@@ -1,1 +1,1 @@
--keep class net.euse.skcal.models.** { *; }
+-keep class com.simplemobiletools.calendar.models.** { *; }
