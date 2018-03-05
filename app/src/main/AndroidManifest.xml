@@ -2,7 +2,7 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.simplemobiletools.calendar"
+    package="net.euse.skcal"
     android:installLocation="auto">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
@@ -17,7 +17,7 @@
         tools:node="remove"/>
 
     <application
-        android:name=".App"
+        android:name="net.euse.skcal.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_launcher_name"
@@ -25,7 +25,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".activities.SplashActivity"
+            android:name="net.euse.skcal.activities.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -34,7 +34,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.MainActivity">
+        <activity android:name="net.euse.skcal.activities.MainActivity">
             <meta-data
                 android:name="android.app.default_searchable"
                 android:resource="@xml/searchable"/>
@@ -64,7 +64,7 @@
         </activity>
 
         <activity
-            android:name=".activities.WidgetMonthlyConfigureActivity"
+            android:name="net.euse.skcal.activities.WidgetMonthlyConfigureActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyWidgetConfigTheme">
             <intent-filter>
@@ -73,7 +73,7 @@
         </activity>
 
         <activity
-            android:name=".activities.WidgetListConfigureActivity"
+            android:name="net.euse.skcal.activities.WidgetListConfigureActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyWidgetConfigTheme">
             <intent-filter>
@@ -84,12 +84,12 @@
         <activity
             android:name="com.simplemobiletools.commons.activities.AboutActivity"
             android:label="@string/about"
-            android:parentActivityName=".activities.MainActivity"/>
+            android:parentActivityName="net.euse.skcal.activities.MainActivity"/>
 
         <activity
             android:name="com.simplemobiletools.commons.activities.CustomizationActivity"
             android:label="@string/customize_colors"
-            android:parentActivityName=".activities.SettingsActivity"/>
+            android:parentActivityName="net.euse.skcal.activities.SettingsActivity"/>
 
         <activity
             android:name="com.simplemobiletools.commons.activities.LicenseActivity"
@@ -102,8 +102,8 @@
             android:parentActivityName="com.simplemobiletools.commons.activities.AboutActivity"/>
 
         <activity
-            android:name=".activities.EventActivity"
-            android:parentActivityName=".activities.MainActivity">
+            android:name="net.euse.skcal.activities.EventActivity"
+            android:parentActivityName="net.euse.skcal.activities.MainActivity">
 
             <intent-filter>
                 <action android:name="android.intent.action.EDIT"/>
@@ -115,17 +115,17 @@
         </activity>
 
         <activity
-            android:name=".activities.SettingsActivity"
+            android:name="net.euse.skcal.activities.SettingsActivity"
             android:label="@string/settings"
-            android:parentActivityName=".activities.MainActivity"/>
+            android:parentActivityName="net.euse.skcal.activities.MainActivity"/>
 
         <activity
-            android:name=".activities.ManageEventTypesActivity"
+            android:name="net.euse.skcal.activities.ManageEventTypesActivity"
             android:label="@string/event_types"
-            android:parentActivityName=".activities.SettingsActivity"/>
+            android:parentActivityName="net.euse.skcal.activities.SettingsActivity"/>
 
         <activity
-            android:name=".activities.SnoozeReminderActivity"
+            android:name="net.euse.skcal.activities.SnoozeReminderActivity"
             android:theme="@style/Theme.Transparent"/>
 
         <receiver
