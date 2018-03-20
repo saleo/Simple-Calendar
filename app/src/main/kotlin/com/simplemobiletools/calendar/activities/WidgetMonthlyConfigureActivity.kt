@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
@@ -136,11 +137,11 @@ class WidgetMonthlyConfigureActivity : SimpleActivity(), MonthlyCalendar {
         mWeakTextColor = mTextColorWithoutTransparency.adjustAlpha(LOW_ALPHA)
         mPrimaryColor = config.primaryColor
 
-        top_left_arrow.applyColorFilter(mTextColor)
-        top_right_arrow.applyColorFilter(mTextColor)
-        top_value.setTextColor(mTextColor)
-        config_text_color.setBackgroundColor(mTextColor)
-        config_save.setTextColor(mTextColor)
+//        top_left_arrow.applyColorFilter(mTextColor)
+//        top_right_arrow.applyColorFilter(mTextColor)
+//        top_value.setTextColor(mTextColor)
+//        config_text_color.setBackgroundColor(mTextColor)
+//        config_save.setTextColor(mTextColor)
         updateLabels()
     }
 
@@ -197,7 +198,6 @@ class WidgetMonthlyConfigureActivity : SimpleActivity(), MonthlyCalendar {
     override fun updateMonthlyCalendar(context: Context, month: String, days: List<DayMonthly>, checkedEvents: Boolean) {
         runOnUiThread {
             mDays = days
-            top_value.text = month
             updateDays()
         }
     }
@@ -209,4 +209,5 @@ class WidgetMonthlyConfigureActivity : SimpleActivity(), MonthlyCalendar {
             }
         }
     }
+
 }

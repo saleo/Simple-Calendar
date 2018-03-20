@@ -58,28 +58,28 @@ class DayFragment : Fragment() {
     private fun setupButtons() {
         mTextColor = context!!.config.textColor
 
-        mHolder.top_left_arrow.apply {
-            applyColorFilter(mTextColor)
-            background = null
-            setOnClickListener {
-                mListener?.goLeft()
-            }
-        }
+//        mHolder.top_left_arrow.apply {
+//            applyColorFilter(mTextColor)
+//            background = null
+//            setOnClickListener {
+//                mListener?.goLeft()
+//            }
+//        }
+//
+//        mHolder.top_right_arrow.apply {
+//            applyColorFilter(mTextColor)
+//            background = null
+//            setOnClickListener {
+//                mListener?.goRight()
+//            }
+//        }
 
-        mHolder.top_right_arrow.apply {
-            applyColorFilter(mTextColor)
-            background = null
-            setOnClickListener {
-                mListener?.goRight()
-            }
-        }
-
-        val day = Formatter.getDayTitle(context!!, mDayCode)
-        mHolder.top_value.apply {
-            text = day
-            setOnClickListener { pickDay() }
-            setTextColor(context.config.textColor)
-        }
+//        val day = Formatter.getDayTitle(context!!, mDayCode)
+//        mHolder.top_value.apply {
+//            text = day
+//            setOnClickListener { pickDay() }
+//            setTextColor(context.config.textColor)
+//        }
     }
 
     private fun pickDay() {

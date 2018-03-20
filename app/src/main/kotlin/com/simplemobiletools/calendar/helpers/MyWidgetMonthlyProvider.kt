@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.view.View
+import android.widget.ImageView
 import android.widget.RemoteViews
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.activities.SplashActivity
@@ -157,30 +158,17 @@ class MyWidgetMonthlyProvider : AppWidgetProvider() {
             val appWidgetManager = AppWidgetManager.getInstance(context)
             appWidgetManager.getAppWidgetIds(getComponentName(context)).forEach {
                 val views = RemoteViews(context.packageName, R.layout.fragment_month_widget)
-                views.setText(R.id.top_value, month)
+                setMonthDisplayed(views,DateTime.now())
 
                 views.setBackgroundColor(R.id.calendar_holder, context.config.widgetBgColor)
 
-                views.setTextColor(R.id.top_value, textColor)
-                views.setTextSize(R.id.top_value, largerFontSize)
-
-                var bmp = resources.getColoredBitmap(R.drawable.ic_pointer_left, textColor)
-                views.setImageViewBitmap(R.id.top_left_arrow, bmp)
-
-                bmp = resources.getColoredBitmap(R.drawable.ic_pointer_right, textColor)
-                views.setImageViewBitmap(R.id.top_right_arrow, bmp)
-
-                bmp = resources.getColoredBitmap(R.drawable.ic_plus, textColor)
+                var bmp =  resources.getColoredBitmap(R.drawable.ic_plus, textColor)
                 views.setImageViewBitmap(R.id.top_new_event, bmp)
                 updateDayLabels(context, views, resources, textColor)
                 updateDays(context, views, days)
 
-                setupIntent(context, views, PREV, R.id.top_left_arrow)
-                setupIntent(context, views, NEXT, R.id.top_right_arrow)
-                setupIntent(context, views, NEW_EVENT, R.id.top_new_event)
-
-                val monthCode = days.firstOrNull { it.code.substring(6) == "01" }?.code ?: Formatter.getTodayCode(context)
-                setupAppOpenIntent(context, views, R.id.top_value, monthCode)
+//                val monthCode = days.firstOrNull { it.code.substring(6) == "01" }?.code ?: Formatter.getTodayCode(context)
+//                setupAppOpenIntent(context, views, R.id.top_value, monthCode)
 
                 appWidgetManager.updateAppWidget(it, views)
             }
@@ -205,4 +193,61 @@ class MyWidgetMonthlyProvider : AppWidgetProvider() {
             views.setText(id, resources.getString(letters[index]))
         }
     }
+
+    /**
+     * Sets the month displayed at the top of this view based on time. Override
+     * to add custom events when the title is changed.
+     *
+     * @param time A day in the new focus month.
+     * @param updateHighlight TODO(epastern):
+     */
+    protected fun setMonthDisplayed(views: RemoteViews, time: DateTime) {
+
+        //        CharSequence oldMonth = mMonthName.getText();
+        //        mMonthName.setText(Utils.formatMonthYear(mContext, time));
+        //        mMonthName.invalidate();
+        //        if (!TextUtils.equals(oldMonth, mMonthName.getText())) {
+        //            mMonthName.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+        //        }
+        val intYear = time.year
+        val mCurrentMonthDisplayed = time.monthOfYear
+        val view:ImageView
+
+        if (intYear == 2016) {
+            when (mCurrentMonthDisplayed) {
+                0 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2016_1)
+                1 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2016_2)
+                2 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2016_3)
+                3 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2016_4)
+                4 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2016_5)
+                5 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2016_6)
+                6 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2016_7)
+                7 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2016_8)
+                8 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2016_9)
+                9 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2016_10)
+                10 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2016_11)
+                11 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2016_12)
+                else -> views.setImageViewResource(R.id.top_month,R.drawable.sk2016_1)
+            }
+        } else if (intYear == 2017) {
+            when (mCurrentMonthDisplayed) {
+                0 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2017_1)
+                1 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2017_2)
+                2 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2017_3)
+                3 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2017_4)
+                4 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2017_5)
+                5 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2017_6)
+                6 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2017_7)
+                7 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2017_8)
+                8 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2017_9)
+                9 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2017_10)
+                10 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2017_11)
+                11 -> views.setImageViewResource(R.id.top_month,R.drawable.sk2017_12)
+                else -> views.setImageViewResource(R.id.top_month,R.drawable.sk2017_1)
+            }
+        } else {
+            views.setImageViewResource(R.id.top_month,R.drawable.placeholder)
+        }
+    }
+
 }

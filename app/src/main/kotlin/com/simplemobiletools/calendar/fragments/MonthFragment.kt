@@ -51,7 +51,7 @@ class MonthFragment : Fragment(), MonthlyCalendar {
         mConfig = context!!.config
         mSundayFirst = mConfig.isSundayFirst
 
-        setupButtons()
+        mTextColor = mConfig.textColor
         setupLabels()
         mCalendar = MonthlyCalendarImpl(this, context!!)
 
@@ -91,40 +91,40 @@ class MonthFragment : Fragment(), MonthlyCalendar {
         mLastHash = newHash
 
         activity?.runOnUiThread {
-            mHolder.top_value.apply {
-                text = month
-                setTextColor(mConfig.textColor)
-            }
+//            mHolder.top_value.apply {
+//                text = month
+//                setTextColor(mConfig.textColor)
+//            }
             updateDays(days)
         }
     }
 
-    private fun setupButtons() {
-        mTextColor = mConfig.textColor
-
-        mHolder.top_left_arrow.apply {
-            applyColorFilter(mTextColor)
-            background = null
-            setOnClickListener {
-                listener?.goLeft()
-            }
-        }
-
-        mHolder.top_right_arrow.apply {
-            applyColorFilter(mTextColor)
-            background = null
-            setOnClickListener {
-                listener?.goRight()
-            }
-        }
-
-        mHolder.top_value.apply {
-            setTextColor(mConfig.textColor)
-            setOnClickListener {
-                showMonthDialog()
-            }
-        }
-    }
+//    private fun setupButtons() {
+//        mTextColor = mConfig.textColor
+//
+//        mHolder.top_left_arrow.apply {
+//            applyColorFilter(mTextColor)
+//            background = null
+//            setOnClickListener {
+//                listener?.goLeft()
+//            }
+//        }
+//
+//        mHolder.top_right_arrow.apply {
+//            applyColorFilter(mTextColor)
+//            background = null
+//            setOnClickListener {
+//                listener?.goRight()
+//            }
+//        }
+//
+//        mHolder.top_value.apply {
+//            setTextColor(mConfig.textColor)
+//            setOnClickListener {
+//                showMonthDialog()
+//            }
+//        }
+//    }
 
     private fun showMonthDialog() {
         activity!!.setTheme(context!!.getDialogTheme())

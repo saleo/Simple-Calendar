@@ -1,4 +1,4 @@
-package com.simplemobiletools.calendar.activities
+ package com.simplemobiletools.calendar.activities
 
 import android.content.Intent
 import com.simplemobiletools.calendar.helpers.DAY_CODE
