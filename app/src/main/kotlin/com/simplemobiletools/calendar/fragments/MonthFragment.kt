@@ -8,16 +8,14 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.activities.MainActivity
 import com.simplemobiletools.calendar.extensions.addDayEvents
 import com.simplemobiletools.calendar.extensions.addDayNumber
 import com.simplemobiletools.calendar.extensions.config
 import com.simplemobiletools.calendar.helpers.*
+import com.simplemobiletools.calendar.helpers.Formatter
 import com.simplemobiletools.calendar.interfaces.MonthlyCalendar
 import com.simplemobiletools.calendar.interfaces.NavigationListener
 import com.simplemobiletools.calendar.models.DayMonthly
@@ -91,10 +89,7 @@ class MonthFragment : Fragment(), MonthlyCalendar {
         mLastHash = newHash
 
         activity?.runOnUiThread {
-//            mHolder.top_value.apply {
-//                text = month
-//                setTextColor(mConfig.textColor)
-//            }
+            updateMonth(Formatter.getDateTimeFromCode(mDayCode))
             updateDays(days)
         }
     }
@@ -196,5 +191,54 @@ class MonthFragment : Fragment(), MonthlyCalendar {
                 context.addDayEvents(day, this, mRes, dividerMargin)
             }
         }
+    }
+    
+    private fun updateMonth(time: DateTime)
+    {
+        
+
+            //        CharSequence oldMonth = mMonthName.getText();
+            //        mMonthName.setText(Utils.formatMonthYear(mContext, time));
+            //        mMonthName.invalidate();
+            //        if (!TextUtils.equals(oldMonth, mMonthName.getText())) {
+            //            mMonthName.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+            //        }
+            val intYear = time.year
+            val mCurrentMonthDisplayed = time.monthOfYear
+            val view: ImageView
+
+            if (intYear == 2016) {
+                when (mCurrentMonthDisplayed) {
+                    1 -> mHolder.top_month.setImageResource(R.drawable.sk2016_1)
+                    2 -> mHolder.top_month.setImageResource(R.drawable.sk2016_2)
+                    3 -> mHolder.top_month.setImageResource(R.drawable.sk2016_3)
+                    4 -> mHolder.top_month.setImageResource(R.drawable.sk2016_4)
+                    5 -> mHolder.top_month.setImageResource(R.drawable.sk2016_5)
+                    6 -> mHolder.top_month.setImageResource(R.drawable.sk2016_6)
+                    7 -> mHolder.top_month.setImageResource(R.drawable.sk2016_7)
+                    8 -> mHolder.top_month.setImageResource(R.drawable.sk2016_8)
+                    9 -> mHolder.top_month.setImageResource(R.drawable.sk2016_9)
+                    10 -> mHolder.top_month.setImageResource(R.drawable.sk2016_10)
+                    11 -> mHolder.top_month.setImageResource(R.drawable.sk2016_11)
+                    12 -> mHolder.top_month.setImageResource(R.drawable.sk2016_12)
+                }
+            } else if (intYear == 2017) {
+                when (mCurrentMonthDisplayed) {
+                    1 -> mHolder.top_month.setImageResource(R.drawable.sk2017_1)
+                    2 -> mHolder.top_month.setImageResource(R.drawable.sk2017_2)
+                    3 -> mHolder.top_month.setImageResource(R.drawable.sk2017_3)
+                    4 -> mHolder.top_month.setImageResource(R.drawable.sk2017_4)
+                    5 -> mHolder.top_month.setImageResource(R.drawable.sk2017_5)
+                    6 -> mHolder.top_month.setImageResource(R.drawable.sk2017_6)
+                    7 -> mHolder.top_month.setImageResource(R.drawable.sk2017_7)
+                    8 -> mHolder.top_month.setImageResource(R.drawable.sk2017_8)
+                    9 -> mHolder.top_month.setImageResource(R.drawable.sk2017_9)
+                    10 -> mHolder.top_month.setImageResource(R.drawable.sk2017_10)
+                    11 -> mHolder.top_month.setImageResource(R.drawable.sk2017_11)
+                    12 -> mHolder.top_month.setImageResource(R.drawable.sk2017_12)
+                }
+            } else {
+                mHolder.top_month.setImageResource(R.drawable.placeholder)
+            }        
     }
 }
