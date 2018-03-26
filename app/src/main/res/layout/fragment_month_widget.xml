@@ -456,5 +456,11 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical"/>
         </LinearLayout>
+
     </LinearLayout>
+    <include android:id="@+id/id_bottom_sentense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/table_holder"
+        layout="@layout/bottom_sentense" />
 </RelativeLayout>

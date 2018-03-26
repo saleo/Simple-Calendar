@@ -501,5 +501,10 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical"/>
         </LinearLayout>
+        <include android:id="@+id/id_bottom_sentense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/bottom_sentense" />
     </LinearLayout>
+
 </RelativeLayout>
