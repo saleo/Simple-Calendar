@@ -5,7 +5,7 @@
     android:id="@+id/month_calendar_holder"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/medium_margin">
+    android:paddingTop="0">
 
     <include layout="@layout/top_navigation"/>
 
