@@ -107,6 +107,8 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         if (config.caldavSync) {
             refreshCalDAVCalendars(false)
         }
+
+        supportActionBar?.hide()
     }
 
     override fun onResume() {
