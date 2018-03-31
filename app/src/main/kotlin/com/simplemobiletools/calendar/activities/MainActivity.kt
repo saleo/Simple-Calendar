@@ -70,7 +70,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         setContentView(R.layout.activity_main)
         appLaunched()
         checkWhatsNewDialog()
-        calendar_fab.beVisibleIf(config.storedView != YEARLY_VIEW)
+        //calendar_fab.beVisibleIf(config.storedView != YEARLY_VIEW)
         calendar_fab.setOnClickListener {
             launchNewEventIntent(currentFragments.last().getNewEventDayCode())
         }
@@ -235,7 +235,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
                 mIsSearchOpen = true
                 search_holder.beVisible()
-                calendar_fab.beGone()
+                //calendar_fab.beGone()
                 searchQueryChanged("")
                 return true
             }
@@ -243,7 +243,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
                 mIsSearchOpen = false
                 search_holder.beGone()
-                calendar_fab.beVisible()
+                //calendar_fab.beVisible()
                 return true
             }
         })
@@ -259,7 +259,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         intent.removeExtra(OPEN_MONTH)
         intent.removeExtra(DAY_CODE)
         if (dayCodeToOpen.isNotEmpty()) {
-            calendar_fab.beVisible()
+            //calendar_fab.beVisible()
             config.storedView = if (openMonth) MONTHLY_VIEW else DAILY_VIEW
             updateViewPager(dayCodeToOpen)
             return true
@@ -289,10 +289,10 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                 RadioItem(EVENTS_LIST_VIEW, getString(R.string.simple_event_list)))
 
         RadioGroupDialog(this, items, config.storedView) {
-            calendar_fab.beVisibleIf(it as Int != YEARLY_VIEW)
+            //calendar_fab.beVisibleIf(it as Int != YEARLY_VIEW)
             resetActionBarTitle()
             closeSearch()
-            updateView(it)
+            updateView(it as Int)
             shouldGoToTodayBeVisible = false
             invalidateOptionsMenu()
         }
@@ -497,7 +497,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     private fun updateView(view: Int) {
-        calendar_fab.beVisibleIf(view != YEARLY_VIEW)
+        //calendar_fab.beVisibleIf(view != YEARLY_VIEW)
         config.storedView = view
         updateViewPager()
         if (goToTodayButton?.isVisible == true) {
@@ -536,7 +536,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         fragment.arguments = bundle
         supportFragmentManager.beginTransaction().add(R.id.fragments_holder, fragment).commitNow()
         resetActionBarTitle()
-        calendar_fab.beVisible()
+        //calendar_fab.beVisible()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
@@ -578,7 +578,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             refreshEvents()
             updateActionBarTitle()
         }
-        calendar_fab.beGoneIf(currentFragments.size == 1 && config.storedView == YEARLY_VIEW)
+        //calendar_fab.beGoneIf(currentFragments.size == 1 && config.storedView == YEARLY_VIEW)
         supportActionBar?.setDisplayHomeAsUpEnabled(currentFragments.size > 1)
     }
 
@@ -716,7 +716,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
     private fun openDayAt(timestamp: Long) {
         val dayCode = Formatter.getDayCodeFromTS((timestamp / 1000).toInt())
-        calendar_fab.beVisible()
+        //calendar_fab.beVisible()
         config.storedView = DAILY_VIEW
         updateViewPager(dayCode)
     }
