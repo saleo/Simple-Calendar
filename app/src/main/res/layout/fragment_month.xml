@@ -45,7 +45,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -54,7 +54,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -63,7 +63,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -72,7 +72,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -81,7 +81,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -90,7 +90,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -99,7 +99,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
         </LinearLayout>
 
@@ -125,7 +125,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -134,7 +134,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -143,7 +143,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -152,7 +152,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -161,7 +161,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -170,7 +170,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -179,7 +179,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
         </LinearLayout>
 
@@ -204,7 +204,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -213,7 +213,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -222,7 +222,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -231,7 +231,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -240,7 +240,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -249,7 +249,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -258,7 +258,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
         </LinearLayout>
 
@@ -284,7 +284,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -293,7 +293,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -302,7 +302,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -311,7 +311,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -320,7 +320,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -329,7 +329,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -338,7 +338,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
         </LinearLayout>
 
@@ -364,7 +364,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -373,7 +373,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -382,7 +382,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -391,7 +391,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -400,7 +400,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -409,7 +409,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -418,7 +418,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
         </LinearLayout>
 
@@ -443,7 +443,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -452,7 +452,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -461,7 +461,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -470,7 +470,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -479,7 +479,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -488,7 +488,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
 
             <LinearLayout
@@ -497,7 +497,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_horizontal"
+                android:gravity="left"
                 android:orientation="vertical"/>
         </LinearLayout>
         <include android:id="@+id/id_bottom_sentense"

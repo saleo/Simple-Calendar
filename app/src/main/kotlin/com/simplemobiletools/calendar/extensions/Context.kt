@@ -19,8 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.simplemobiletools.calendar.BuildConfig
-import com.simplemobiletools.calendar.R
+import com.simplemobiletools.calendar.*
 import com.simplemobiletools.calendar.activities.EventActivity
 import com.simplemobiletools.calendar.activities.SimpleActivity
 import com.simplemobiletools.calendar.activities.SnoozeReminderActivity
@@ -326,13 +325,14 @@ fun Context.syncCalDAVCalendars(activity: SimpleActivity?, calDAVSyncObserver: C
 
 fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: LinearLayout, dayLabelHeight: Int, callback: (Int) -> Unit) {
     var textColor = rawTextColor
+    var holidayOrLunar=""
     if (!day.isThisMonth)
         textColor = textColor.adjustAlpha(LOW_ALPHA)
 
     (View.inflate(applicationContext, R.layout.day_monthly_number_view, null) as TextView).apply {
         setTextColor(textColor)
         text = day.value.toString()
-        gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+        gravity = Gravity.TOP or Gravity.LEFT
         layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         linearLayout.addView(this)
 
@@ -352,6 +352,47 @@ fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: Linea
             }
         }
     }
+
+    //show chinese lunar when in zh-cn,or zh-tw,etc
+    val strCountry = resources.getConfiguration().locale.getCountry()
+    if (strCountry == "CN" || strCountry == "TW") {
+        val calendar = Calendar.getInstance()
+        val datetime=Formatter.getDateTimeFromCode(day.code)
+        val year=datetime.year
+        val month=datetime.monthOfYear
+        calendar.set(year,month,day.value)
+        val lunar = Lunar(calendar, applicationContext)
+        holidayOrLunar = SolarTerm.getSolarTermStr(year, month, day.value, applicationContext)
+        if (holidayOrLunar.length == 0) {
+            val SolarHoliDayStr = SolarHoliday.getSolarHoliday(month, day.value, applicationContext)
+            if (SolarHoliDayStr.length == 0) {
+                val fullchinadatestr = lunar.toString()
+                val LunarFestivalStr = LunarFestival.getLunarFestival(fullchinadatestr, lunar, applicationContext)
+                if (LunarFestivalStr.length != 0) {
+                    holidayOrLunar=LunarFestivalStr
+                } else {
+                    holidayOrLunar = fullchinadatestr.substring(fullchinadatestr.length - 2, fullchinadatestr.length)
+                }
+            } else {
+                holidayOrLunar=SolarHoliDayStr
+            }
+        }
+
+    }
+
+//    if (isBold) {
+//        mMonthNumPaint.setFakeBoldText(isBold = false)
+//    }
+
+    (View.inflate(applicationContext, R.layout.day_monthly_number_view, null) as TextView).apply {
+        setTextColor(textColor)
+        text = holidayOrLunar
+        gravity = Gravity.TOP or Gravity.RIGHT
+        layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        linearLayout.addView(this)
+
+    }
+
 }
 
 private fun addTodaysBackground(textView: TextView, res: Resources, dayLabelHeight: Int, mPrimaryColor: Int) =

@@ -20,6 +20,21 @@
         <item>@string/yearly</item>
     </string-array>
 
+    <string-array name="solar_holiday">
+        <item>0101 元旦节</item>
+        <item>0308 妇女节</item>
+        <item>0312 植树节</item>
+        <item>0401 愚人节</item>
+        <item>0501 劳动节</item>
+        <item>0504 青年节</item>
+        <item>0601 儿童节</item>
+        <item>0701 建党节</item>
+        <item>0801 建军节</item>
+        <item>0910 教师节</item>
+        <item>1001 国庆节</item>
+        <item>1225 圣诞节</item>
+    </string-array>
+
     <!-- Lunar -->
     <string-array name="animals" translatable="false">
         <item>鼠</item>
