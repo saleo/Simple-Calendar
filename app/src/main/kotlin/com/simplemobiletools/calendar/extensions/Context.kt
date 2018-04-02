@@ -359,7 +359,7 @@ fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: Linea
         val calendar = Calendar.getInstance()
         val datetime=Formatter.getDateTimeFromCode(day.code)
         val year=datetime.year
-        val month=datetime.monthOfYear
+        val month=datetime.monthOfYear-1
         calendar.set(year,month,day.value)
         val lunar = Lunar(calendar, applicationContext)
         holidayOrLunar = SolarTerm.getSolarTermStr(year, month, day.value, applicationContext)
