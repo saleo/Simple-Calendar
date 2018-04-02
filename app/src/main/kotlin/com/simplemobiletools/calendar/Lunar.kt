@@ -167,6 +167,8 @@ class Lunar(private val mCalendar: Calendar, private val mContext: Context) {
             mContext.resources.getString(R.string.status_ershi)
         else if (day == 30)
             mContext.resources.getString(R.string.status_sanshi)
+        else if (day==1)
+            lunarMonthName[month-1]
         else
             chineseTen[day / 10] + chineseNumber[n]
     }
