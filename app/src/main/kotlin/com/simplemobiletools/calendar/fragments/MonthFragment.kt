@@ -221,7 +221,7 @@ class MonthFragment : Fragment(), MonthlyCalendar {
         val res = resources
         mBottomSentences = res.getStringArray(R.array.bottom_sentences)
 
-            if (intYear == 2016) {
+            if (intYear == 2016 || intYear==2018) {
                 when (mCurrentMonthDisplayed) {
                     1 -> {mHolder.top_month.setImageResource(R.drawable.sk2016_1)
                         mBottomSentence0.text=mBottomSentences[mCurrentMonthDisplayed]
