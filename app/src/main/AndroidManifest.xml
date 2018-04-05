@@ -16,6 +16,33 @@
         android:name="android.permission.USE_FINGERPRINT"
         tools:node="remove"/>
 
+    <!-- normal permissions -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.READ_SYNC_STATS"/>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+
+    <!-- account management permissions not required for own accounts since API level 22 -->
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" android:maxSdkVersion="22"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" android:maxSdkVersion="22"/>
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" android:maxSdkVersion="22"/>
+
+    <!--
+         for writing external log files; permission only required for SDK <= 18 because since then,
+         writing to app-private directory doesn't require extra permissions
+    -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="18"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18"/>
+
+    <!-- other permissions -->
+    <!-- android.permission-group.CALENDAR -->
+    <uses-permission android:name="android.permission.READ_CALENDAR"/>
+    <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
+
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -159,6 +186,32 @@
             android:permission="android.permission.BIND_REMOTEVIEWS"/>
 
         <service android:name=".services.SnoozeService"/>
+
+        <!-- account type "DAVdroid" -->
+        <service
+            android:name=".adapters.AccountAuthenticatorService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/account_authenticator"/>
+        </service>
+        <service
+            android:name=".adapters.CalendarsSyncAdapterService"
+            android:exported="true"
+            android:process=":sync"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/sync_calendars"/>
+        </service>
 
         <receiver android:name=".receivers.NotificationReceiver"/>
 
