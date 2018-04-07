@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DAVdroid</string>
+    <string name="help">Ajuda</string>
+    <string name="login_type_email">Entra amb una adreça de correu electrònic</string>
+    <string name="login_type_url">Entra amb una URL i un nom d\'usuari</string>
+</resources>

@@ -1,0 +1,333 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:9:1-207:12
+INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:9:1-207:12
+INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:9:1-207:12
+INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:9:1-207:12
+INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:9:1-207:12
+INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:9:1-207:12
+INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:9:1-207:12
+	package
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:9:11-40
+		INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml
+		INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:9:1-207:12
+		INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml
+	xmlns:tools
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:11:11-57
+	android:versionCode
+		INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:9:1-207:12
+		INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:10:11-69
+	android:installLocation
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:12:11-49
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:15:5-78
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:15:22-76
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:16:5-75
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:16:22-73
+uses-permission#android.permission.INTERNET
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:17:5-66
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:17:22-64
+uses-permission#android.permission.READ_SYNC_SETTINGS
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:18:5-76
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:18:22-74
+uses-permission#android.permission.READ_SYNC_STATS
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:19:5-73
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:19:22-71
+uses-permission#android.permission.WRITE_SYNC_SETTINGS
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:20:5-77
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:20:22-75
+uses-permission#android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:21:5-94
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:21:22-92
+uses-permission#android.permission.AUTHENTICATE_ACCOUNTS
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:24:5-106
+	android:maxSdkVersion
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:24:78-104
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:24:22-77
+uses-permission#android.permission.GET_ACCOUNTS
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:25:5-97
+	android:maxSdkVersion
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:25:69-95
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:25:22-68
+uses-permission#android.permission.MANAGE_ACCOUNTS
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:26:5-100
+	android:maxSdkVersion
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:26:72-98
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:26:22-71
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:32:5-106
+	android:maxSdkVersion
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:32:78-104
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:32:22-77
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:33:5-107
+	android:maxSdkVersion
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:33:79-105
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:33:22-78
+uses-permission#android.permission.READ_CONTACTS
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:37:5-71
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:37:22-69
+uses-permission#android.permission.WRITE_CONTACTS
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:38:5-72
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:38:22-70
+uses-permission#android.permission.READ_CALENDAR
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:40:5-71
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:40:22-69
+uses-permission#android.permission.WRITE_CALENDAR
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:41:5-72
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:41:22-70
+uses-permission-sdk-23#android.permission.ACCESS_COARSE_LOCATION
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:45:5-87
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:45:29-85
+application
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:49:5-205:19
+	android:label
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:55:9-41
+	android:fullBackupContent
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:52:9-42
+	tools:ignore
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:57:9-39
+	android:icon
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:54:9-43
+	android:allowBackup
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:51:9-35
+	android:theme
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:56:9-43
+	android:networkSecurityConfig
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:53:9-69
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:50:9-28
+service#at.bitfire.davdroid.DavService
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:59:9-46
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:59:18-44
+service#at.bitfire.davdroid.settings.Settings
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:60:9-53
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:60:18-51
+activity#at.bitfire.davdroid.ui.AccountsActivity
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:62:9-70:20
+	android:label
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:64:13-45
+	android:theme
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:65:13-56
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:63:13-48
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:66:13-69:29
+action#android.intent.action.MAIN
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:67:17-68
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:67:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:68:17-76
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:68:27-74
+activity#at.bitfire.davdroid.ui.AboutActivity
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:72:9-76:64
+	android:parentActivityName
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:76:13-62
+	android:label
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:74:13-45
+	android:theme
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:75:13-56
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:73:13-45
+activity#at.bitfire.davdroid.ui.AppSettingsActivity
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:78:9-81:64
+	android:parentActivityName
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:81:13-62
+	android:label
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:80:13-49
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:79:13-51
+activity#at.bitfire.davdroid.ui.setup.LoginActivity
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:83:9-90:20
+	android:parentActivityName
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:86:13-62
+	android:label
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:85:13-48
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:84:13-51
+intent-filter#action:name:android.intent.action.MAIN
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:87:13-89:29
+activity#at.bitfire.davdroid.ui.AccountActivity
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:92:9-95:20
+	android:parentActivityName
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:94:13-62
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:93:13-47
+activity#at.bitfire.davdroid.ui.AccountSettingsActivity
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:96:9-63
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:96:19-61
+activity#at.bitfire.davdroid.ui.CreateAddressBookActivity
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:97:9-98:57
+	android:label
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:98:13-55
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:97:19-63
+activity#at.bitfire.davdroid.ui.CreateCalendarActivity
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:99:9-100:60
+	android:label
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:100:19-58
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:99:19-60
+activity#at.bitfire.davdroid.ui.DebugInfoActivity
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:102:9-107:20
+	android:parentActivityName
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:104:13-65
+	android:label
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:106:13-53
+	android:exported
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:105:13-36
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:103:13-49
+provider#android.support.v4.content.FileProvider
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:108:9-116:20
+	android:grantUriPermissions
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:111:13-47
+	android:authorities
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:110:13-65
+	android:exported
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:112:13-37
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:109:13-67
+meta-data#android.support.FILE_PROVIDER_PATHS
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:113:13-115:53
+	android:resource
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:115:17-50
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:114:17-67
+service#at.bitfire.davdroid.syncadapter.AccountAuthenticatorService
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:119:9-129:19
+	android:exported
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:121:13-37
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:120:13-68
+intent-filter#action:name:android.accounts.AccountAuthenticator
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:122:13-124:29
+action#android.accounts.AccountAuthenticator
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:123:17-79
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:123:25-77
+meta-data#android.accounts.AccountAuthenticator
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:126:13-128:64
+	android:resource
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:128:17-62
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:127:17-69
+service#at.bitfire.davdroid.syncadapter.CalendarsSyncAdapterService
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:130:9-142:19
+	android:process
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:133:13-36
+	android:exported
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:132:13-36
+	tools:ignore
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:134:13-43
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:131:13-68
+intent-filter#action:name:android.content.SyncAdapter
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:135:13-137:29
+action#android.content.SyncAdapter
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:136:17-69
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:136:25-67
+meta-data#android.content.SyncAdapter
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:139:13-141:57
+	android:resource
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:141:17-55
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:140:17-59
+service#at.bitfire.davdroid.syncadapter.TasksSyncAdapterService
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:143:9-155:19
+	android:process
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:146:13-36
+	android:exported
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:145:13-36
+	tools:ignore
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:147:13-43
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:144:13-64
+service#at.bitfire.davdroid.syncadapter.NullAuthenticatorService
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:158:9-168:19
+	android:exported
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:160:13-37
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:159:13-65
+provider#at.bitfire.davdroid.syncadapter.AddressBookProvider
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:169:9-174:43
+	android:authorities
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:170:13-66
+	android:label
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:172:13-66
+	android:multiprocess
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:174:13-41
+	android:exported
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:171:13-37
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:173:13-60
+service#at.bitfire.davdroid.syncadapter.AddressBooksSyncAdapterService
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:175:9-187:19
+	android:process
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:178:13-36
+	android:exported
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:177:13-36
+	tools:ignore
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:179:13-43
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:176:13-71
+service#at.bitfire.davdroid.syncadapter.ContactsSyncAdapterService
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:188:9-203:19
+	android:process
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:191:13-36
+	android:exported
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:190:13-36
+	tools:ignore
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:192:13-43
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:189:13-67
+meta-data#android.provider.CONTACTS_STRUCTURE
+ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:200:13-202:51
+	android:resource
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:202:17-49
+	android:name
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml:201:17-67
+uses-sdk
+INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml
+INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml
+INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml
+INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml
+		INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml
+		ADDED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml
+		INJECTED from /home/leo/work/skcal/davdroid/src/main/AndroidManifest.xml
