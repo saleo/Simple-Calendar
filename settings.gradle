@@ -1,1 +1,4 @@
-include ':app','davdroid','dav4android'
+include ':app', 'davdroid', 'dav4android', ':icsdroid_lib', ':cert4android', ':ical4android'
+project(':icsdroid_lib').projectDir = new File('icsdroid/icsdroid_lib')
+project(':cert4android').projectDir = new File('icsdroid/cert4android')
+project(':ical4android').projectDir = new File('icsdroid/ical4android')
