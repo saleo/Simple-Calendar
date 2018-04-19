@@ -189,7 +189,7 @@
 
         <!-- account type "DAVdroid" -->
         <service
-            android:name="at.bitfire.davdroid.syncadapter.AccountAuthenticatorService"
+            android:name="at.bitfire.icsdroid.AccountAuthenticatorService"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator"/>
@@ -200,7 +200,7 @@
                 android:resource="@xml/account_authenticator"/>
         </service>
         <service
-            android:name="at.bitfire.davdroid.syncadapter.CalendarsSyncAdapterService"
+            android:name="at.bitfire.icsdroid.SyncAdapterService"
             android:exported="true"
             android:process=":sync"
             tools:ignore="ExportedService">
