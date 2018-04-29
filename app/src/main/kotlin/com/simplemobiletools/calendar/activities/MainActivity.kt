@@ -1,8 +1,7 @@
 package com.simplemobiletools.calendar.activities
 
 import android.app.SearchManager
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.content.pm.ActivityInfo
 import android.database.ContentObserver
 import android.database.Cursor
@@ -10,12 +9,19 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.provider.CalendarContract
 import android.provider.ContactsContract
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.SearchView
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import at.bitfire.ical4android.AndroidCalendar
+import at.bitfire.ical4android.CalendarStorageException
+import at.bitfire.icsdroid.AppAccount
+import at.bitfire.icsdroid.AppAccount.account
+import at.bitfire.icsdroid.Constants
 import com.simplemobiletools.calendar.BuildConfig
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.adapters.EventListAdapter
@@ -44,9 +50,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import at.bitfire.icsdroid.SyncAdapterService
+import at.bitfire.icsdroid.db.CalendarCredentials
+import at.bitfire.icsdroid.db.LocalCalendar
+import java.util.concurrent.TimeUnit
 
 class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     private val CALDAV_SYNC_DELAY = 1000L
+    private val SKCAL_EXIST=2
+    private val SKCAL_NON_EXIST=1
+    private val SKCAL_CHECK_ERROR=0
+    private val SKCAL_URL="https://fruux.com/calendars/public/a3298197437/d136f63e-d838-4cdd-8034-86130fc9780b/"
 
     private var showCalDAVRefreshToast = false
     private var mShouldFilterBeVisible = false
@@ -105,9 +118,20 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             config.caldavSync = false
         }
 
-        if (config.caldavSync) {
-            refreshCalDAVCalendars(false)
+        if (checkSkCalExist()==SKCAL_EXIST){
+            val extras = Bundle(2)
+            extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true)
+            extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true)
+            ContentResolver.requestSync(AppAccount.account, CalendarContract.AUTHORITY, extras)
+        } else if (checkSkCalExist()==SKCAL_NON_EXIST){
+            if (createSkCalendar())
+                Toast.makeText(this, getString(R.string.add_calendar_created), Toast.LENGTH_LONG).show()
+            else
+                Toast.makeText(this, getString(R.string.add_calendar_failed), Toast.LENGTH_LONG).show()
+        } else{
+            Toast.makeText(this, getString(R.string.check_calendar_failed), Toast.LENGTH_LONG).show()
         }
+
 
         supportActionBar?.hide()
     }
@@ -798,6 +822,55 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             add(Release(88, R.string.release_88))
             add(Release(98, R.string.release_98))
             checkWhatsNew(this, BuildConfig.VERSION_CODE)
+        }
+    }
+
+    private fun checkSkCalExist():Int{
+        var provider= contentResolver.acquireContentProviderClient(CalendarContract.AUTHORITY)
+        var res=SKCAL_CHECK_ERROR
+        try {
+            // currently only filter by account, since cannot find any other criteria suitable or available
+            if (!LocalCalendar.findAll(account, provider).filter { it.account.equals(account) }.isEmpty())
+                res=SKCAL_EXIST
+            else
+                res=SKCAL_NON_EXIST
+        } catch (e: CalendarStorageException) {
+            Log.e(Constants.TAG, "Calendar storage exception", e)
+            Toast.makeText(applicationContext, e.localizedMessage, Toast.LENGTH_LONG).show()
+        } catch (e: InterruptedException) {
+            Log.e(Constants.TAG, "Thread interrupted", e)
+            Toast.makeText(applicationContext, e.localizedMessage, Toast.LENGTH_LONG).show()
+        }
+        return res
+    }
+
+    private fun createSkCalendar(): Boolean {
+        AppAccount.makeAvailable(this)
+
+        val calInfo = ContentValues(9)
+        calInfo.put(CalendarContract.Calendars.ACCOUNT_NAME, AppAccount.account.name)
+        calInfo.put(CalendarContract.Calendars.ACCOUNT_TYPE, AppAccount.account.type)
+        calInfo.put(CalendarContract.Calendars.NAME, SKCAL_URL)
+        calInfo.put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,getString(R.string.skcal_title) )
+        calInfo.put(CalendarContract.Calendars.CALENDAR_COLOR,R.color.lightblue)
+        calInfo.put(CalendarContract.Calendars.OWNER_ACCOUNT, AppAccount.account.name)
+        calInfo.put(CalendarContract.Calendars.SYNC_EVENTS, 1)
+        calInfo.put(CalendarContract.Calendars.VISIBLE, 1)
+        calInfo.put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_READ)
+
+        val client: ContentProviderClient? = contentResolver.acquireContentProviderClient(CalendarContract.AUTHORITY)
+        return try {
+            client?.let {
+                val uri = AndroidCalendar.create(AppAccount.account, it, calInfo)
+                val calendar = LocalCalendar.findById(AppAccount.account, client, ContentUris.parseId(uri))
+            }
+            true
+        } catch(e: Exception) {
+            Log.e(Constants.TAG, "Couldn't create calendar", e)
+//            Toast.makeText(applicationContext, e.localizedMessage, Toast.LENGTH_LONG).show()
+            false
+        } finally {
+            client?.release()
         }
     }
 }

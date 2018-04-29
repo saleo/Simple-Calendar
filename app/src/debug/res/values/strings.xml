@@ -13,6 +13,12 @@
     <string name="status_format1" translatable="false">yyyy年MM月dd日</string>
     <string name="status_format2" translatable="false">1900年1月31日</string>
 
+    <string name="add_calendar_created">寿康日历创建成功</string>
+    <string name="add_calendar_failed">寿康日历创建失败</string>
+    <string name="check_calendar_failed">寿康日历创建失败</string>
+    <string name="skcal_title">寿康日历SkCalendar</string>
+
+
     <string-array name="bottom_sentences">
         <item>o 无论走到那里，无论天气怎样，都请带上自我相遇的阳光。</item>
         <item>o 一个人受其他人影响的程度，和觉悟程度成反比</item>

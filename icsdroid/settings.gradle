@@ -1,2 +1,0 @@
-
-include ':icsdroid_lib', ':cert4android', ':ical4android'
