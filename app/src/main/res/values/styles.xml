@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="AppTheme.Blue_Grey_900"/>
+    <style name="AppTheme" parent="AppTheme.Light_Green_900"/>
 
     <style name="DayView">
         <item name="android:gravity">center</item>
-        <item name="android:textSize">@dimen/day_text_size</item>
+        <item name="android:textSize">@dimen/meta_text_size</item>
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 

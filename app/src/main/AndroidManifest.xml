@@ -62,7 +62,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.MainActivity">
+        <activity android:name=".activities.MainActivity"
+            android:permission="android.permission.READ_CALENDAR">
             <meta-data
                 android:name="android.app.default_searchable"
                 android:resource="@xml/searchable"/>
@@ -188,10 +189,10 @@
 
         <service android:name=".services.SnoozeService"/>
 
-        <!-- account type "at.bitfire.icsdroid" -->
+        <!-- account type "net.euse.icsdroid" -->
         <service
             android:name="at.bitfire.icsdroid.AccountAuthenticatorService"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>

@@ -94,7 +94,9 @@
 
     <string name="sync_permission_required">Permission required</string>
     <string name="sync_permission_required_sync_calendar">Needing permission to sync your calendar</string>
-
+    <string name="calendar_permission_required">Calendar Read_Write Permission required</string>
+<string name="calendar_permission_granted">Calendar Read_Write Permission granted</string>
+<string name="calendar_permission_denied">Calendar Read_Write Permission denied</string>
     <string name="permission_required_external_storage">Storage permission is required to access local iCalendar files</string>
 
 </resources>

@@ -10,6 +10,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.database.ContentObserver
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
@@ -30,6 +31,7 @@ import com.simplemobiletools.calendar.receivers.CalDAVSyncReceiver
 import com.simplemobiletools.calendar.receivers.NotificationReceiver
 import com.simplemobiletools.calendar.services.SnoozeService
 import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.helpers.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import java.io.File
@@ -123,29 +125,6 @@ private fun getNotificationIntent(context: Context, event: Event): PendingIntent
     return PendingIntent.getBroadcast(context, event.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 }
 
-fun Context.getFormattedMinutes(minutes: Int, showBefore: Boolean = true) = when (minutes) {
-    -1 -> getString(R.string.no_reminder)
-    0 -> getString(R.string.at_start)
-    else -> {
-        if (minutes % 525600 == 0)
-            resources.getQuantityString(R.plurals.years, minutes / 525600, minutes / 525600)
-
-        when {
-            minutes % 43200 == 0 -> resources.getQuantityString(R.plurals.months, minutes / 43200, minutes / 43200)
-            minutes % 10080 == 0 -> resources.getQuantityString(R.plurals.weeks, minutes / 10080, minutes / 10080)
-            minutes % 1440 == 0 -> resources.getQuantityString(R.plurals.days, minutes / 1440, minutes / 1440)
-            minutes % 60 == 0 -> {
-                val base = if (showBefore) R.plurals.hours_before else R.plurals.by_hours
-                resources.getQuantityString(base, minutes / 60, minutes / 60)
-            }
-            else -> {
-                val base = if (showBefore) R.plurals.minutes_before else R.plurals.by_minutes
-                resources.getQuantityString(base, minutes, minutes)
-            }
-        }
-    }
-}
-
 fun Context.getRepetitionText(seconds: Int) = when (seconds) {
     0 -> getString(R.string.no_repetition)
     DAY -> getString(R.string.daily)
@@ -185,7 +164,7 @@ fun Context.notifyEvent(event: Event) {
 @SuppressLint("NewApi")
 private fun getNotification(context: Context, pendingIntent: PendingIntent, event: Event, content: String): Notification {
     val channelId = "reminder_channel"
-    if (context.isOreoPlus()) {
+    if (isOreoPlus()) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val name = context.resources.getString(R.string.event_reminders)
         val importance = NotificationManager.IMPORTANCE_HIGH
@@ -217,7 +196,7 @@ private fun getNotification(context: Context, pendingIntent: PendingIntent, even
             .setChannelId(channelId)
             .addAction(R.drawable.ic_snooze, context.getString(R.string.snooze), getSnoozePendingIntent(context, event))
 
-    if (context.isLollipopPlus()) {
+    if (isLollipopPlus()) {
         builder.setVisibility(Notification.VISIBILITY_PUBLIC)
     }
 
@@ -330,7 +309,7 @@ fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: Linea
         textColor = textColor.adjustAlpha(LOW_ALPHA)
 
     (View.inflate(applicationContext, R.layout.day_monthly_number_view, null) as TextView).apply {
-        setTextColor(textColor)
+        setTextColor(Color.BLACK)
         text = day.value.toString()
         gravity = Gravity.TOP or Gravity.LEFT
         layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -385,9 +364,9 @@ fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: Linea
 //    }
 
     (View.inflate(applicationContext, R.layout.day_monthly_number_view, null) as TextView).apply {
-        setTextColor(textColor)
+        setTextColor(Color.BLACK)
         text = holidayOrLunar
-        gravity = Gravity.TOP or Gravity.RIGHT
+        gravity = Gravity.BOTTOM or Gravity.LEFT
         layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         linearLayout.addView(this)
 

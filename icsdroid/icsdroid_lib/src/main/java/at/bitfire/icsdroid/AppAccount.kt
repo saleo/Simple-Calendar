@@ -20,7 +20,7 @@ object AppAccount {
 
     val SYNC_INTERVAL_MANUALLY = -1L
 
-    val account = Account("ShouKangCal", "at.bitfire.icsdroid")
+    val account = Account("ShouKangCal", "net.euse.icsdroid")
 
 
     fun makeAvailable(context: Context) {

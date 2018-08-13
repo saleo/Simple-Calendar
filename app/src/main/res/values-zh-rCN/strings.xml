@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">寿康日历</string>
-    <string name="app_launcher_name">寿康日历</string>
+    <string name="app_name">寿康日历dbg</string>
+    <string name="app_launcher_name">寿康日历dbg</string>
     <string name="change_view">切换显示</string>
     <string name="daily_view">天</string>
     <string name="weekly_view">周</string>

@@ -1,0 +1,41 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion propCompileSdkVersion
+
+    defaultConfig {
+        minSdkVersion propMinSdkVersion
+        targetSdkVersion propTargetSdkVersion
+        versionCode propVersionCode
+        versionName propVersionName
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            consumerProguardFiles 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+}
+
+dependencies {
+    compile "com.android.support:design:$support_libs"
+    compile "com.android.support:appcompat-v7:$support_libs"
+    compile 'com.github.bumptech.glide:glide:4.6.1'
+    compile 'com.booking:rtlviewpager:1.0.1'
+    compile 'com.andrognito.patternlockview:patternlockview:1.0.0'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile 'com.bignerdranch.android:recyclerview-multiselect:0.2'
+    compile 'com.github.ajalt.reprint:core:3.2.0@aar'
+
+    kapt 'com.github.bumptech.glide:compiler:4.6.1'
+}
+

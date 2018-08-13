@@ -1,8 +1,10 @@
 package com.simplemobiletools.calendar.activities
 
+import android.Manifest
 import android.app.SearchManager
 import android.content.*
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.database.ContentObserver
 import android.database.Cursor
 import android.graphics.drawable.ColorDrawable
@@ -11,11 +13,15 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.CalendarContract
 import android.provider.ContactsContract
+import android.support.design.widget.Snackbar
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.SearchView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import at.bitfire.ical4android.AndroidCalendar
 import at.bitfire.ical4android.CalendarStorageException
@@ -54,12 +60,17 @@ import at.bitfire.icsdroid.db.CalendarCredentials
 import at.bitfire.icsdroid.db.LocalCalendar
 import java.util.concurrent.TimeUnit
 
+const val MY_PERMISSIONS_REQUEST_READ_CALENDAR=1
+
 class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     private val CALDAV_SYNC_DELAY = 1000L
     private val SKCAL_EXIST=2
     private val SKCAL_NON_EXIST=1
     private val SKCAL_CHECK_ERROR=0
-    private val SKCAL_URL="https://fruux.com/calendars/public/a3298197437/d136f63e-d838-4cdd-8034-86130fc9780b/"
+    private val SKCAL_URL="http://p.fruux.com/c/a3298197437/d136f63e-d838-4cdd-8034-86130fc9780b.ics"
+
+
+    private lateinit var layout: View
 
     private var showCalDAVRefreshToast = false
     private var mShouldFilterBeVisible = false
@@ -119,6 +130,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
 
         if (checkSkCalExist()==SKCAL_EXIST){
+
             val extras = Bundle(2)
             extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true)
             extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true)
@@ -826,11 +838,38 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     private fun checkSkCalExist():Int{
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                                Manifest.permission.READ_CALENDAR)) {
+                    // Show an explanation to the user *asynchronously* -- don't block
+                    // this thread waiting for the user's response! After the user
+                    // sees the explanation, try again to request the permission.
+                    layout.showSnackbar(R.string.calendar_permission_required,
+                            Snackbar.LENGTH_INDEFINITE, R.string.ok) {
+                        ActivityCompat.requestPermissions(this,
+                                arrayOf(Manifest.permission_group.CALENDAR),
+                                MY_PERMISSIONS_REQUEST_READ_CALENDAR)
+                    }
+                } else {
+                    // No explanation needed, we can request the permission.
+                    ActivityCompat.requestPermissions(this,
+                            arrayOf(Manifest.permission_group.CALENDAR),
+                            MY_PERMISSIONS_REQUEST_READ_CALENDAR)
+
+                    // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                    // app-defined int constant. The callback method gets the
+                    // result of the request.
+                }
+            }
+        }
+
         var provider= contentResolver.acquireContentProviderClient(CalendarContract.AUTHORITY)
         var res=SKCAL_CHECK_ERROR
         try {
             // currently only filter by account, since cannot find any other criteria suitable or available
-            if (!LocalCalendar.findAll(account, provider).filter { it.account.equals(account) }.isEmpty())
+            if (!LocalCalendar.findAll(account, provider).isEmpty())
                 res=SKCAL_EXIST
             else
                 res=SKCAL_NON_EXIST
@@ -871,6 +910,23 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             false
         } finally {
             client?.release()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<String>,
+            grantResults: IntArray
+    ) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_READ_CALENDAR) {
+            // Request for camera permission.
+            if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission has been granted. Start camera preview Activity.
+                layout.showSnackbar(R.string.calendar_permission_granted, Snackbar.LENGTH_SHORT)
+            } else {
+                // Permission request was denied.
+                layout.showSnackbar(R.string.calendar_permission_denied, Snackbar.LENGTH_SHORT)
+            }
         }
     }
 }

@@ -1,7 +1,9 @@
 package com.simplemobiletools.calendar.helpers
 
 import android.content.Context
+import android.graphics.Color
 import android.media.RingtoneManager
+import android.provider.CalendarContract
 import android.text.format.DateFormat
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.extensions.scheduleCalDAVSync
@@ -13,12 +15,6 @@ class Config(context: Context) : BaseConfig(context) {
         fun newInstance(context: Context) = Config(context)
     }
 
-    var isSundayFirst: Boolean
-        get() {
-            val isSundayFirst = Calendar.getInstance(Locale.getDefault()).firstDayOfWeek == Calendar.SUNDAY
-            return prefs.getBoolean(SUNDAY_FIRST, isSundayFirst)
-        }
-        set(sundayFirst) = prefs.edit().putBoolean(SUNDAY_FIRST, sundayFirst).apply()
 
     var use24hourFormat: Boolean
         get() {
@@ -62,10 +58,6 @@ class Config(context: Context) : BaseConfig(context) {
     var defaultReminderMinutes3: Int
         get() = prefs.getInt(REMINDER_MINUTES_3, REMINDER_OFF)
         set(defaultReminderMinutes3) = prefs.edit().putInt(REMINDER_MINUTES_3, defaultReminderMinutes3).apply()
-
-    var useSameSnooze: Boolean
-        get() = prefs.getBoolean(USE_SAME_SNOOZE, false)
-        set(useSameSnooze) = prefs.edit().putBoolean(USE_SAME_SNOOZE, useSameSnooze).apply()
 
     var snoozeDelay: Int
         get() = prefs.getInt(SNOOZE_DELAY, 10)
@@ -137,4 +129,6 @@ class Config(context: Context) : BaseConfig(context) {
     private fun getSmallFontSize() = getMediumFontSize() - 3f
     private fun getMediumFontSize() = context.resources.getDimension(R.dimen.day_text_size) / context.resources.displayMetrics.density
     private fun getLargeFontSize() = getMediumFontSize() + 3f
+
+
 }

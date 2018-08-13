@@ -11,7 +11,7 @@ import com.simplemobiletools.calendar.extensions.getNowSeconds
 import com.simplemobiletools.calendar.extensions.seconds
 import com.simplemobiletools.calendar.helpers.Formatter
 import com.simplemobiletools.commons.extensions.getDialogTheme
-import com.simplemobiletools.commons.extensions.isLollipopPlus
+import com.simplemobiletools.commons.helpers.isLollipopPlus
 import com.simplemobiletools.commons.extensions.setupDialogStuff
 import com.simplemobiletools.commons.extensions.value
 import kotlinx.android.synthetic.main.dialog_repeat_limit_type_picker.view.*
@@ -85,7 +85,7 @@ class RepeatLimitTypePickerDialog(val activity: Activity, var repeatLimit: Int, 
         val datepicker = DatePickerDialog(activity, activity.getDialogTheme(), repetitionLimitDateSetListener, repeatLimitDateTime.year,
                 repeatLimitDateTime.monthOfYear - 1, repeatLimitDateTime.dayOfMonth)
 
-        if (activity.isLollipopPlus()) {
+        if (isLollipopPlus()) {
             datepicker.datePicker.firstDayOfWeek = if (activity.config.isSundayFirst) Calendar.SUNDAY else Calendar.MONDAY
         }
 

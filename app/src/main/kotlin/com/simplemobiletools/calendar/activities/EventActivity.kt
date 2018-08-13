@@ -19,6 +19,8 @@ import com.simplemobiletools.calendar.models.CalDAVCalendar
 import com.simplemobiletools.calendar.models.Event
 import com.simplemobiletools.commons.dialogs.RadioGroupDialog
 import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.helpers.isLollipopPlus
+import com.simplemobiletools.calendar.helpers.Config
 import com.simplemobiletools.commons.models.RadioItem
 import kotlinx.android.synthetic.main.activity_event.*
 import org.joda.time.DateTime
@@ -571,7 +573,7 @@ class EventActivity : SimpleActivity() {
             reminder3Minutes = reminder3
             repeatInterval = mRepeatInterval
             importId = newImportId
-            flags = if (event_all_day.isChecked) (mEvent.flags or FLAG_ALL_DAY) else (mEvent.flags.removeFlag(FLAG_ALL_DAY))
+            flags = if (event_all_day.isChecked) (mEvent.flags or FLAG_ALL_DAY) else (mEvent.flags.removeBit(FLAG_ALL_DAY))
             repeatLimit = if (repeatInterval == 0) 0 else mRepeatLimit
             repeatRule = mRepeatRule
             eventType = newEventType
@@ -728,9 +730,8 @@ class EventActivity : SimpleActivity() {
         val datepicker = DatePickerDialog(this, mDialogTheme, endDateSetListener, mEventEndDateTime.year, mEventEndDateTime.monthOfYear - 1,
                 mEventEndDateTime.dayOfMonth)
 
-        if (isLollipopPlus()) {
             datepicker.datePicker.firstDayOfWeek = if (config.isSundayFirst) Calendar.SUNDAY else Calendar.MONDAY
-        }
+
 
         datepicker.show()
     }

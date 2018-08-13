@@ -8,6 +8,7 @@ import com.simplemobiletools.calendar.dialogs.CustomEventRepeatIntervalDialog
 import com.simplemobiletools.calendar.helpers.*
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.RadioGroupDialog
+import com.simplemobiletools.commons.extensions.getFormattedMinutes
 import com.simplemobiletools.commons.extensions.hideKeyboard
 import com.simplemobiletools.commons.extensions.sharePathIntent
 import com.simplemobiletools.commons.extensions.toast
