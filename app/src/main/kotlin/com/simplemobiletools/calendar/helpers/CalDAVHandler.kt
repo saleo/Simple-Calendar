@@ -23,16 +23,17 @@ import kotlin.collections.ArrayList
 class CalDAVHandler(val context: Context) {
     fun refreshCalendars(activity: SimpleActivity? = null, callback: () -> Unit) {
         for (calendar in getCalDAVCalendars(activity, context.config.caldavSyncedCalendarIDs)) {
-            val localEventType = context.dbHelper.getEventTypeWithCalDAVCalendarId(calendar.id) ?: continue
+            /*val localEventType = context.dbHelper.getEventTypeWithCalDAVCalendarId(calendar.id) ?: continue
             localEventType.apply {
                 title = calendar.displayName
                 caldavDisplayName = calendar.displayName
                 caldavEmail = calendar.accountName
                 color = calendar.color
                 context.dbHelper.updateLocalEventType(this)
-            }
+            }*/
 
-            CalDAVHandler(context).fetchCalDAVCalendarEvents(calendar.id, localEventType.id, activity)
+
+            CalDAVHandler(context).fetchCalDAVCalendarEvents(calendar.id, DBHelper.REGULAR_EVENT_TYPE_ID, activity)
         }
         context.scheduleCalDAVSync(true)
         callback()

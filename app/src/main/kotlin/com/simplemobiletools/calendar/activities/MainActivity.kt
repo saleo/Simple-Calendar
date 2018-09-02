@@ -64,9 +64,9 @@ const val MY_PERMISSIONS_REQUEST_READ_CALENDAR=1
 
 class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     private val CALDAV_SYNC_DELAY = 1000L
-    private val SKCAL_EXIST=2
     private val SKCAL_NON_EXIST=1
     private val SKCAL_CHECK_ERROR=0
+    private val SK_CREATE_FAILED=0
     private val SKCAL_URL="http://p.fruux.com/c/a3298197437/d136f63e-d838-4cdd-8034-86130fc9780b.ics"
 
 
@@ -129,22 +129,25 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             config.caldavSync = false
         }
 
-        if (checkSkCalExist()==SKCAL_EXIST){
+        var res=checkSkCalExist()
+        if (res!=SKCAL_NON_EXIST && res!=SKCAL_CHECK_ERROR){
 
             val extras = Bundle(2)
             extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true)
             extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true)
             ContentResolver.requestSync(AppAccount.account, CalendarContract.AUTHORITY, extras)
         } else if (checkSkCalExist()==SKCAL_NON_EXIST){
-            if (createSkCalendar())
+            res=createSkCalendar()
+            if (res!=SK_CREATE_FAILED)
                 Toast.makeText(this, getString(R.string.add_calendar_created), Toast.LENGTH_LONG).show()
             else
                 Toast.makeText(this, getString(R.string.add_calendar_failed), Toast.LENGTH_LONG).show()
         } else{
             Toast.makeText(this, getString(R.string.check_calendar_failed), Toast.LENGTH_LONG).show()
         }
-
-
+        this.config.caldavSync=true
+        this.config.lastUsedCaldavCalendar=res
+        this.config.caldavSyncedCalendarIDs=res.toString()
         supportActionBar?.hide()
     }
 
@@ -177,6 +180,8 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
         calendar_fab.setColors(config.textColor, getAdjustedPrimaryColor(), config.backgroundColor)
         search_holder.background = ColorDrawable(config.backgroundColor)
+
+        refreshCalDAVCalendars(true)
     }
 
     override fun onPause() {
@@ -370,6 +375,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     private val calDAVSyncObserver = object : ContentObserver(Handler()) {
         override fun onChange(selfChange: Boolean) {
             super.onChange(selfChange)
+            Log.d(Constants.TAG,"calDavSync onChange() observed")
             if (!selfChange) {
                 mCalDAVSyncHandler.removeCallbacksAndMessages(null)
                 mCalDAVSyncHandler.postDelayed({
@@ -840,22 +846,20 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     private fun checkSkCalExist():Int{
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                                Manifest.permission.READ_CALENDAR)) {
+            if (ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_CALENDAR)) {
                     // Show an explanation to the user *asynchronously* -- don't block
-                    // this thread waiting for the user's response! After the user
+                    // this thread waiting for the user's response! After the user`
                     // sees the explanation, try again to request the permission.
                     layout.showSnackbar(R.string.calendar_permission_required,
                             Snackbar.LENGTH_INDEFINITE, R.string.ok) {
-                        ActivityCompat.requestPermissions(this,
-                                arrayOf(Manifest.permission_group.CALENDAR),
+                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_CALENDAR,Manifest.permission.WRITE_CALENDAR),
                                 MY_PERMISSIONS_REQUEST_READ_CALENDAR)
                     }
                 } else {
                     // No explanation needed, we can request the permission.
-                    ActivityCompat.requestPermissions(this,
-                            arrayOf(Manifest.permission_group.CALENDAR),
+                    ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.READ_CALENDAR,Manifest.permission.WRITE_CALENDAR),
                             MY_PERMISSIONS_REQUEST_READ_CALENDAR)
 
                     // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
@@ -870,7 +874,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         try {
             // currently only filter by account, since cannot find any other criteria suitable or available
             if (!LocalCalendar.findAll(account, provider).isEmpty())
-                res=SKCAL_EXIST
+                res=LocalCalendar.findAll(account, provider)[0].id.toInt()
             else
                 res=SKCAL_NON_EXIST
         } catch (e: CalendarStorageException) {
@@ -883,7 +887,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         return res
     }
 
-    private fun createSkCalendar(): Boolean {
+    private fun createSkCalendar(): Int {
         AppAccount.makeAvailable(this)
 
         val calInfo = ContentValues(9)
@@ -897,19 +901,21 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         calInfo.put(CalendarContract.Calendars.VISIBLE, 1)
         calInfo.put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_READ)
 
+        var res=SK_CREATE_FAILED
         val client: ContentProviderClient? = contentResolver.acquireContentProviderClient(CalendarContract.AUTHORITY)
         return try {
             client?.let {
                 val uri = AndroidCalendar.create(AppAccount.account, it, calInfo)
-                val calendar = LocalCalendar.findById(AppAccount.account, client, ContentUris.parseId(uri))
+                res=ContentUris.parseId(uri).toInt()
             }
-            true
+            res
         } catch(e: Exception) {
             Log.e(Constants.TAG, "Couldn't create calendar", e)
 //            Toast.makeText(applicationContext, e.localizedMessage, Toast.LENGTH_LONG).show()
-            false
+            res
         } finally {
             client?.release()
+            res
         }
     }
 
