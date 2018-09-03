@@ -125,29 +125,38 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             updateViewPager()
         }
 
+        handlePermission(PERMISSION_WRITE_CALENDAR) {
+            if (it) {
+                handlePermission(PERMISSION_READ_CALENDAR) {
+                    if (it) {
+                        var res=checkSkCalExist()
+                        if (res!=SKCAL_NON_EXIST && res!=SKCAL_CHECK_ERROR){
+
+                            val extras = Bundle(2)
+                            extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true)
+                            extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true)
+                            ContentResolver.requestSync(AppAccount.account, CalendarContract.AUTHORITY, extras)
+                        } else if (res==SKCAL_NON_EXIST){
+                            res=createSkCalendar()
+                            if (res!=SK_CREATE_FAILED)
+                                Toast.makeText(this, getString(R.string.add_calendar_created), Toast.LENGTH_LONG).show()
+                            else
+                                Toast.makeText(this, getString(R.string.add_calendar_failed), Toast.LENGTH_LONG).show()
+                        } else{
+                            Toast.makeText(this, getString(R.string.check_calendar_failed), Toast.LENGTH_LONG).show()
+                        }
+                        this.config.caldavSync=true
+                        this.config.lastUsedCaldavCalendar=res
+                        this.config.caldavSyncedCalendarIDs=res.toString()
+                    }
+                }
+            }
+        }
+
         if (!hasPermission(PERMISSION_WRITE_CALENDAR) || !hasPermission(PERMISSION_READ_CALENDAR)) {
             config.caldavSync = false
         }
 
-        var res=checkSkCalExist()
-        if (res!=SKCAL_NON_EXIST && res!=SKCAL_CHECK_ERROR){
-
-            val extras = Bundle(2)
-            extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true)
-            extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true)
-            ContentResolver.requestSync(AppAccount.account, CalendarContract.AUTHORITY, extras)
-        } else if (checkSkCalExist()==SKCAL_NON_EXIST){
-            res=createSkCalendar()
-            if (res!=SK_CREATE_FAILED)
-                Toast.makeText(this, getString(R.string.add_calendar_created), Toast.LENGTH_LONG).show()
-            else
-                Toast.makeText(this, getString(R.string.add_calendar_failed), Toast.LENGTH_LONG).show()
-        } else{
-            Toast.makeText(this, getString(R.string.check_calendar_failed), Toast.LENGTH_LONG).show()
-        }
-        this.config.caldavSync=true
-        this.config.lastUsedCaldavCalendar=res
-        this.config.caldavSyncedCalendarIDs=res.toString()
         supportActionBar?.hide()
     }
 
@@ -844,31 +853,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     private fun checkSkCalExist():Int{
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_CALENDAR)) {
-                    // Show an explanation to the user *asynchronously* -- don't block
-                    // this thread waiting for the user's response! After the user`
-                    // sees the explanation, try again to request the permission.
-                    layout.showSnackbar(R.string.calendar_permission_required,
-                            Snackbar.LENGTH_INDEFINITE, R.string.ok) {
-                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_CALENDAR,Manifest.permission.WRITE_CALENDAR),
-                                MY_PERMISSIONS_REQUEST_READ_CALENDAR)
-                    }
-                } else {
-                    // No explanation needed, we can request the permission.
-                    ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.READ_CALENDAR,Manifest.permission.WRITE_CALENDAR),
-                            MY_PERMISSIONS_REQUEST_READ_CALENDAR)
-
-                    // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                    // app-defined int constant. The callback method gets the
-                    // result of the request.
-                }
-            }
-        }
-
         var provider= contentResolver.acquireContentProviderClient(CalendarContract.AUTHORITY)
         var res=SKCAL_CHECK_ERROR
         try {
@@ -919,20 +903,4 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
     }
 
-    override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<String>,
-            grantResults: IntArray
-    ) {
-        if (requestCode == MY_PERMISSIONS_REQUEST_READ_CALENDAR) {
-            // Request for camera permission.
-            if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission has been granted. Start camera preview Activity.
-                layout.showSnackbar(R.string.calendar_permission_granted, Snackbar.LENGTH_SHORT)
-            } else {
-                // Permission request was denied.
-                layout.showSnackbar(R.string.calendar_permission_denied, Snackbar.LENGTH_SHORT)
-            }
-        }
-    }
 }

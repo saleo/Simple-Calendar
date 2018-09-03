@@ -5,6 +5,7 @@ import android.annotation.TargetApi
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
@@ -289,7 +290,7 @@ open class BaseSimpleActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         isAskingPermissions = false
         if (requestCode == GENERIC_PERM_HANDLER && grantResults.isNotEmpty()) {
-            actionOnPermission?.invoke(grantResults[0] == 0)
+            actionOnPermission?.invoke(grantResults[0] == PackageManager.PERMISSION_GRANTED)
         }
     }
 
