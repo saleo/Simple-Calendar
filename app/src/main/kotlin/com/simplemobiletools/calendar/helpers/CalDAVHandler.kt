@@ -213,7 +213,8 @@ class CalDAVHandler(val context: Context) {
                 CalendarContract.Events.RRULE,
                 CalendarContract.Events.ORIGINAL_ID,
                 CalendarContract.Events.ORIGINAL_INSTANCE_TIME,
-                CalendarContract.Events.EVENT_LOCATION)
+                CalendarContract.Events.EVENT_LOCATION,
+                CalendarContract.Events.EVENT_COLOR)
 
         val selection = "${CalendarContract.Events.CALENDAR_ID} = $calendarId"
         var cursor: Cursor? = null
@@ -232,6 +233,7 @@ class CalDAVHandler(val context: Context) {
                     val originalId = cursor.getStringValue(CalendarContract.Events.ORIGINAL_ID)
                     val originalInstanceTime = cursor.getLongValue(CalendarContract.Events.ORIGINAL_INSTANCE_TIME)
                     val reminders = getCalDAVEventReminders(id)
+                    val color=cursor.getIntValue(CalendarContract.Events.EVENT_COLOR)
 
                     if (endTS == 0) {
                         val duration = cursor.getStringValue(CalendarContract.Events.DURATION) ?: ""
@@ -243,7 +245,7 @@ class CalDAVHandler(val context: Context) {
                     val repeatRule = Parser().parseRepeatInterval(rrule, startTS)
                     val event = Event(0, startTS, endTS, title, description, reminders.getOrElse(0, { -1 }),
                             reminders.getOrElse(1, { -1 }), reminders.getOrElse(2, { -1 }), repeatRule.repeatInterval,
-                            importId, allDay, repeatRule.repeatLimit, repeatRule.repeatRule, eventTypeId, source = source, location = location)
+                            importId, allDay, repeatRule.repeatLimit, repeatRule.repeatRule, eventTypeId, source = source, color = color,location = location)
 
                     if (event.getIsAllDay()) {
                         event.startTS = Formatter.getShiftedImportTimestamp(event.startTS)
@@ -258,9 +260,9 @@ class CalDAVHandler(val context: Context) {
                         val existingEvent = importIdsMap[importId]
                         val originalEventId = existingEvent!!.id
 
+
                         existingEvent.apply {
                             this.id = 0
-                            color = 0
                             ignoreEventOccurrences = ArrayList()
                             lastUpdated = 0L
                             offset = ""

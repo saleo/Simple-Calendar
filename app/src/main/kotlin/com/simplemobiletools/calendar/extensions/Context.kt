@@ -385,7 +385,7 @@ fun Context.addDayEvents(day: DayMonthly, linearLayout: LinearLayout, res: Resou
         backgroundDrawable.applyColorFilter(it.color)
         eventLayoutParams.setMargins(dividerMargin, 0, dividerMargin, dividerMargin)
 
-        var textColor = it.color.getContrastColor()
+        var textColor = Color.WHITE //it.color.getContrastColor()
         if (!day.isThisMonth) {
             backgroundDrawable.alpha = 64
             textColor = textColor.adjustAlpha(0.25f)

@@ -19,6 +19,7 @@ import android.support.v4.content.ContextCompat
 import android.util.Base64
 import android.util.Log
 import at.bitfire.cert4android.CustomCertManager
+import at.bitfire.ical4android.AndroidCalendar
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.ical4android.Event
 import at.bitfire.icsdroid.db.CalendarCredentials
@@ -53,6 +54,9 @@ class SyncAdapter(
         Log.i(Constants.TAG, "Synchronizing ${account.name} on authority $authority")
 
         try {
+
+            AndroidCalendar.insertColors(provider,account)
+
             LocalCalendar.findAll(account, provider)
                     .filter { it.isSynced }
                     .forEach { syncExecutor.execute(ProcessEventsTask(it, syncResult)) }
