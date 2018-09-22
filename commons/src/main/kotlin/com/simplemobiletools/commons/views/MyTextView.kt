@@ -15,4 +15,5 @@ class MyTextView : TextView {
         setTextColor(textColor)
         setLinkTextColor(accentColor)
     }
+
 }

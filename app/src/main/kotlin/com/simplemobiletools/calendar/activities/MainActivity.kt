@@ -156,7 +156,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         if (!hasPermission(PERMISSION_WRITE_CALENDAR) || !hasPermission(PERMISSION_READ_CALENDAR)) {
             config.caldavSync = false
         }
-
+        config.isSundayFirst = false
         supportActionBar?.hide()
     }
 

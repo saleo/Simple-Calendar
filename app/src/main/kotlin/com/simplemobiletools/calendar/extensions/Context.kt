@@ -21,6 +21,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.simplemobiletools.calendar.*
+import com.simplemobiletools.calendar.R.drawable.*
 import com.simplemobiletools.calendar.activities.EventActivity
 import com.simplemobiletools.calendar.activities.SimpleActivity
 import com.simplemobiletools.calendar.activities.SnoozeReminderActivity
@@ -305,33 +306,38 @@ fun Context.syncCalDAVCalendars(activity: SimpleActivity?, calDAVSyncObserver: C
 fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: LinearLayout, dayLabelHeight: Int, callback: (Int) -> Unit) {
     var textColor = rawTextColor
     var holidayOrLunar=""
-    if (!day.isThisMonth)
-        textColor = textColor.adjustAlpha(LOW_ALPHA)
 
     (View.inflate(applicationContext, R.layout.day_monthly_number_view, null) as TextView).apply {
-        setTextColor(Color.BLACK)
         text = day.value.toString()
+        setTextColor(Color.BLACK)
+        setTextSize((context.config.getFontSize()) * 1.5.toFloat())
         gravity = Gravity.TOP or Gravity.LEFT
         layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         linearLayout.addView(this)
 
         if (day.isToday) {
             val primaryColor = getAdjustedPrimaryColor()
-            setTextColor(primaryColor.getContrastColor())
+            setTextColor(Color.BLACK)
             if (dayLabelHeight == 0) {
                 onGlobalLayout {
                     val height = this@apply.height
                     if (height > 0) {
                         callback(height)
-                        addTodaysBackground(this, resources, height, primaryColor)
                     }
                 }
-            } else {
-                addTodaysBackground(this, resources, dayLabelHeight, primaryColor)
             }
+            linearLayout.setBackgroundResource(today_border)
         }
-    }
 
+        val dayEventsString:String=day.dayEvents.toString()
+        when  //eventColor only show one if there're more than 1, and the priority is:red,blue, gray
+        {
+            dayEventsString.contains("-65536") -> setBackgroundResource(circle_empty_red)
+            dayEventsString.contains("-16776961") -> setBackgroundResource(circle_empty_blue)
+            dayEventsString.contains("-8355712") -> setBackgroundResource(circle_empty_gray)
+        }
+
+    }
     //show chinese lunar when in zh-cn,or zh-tw,etc
     val strCountry = resources.getConfiguration().locale.getCountry()
     if (strCountry == "CN" || strCountry == "TW") {
@@ -363,13 +369,12 @@ fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: Linea
 //        mMonthNumPaint.setFakeBoldText(isBold = false)
 //    }
 
-    (View.inflate(applicationContext, R.layout.day_monthly_number_view, null) as TextView).apply {
+    (View.inflate(applicationContext, R.layout.day_monthly_number_lunar_view, null) as TextView).apply {
         setTextColor(Color.BLACK)
         text = holidayOrLunar
         gravity = Gravity.BOTTOM or Gravity.LEFT
         layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         linearLayout.addView(this)
-
     }
 
 }
@@ -386,10 +391,6 @@ fun Context.addDayEvents(day: DayMonthly, linearLayout: LinearLayout, res: Resou
         eventLayoutParams.setMargins(dividerMargin, 0, dividerMargin, dividerMargin)
 
         var textColor = Color.WHITE //it.color.getContrastColor()
-        if (!day.isThisMonth) {
-            backgroundDrawable.alpha = 64
-            textColor = textColor.adjustAlpha(0.25f)
-        }
 
         (View.inflate(applicationContext, R.layout.day_monthly_event_view, null) as TextView).apply {
             setTextColor(textColor)

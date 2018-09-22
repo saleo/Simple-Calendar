@@ -173,7 +173,7 @@ class MonthFragment : Fragment(), MonthlyCalendar {
         week_num.setTextColor(mTextColor)
         week_num.beVisibleIf(displayWeekNumbers)
 
-        for (i in 0..5) {
+        for (i in 0..4) {
             mHolder.findViewById<TextView>(mRes.getIdentifier("week_num_$i", "id", mPackageName)).apply {
                 text = "${days[i * 7 + 3].weekOfYear}:"     // fourth day of the week matters
                 setTextColor(mTextColor)
@@ -184,14 +184,17 @@ class MonthFragment : Fragment(), MonthlyCalendar {
         val dividerMargin = mRes.displayMetrics.density.toInt()
         for (i in 0 until len) {
             mHolder.findViewById<LinearLayout>(mRes.getIdentifier("day_$i", "id", mPackageName)).apply {
-                val day = days[i]
+                if (days[i].isThisMonth)
+                 {
+                    val day = days[i]
 //                setOnClickListener {
 //                    (activity as MainActivity).openDayFromMonthly(Formatter.getDateTimeFromCode(day.code))
 //                }
 
-                removeAllViews()
-                context.addDayNumber(mTextColor, day, this, mDayLabelHeight) { mDayLabelHeight = it }
-                context.addDayEvents(day, this, mRes, dividerMargin)
+                    removeAllViews()
+                    context.addDayNumber(mTextColor, day, this, mDayLabelHeight) { mDayLabelHeight = it }
+                    context.addDayEvents(day, this, mRes, dividerMargin)
+                }
             }
         }
     }
