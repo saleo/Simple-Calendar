@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/day_holder"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:paddingTop="@dimen/medium_margin">
 
     <include layout="@layout/top_navigation"/>
@@ -12,9 +12,16 @@
     <com.simplemobiletools.commons.views.MyRecyclerView
         android:id="@+id/day_events"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/top_month"
-        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:clipToPadding="true"
         app:layoutManager="com.simplemobiletools.commons.views.MyLinearLayoutManager"/>
 
+    <include android:id="@+id/id_bottom_sentense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignWithParentIfMissing="true"
+        layout="@layout/bottom_sentense" />
 </RelativeLayout>

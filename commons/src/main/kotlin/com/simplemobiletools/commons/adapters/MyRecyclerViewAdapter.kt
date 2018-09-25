@@ -256,14 +256,8 @@ abstract class MyRecyclerViewAdapter(val activity: BaseSimpleActivity, val recyc
         fun bindView(any: Any, allowLongClick: Boolean = true, callback: (itemView: View, layoutPosition: Int) -> Unit): View {
             return itemView.apply {
                 callback(this, layoutPosition)
-
-                if (isClickable) {
-                    setOnClickListener { viewClicked(any) }
-                    setOnLongClickListener { if (allowLongClick) viewLongClicked() else viewClicked(any); true }
-                } else {
-                    setOnClickListener(null)
-                    setOnLongClickListener(null)
-                }
+                setOnClickListener(null)
+                setOnLongClickListener(null)
             }
         }
 

@@ -5,19 +5,18 @@
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     android:paddingTop="1dp"
-    android:paddingBottom="1dp"
     >
 
     <TextView android:id="@+id/bottom_sentense0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
+        android:layout_gravity="bottom"
         android:text="sentense1"/>
 
     <TextView android:id="@+id/bottom_sentense1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
+        android:layout_gravity="bottom"
         android:text="words1,sentense1" />
 
 </LinearLayout>
