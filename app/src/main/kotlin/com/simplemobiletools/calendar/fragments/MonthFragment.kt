@@ -187,9 +187,9 @@ class MonthFragment : Fragment(), MonthlyCalendar {
                 if (days[i].isThisMonth)
                  {
                     val day = days[i]
-//                setOnClickListener {
-//                    (activity as MainActivity).openDayFromMonthly(Formatter.getDateTimeFromCode(day.code))
-//                }
+                setOnClickListener {
+                    (activity as MainActivity).openDayFromMonthly(Formatter.getDateTimeFromCode(day.code))
+                }
 
                     removeAllViews()
                     context.addDayNumber(mTextColor, day, this, mDayLabelHeight) { mDayLabelHeight = it }
@@ -221,6 +221,8 @@ class MonthFragment : Fragment(), MonthlyCalendar {
         mbottomsentenceFooter = mHolder.findViewById(R.id.id_bottom_sentense) as  ViewGroup
         mBottomSentence0 = mbottomsentenceFooter.findViewById(R.id.bottom_sentense0) as TextView
         mBottomSentence1 = mbottomsentenceFooter.findViewById(R.id.bottom_sentense1) as TextView
+        mBottomSentence0.setTextSize(mConfig.getFontSize()*1.01.toFloat())
+        mBottomSentence1.setTextSize(mConfig.getFontSize()*1.01.toFloat())
         val res = resources
         mBottomSentences = res.getStringArray(R.array.bottom_sentences)
 

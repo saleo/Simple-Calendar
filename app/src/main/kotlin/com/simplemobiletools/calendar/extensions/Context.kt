@@ -334,7 +334,7 @@ fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: Linea
         {
             dayEventsString.contains("-65536") -> setBackgroundResource(circle_empty_red)
             dayEventsString.contains("-16776961") -> setBackgroundResource(circle_empty_blue)
-            dayEventsString.contains("-8355712") -> setBackgroundResource(circle_empty_gray)
+            dayEventsString.contains("-7829368") -> setBackgroundResource(circle_empty_gray)
         }
 
     }
@@ -384,22 +384,35 @@ private fun addTodaysBackground(textView: TextView, res: Resources, dayLabelHeig
 
 fun Context.addDayEvents(day: DayMonthly, linearLayout: LinearLayout, res: Resources, dividerMargin: Int) {
     val eventLayoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-
-    day.dayEvents.sortedWith(compareBy({ it.startTS }, { it.endTS }, { it.title })).forEach {
+    var eventBackgroundColor=Color.GRAY
+    var eventText=""
+    run loop@{
+        day.dayEvents.sortedWith(compareBy({ it.color })).forEach {
+            if (it.color != Color.GRAY) {
+                eventBackgroundColor = it.color;eventText = it.title
+                if (eventBackgroundColor == Color.RED) return@loop
+            }
+            else{
+                if (eventBackgroundColor!=Color.BLUE) {
+                    eventBackgroundColor = it.color;eventText = it.title
+                }
+            }
+        }
+    }
+    if (eventText != "") {
         val backgroundDrawable = res.getDrawable(R.drawable.day_monthly_event_background)
-        backgroundDrawable.applyColorFilter(it.color)
+        backgroundDrawable.applyColorFilter(eventBackgroundColor)
         eventLayoutParams.setMargins(dividerMargin, 0, dividerMargin, dividerMargin)
 
-        var textColor = Color.WHITE //it.color.getContrastColor()
-
         (View.inflate(applicationContext, R.layout.day_monthly_event_view, null) as TextView).apply {
-            setTextColor(textColor)
-            text = it.title.replace(" ", "\u00A0")  // allow word break by char
+            setTextColor(Color.WHITE)
+            text = eventText.replace(" ", "\u00A0")  // allow word break by char
             background = backgroundDrawable
             layoutParams = eventLayoutParams
             linearLayout.addView(this)
         }
     }
+
 }
 
 fun Context.getEventListItems(events: List<Event>): ArrayList<ListItem> {

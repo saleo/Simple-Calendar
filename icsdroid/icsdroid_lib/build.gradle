@@ -22,6 +22,9 @@ android {
         versionName "1.5.4"
     }
     buildTypes {
+        debug {
+            debuggable true
+        }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
