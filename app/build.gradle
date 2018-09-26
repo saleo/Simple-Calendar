@@ -53,6 +53,7 @@ dependencies {
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
     implementation 'com.android.support:design:27.1.0'
+    implementation 'com.karumi:expandableselector:1.0.0'
     implementation project(':icsdroid_lib')
     implementation project(':commons')
 }

@@ -59,6 +59,10 @@ import at.bitfire.icsdroid.SyncAdapterService
 import at.bitfire.icsdroid.db.CalendarCredentials
 import at.bitfire.icsdroid.db.LocalCalendar
 import java.util.concurrent.TimeUnit
+import com.karumi.expandableselector.ExpandableItem
+import com.karumi.expandableselector.ExpandableSelector
+import com.karumi.expandableselector.ExpandableSelectorListener
+import com.karumi.expandableselector.OnExpandableItemClickListener
 
 const val MY_PERMISSIONS_REQUEST_READ_CALENDAR=1
 
@@ -68,7 +72,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     private val SKCAL_CHECK_ERROR=0
     private val SK_CREATE_FAILED=0
     private val SKCAL_URL="http://tp.euse.cn/1vevent.ics"
-
 
     private lateinit var layout: View
 
@@ -89,7 +92,9 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     private var mStoredIsSundayFirst = false
     private var mStoredUse24HourFormat = false
     private var mStoredUseEnglish = false
+    private var expandableSelector: ExpandableSelector? = null
 
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -99,6 +104,8 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         calendar_fab.setOnClickListener {
             launchNewEventIntent(currentFragments.last().getNewEventDayCode())
         }
+
+        initializeExpandableSelector()
 
         storeStateVariables()
         if (resources.getBoolean(R.bool.portrait_only)) {
@@ -902,5 +909,59 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             res
         }
     }
+
+  private fun initializeExpandableSelector(): Unit {
+     expandableSelector = findViewById(R.id.es_icons)
+    var expandableItems = ArrayList<ExpandableItem>()
+      val item1 = ExpandableItem()
+      item1.resourceId = R.drawable.ic_keyboard_arrow_up_black
+      expandableItems.add(item1)
+      val item2 = ExpandableItem()
+      item2.resourceId = R.drawable.settings_solid
+      expandableItems.add(item2)
+      val item3 = ExpandableItem()
+      item3.resourceId = R.drawable.about_us
+      expandableItems.add(item3)
+      (expandableSelector as ExpandableSelector).showExpandableItems(expandableItems)
+      (expandableSelector as ExpandableSelector).setOnExpandableItemClickListener(object : OnExpandableItemClickListener {
+       override fun onExpandableItemClickListener(index: Int, view: View) {
+        if (index == 0 && (expandableSelector as ExpandableSelector).isExpanded()) {
+            (expandableSelector as ExpandableSelector).collapse()
+          updateIconsFirstButtonResource(R.drawable.ic_keyboard_arrow_up_black)
+        }
+
+       when (index) {
+           1 -> launchSettings()
+           2 -> launchAbout()
+       }
+      }
+    })
+
+      (expandableSelector as ExpandableSelector).setExpandableSelectorListener(object : ExpandableSelectorListener {
+
+      override fun onCollapse() {
+
+      }
+
+      override fun onExpand() {
+        updateIconsFirstButtonResource(R.drawable.ic_keyboard_arrow_down_black)
+      }
+
+      override fun onCollapsed() {
+
+      }
+
+      override fun onExpanded() {
+
+      }
+    })
+  }
+
+    private fun updateIconsFirstButtonResource(resourceId: Int) {
+        val arrowUpExpandableItem = ExpandableItem()
+        arrowUpExpandableItem.resourceId = resourceId
+        (expandableSelector as ExpandableSelector).updateExpandableItem(0, arrowUpExpandableItem)
+    }
+
 
 }
