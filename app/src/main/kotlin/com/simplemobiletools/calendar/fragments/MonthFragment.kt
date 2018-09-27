@@ -187,9 +187,10 @@ class MonthFragment : Fragment(), MonthlyCalendar {
                 if (days[i].isThisMonth)
                  {
                     val day = days[i]
-                setOnClickListener {
-                    (activity as MainActivity).openDayFromMonthly(Formatter.getDateTimeFromCode(day.code))
-                }
+                    if (day.dayEvents.size>0)
+                        setOnClickListener {
+                            (activity as MainActivity).openDayFromMonthly(Formatter.getDateTimeFromCode(day.code))
+                        }
 
                     removeAllViews()
                     context.addDayNumber(mTextColor, day, this, mDayLabelHeight) { mDayLabelHeight = it }
