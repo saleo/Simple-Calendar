@@ -252,6 +252,9 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     override fun onBackPressed() {
+        if ((expandableSelector as ExpandableSelector).isExpanded())
+            (expandableSelector as ExpandableSelector).collapse()
+
         if (currentFragments.size > 1) {
             removeTopFragment()
         } else {
@@ -600,6 +603,9 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     fun openDayFromMonthly(dateTime: DateTime) {
+        if ((expandableSelector as ExpandableSelector).isExpanded())
+            (expandableSelector as ExpandableSelector).collapse()
+
         if (currentFragments.last() is DayFragmentsHolder) {
             return
         }
@@ -914,7 +920,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
      expandableSelector = findViewById(R.id.es_icons)
     var expandableItems = ArrayList<ExpandableItem>()
       val item1 = ExpandableItem()
-      item1.resourceId = R.drawable.ic_keyboard_arrow_up_black
+      item1.resourceId = R.drawable.ic_launcher_bg_transparent
       expandableItems.add(item1)
       val item2 = ExpandableItem()
       item2.resourceId = R.drawable.settings_solid
@@ -925,9 +931,11 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
       (expandableSelector as ExpandableSelector).showExpandableItems(expandableItems)
       (expandableSelector as ExpandableSelector).setOnExpandableItemClickListener(object : OnExpandableItemClickListener {
        override fun onExpandableItemClickListener(index: Int, view: View) {
-        if (index == 0 && (expandableSelector as ExpandableSelector).isExpanded()) {
-            (expandableSelector as ExpandableSelector).collapse()
-          updateIconsFirstButtonResource(R.drawable.ic_keyboard_arrow_up_black)
+        if (index == 0 ) {
+            if ((expandableSelector as ExpandableSelector).isExpanded())
+                (expandableSelector as ExpandableSelector).collapse()
+            else
+                (expandableSelector as ExpandableSelector).expand()
         }
 
        when (index) {
@@ -944,7 +952,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
       }
 
       override fun onExpand() {
-        updateIconsFirstButtonResource(R.drawable.ic_keyboard_arrow_down_black)
       }
 
       override fun onCollapsed() {
