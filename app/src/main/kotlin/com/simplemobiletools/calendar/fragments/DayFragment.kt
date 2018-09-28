@@ -298,7 +298,7 @@ class DayFragment : Fragment() {
         }
 
         dayNumber=mHolder.findViewById(R.id.day_monthly_number)
-        dayNumber.text=mCurrentDay
+        dayNumber.text=mCurrentDay+context!!.getString(R.string.days_raw)
         dayNumber.setTextColor(Color.WHITE)
         dayNumber.textSize=mConfig.getFontSize()*1.08f
     }
