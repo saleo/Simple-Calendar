@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
+import android.view.View.inflate
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.ImageView
