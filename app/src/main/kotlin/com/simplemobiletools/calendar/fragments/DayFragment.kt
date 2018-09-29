@@ -149,7 +149,7 @@ class DayFragment : Fragment() {
         }.apply {
             setupDragListener(false)
             addVerticalDividers(true)
-            mHolder.day_events.adapter = this
+            mHolder.day_events.adapter=this
         }
     }
 
