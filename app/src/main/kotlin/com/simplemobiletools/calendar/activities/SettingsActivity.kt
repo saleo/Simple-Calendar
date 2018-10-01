@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.TextUtils
+import android.view.View.INVISIBLE
 import com.simplemobiletools.calendar.BuildConfig
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.dialogs.CustomEventReminderDialog
@@ -274,7 +275,6 @@ class SettingsActivity : SimpleActivity() {
 
     private fun setupReminderSound(isEnabled:Boolean=true) {
         settings_reminder_sound.isEnabled=isEnabled
-        settings_reminder_sound.textSize=config.fontSize.toFloat()
 
         if (isEnabled) {
             val noRingtone = res.getString(R.string.no_ringtone_selected)
@@ -302,7 +302,8 @@ class SettingsActivity : SimpleActivity() {
 
     private fun setupVibrate(isEnabled:Boolean=true) {
         settings_reminder_vibrate.isEnabled=isEnabled
-        settings_reminder_vibrate.textSize=config.fontSize.toFloat()
+//        settings_reminder_vibrate.textSize=config.fontSize.toFloat()
+        settings_reminder_vibrate_holder.isEnabled=isEnabled
 
         if (isEnabled) {
             settings_reminder_vibrate.isChecked = config.vibrateOnReminder
@@ -314,12 +315,10 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupUseSameSnooze() {
-        settings_snooze_delay.beVisibleIf(config.useSameSnooze)
         settings_use_same_snooze.isChecked = config.useSameSnooze
         settings_use_same_snooze_holder.setOnClickListener {
             settings_use_same_snooze.toggle()
             config.useSameSnooze = settings_use_same_snooze.isChecked
-            settings_snooze_delay.beVisibleIf(config.useSameSnooze)
         }
     }
 
@@ -425,7 +424,7 @@ class SettingsActivity : SimpleActivity() {
 
     private fun setupReminderSwitch(isChecked: Boolean=true){
         settings_reminder_switch.isChecked=isChecked //no trigger clicklistener when enter here FIRST
-        settings_reminder_switch.textSize=config.fontSize.toFloat()
+//        settings_reminder_switch.textSize=config.fontSize.toFloat()
         setupReminderUnifiedMinute(isChecked)
         setupVibrate(isChecked)
         setupReminderSound(isChecked)

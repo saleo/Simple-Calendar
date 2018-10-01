@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    .<LinearLayout
         android:id="@+id/settings_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -56,6 +56,7 @@
                     android:clickable="false"
                     android:paddingLeft="@dimen/medium_margin"
                     android:paddingStart="@dimen/medium_margin"
+                    android:textSize="@dimen/day_text_size"
                     android:text="@string/reminder_switch" />
             </RelativeLayout>
 
@@ -68,6 +69,7 @@
                 android:layout_alignLeft="@id/settings_reminder_switch_holder"
                 android:background="?attr/selectableItemBackground"
                 android:padding="@dimen/medium_margin"
+                android:textSize="@dimen/day_text_size"
                 android:text="@string/reminder_time_label"/>
 
             <com.simplemobiletools.commons.views.MyTextView
@@ -80,6 +82,7 @@
                 android:layout_alignParentRight="true"
                 android:background="?attr/selectableItemBackground"
                 android:padding="@dimen/medium_margin"
+                android:textSize="@dimen/day_text_size"
                 android:text="@string/reminder_time_label"/>
 
         <RelativeLayout
@@ -95,6 +98,7 @@
                 android:background="@null"
                 android:clickable="false"
                 android:padding="@dimen/medium_margin"
+                android:textSize="@dimen/day_text_size"
                 android:text="@string/vibrate" />
 
         </RelativeLayout>
@@ -108,6 +112,7 @@
                 android:layout_toLeftOf="@+id/settings_reminder_sound"
                 android:layout_toStartOf="@+id/settings_reminder_sound"
                 android:padding="@dimen/medium_margin"
+                android:textSize="@dimen/day_text_size"
                 android:text="@string/reminder_sound"/>
 
             <com.simplemobiletools.commons.views.MyTextView
@@ -118,6 +123,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:padding="@dimen/medium_margin"
+                android:textSize="@dimen/day_text_size"
                 android:background="@null"
                 android:clickable="false" />
 
@@ -132,6 +138,7 @@
                 android:id="@+id/settings_use_same_snooze"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="invisible"
                 android:background="@null"
                 android:clickable="false"
                 android:padding="@dimen/medium_margin"
