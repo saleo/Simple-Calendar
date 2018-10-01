@@ -38,4 +38,9 @@
     <style name="MonthStyle">
         <item name="android:background">@drawable/transparent_button</item>
     </style>
+
+    <style name="TextAppearanceSwitchDisabled">
+        <item name="android:textColor">@color/thumb_deactivated</item>
+        <item name="android:shadowColor">@color/track_deactivated</item>
+    </style>
 </resources>

@@ -122,17 +122,17 @@
 
     <plurals name="minutes_before">
         <item quantity="one">%d 分钟之前</item>
-        <item quantity="other">%d minutes before</item>
+        <item quantity="other">%d 分钟之前</item>
     </plurals>
 
     <plurals name="hours_before">
-        <item quantity="one">%d hour before</item>
-        <item quantity="other">%d hours before</item>
+        <item quantity="one">%d 小时之前</item>
+        <item quantity="other">%d 小时之前</item>
     </plurals>
 
     <plurals name="days_before">
-        <item quantity="one">%d day before</item>
-        <item quantity="other">%d days before</item>
+        <item quantity="one">%d 天之前</item>
+        <item quantity="other">%d 天之前</item>
     </plurals>
 
     <!-- Export / Import -->

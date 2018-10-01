@@ -7,9 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.TextUtils
-import android.view.View.INVISIBLE
 import com.simplemobiletools.calendar.BuildConfig
-import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.dialogs.CustomEventReminderDialog
 import com.simplemobiletools.calendar.dialogs.SelectCalendarsDialog
 import com.simplemobiletools.calendar.extensions.*
@@ -21,6 +19,7 @@ import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.PERMISSION_READ_CALENDAR
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CALENDAR
 import com.simplemobiletools.commons.models.RadioItem
+import com.simplemobiletools.calendar.R
 import kotlinx.android.synthetic.main.activity_settings.*
 import java.io.File
 import java.util.*
@@ -276,25 +275,22 @@ class SettingsActivity : SimpleActivity() {
     private fun setupReminderSound(isEnabled:Boolean=true) {
         settings_reminder_sound.isEnabled=isEnabled
 
-        if (isEnabled) {
-            val noRingtone = res.getString(R.string.no_ringtone_selected)
-            if (config.reminderSound.isEmpty()) {
-                settings_reminder_sound.text = noRingtone
-            } else {
-                settings_reminder_sound.text = RingtoneManager.getRingtone(this, Uri.parse(config.reminderSound))?.getTitle(this) ?: noRingtone
-            }
+        val noRingtone = res.getString(R.string.no_ringtone_selected)
+        if (config.reminderSound.isEmpty()) {
+            settings_reminder_sound.text = noRingtone
+        } else {
+            settings_reminder_sound.text = RingtoneManager.getRingtone(this, Uri.parse(config.reminderSound))?.getTitle(this) ?: noRingtone
+        }
+        settings_reminder_sound.setOnClickListener {
+            Intent(RingtoneManager.ACTION_RINGTONE_PICKER).apply {
+                putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
+                putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, res.getString(R.string.reminder_sound))
+                putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(config.reminderSound))
 
-            settings_reminder_sound.setOnClickListener {
-                Intent(RingtoneManager.ACTION_RINGTONE_PICKER).apply {
-                    putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
-                    putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, res.getString(R.string.reminder_sound))
-                    putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(config.reminderSound))
-
-                    if (resolveActivity(packageManager) != null)
-                        startActivityForResult(this, GET_RINGTONE_URI)
-                    else {
-                        toast(R.string.no_ringtone_picker)
-                    }
+                if (resolveActivity(packageManager) != null)
+                    startActivityForResult(this, GET_RINGTONE_URI)
+                else {
+                    toast(R.string.no_ringtone_picker)
                 }
             }
         }
@@ -302,16 +298,17 @@ class SettingsActivity : SimpleActivity() {
 
     private fun setupVibrate(isEnabled:Boolean=true) {
         settings_reminder_vibrate.isEnabled=isEnabled
-//        settings_reminder_vibrate.textSize=config.fontSize.toFloat()
         settings_reminder_vibrate_holder.isEnabled=isEnabled
-
         if (isEnabled) {
-            settings_reminder_vibrate.isChecked = config.vibrateOnReminder
             settings_reminder_vibrate_holder.setOnClickListener {
                 settings_reminder_vibrate.toggle()
-                config.vibrateOnReminder = settings_reminder_vibrate.isChecked
+                config.vibrateOnReminder=settings_reminder_vibrate.isChecked
             }
+            settings_reminder_vibrate.isChecked=config.vibrateOnReminder
         }
+        else
+            settings_reminder_vibrate.isChecked = false
+        config.vibrateOnReminder = settings_reminder_vibrate.isChecked
     }
 
     private fun setupUseSameSnooze() {
@@ -432,6 +429,7 @@ class SettingsActivity : SimpleActivity() {
         settings_reminder_switch_holder.setOnClickListener {
             settings_reminder_switch.toggle()
             val reminderOnOff=settings_reminder_switch.isChecked
+            config.reminderSwitch=reminderOnOff
             setupReminderUnifiedMinute(reminderOnOff)
             setupVibrate(reminderOnOff)
             setupReminderSound(reminderOnOff)

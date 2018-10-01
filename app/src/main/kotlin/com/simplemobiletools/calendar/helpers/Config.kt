@@ -101,7 +101,7 @@ class Config(context: Context) : BaseConfig(context) {
 
     var currentReminderMinutes: Int
         get() = prefs.getInt(CURRENT_REMINDER_MINUTES, 10)
-        set(currentReminderMinutes) = prefs.edit().putInt(REMINDER_MINUTES, currentReminderMinutes).apply()
+        set(currentReminderMinutes) = prefs.edit().putInt(CURRENT_REMINDER_MINUTES, currentReminderMinutes).apply()
 
     fun getSyncedCalendarIdsAsList() = caldavSyncedCalendarIDs.split(",").filter { it.trim().isNotEmpty() } as ArrayList<String>
 
