@@ -12,10 +12,7 @@ import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.dialogs.CustomEventReminderDialog
 import com.simplemobiletools.calendar.dialogs.SelectCalendarsDialog
 import com.simplemobiletools.calendar.extensions.*
-import com.simplemobiletools.calendar.helpers.CalDAVHandler
-import com.simplemobiletools.calendar.helpers.FONT_SIZE_LARGE
-import com.simplemobiletools.calendar.helpers.FONT_SIZE_MEDIUM
-import com.simplemobiletools.calendar.helpers.FONT_SIZE_SMALL
+import com.simplemobiletools.calendar.helpers.*
 import com.simplemobiletools.calendar.models.EventType
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.RadioGroupDialog
@@ -32,6 +29,7 @@ class SettingsActivity : SimpleActivity() {
 
     lateinit var res: Resources
     private var mStoredPrimaryColor = 0
+    private var mReminderMinutes = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,15 +53,14 @@ class SettingsActivity : SimpleActivity() {
         setupWeekNumbers()
         setupWeeklyStart()
         setupWeeklyEnd()
-        setupVibrate()
-        setupReminderSound()
-        setupUseSameSnooze()
-        setupSnoozeDelay()
         setupDisplayPastEvents()
         setupFontSize()
         updateTextColors(settings_holder)
         checkPrimaryColor()
         setupSectionColors()
+        setupSnoozeDelay()
+        setupUseSameSnooze()
+        setupReminerGeneral()
     }
 
     override fun onPause() {
@@ -85,7 +82,7 @@ class SettingsActivity : SimpleActivity() {
 
     private fun setupSectionColors() {
         val adjustedPrimaryColor = getAdjustedPrimaryColor()
-        arrayListOf(reminders_label, caldav_label, weekly_view_label, monthly_view_label, simple_event_list_label, simple_font_size_label).forEach {
+        arrayListOf(settings_reminder_label, caldav_label, weekly_view_label, monthly_view_label, simple_event_list_label, simple_font_size_label).forEach {
             it.setTextColor(adjustedPrimaryColor)
         }
     }
@@ -275,56 +272,67 @@ class SettingsActivity : SimpleActivity() {
         }
     }
 
-    private fun setupReminderSound() {
-        val noRingtone = res.getString(R.string.no_ringtone_selected)
-        if (config.reminderSound.isEmpty()) {
-            settings_reminder_sound.text = noRingtone
-        } else {
-            settings_reminder_sound.text = RingtoneManager.getRingtone(this, Uri.parse(config.reminderSound))?.getTitle(this) ?: noRingtone
-        }
+    private fun setupReminderSound(isEnabled:Boolean=true) {
+        settings_reminder_sound.isEnabled=isEnabled
+        settings_reminder_sound.textSize=config.fontSize.toFloat()
 
-        settings_reminder_sound_holder.setOnClickListener {
-            Intent(RingtoneManager.ACTION_RINGTONE_PICKER).apply {
-                putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
-                putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, res.getString(R.string.reminder_sound))
-                putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(config.reminderSound))
+        if (isEnabled) {
+            val noRingtone = res.getString(R.string.no_ringtone_selected)
+            if (config.reminderSound.isEmpty()) {
+                settings_reminder_sound.text = noRingtone
+            } else {
+                settings_reminder_sound.text = RingtoneManager.getRingtone(this, Uri.parse(config.reminderSound))?.getTitle(this) ?: noRingtone
+            }
 
-                if (resolveActivity(packageManager) != null)
-                    startActivityForResult(this, GET_RINGTONE_URI)
-                else {
-                    toast(R.string.no_ringtone_picker)
+            settings_reminder_sound.setOnClickListener {
+                Intent(RingtoneManager.ACTION_RINGTONE_PICKER).apply {
+                    putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
+                    putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, res.getString(R.string.reminder_sound))
+                    putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(config.reminderSound))
+
+                    if (resolveActivity(packageManager) != null)
+                        startActivityForResult(this, GET_RINGTONE_URI)
+                    else {
+                        toast(R.string.no_ringtone_picker)
+                    }
                 }
             }
         }
     }
 
-    private fun setupVibrate() {
-        settings_vibrate.isChecked = config.vibrateOnReminder
-        settings_vibrate_holder.setOnClickListener {
-            settings_vibrate.toggle()
-            config.vibrateOnReminder = settings_vibrate.isChecked
+    private fun setupVibrate(isEnabled:Boolean=true) {
+        settings_reminder_vibrate.isEnabled=isEnabled
+        settings_reminder_vibrate.textSize=config.fontSize.toFloat()
+
+        if (isEnabled) {
+            settings_reminder_vibrate.isChecked = config.vibrateOnReminder
+            settings_reminder_vibrate_holder.setOnClickListener {
+                settings_reminder_vibrate.toggle()
+                config.vibrateOnReminder = settings_reminder_vibrate.isChecked
+            }
         }
     }
 
     private fun setupUseSameSnooze() {
-        settings_snooze_delay_holder.beVisibleIf(config.useSameSnooze)
+        settings_snooze_delay.beVisibleIf(config.useSameSnooze)
         settings_use_same_snooze.isChecked = config.useSameSnooze
         settings_use_same_snooze_holder.setOnClickListener {
             settings_use_same_snooze.toggle()
             config.useSameSnooze = settings_use_same_snooze.isChecked
-            settings_snooze_delay_holder.beVisibleIf(config.useSameSnooze)
+            settings_snooze_delay.beVisibleIf(config.useSameSnooze)
         }
     }
 
     private fun setupSnoozeDelay() {
         updateSnoozeText()
-        settings_snooze_delay_holder.setOnClickListener {
+        settings_snooze_delay.setOnClickListener {
             showEventReminderDialog(config.snoozeDelay, true) {
                 config.snoozeDelay = it
                 updateSnoozeText()
             }
         }
     }
+
 
     private fun updateSnoozeText() {
         settings_snooze_delay.text = res.getQuantityString(R.plurals.by_minutes, config.snoozeDelay, config.snoozeDelay)
@@ -404,6 +412,50 @@ class SettingsActivity : SimpleActivity() {
                     }
                 }
             }
+        }
+    }
+
+    private fun setupReminderUnifiedMinute(isEnabled:Boolean=true){
+
+        settings_reminder_unified_minute.isEnabled=isEnabled
+        settings_reminder_unified_minute.text=getFormattedMinutes(config.currentReminderMinutes)
+        if (isEnabled)
+            settings_reminder_unified_minute.setOnClickListener { showReminderDialog() }
+    }
+
+    private fun setupReminderSwitch(isChecked: Boolean=true){
+        settings_reminder_switch.isChecked=isChecked //no trigger clicklistener when enter here FIRST
+        settings_reminder_switch.textSize=config.fontSize.toFloat()
+        setupReminderUnifiedMinute(isChecked)
+        setupVibrate(isChecked)
+        setupReminderSound(isChecked)
+
+        settings_reminder_switch_holder.setOnClickListener {
+            settings_reminder_switch.toggle()
+            val reminderOnOff=settings_reminder_switch.isChecked
+            setupReminderUnifiedMinute(reminderOnOff)
+            setupVibrate(reminderOnOff)
+            setupReminderSound(reminderOnOff)
+            if (!reminderOnOff)
+                Thread {
+                    dbHelper.updateReminder(REMINDER_OFF)
+                }.start()
+        }
+    }
+
+    private fun setupReminerGeneral(){
+        val reminderOnOff=config.reminderSwitch
+        setupReminderSwitch(reminderOnOff)
+    }
+
+    private fun showReminderDialog() {
+        showEventReminderDialog(mReminderMinutes) {
+            mReminderMinutes = it
+            settings_reminder_unified_minute.text=getFormattedMinutes(mReminderMinutes)
+            config.currentReminderMinutes=mReminderMinutes
+            Thread {
+                dbHelper.updateReminder(mReminderMinutes)
+            }.start()
         }
     }
 }

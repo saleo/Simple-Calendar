@@ -186,7 +186,7 @@
     <string name="vibrate">提醒通知震动</string>
     <string name="reminder_sound">提醒提示音</string>
     <string name="no_ringtone_picker">没找到可设置铃声的应用APP</string>
-    <string name="no_ringtone_selected">无</string>
+    <string name="no_ringtone_selected">没选中可用铃声</string>
     <string name="day_end_before_start">日子不能结束于开始之前</string>
     <string name="caldav_sync">CalDAV同步</string>
     <string name="event_lists">事件列表</string>
@@ -272,6 +272,9 @@
 
         This app is just one piece of a bigger series of apps. You can find the rest of them at http://www.simplemobiletools.com
     </string>
+
+    <string name="reminder_time_label">事件提醒时间</string>
+    <string name="reminder_switch">提醒开关</string>
 
     <!--
         Haven't found some strings? There's more at

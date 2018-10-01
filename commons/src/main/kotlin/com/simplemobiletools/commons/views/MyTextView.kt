@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.widget.TextView
 
 class MyTextView : TextView {
-    constructor(context: Context) : super(context)
+    constructor(context: Context): super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 

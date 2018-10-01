@@ -1000,4 +1000,9 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
             cursor?.close()
         }
     }
+
+    fun updateReminder(reminderMinutes:Int){
+        val contentValues=ContentValues().apply {put(COL_REMINDER_MINUTES, reminderMinutes)}
+        val i:Int=mDb.update(MAIN_TABLE_NAME,contentValues,null,null)
+    }
 }

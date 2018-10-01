@@ -55,7 +55,8 @@ const val SNOOZE_DELAY = "snooze_delay"
 const val DISPLAY_PAST_EVENTS = "display_past_events"
 const val REPLACE_DESCRIPTION = "replace_description"
 const val USE_SAME_SNOOZE = "use_same_snooze"
-
+const val REMINDER_UNIFIED_TIME = "reminder_unified_time"
+const val CURRENT_REMINDER_MINUTES ="current_reminder_minutes"
 val letterIDs = intArrayOf(R.string.sunday_letter, R.string.monday_letter, R.string.tuesday_letter, R.string.wednesday_letter,
         R.string.thursday_letter, R.string.friday_letter, R.string.saturday_letter)
 
@@ -138,3 +139,7 @@ const val SOURCE_SIMPLE_CALENDAR = "simple-calendar"
 const val SOURCE_IMPORTED_ICS = "imported-ics"
 const val SOURCE_CONTACT_BIRTHDAY = "contact-birthday"
 const val SOURCE_CONTACT_ANNIVERSARY = "contact-anniversary"
+
+const val REMINDER_UNIFIED_TIME_VALUE = 2400
+const val REMINDER_SWITCH ="reminder_switch"
+const val REMINDER_INITIAL_MINUTES=240 //4 hours before REMINDER_UNIFIED_TIME_VALUE

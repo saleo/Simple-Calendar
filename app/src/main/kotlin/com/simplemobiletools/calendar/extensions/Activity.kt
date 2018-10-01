@@ -49,7 +49,8 @@ fun Activity.showEventReminderDialog(curMinutes: Int, isSnoozePicker: Boolean = 
     val minutes = TreeSet<Int>()
     minutes.apply {
         if (!isSnoozePicker) {
-            add(-1)
+            //for settings-activity already have one equal reminders_switch
+//            add(-1)
             add(0)
         }
         add(5)
@@ -57,6 +58,8 @@ fun Activity.showEventReminderDialog(curMinutes: Int, isSnoozePicker: Boolean = 
         add(20)
         add(30)
         add(60)
+        add(120)
+        add(180)
         add(curMinutes)
     }
 

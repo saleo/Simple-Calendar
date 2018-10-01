@@ -232,7 +232,7 @@ class CalDAVHandler(val context: Context) {
                     val location = cursor.getStringValue(CalendarContract.Events.EVENT_LOCATION) ?: ""
                     val originalId = cursor.getStringValue(CalendarContract.Events.ORIGINAL_ID)
                     val originalInstanceTime = cursor.getLongValue(CalendarContract.Events.ORIGINAL_INSTANCE_TIME)
-                    val reminders = getCalDAVEventReminders(id)
+                    val reminders = listOf(REMINDER_INITIAL_MINUTES)
                     val color=cursor.getIntValue(CalendarContract.Events.EVENT_COLOR)
 
                     if (endTS == 0) {

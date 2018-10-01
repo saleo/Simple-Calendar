@@ -8,6 +8,7 @@ import android.text.format.DateFormat
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.extensions.scheduleCalDAVSync
 import com.simplemobiletools.commons.helpers.BaseConfig
+import org.joda.time.DateTime
 import java.util.*
 
 class Config(context: Context) : BaseConfig(context) {
@@ -93,6 +94,14 @@ class Config(context: Context) : BaseConfig(context) {
     var replaceDescription: Boolean
         get() = prefs.getBoolean(REPLACE_DESCRIPTION, false)
         set(replaceDescription) = prefs.edit().putBoolean(REPLACE_DESCRIPTION, replaceDescription).apply()
+
+    var reminderSwitch:Boolean
+        get()=prefs.getBoolean(REMINDER_SWITCH,true)
+        set(reminderSwitch)=prefs.edit().putBoolean(REMINDER_SWITCH,reminderSwitch).apply()
+
+    var currentReminderMinutes: Int
+        get() = prefs.getInt(CURRENT_REMINDER_MINUTES, 10)
+        set(currentReminderMinutes) = prefs.edit().putInt(REMINDER_MINUTES, currentReminderMinutes).apply()
 
     fun getSyncedCalendarIdsAsList() = caldavSyncedCalendarIDs.split(",").filter { it.trim().isNotEmpty() } as ArrayList<String>
 
