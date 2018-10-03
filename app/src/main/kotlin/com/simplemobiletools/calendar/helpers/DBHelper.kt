@@ -782,7 +782,7 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         return getEvents(selection) as ArrayList<Event>
     }
 
-    fun getEventsAtReboot(): List<Event> {
+    fun getEventsAfterward(): List<Event> {
         val selection = "$COL_REMINDER_MINUTES != -1 AND ($COL_START_TS > ? OR $COL_REPEAT_INTERVAL != 0) AND $COL_START_TS != 0"
         val selectionArgs = arrayOf(DateTime.now().seconds().toString())
         val cursor = getEventsCursor(selection, selectionArgs)
@@ -1003,6 +1003,8 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
 
     fun updateReminder(reminderMinutes:Int){
         val contentValues=ContentValues().apply {put(COL_REMINDER_MINUTES, reminderMinutes)}
-        val i:Int=mDb.update(MAIN_TABLE_NAME,contentValues,null,null)
+        val ts = context.getNowSeconds().toString()
+        val selection = "$COL_START_TS >= ?"
+        val i:Int=mDb.update(MAIN_TABLE_NAME,contentValues,selection, arrayOf(ts))
     }
 }

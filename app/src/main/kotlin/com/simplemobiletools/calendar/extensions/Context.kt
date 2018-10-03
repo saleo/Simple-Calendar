@@ -72,7 +72,7 @@ fun Context.updateListWidget() {
 }
 
 fun Context.scheduleAllEvents() {
-    val events = dbHelper.getEventsAtReboot()
+    val events = dbHelper.getEventsAfterward()
     events.forEach {
         scheduleNextEventReminder(it, dbHelper)
     }
@@ -431,4 +431,43 @@ fun Context.getEventListItems(events: List<Event>): ArrayList<ListItem> {
         listItems.add(ListEvent(it.id, it.startTS, it.endTS, it.title, it.description, it.getIsAllDay(), it.color, it.location))
     }
     return listItems
+}
+
+fun Context.cancelAllEvents() {
+    val events = dbHelper.getEventsAfterward()
+    events.forEach {
+        cancelNextEventReminder(it, dbHelper)
+    }
+}
+
+fun Context.cancelNextEventReminder(event: Event?, dbHelper: DBHelper) {
+    if (event == null || event.getReminders().isEmpty()) {
+        return
+    }
+
+    val now = getNowSeconds()
+    val reminderSeconds = event.getReminders().reversed().map { it * 60 }
+    dbHelper.getEvents(now, now + YEAR, event.id) {
+        if (it.isNotEmpty()) {
+            for (curEvent in it) {
+                for (curReminder in reminderSeconds) {
+                    if (curEvent.getEventStartTS() - curReminder > now) {
+                        cancelEventIn((curEvent.getEventStartTS() - curReminder) * 1000L, curEvent)
+                        return@getEvents
+                    }
+                }
+            }
+        }
+    }
+}
+
+fun Context.cancelEventIn(notifTS: Long, event: Event) {
+    if (notifTS < System.currentTimeMillis()) {
+        return
+    }
+
+    val pendingIntent = getNotificationIntent(applicationContext, event)
+    val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+    alarmManager.cancel(pendingIntent)
 }

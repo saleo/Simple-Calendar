@@ -52,7 +52,7 @@ open class BaseConfig(val context: Context) {
         set(backgroundColor) = prefs.edit().putInt(BACKGROUND_COLOR, backgroundColor).apply()
 
     var primaryColor: Int
-        get() = prefs.getInt(PRIMARY_COLOR, context.resources.getColor(R.color.color_primary))
+        get() = prefs.getInt(PRIMARY_COLOR, context.resources.getColor(R.color.md_green))
         set(primaryColor) = prefs.edit().putInt(PRIMARY_COLOR, primaryColor).apply()
 
     var customTextColor: Int
