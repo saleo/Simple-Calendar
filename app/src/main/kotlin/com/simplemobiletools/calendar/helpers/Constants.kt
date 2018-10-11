@@ -143,3 +143,5 @@ const val SOURCE_CONTACT_ANNIVERSARY = "contact-anniversary"
 const val REMINDER_UNIFIED_TIME_VALUE = 2400
 const val REMINDER_SWITCH ="reminder_switch"
 const val REMINDER_INITIAL_MINUTES=240 //4 hours before REMINDER_UNIFIED_TIME_VALUE
+const val SKCAL_AS_DEFAULT="skcal_as_default"
+const val INTRO_TYPE="intro_type"

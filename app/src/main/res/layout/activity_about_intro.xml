@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/about_intro_activity_holder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/about_topimage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/placeholder" />
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/intro_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="@dimen/bigger_text_size"
+        android:paddingVertical="2sp"
+        android:layout_below="@+id/about_topimage">
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/tab_intro_skcal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_intro_skcal" />
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/tab_intro_sk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_intro_sk" />
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/tab_intro_donate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_intro_donate" />
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/tab_intro_xiangyu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_intro_xiangyu" />
+
+    </android.support.design.widget.TabLayout>
+
+    <include
+        layout="@layout/bottom_copyright"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+
+<com.simplemobiletools.commons.views.MyTextView
+    android:id="@+id/txt_about_intro"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/intro_tabs"
+    android:text="@string/str_intro_xiangyu"
+    />
+
+</RelativeLayout>

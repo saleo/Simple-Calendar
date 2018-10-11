@@ -1,10 +1,8 @@
 package com.simplemobiletools.calendar.activities
 
-import android.Manifest
 import android.app.SearchManager
 import android.content.*
 import android.content.pm.ActivityInfo
-import android.content.pm.PackageManager
 import android.database.ContentObserver
 import android.database.Cursor
 import android.graphics.drawable.ColorDrawable
@@ -13,9 +11,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.CalendarContract
 import android.provider.ContactsContract
-import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.SearchView
 import android.util.Log
@@ -55,10 +50,7 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import at.bitfire.icsdroid.SyncAdapterService
-import at.bitfire.icsdroid.db.CalendarCredentials
 import at.bitfire.icsdroid.db.LocalCalendar
-import java.util.concurrent.TimeUnit
 import com.karumi.expandableselector.ExpandableItem
 import com.karumi.expandableselector.ExpandableSelector
 import com.karumi.expandableselector.ExpandableSelectorListener
@@ -740,7 +732,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                 FAQItem(getString(R.string.faq_1_title), getString(R.string.faq_1_text)),
                 FAQItem(getString(R.string.faq_2_title), getString(R.string.faq_2_text)))
 
-        startAboutActivity(R.string.app_name, LICENSE_KOTLIN or LICENSE_JODA or LICENSE_STETHO or LICENSE_MULTISELECT or LICENSE_LEAK_CANARY,
+        startAboutActivity(R.string.app_name, LICENSE_SMT or LICENSE_KOTLIN or LICENSE_JODA or LICENSE_STETHO or LICENSE_MULTISELECT or LICENSE_LEAK_CANARY,
                 BuildConfig.VERSION_NAME, faqItems)
     }
 
@@ -970,5 +962,14 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         (expandableSelector as ExpandableSelector).updateExpandableItem(0, arrowUpExpandableItem)
     }
 
+    fun startAboutActivity(appNameId: Int, licenseMask: Int, versionName: String, faqItems: java.util.ArrayList<FAQItem> = arrayListOf()) {
+        Intent(applicationContext, AboutActivity::class.java).apply {
+            putExtra(APP_NAME, getString(appNameId))
+            putExtra(APP_LICENSES, licenseMask)
+            putExtra(APP_VERSION_NAME, versionName)
+            putExtra(APP_FAQ, faqItems)
+            startActivity(this)
+        }
+    }
 
 }
