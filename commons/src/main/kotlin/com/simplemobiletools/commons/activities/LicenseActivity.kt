@@ -41,6 +41,7 @@ class LicenseActivity : BaseSimpleActivity() {
     }
 
     private fun initLicenses() = arrayOf(
+            License(LICENSE_SMT, R.string.simplecalendar_title, R.string.simplecalendar_text, R.string.simplecalendar_url),
             License(LICENSE_KOTLIN, R.string.kotlin_title, R.string.kotlin_text, R.string.kotlin_url),
             License(LICENSE_SUBSAMPLING, R.string.subsampling_title, R.string.subsampling_text, R.string.subsampling_url),
             License(LICENSE_GLIDE, R.string.glide_title, R.string.glide_text, R.string.glide_url),

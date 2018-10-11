@@ -168,16 +168,6 @@ open class BaseSimpleActivity : AppCompatActivity() {
 
     private fun isExternalStorageDocument(uri: Uri) = "com.android.externalstorage.documents" == uri.authority
 
-    fun startAboutActivity(appNameId: Int, licenseMask: Int, versionName: String, faqItems: ArrayList<FAQItem> = arrayListOf()) {
-        Intent(applicationContext, AboutActivity::class.java).apply {
-            putExtra(APP_NAME, getString(appNameId))
-            putExtra(APP_LICENSES, licenseMask)
-            putExtra(APP_VERSION_NAME, versionName)
-            putExtra(APP_FAQ, faqItems)
-            startActivity(this)
-        }
-    }
-
     fun startCustomizationActivity() = startActivity(Intent(this, CustomizationActivity::class.java))
 
     fun handleSAFDialog(path: String, callback: () -> Unit): Boolean {
