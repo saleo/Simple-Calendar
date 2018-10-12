@@ -1,17 +1,16 @@
 package com.simplemobiletools.calendar.activities
 
 import android.os.Bundle
-import android.support.design.widget.TabItem
 import android.support.design.widget.TabLayout
+import android.text.method.ScrollingMovementMethod
 import android.view.ViewGroup
 import com.simplemobiletools.calendar.R
-import com.simplemobiletools.calendar.fragments.IntroFragment
-import com.simplemobiletools.calendar.helpers.INTRO_TYPE
 import com.simplemobiletools.calendar.helpers.SKCAL_AS_DEFAULT
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
-import com.simplemobiletools.commons.extensions.toast
+import com.simplemobiletools.commons.helpers.APP_VERSION_NAME
 import kotlinx.android.synthetic.main.activity_about_intro.*
 import kotlinx.android.synthetic.main.bottom_copyright.*
+import java.util.*
 
 
 class AboutActivityIntro: BaseSimpleActivity() ,TabLayout.OnTabSelectedListener{
@@ -24,22 +23,19 @@ class AboutActivityIntro: BaseSimpleActivity() ,TabLayout.OnTabSelectedListener{
 
         skcal_as_default=intent.getBooleanExtra(SKCAL_AS_DEFAULT,true)
 
-        if (skcal_as_default)
-            txt_about_intro.text=getString(R.string.str_intro_skcal)
-        else
-            txt_about_intro.text=getString(R.string.str_intro_donate)
+        if (skcal_as_default) {
+            txt_about_intro.text = getString(R.string.str_intro_skcal)
+            intro_tabs.getTabAt(0)
+        }
+        else {
+            txt_about_intro.text = getString(R.string.str_intro_donate)
+            intro_tabs.getTabAt(2)
+        }
         setupTabs()
+        setupCopyright()
+        txt_about_intro.movementMethod=ScrollingMovementMethod()
     }
 
-    override fun onResume() {
-        super.onResume()
-        about_intro_activity_holder.measure(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        about_topimage.measure(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        intro_tabs.measure(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        about_copyright_holder.measure(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
-        val i:Int=about_intro_activity_holder.measuredHeight-about_topimage.measuredHeight-intro_tabs.measuredHeight-about_copyright_holder.measuredHeight
-        txt_about_intro.height=i
-    }
 
     private fun setupTabs(){
         val tabLayout:TabLayout?=findViewById(R.id.intro_tabs)
@@ -49,6 +45,11 @@ class AboutActivityIntro: BaseSimpleActivity() ,TabLayout.OnTabSelectedListener{
         tabLayout!!.newTab().setText(R.string.title_intro_xiangyu)
 
         tabLayout.addOnTabSelectedListener(this)
+    }
+
+    private fun setupCopyright() {
+        val year = Calendar.getInstance().get(Calendar.YEAR)
+        about_copyright.text = String.format(getString(R.string.copyright), year)
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {

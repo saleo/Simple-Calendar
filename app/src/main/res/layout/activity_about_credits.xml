@@ -12,37 +12,72 @@
         android:src="@drawable/placeholder"
         android:scaleType="fitXY"/>
 
-    <com.simplemobiletools.commons.views.MyTextView
-        android:id="@+id/txt_credit_caption"
+    <LinearLayout
+        android:id="@+id/ll_credits_holder1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/about_topimage"
-        android:text="@string/str_credit_caption"
-        android:textSize="@dimen/middle_text_size"/>
+        android:gravity="center_vertical"
+        android:paddingTop="@dimen/normal_icon_size"
+        android:paddingBottom="@dimen/normal_margin">
 
-    <com.simplemobiletools.commons.views.MyTextView
-        android:id="@+id/txt_credit_bignamelist"
+        <TextView
+            android:id="@+id/txt_credit_bignamelist"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="@string/str_credit_bignamelist"
+            android:textSize="@dimen/big_text_size" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:src="@drawable/liuheyuan1" />
+    </LinearLayout>
+
+    <include layout="@layout/divider"
+        android:id="@+id/about_credit_divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/ll_credits_holder1"
+        android:paddingTop="@dimen/normal_margin"
+    android:paddingBottom="@dimen/normal_margin" />
+
+
+
+    <LinearLayout
+        android:id="@+id/ll_credits_holder2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txt_credit_caption"
-        android:text="@string/str_credit_bignamelist"
-        android:textSize="@dimen/big_text_size"/>
+        android:layout_below="@id/about_credit_divider1"
+        android:gravity="left|center_vertical"
+        android:paddingTop="@dimen/normal_margin"
+        android:paddingBottom="@dimen/normal_icon_size">
 
+        <TextView
+            android:id="@+id/txt_credit_subcaption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="@string/str_credit_subcatption"
+            android:textSize="@dimen/big_text_size" />
 
-    <com.simplemobiletools.commons.views.MyTextView
-        android:id="@+id/txt_credit_subcaption"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txt_credit_bignamelist"
-        android:text="@string/str_credit_subcatption"
-        android:textSize="@dimen/normal_text_size"
-    />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/sk_banner" />
+    </LinearLayout>>
 
     <com.simplemobiletools.commons.views.MyTextView
         android:id="@+id/txt_credit_gongdehuixiang"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txt_credit_subcaption"
+        android:layout_below="@id/ll_credits_holder2"
         android:text="@string/str_credit_gongdehuixiang"
         android:textSize="@dimen/normal_text_size"
         />
@@ -52,15 +87,16 @@
         android:id="@+id/btn_credit_donatenow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txt_credit_gongdehuixiang"
-        android:drawableLeft="@drawable/ic_launcher_bg_transparent"
+        android:layout_above="@id/include_bottom"
+        android:drawableLeft="@drawable/donate_left"
+        android:drawableRight="@drawable/donate"
         android:text="@string/str_credit_donatenow"
         android:gravity="center"
         android:textColor="@color/theme_light_text_color"
         android:layout_centerInParent="true"
         />
 
-    <include
+    <include android:id="@+id/include_bottom"
         layout="@layout/bottom_copyright"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

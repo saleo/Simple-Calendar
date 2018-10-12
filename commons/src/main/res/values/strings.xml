@@ -411,7 +411,7 @@
     <string name="donate">Donate</string>
     <string name="donate_underlined"><u>Donate</u></string>
     <string name="follow_us">Follow us</string>
-    <string name="copyright">v %1$s\tCopyright © ShoukangCalendar %2$d</string>
+    <string name="copyright">©商丘市寿康文化研究学会 %1$d</string>
     <string name="additional_info">Additional info</string>
     <string name="app_version">App version: %s</string>
     <string name="device_os">Device OS: %s</string>

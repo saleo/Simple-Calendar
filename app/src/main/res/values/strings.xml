@@ -273,20 +273,20 @@
 
         This app is just one piece of a bigger series of apps. You can find the rest of them at http://www.simplemobiletools.com
     </string>
-    <string name="reminder_time_label">reminder time</string>
-    <string name="reminder_switch">reminder switch on/off</string>
-    <string name="title_intro_skcal">shoukang Calendar</string>
-    <string name="title_intro_sk">shoukang.org</string>
-    <string name="title_intro_donate">donate</string>
-    <string name="title_intro_xiangyu">xiangyu</string>
+    <string name="reminder_time_label">事件提醒时间</string>
+    <string name="reminder_switch">提醒开关</string>
+    <string name="title_intro_skcal">寿康日历</string>
+    <string name="title_intro_sk">寿康学会</string>
+    <string name="title_intro_donate">捐赠</string>
+    <string name="title_intro_xiangyu">相遇疗法</string>
 
-    <string name="str_intro_skcal">寿康宝鉴夫妻保身立命戒期日历,可帮助防色欲，戒除邪淫; 主要功能特点：
-        1. 戒期展示：日历主界面以红、蓝、灰三色标示对身心影响程度
-        2. 戒期提醒：默认在戒期当天20:00提醒-可关闭震动、关闭提醒、调整提醒时间、选用提醒声音等
-        3. 清心格言：同步寿康学会发布的清心格言
-        4. 戒期信息：同步寿康学会发布的戒期信息
+    <string name="str_intro_skcal">\n\t寿康宝鉴夫妻保身立命戒期日历,可帮助防色欲，戒除邪淫; 主要功能特点：
+        \n\n\t1. 戒期展示：日历主界面以红、蓝、灰三色标示对身心影响程度
+        \n\n\t2. 戒期提醒：默认在戒期当天20:00提醒-可关闭震动、关闭提醒、调整提醒时间、选用提醒声音等
+        \n\n\t3. 清心格言：同步寿康学会发布的清心格言
+        \n\n\t4. 戒期信息：同步寿康学会发布的戒期信息
     </string>
-    <string name="str_intro_sk">       \n\n\t商丘市寿康文化研究学会，是在民政局注册的，由社科联主管的新社会组织，由关注
+    <string name="str_intro_sk">\n\t商丘市寿康文化研究学会，是在民政局注册的，由社科联主管的新社会组织，由关注
 青少年身心健康、家庭稳定和社会风气净化的各界有识之士所组成。
        \n\n\t一：目标，营造一个可信的百年福慧平台，以慈善为先导，以文化为后劲，帮助更多
 的人减轻痛苦、增长幸福
@@ -299,7 +299,7 @@
 好德，善终）
 
 </string>
-    <string name="str_intro_donate">\n\n\t捐助事项：网站维护，身心科学探索，东西方心理学，家庭教育，心灵环保学习班，
+    <string name="str_intro_donate">\t捐助事项：网站维护，身心科学探索，东西方心理学，家庭教育，心灵环保学习班，
 《修养》杂志，慈善救助，清心格言，环保护生，有机农业，慈光义诊，国学启蒙，随缘
 捐助等。
         \n\n\t　　开户行：中国农业银行商丘市京港支行
@@ -317,7 +317,7 @@
 \n\n\t电话：0370-2558081   网址：http://www.shoukang.org
 </string>
     <string name="str_intro_xiangyu">
-           \n\n\t　　相遇疗法，是一颗心灵陪伴另外一颗心灵进行自我探索、自我觉悟、自我照亮内心的过程，然后烦恼之冰自然融化为智慧之水。
+           \t　　相遇疗法，是一颗心灵陪伴另外一颗心灵进行自我探索、自我觉悟、自我照亮内心的过程，然后烦恼之冰自然融化为智慧之水。
            \n\n\t　　相遇疗法，是寿康学会徐冉会长结合对佛法、道家思想、中医心理学、王凤仪学说、马丁布伯哲学思想，罗杰斯来访者中心疗法、非暴力沟通等的体会，综合提炼而成的本土化心理疗法，是对传统文化的创造性转化和创新性发展。
 　　\n\n\t特点：不用说隐私，不用讲道理，效果不衰减，易学易用。
 　　\n\n\t应用范围：烦恼，心因性疾病，亲子教育，考试减压，矛盾调解，突破销售障碍等诸多方面。
@@ -330,12 +330,11 @@
 　　\n\n\t相遇疗法网站：www.xiangyuliaofa.cn
 
     </string>
-    <string name="str_intro">introduction here</string>>
-    <string name="str_credit_caption">\n\n\t助印功德芳名</string>
-    <string name="str_credit_bignamelist">\n\n\t方伟坤老师-深圳六合园</string>
-    <string name="str_credit_subcatption">\n\n\t及其他寿康学会会员和网友</string>
-    <string name="str_credit_gongdehuixiang">\n\n\t所有功德回向给戒邪淫网和寿康学会的所有资助者、随喜者、参与者、见闻者、传播者，业障消除，福慧增长，尽此一报身，同生极乐国。</string>>
-    <string name="str_credit_donatenow">\t随喜乐捐\t</string>>
+    <string name="str_credit_bignamelist">方伟坤老师</string>
+    <string name="str_credit_subcatption">寿康学会会员和网友</string>
+    <string name="str_credit_gongdehuixiang">所有功德回向给戒邪淫网和寿康学会的所有资助者、随喜者、参与者、见闻者、传播者，业障消除，福慧增长，尽此一报身，同生极乐国。</string>
+    <string name="str_credit_donatenow">随喜乐捐</string>>
+    <string name="str_intro">介绍</string>>
     <!--
         Haven't found some strings? There's more at
         https://github.com/SimpleMobileTools/Simple-Commons/tree/master/commons/src/main/res

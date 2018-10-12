@@ -12,7 +12,7 @@
         android:layout_width="@dimen/social_logo"
         android:layout_height="@dimen/social_logo"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/sklogo1"/>
+        android:src="@drawable/ic_launcher_transparent"/>
 
     <LinearLayout android:id="@+id/bottom_contact_holder"
         android:layout_width="match_parent"
