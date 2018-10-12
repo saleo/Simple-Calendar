@@ -1,0 +1,138 @@
+<RelativeLayout     xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/about_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/about_topimage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/placeholder"
+            android:scaleType="fitXY"/>
+
+
+
+    <RelativeLayout
+        android:id="@+id/about_introduction_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/about_topimage"
+        android:padding="@dimen/medium_margin">
+
+        <com.simplemobiletools.commons.views.MyTextView
+            android:id="@+id/about_introduction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:padding="@dimen/medium_margin"
+            android:text="@string/skcal_introduction"
+            android:textColorLink="@color/color_primary"/>
+
+        <com.simplemobiletools.commons.views.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/medium_margin"
+            android:text="@string/right_arrow"
+            android:textColorLink="@color/color_primary"/>
+
+    </RelativeLayout>
+
+        <include layout="@layout/divider"
+            android:id="@+id/about_divider1"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_below="@id/about_introduction_holder" />
+
+
+        <RelativeLayout
+            android:id="@+id/about_credit_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/about_divider1"
+            android:padding="@dimen/medium_margin">
+
+            <com.simplemobiletools.commons.views.MyTextView
+                android:id="@+id/about_credit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:padding="@dimen/medium_margin"
+                android:text="@string/skcal_creditlist"/>
+
+            <com.simplemobiletools.commons.views.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="@dimen/medium_margin"
+                android:text="@string/right_arrow"/>
+
+        </RelativeLayout>
+
+        <include layout="@layout/divider"
+            android:id="@+id/about_divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_below="@id/about_credit_holder" />
+
+        <RelativeLayout
+            android:id="@+id/about_share_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/about_divider2"
+            android:padding="@dimen/medium_margin">
+
+            <com.simplemobiletools.commons.views.MyTextView
+                android:id="@+id/about_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:padding="@dimen/medium_margin"
+                android:text="@string/skcal_share"/>
+
+            <com.simplemobiletools.commons.views.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="@dimen/medium_margin"
+                android:text="@string/right_arrow"/>
+
+        </RelativeLayout>
+
+        <include layout="@layout/divider"
+            android:id="@+id/about_divider3"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_below="@id/about_share_holder" />
+
+        <RelativeLayout android:id="@+id/about_license_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/about_divider3"
+            android:padding="@dimen/medium_margin">
+
+            <com.simplemobiletools.commons.views.MyTextView
+                android:id="@+id/about_license"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:padding="@dimen/medium_margin"
+                android:text="@string/third_party_licences"/>
+
+            <com.simplemobiletools.commons.views.MyTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="@dimen/medium_margin"
+                android:text="@string/right_arrow"/>
+
+        </RelativeLayout>
+
+    <include layout="@layout/bottom_copyright"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+    />
+
+    </RelativeLayout>
