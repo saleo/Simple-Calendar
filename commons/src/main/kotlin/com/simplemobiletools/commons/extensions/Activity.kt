@@ -81,13 +81,13 @@ fun Activity.appLaunched() {
     updateSDCardPath()
     baseConfig.appRunCount++
 
-    if (!baseConfig.hadThankYouInstalled) {
-        if (isThankYouInstalled()) {
-            baseConfig.hadThankYouInstalled = true
-        } else if (baseConfig.appRunCount % 50 == 0) {
-            DonateDialog(this)
-        }
-    }
+//    if (!baseConfig.hadThankYouInstalled) {
+//        if (isThankYouInstalled()) {
+//            baseConfig.hadThankYouInstalled = true
+//        } else if (baseConfig.appRunCount % 50 == 0) {
+//            DonateDialog(this)
+//        }
+//    }
 }
 
 @SuppressLint("InlinedApi")
