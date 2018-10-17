@@ -1,7 +1,9 @@
 package com.simplemobiletools.calendar.fragments
 
+import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
+import android.support.annotation.MainThread
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +16,11 @@ import com.simplemobiletools.calendar.helpers.Formatter
 import kotlinx.android.synthetic.main.fragment_qingxin.*
 import kotlinx.android.synthetic.main.fragment_qingxin.view.*
 import org.joda.time.DateTime
+import com.xyzlf.share.library.interfaces.ShareConstant
+import com.xyzlf.share.library.util.ShareUtil
+import com.xyzlf.share.library.bean.ShareEntity
+
+
 
 class QingxinFragment:MyFragmentHolder() {
 
@@ -58,6 +65,12 @@ class QingxinFragment:MyFragmentHolder() {
             txt_qingxin3!!.text=bottomeSentences[2]
         }
 
+        img_forward1.setOnClickListener {
+            val testBean = ShareEntity("我是标题", "我是内容，描述内容。")
+            testBean.url = "https://www.baidu.com" //分享链接
+            testBean.imgUrl = "https://www.baidu.com/img/bd_logo1.png"
+            ShareUtil.startShare(activity, ShareConstant.SHARE_CHANNEL_WEIXIN_FRIEND, testBean, ShareConstant.REQUEST_CODE)
+        }
     }
 
     //all below are for placeholder purpose
