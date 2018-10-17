@@ -972,4 +972,21 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
     }
 
+    fun openQingxinFromMonthly(dateTime: DateTime) {
+        if ((expandableSelector as ExpandableSelector).isExpanded())
+            (expandableSelector as ExpandableSelector).collapse()
+
+        if (currentFragments.last() is QingxinFragment) {
+            return
+        }
+
+        val fragment = QingxinFragment()
+        currentFragments.add(fragment)
+        val bundle = Bundle()
+        bundle.putString(DAY_CODE, Formatter.getDayCodeFromDateTime(dateTime))
+        fragment.arguments = bundle
+        supportFragmentManager.beginTransaction().add(R.id.fragments_holder, fragment).commitNow()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
 }

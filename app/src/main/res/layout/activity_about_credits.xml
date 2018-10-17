@@ -97,7 +97,7 @@
         />
 
     <include android:id="@+id/include_bottom"
-        layout="@layout/bottom_copyright"
+        layout="@layout/bottom_contact_copyright"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" />

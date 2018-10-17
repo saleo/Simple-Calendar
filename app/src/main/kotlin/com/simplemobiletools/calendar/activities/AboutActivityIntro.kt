@@ -9,7 +9,7 @@ import com.simplemobiletools.calendar.helpers.SKCAL_AS_DEFAULT
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.helpers.APP_VERSION_NAME
 import kotlinx.android.synthetic.main.activity_about_intro.*
-import kotlinx.android.synthetic.main.bottom_copyright.*
+import kotlinx.android.synthetic.main.bottom_contact_copyright.*
 import java.util.*
 
 

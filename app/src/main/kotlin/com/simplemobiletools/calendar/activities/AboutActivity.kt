@@ -15,7 +15,7 @@ import com.simplemobiletools.commons.helpers.APP_NAME
 import com.simplemobiletools.commons.helpers.APP_VERSION_NAME
 import com.simplemobiletools.commons.models.FAQItem
 import kotlinx.android.synthetic.main.activity_about.*
-import kotlinx.android.synthetic.main.bottom_copyright.*
+import kotlinx.android.synthetic.main.bottom_contact_copyright.*
 import java.util.*
 
 class AboutActivity : BaseSimpleActivity() {

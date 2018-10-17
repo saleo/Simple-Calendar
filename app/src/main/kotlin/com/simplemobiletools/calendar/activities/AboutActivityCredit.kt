@@ -8,7 +8,7 @@ import com.simplemobiletools.calendar.helpers.SKCAL_AS_DEFAULT
 import kotlinx.android.synthetic.main.activity_about_credits.*
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.commons.helpers.APP_VERSION_NAME
-import kotlinx.android.synthetic.main.bottom_copyright.*
+import kotlinx.android.synthetic.main.bottom_contact_copyright.*
 import java.util.*
 
 class AboutActivityCredit:SimpleActivity() {
