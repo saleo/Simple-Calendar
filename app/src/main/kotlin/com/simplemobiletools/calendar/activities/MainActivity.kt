@@ -915,7 +915,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
      expandableSelector = findViewById(R.id.es_icons)
     var expandableItems = ArrayList<ExpandableItem>()
       val item1 = ExpandableItem()
-      item1.resourceId = R.drawable.ic_up_red
+      item1.resourceId = R.drawable.ic_up_red1
       expandableItems.add(item1)
       val item2 = ExpandableItem()
       item2.resourceId = R.drawable.settings_solid
@@ -943,11 +943,11 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
       (expandableSelector as ExpandableSelector).setExpandableSelectorListener(object : ExpandableSelectorListener {
 
       override fun onCollapse() {
-          updateIconsFirstButtonResource(R.drawable.ic_up_red)
+          updateIconsFirstButtonResource(R.drawable.ic_up_red1)
       }
 
       override fun onExpand() {
-          updateIconsFirstButtonResource(R.drawable.ic_down_red)
+          updateIconsFirstButtonResource(R.drawable.ic_down_red1)
       }
 
       override fun onCollapsed() {
