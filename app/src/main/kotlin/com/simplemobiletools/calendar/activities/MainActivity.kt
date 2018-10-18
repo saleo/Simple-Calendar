@@ -189,6 +189,9 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         calendar_fab.setColors(config.textColor, getAdjustedPrimaryColor(), config.backgroundColor)
         search_holder.background = ColorDrawable(config.backgroundColor)
 
+        if ((expandableSelector as ExpandableSelector).isExpanded())
+            (expandableSelector as ExpandableSelector).collapse()
+
         refreshCalDAVCalendars(true)
     }
 
@@ -912,7 +915,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
      expandableSelector = findViewById(R.id.es_icons)
     var expandableItems = ArrayList<ExpandableItem>()
       val item1 = ExpandableItem()
-      item1.resourceId = R.drawable.ic_launcher_bg_transparent
+      item1.resourceId = R.drawable.ic_up_red
       expandableItems.add(item1)
       val item2 = ExpandableItem()
       item2.resourceId = R.drawable.settings_solid
@@ -940,10 +943,11 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
       (expandableSelector as ExpandableSelector).setExpandableSelectorListener(object : ExpandableSelectorListener {
 
       override fun onCollapse() {
-
+          updateIconsFirstButtonResource(R.drawable.ic_up_red)
       }
 
       override fun onExpand() {
+          updateIconsFirstButtonResource(R.drawable.ic_down_red)
       }
 
       override fun onCollapsed() {

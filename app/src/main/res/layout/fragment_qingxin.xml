@@ -14,7 +14,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:src="@drawable/forward" />
+        android:src="@drawable/forward"
+        android:visibility="invisible"/>
 
     <com.simplemobiletools.commons.views.MyTextView
         android:id="@+id/txt_qingxin1"
@@ -38,7 +39,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/forward"
-        android:layout_gravity="right"/>
+        android:layout_gravity="right"
+        android:visibility="invisible"/>
 
     <com.simplemobiletools.commons.views.MyTextView
         android:id="@+id/txt_qingxin2"
@@ -61,7 +63,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/forward"
-        android:layout_gravity="right"/>
+        android:layout_gravity="right"
+        android:visibility="invisible"/>
+
 
     <com.simplemobiletools.commons.views.MyTextView
         android:id="@+id/txt_qingxin3"
