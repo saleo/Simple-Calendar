@@ -18,6 +18,7 @@ import android.widget.TextView
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.R.string.days_raw
 import com.simplemobiletools.calendar.activities.EventActivity
+import com.simplemobiletools.calendar.activities.MainActivity
 import com.simplemobiletools.calendar.activities.SimpleActivity
 import com.simplemobiletools.calendar.adapters.DayEventsAdapter
 import com.simplemobiletools.calendar.extensions.config
@@ -174,127 +175,66 @@ class DayFragment : Fragment() {
         val intYear = time.year
         val mCurrentMonthDisplayed = time.monthOfYear
         val mCurrentDay = mDayCode.substring(6,8)
-        val topMonth= mHolder.top_month
 
         var dayNumber:TextView
         val mBottomSentences: Array<String>
 
         bottom_sentense0.setTextSize(mConfig.getFontSize()*1.01.toFloat())
         bottom_sentense1.setTextSize(mConfig.getFontSize()*1.01.toFloat())
+        bottom_sentense2.setTextSize(mConfig.getFontSize()*1.01.toFloat())
         val res = resources
         mBottomSentences = res.getStringArray(R.array.bottom_sentences_digest)
 
         if (intYear == 2016 || intYear==2018) {
             when (mCurrentMonthDisplayed) {
-                1 -> {topMonth.setImageResource(R.drawable.sk2018_1)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+1]
-                }
-                2 -> {topMonth.setImageResource(R.drawable.sk2018_2)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+2]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+3]
-                }
-                3 -> {topMonth.setImageResource(R.drawable.sk2018_3)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+4]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+5]
-                }
-                4 -> {topMonth.setImageResource(R.drawable.sk2018_4)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+6]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+7]
-                }
-                5 -> {topMonth.setImageResource(R.drawable.sk2018_5)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+8]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+9]
-                }
-                6 -> {topMonth.setImageResource(R.drawable.sk2018_6)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+10]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+11]
-                }
-                7 -> {topMonth.setImageResource(R.drawable.sk2018_7)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+12]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+13]
-                }
-                8 -> {topMonth.setImageResource(R.drawable.sk2018_8)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+14]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+15]
-                }
-                9 -> {topMonth.setImageResource(R.drawable.sk2018_1)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+16]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+17]
-                }
-                10 -> {topMonth.setImageResource(R.drawable.sk2018_2)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+18]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+19]
-                }
-                11 -> {topMonth.setImageResource(R.drawable.sk2018_3)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+20]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+21]
-                }
-                12 -> {topMonth.setImageResource(R.drawable.sk2018_12)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+22]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+23]
-                }
+                1 -> mHolder.top_month.setImageResource(R.drawable.sk2018_1)
+                2 -> mHolder.top_month.setImageResource(R.drawable.sk2018_2)
+                3 -> mHolder.top_month.setImageResource(R.drawable.sk2018_3)
+                4 -> mHolder.top_month.setImageResource(R.drawable.sk2018_4)
+                5 -> mHolder.top_month.setImageResource(R.drawable.sk2018_5)
+                6 -> mHolder.top_month.setImageResource(R.drawable.sk2018_6)
+                7 -> mHolder.top_month.setImageResource(R.drawable.sk2018_7)
+                8 -> mHolder.top_month.setImageResource(R.drawable.sk2018_8)
+                9 -> mHolder.top_month.setImageResource(R.drawable.sk2018_9)
+                10 -> mHolder.top_month.setImageResource(R.drawable.sk2018_10)
+                11 -> mHolder.top_month.setImageResource(R.drawable.sk2018_11)
+                12 -> mHolder.top_month.setImageResource(R.drawable.sk2018_12)
             }
+            bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+3*(mCurrentMonthDisplayed-1)]
+            bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+3*(mCurrentMonthDisplayed-1)+1]
+            bottom_sentense2.text=mBottomSentences[mCurrentMonthDisplayed+3*(mCurrentMonthDisplayed-1)+2]
         } else if (intYear == 2017 || intYear==2019) {
             when (mCurrentMonthDisplayed) {
-                1 -> {topMonth.setImageResource(R.drawable.sk2019_1)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+24]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+25]
-                }
-                2 -> {topMonth.setImageResource(R.drawable.sk2019_2)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+26]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+27]
-                }
-                3 -> {topMonth.setImageResource(R.drawable.sk2019_3)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+28]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+29]
-                }
-                4 -> {topMonth.setImageResource(R.drawable.sk2019_4)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+30]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+31]
-                }
-                5 -> {topMonth.setImageResource(R.drawable.sk2019_5)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+32]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+33]
-                }
-                6 -> {topMonth.setImageResource(R.drawable.sk2019_6)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+34]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+35]
-                }
-                7 -> {topMonth.setImageResource(R.drawable.sk2019_7)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+36]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+37]
-                }
-                8 -> {topMonth.setImageResource(R.drawable.sk2019_8)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+38]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+39]
-                }
-                9 -> {topMonth.setImageResource(R.drawable.sk2019_9)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+40]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+41]
-                }
-                10 -> {topMonth.setImageResource(R.drawable.sk2019_10)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+42]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+43]
-                }
-                11 -> {topMonth.setImageResource(R.drawable.sk2019_11)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+44]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+45]
-                }
-                12 -> {topMonth.setImageResource(R.drawable.sk2019_12)
-                    bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+46]
-                    bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+47]
-                }
+                1 -> mHolder.top_month.setImageResource(R.drawable.sk2019_1)
+                2 -> mHolder.top_month.setImageResource(R.drawable.sk2019_2)
+                3 -> mHolder.top_month.setImageResource(R.drawable.sk2019_3)
+                4 -> mHolder.top_month.setImageResource(R.drawable.sk2019_4)
+                5 -> mHolder.top_month.setImageResource(R.drawable.sk2019_5)
+                6 -> mHolder.top_month.setImageResource(R.drawable.sk2019_6)
+                7 -> mHolder.top_month.setImageResource(R.drawable.sk2019_7)
+                8 -> mHolder.top_month.setImageResource(R.drawable.sk2019_8)
+                9 -> mHolder.top_month.setImageResource(R.drawable.sk2019_9)
+                10 -> mHolder.top_month.setImageResource(R.drawable.sk2019_10)
+                11 -> mHolder.top_month.setImageResource(R.drawable.sk2019_11)
+                12 -> mHolder.top_month.setImageResource(R.drawable.sk2019_12)
             }
+            bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+36+3*(mCurrentMonthDisplayed-1)]
+            bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+36+3*(mCurrentMonthDisplayed-1)+1]
+            bottom_sentense2.text=mBottomSentences[mCurrentMonthDisplayed+36+3*(mCurrentMonthDisplayed-1)+2]
         } else {
-            topMonth.setImageResource(R.drawable.placeholder)
-            bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+0]
-            bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+1]
+            mHolder.top_month.setImageResource(R.drawable.placeholder)
+            bottom_sentense0.text=mBottomSentences[0]
+            bottom_sentense1.text=mBottomSentences[1]
+            bottom_sentense2.text=mBottomSentences[2]
         }
 
         dayNumber=mHolder.findViewById(R.id.day_monthly_number)
         dayNumber.text=mCurrentDay+context!!.getString(R.string.days_raw)
         dayNumber.setTextColor(Color.WHITE)
-        dayNumber.textSize=mConfig.getFontSize()*1.08f
+        dayNumber.textSize=mConfig.getFontSize()*1.07f
+
+        mHolder.id_bottom_sentense.setOnClickListener {
+            (activity as MainActivity).openQingxinFromMonthly(time)
+        }
     }
 }

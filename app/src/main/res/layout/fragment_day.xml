@@ -14,9 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/top_month"
         android:layout_alignBottom="@+id/top_month"
-        android:layout_marginBottom="@dimen/day_number_over_image_bottom_margin"
         android:paddingLeft="@dimen/day_number_over_image_left_padding"
-        android:text="10000000" />
+        android:text="10000" />
 
     <com.simplemobiletools.commons.views.MyRecyclerView
         android:id="@+id/day_events"
