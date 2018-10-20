@@ -330,13 +330,30 @@
 　　\n\n\t相遇疗法网站：www.xiangyuliaofa.cn
 
     </string>
+    <string name="str_intro">介绍</string>
+    <string name="str_credit">芳名录</string>
+    <string name="str_health">身心健康</string>
+    <string name="str_share">分享</string>
+    <string name="str_3partylicense">所使用第三方</string>
+
     <string name="str_credit_bignamelist">方伟坤老师</string>
     <string name="str_credit_subcatption">寿康学会会员和网友</string>
     <string name="str_credit_gongdehuixiang">所有功德回向给戒邪淫网和寿康学会的所有资助者、随喜者、参与者、见闻者、传播者，业障消除，福慧增长，尽此一报身，同生极乐国。</string>
     <string name="str_credit_donatenow">随喜乐捐</string>>
-    <string name="str_intro">介绍</string>>
+
+    <string name="str_health_title1">主要脏腑心理病因基本取象规律</string>
+    <string name="str_health_title2">身体部位的取象规律</string>
+    <string name="str_health_title3">部分感觉和心情的对应</string>
+
+    <string name="str_health_headerviewtext1">脏腑名称</string>
+    <string name="str_health_headerviewtext1_1">功能/定向心理病因</string>
+    <string name="str_health_headerviewtext2">定位</string>
+    <string name="str_health_headerviewtext2_1">对应心理取象</string>
+    <string name="str_health_headerviewtext3">感觉</string>
+    <string name="str_health_headerviewtext3_1">心情对应</string>
+    <string name="str_health_originator">选自王中平《心灵的潜能》-商丘寿康学会身心健康课题组整理</string>
     <!--
-        Haven't found some strings? There's more at
+        Haven't found some stringsh? There's more at
         https://github.com/SimpleMobileTools/Simple-Commons/tree/master/commons/src/main/res
     -->
 </resources>

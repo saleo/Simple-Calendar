@@ -5,6 +5,8 @@
     android:id="@+id/calendar_holder"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:divider="@color/red_text"
+    android:showDividers="beginning|end"
     android:padding="@dimen/yearly_padding_side">
 
     <TableRow android:layout_weight="1">

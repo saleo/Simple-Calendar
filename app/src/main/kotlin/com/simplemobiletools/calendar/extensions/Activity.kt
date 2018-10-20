@@ -44,7 +44,7 @@ fun BaseSimpleActivity.getTempFile(): File? {
     return File(folder, "events.ics")
 }
 
-fun Activity.showEventReminderDialog(curMinutes: Int, isSnoozePicker: Boolean = false, cancelCallback: (() -> Unit)? = null, callback: (minutes: Int) -> Unit) {
+    fun Activity.showEventReminderDialog(curMinutes: Int, isSnoozePicker: Boolean = false, cancelCallback: (() -> Unit)? = null, callback: (minutes: Int) -> Unit) {
     hideKeyboard()
     val minutes = TreeSet<Int>()
     minutes.apply {

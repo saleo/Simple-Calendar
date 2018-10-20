@@ -128,6 +128,11 @@
             android:parentActivityName=".activities.AboutActivity"/>
 
         <activity
+            android:name=".activities.AboutActivityHealth"
+            android:label="@string/str_health"
+            android:parentActivityName=".activities.AboutActivity"/>
+
+        <activity
             android:name=".activities.EventActivity"
             android:parentActivityName=".activities.MainActivity">
 

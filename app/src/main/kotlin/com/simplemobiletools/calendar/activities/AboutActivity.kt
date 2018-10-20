@@ -35,6 +35,7 @@ class AboutActivity : BaseSimpleActivity() {
 
         setupIntro()
         setupCredit()
+        setupHealth()
         setupShare()
         setupLicense()
         setupCopyright()
@@ -55,6 +56,15 @@ class AboutActivity : BaseSimpleActivity() {
             }
         }
     }
+
+    private fun setupHealth() {
+        about_health_holder.setOnClickListener {
+            Intent(applicationContext,AboutActivityHealth::class.java).apply {
+                startActivity(this)
+            }
+        }
+    }
+
 
     private fun setupShare() {
         about_share_holder.setOnClickListener {

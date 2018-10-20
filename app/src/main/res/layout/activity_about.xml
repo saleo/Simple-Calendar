@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:padding="@dimen/medium_margin"
-            android:text="@string/skcal_introduction"
+            android:text="@string/str_intro"
             android:textColorLink="@color/color_primary"/>
 
         <com.simplemobiletools.commons.views.MyTextView
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:padding="@dimen/medium_margin"
-                android:text="@string/skcal_creditlist"/>
+                android:text="@string/str_credit"/>
 
             <com.simplemobiletools.commons.views.MyTextView
                 android:layout_width="wrap_content"
@@ -76,11 +76,41 @@
             android:layout_height="1px"
             android:layout_below="@id/about_credit_holder" />
 
-        <RelativeLayout
+    <RelativeLayout
+        android:id="@+id/about_health_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/about_divider2"
+        android:padding="@dimen/medium_margin">
+
+        <com.simplemobiletools.commons.views.MyTextView
+            android:id="@+id/about_health"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:padding="@dimen/medium_margin"
+            android:text="@string/str_health"/>
+
+        <com.simplemobiletools.commons.views.MyTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/medium_margin"
+            android:text="@string/right_arrow"/>
+
+    </RelativeLayout>
+
+    <include layout="@layout/divider"
+        android:id="@+id/about_divider3"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/about_health_holder" />
+
+    <RelativeLayout
             android:id="@+id/about_share_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/about_divider2"
+            android:layout_below="@id/about_divider3"
             android:padding="@dimen/medium_margin">
 
             <com.simplemobiletools.commons.views.MyTextView
@@ -89,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:padding="@dimen/medium_margin"
-                android:text="@string/skcal_share"/>
+                android:text="@string/str_share"/>
 
             <com.simplemobiletools.commons.views.MyTextView
                 android:layout_width="wrap_content"
@@ -101,7 +131,7 @@
         </RelativeLayout>
 
         <include layout="@layout/divider"
-            android:id="@+id/about_divider3"
+            android:id="@+id/about_divider4"
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_below="@id/about_share_holder" />
@@ -109,7 +139,7 @@
         <RelativeLayout android:id="@+id/about_license_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/about_divider3"
+            android:layout_below="@id/about_divider4"
             android:padding="@dimen/medium_margin">
 
             <com.simplemobiletools.commons.views.MyTextView

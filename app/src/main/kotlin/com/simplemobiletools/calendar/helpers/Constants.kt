@@ -145,3 +145,7 @@ const val REMINDER_SWITCH ="reminder_switch"
 const val REMINDER_INITIAL_MINUTES=240 //4 hours before REMINDER_UNIFIED_TIME_VALUE
 const val SKCAL_AS_DEFAULT="skcal_as_default"
 const val INTRO_TYPE="intro_type"
+const val HEALTH_TITLE="health_title"
+const val HEALTH_CONTENT="health_content"
+const val HEALTH_CONTENT2="health_content2"
+
