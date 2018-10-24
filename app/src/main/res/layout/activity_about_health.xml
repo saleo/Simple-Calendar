@@ -7,39 +7,54 @@
 
     <include layout="@layout/top_navigation"/>
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/health_tabs"
+    <RadioGroup
+        android:id="@+id/rdg_health_tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/about_topimage"
-        android:paddingVertical="2sp"
-        style="@style/MyTabLayoutTextAppearance">
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:layout_gravity="center">
 
-        <android.support.design.widget.TabItem
-            android:id="@+id/tab_health_1"
-            android:layout_width="wrap_content"
+        <RadioButton
+            android:id="@+id/rd_health_tab1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/str_health_title1" />
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/str_health_title1"
+            android:textSize="@dimen/bigger_text_size"
+            android:textColor="@color/md_green"
+            android:textStyle="bold" />
 
-        <android.support.design.widget.TabItem
-            android:id="@+id/tab_health_2"
-            android:layout_width="wrap_content"
+        <RadioButton
+            android:id="@+id/rd_health_tab2"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/str_health_title2" />
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/str_health_title2"
+            android:textSize="@dimen/bigger_text_size"
+            android:textColor="@color/md_green"
+            android:textStyle="bold" />
 
-        <android.support.design.widget.TabItem
-            android:id="@+id/tab_health_3"
-            android:layout_width="wrap_content"
+        <RadioButton
+            android:id="@+id/rd_health_tab3"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/str_health_title3" />
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/str_health_title3"
+            android:textSize="@dimen/bigger_text_size"
+            android:textColor="@color/md_green"
+            android:textStyle="bold" />
 
-    </android.support.design.widget.TabLayout>
-
-
-
+    </RadioGroup>
     <ListView android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:drawSelectorOnTop="false"/>
 
@@ -52,7 +67,9 @@
     <TextView android:id="@+id/txt_health_originator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/str_health_originator"/>
+        android:text="@string/str_health_originator"
+        android:textStyle="italic"
+        android:textSize="@dimen/small_text_size"/>
 
 
     <include

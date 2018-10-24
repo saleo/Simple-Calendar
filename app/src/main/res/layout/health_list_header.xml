@@ -8,9 +8,9 @@
         android:layout_height="wrap_content"
         android:text="gan"
         android:textStyle="bold"
-        android:textSize="@dimen/bigger_text_size"
-        android:layout_weight="3"
-        android:layout_gravity="left|center_vertical"/>
+        android:textSize="@dimen/normal_text_size"
+        android:layout_weight="2"
+        android:gravity="center"/>
 
     <ImageView
         android:layout_width="1dp"
@@ -22,10 +22,11 @@
         android:id="@+id/header_health_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="7"
+        android:layout_weight="8"
         android:textStyle="bold"
-        android:textSize="@dimen/bigger_text_size"
-        android:text="gan structure"/>
+        android:textSize="@dimen/normal_text_size"
+        android:text="gan structure"
+        android:gravity="center"/>
 
 
 </LinearLayout>

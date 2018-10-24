@@ -341,9 +341,9 @@
     <string name="str_credit_gongdehuixiang">所有功德回向给戒邪淫网和寿康学会的所有资助者、随喜者、参与者、见闻者、传播者，业障消除，福慧增长，尽此一报身，同生极乐国。</string>
     <string name="str_credit_donatenow">随喜乐捐</string>>
 
-    <string name="str_health_title1">主要脏腑心理病因基本取象规律</string>
-    <string name="str_health_title2">身体部位的取象规律</string>
-    <string name="str_health_title3">部分感觉和心情的对应</string>
+    <string name="str_health_title1">脏腑心理病因\n基本取象规律</string>
+    <string name="str_health_title2">身体部位\n取象规律</string>
+    <string name="str_health_title3">部分感觉\n心情对应</string>
 
     <string name="str_health_headerviewtext1">脏腑名称</string>
     <string name="str_health_headerviewtext1_1">功能/定向心理病因</string>

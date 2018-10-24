@@ -2,13 +2,14 @@ package com.simplemobiletools.calendar.activities
 
 import android.app.ListActivity
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.design.widget.TabLayout
+import android.view.Display
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.*
-import android.widget.ListAdapter
-import android.widget.SimpleAdapter
+import android.widget.*
 import com.simplemobiletools.calendar.helpers.SKCAL_AS_DEFAULT
 import kotlinx.android.synthetic.main.activity_about_credits.*
 import com.simplemobiletools.calendar.R
@@ -24,32 +25,44 @@ import kotlinx.android.synthetic.main.health_list_header.view.*
 import org.apache.commons.lang3.ObjectUtils
 
 
-class AboutActivityHealth: ListActivity(),TabLayout.OnTabSelectedListener {
-    private lateinit var mHeader : View
-    private var mOldHeader : View?=null
+class AboutActivityHealth: ListActivity(),RadioGroup.OnCheckedChangeListener {
+    private lateinit var mHeader: View
+    private var mOldHeader: View? = null
+    private var mBorder: Drawable? =null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about_health)
 
-        about_sklogo.visibility=INVISIBLE
-        setupTabs()
-        mHeader= inflate(applicationContext,R.layout.health_list_header,null)
+        mBorder=resources.getDrawable(R.drawable.divider_green)
+        val h=mBorder!!.intrinsicHeight
+        val w= mBorder!!.intrinsicWidth
+        mBorder!!.setBounds(0,0,w,h)
 
+        mHeader = inflate(applicationContext, R.layout.health_list_header, null)
+
+        setupTabs()
         setupListview()
         setupCopyright()
+
     }
 
-    private fun setupTabs(){
-        val tabLayout: TabLayout?=findViewById(R.id.health_tabs)
-        tabLayout!!.newTab().setText(R.string.str_intro)
-        tabLayout!!.newTab().setText(R.string.str_intro)
-        tabLayout!!.newTab().setText(R.string.str_intro)
-
-        tabLayout.addOnTabSelectedListener(this)
+    private fun setupTabs() {
+        rdg_health_tabs.setOnCheckedChangeListener(this)
     }
 
-    private fun setupListview(tabSelected:Int=0) {
+    override fun onCheckedChanged(group: RadioGroup?, checkedId: Int) {
+        when (checkedId) {
+            R.id.rd_health_tab1 ->
+                setupListview(0)
+            R.id.rd_health_tab2 ->
+                setupListview(1)
+            R.id.rd_health_tab3 ->
+                setupListview(2)
+        }
+    }
+
+    private fun setupListview(tabSelected: Int = 0) {
         var lst1: List<Map<String, String>> = emptyList()
         var sa1: Array<String> = emptyArray()
         var item1: Map<String, String> = emptyMap()
@@ -59,31 +72,32 @@ class AboutActivityHealth: ListActivity(),TabLayout.OnTabSelectedListener {
             0 -> {
                 sa1 = resources.getStringArray(R.array.health1)
                 iLen = sa1.size / 3
-                mHeader?.header_health_title.text=resources.getString(R.string.str_health_headerviewtext1)
-                mHeader?.header_health_content?.text=resources.getString(R.string.str_health_headerviewtext1_1)
-                txt_health_originator.visibility= INVISIBLE
+                mHeader?.header_health_title.text = resources.getString(R.string.str_health_headerviewtext1)
+                mHeader?.header_health_content?.text = resources.getString(R.string.str_health_headerviewtext1_1)
+                txt_health_originator.visibility = GONE
             }
             1 -> {
                 sa1 = resources.getStringArray(R.array.health2)
                 iLen = sa1.size / 2
-                mHeader!!.header_health_title.text=resources.getString(R.string.str_health_headerviewtext2)
-                mHeader!!.header_health_content.text=resources.getString(R.string.str_health_headerviewtext2_1)
-                txt_health_originator.visibility= INVISIBLE
+                mHeader!!.header_health_title.text = resources.getString(R.string.str_health_headerviewtext2)
+                mHeader!!.header_health_content.text = resources.getString(R.string.str_health_headerviewtext2_1)
+                txt_health_originator.visibility = GONE
             }
             2 -> {
                 sa1 = resources.getStringArray(R.array.health3)
                 iLen = sa1.size / 2
-                mHeader!!.header_health_title.text=resources.getString(R.string.str_health_headerviewtext3)
-                mHeader!!.header_health_content.text==resources.getString(R.string.str_health_headerviewtext3_1)
-                txt_health_originator.visibility= VISIBLE
+                mHeader!!.header_health_title.text = resources.getString(R.string.str_health_headerviewtext3)
+                mHeader!!.header_health_content.text == resources.getString(R.string.str_health_headerviewtext3_1)
+                txt_health_originator.visibility = VISIBLE
             }
         }
+        setBottomBorder(tabSelected)
 
-        if (mOldHeader!=null)
+        if (mOldHeader != null)
             listView.removeHeaderView(mOldHeader)
 
         listView.addHeaderView(mHeader)
-        mOldHeader=mHeader
+        mOldHeader = mHeader
 
         if (tabSelected != 0) {
             for (i in 0 until iLen) {
@@ -101,7 +115,7 @@ class AboutActivityHealth: ListActivity(),TabLayout.OnTabSelectedListener {
         if (tabSelected != 0)
             listAdapter = SimpleAdapter(applicationContext, lst1, R.layout.health_list_item, arrayOf(HEALTH_TITLE, HEALTH_CONTENT), intArrayOf(R.id.item_health_title, R.id.item_health_content))
         else
-            listAdapter = SimpleAdapter(applicationContext, lst1, R.layout.health_list_item2, arrayOf(HEALTH_TITLE, HEALTH_CONTENT,HEALTH_CONTENT2), intArrayOf(R.id.item_health_title, R.id.item_health_content, R.id.item_health_content2))
+            listAdapter = SimpleAdapter(applicationContext, lst1, R.layout.health_list_item2, arrayOf(HEALTH_TITLE, HEALTH_CONTENT, HEALTH_CONTENT2), intArrayOf(R.id.item_health_title, R.id.item_health_content, R.id.item_health_content2))
 
     }
 
@@ -110,15 +124,24 @@ class AboutActivityHealth: ListActivity(),TabLayout.OnTabSelectedListener {
         about_copyright.text = String.format(getString(R.string.copyright), year)
     }
 
-    override fun onTabSelected(tab: TabLayout.Tab?) {
-        setupListview(tab!!.position)
+    private fun setBottomBorder(tabIndex: Int=0){
+        when (tabIndex){
+            0 -> {
+                rd_health_tab1.setCompoundDrawablesWithIntrinsicBounds(null, null, null,mBorder)
+                rd_health_tab2.setCompoundDrawablesWithIntrinsicBounds(null, null, null,null)
+                rd_health_tab3.setCompoundDrawablesWithIntrinsicBounds(null, null, null,null)
+            }
+            1 -> {
+                rd_health_tab1.setCompoundDrawablesWithIntrinsicBounds(null, null, null,null)
+                rd_health_tab2.setCompoundDrawablesWithIntrinsicBounds(null, null, null,mBorder)
+                rd_health_tab3.setCompoundDrawablesWithIntrinsicBounds(null, null, null,null)
+            }
+            2 -> {
+                rd_health_tab1.setCompoundDrawablesWithIntrinsicBounds(null, null, null,null)
+                rd_health_tab2.setCompoundDrawablesWithIntrinsicBounds(null, null, null,null)
+                rd_health_tab3.setCompoundDrawablesWithIntrinsicBounds(null, null, null,mBorder)
+            }
+        }
     }
 
-    override fun onTabReselected(tab: TabLayout.Tab?) {
-        return
-    }
-
-    override fun onTabUnselected(tab: TabLayout.Tab?) {
-        return
-    }
 }
