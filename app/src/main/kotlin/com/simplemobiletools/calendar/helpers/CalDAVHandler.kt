@@ -6,6 +6,7 @@ import android.content.Context
 import android.database.Cursor
 import android.provider.CalendarContract
 import android.provider.CalendarContract.Reminders
+import android.util.SparseArray
 import android.util.SparseIntArray
 import com.simplemobiletools.calendar.activities.SimpleActivity
 import com.simplemobiletools.calendar.extensions.config
@@ -19,6 +20,7 @@ import com.simplemobiletools.commons.helpers.PERMISSION_READ_CALENDAR
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CALENDAR
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class CalDAVHandler(val context: Context) {
     fun refreshCalendars(activity: SimpleActivity? = null, callback: () -> Unit) {
@@ -33,7 +35,7 @@ class CalDAVHandler(val context: Context) {
             }*/
 
 
-            CalDAVHandler(context).fetchCalDAVCalendarEvents(calendar.id, DBHelper.REGULAR_EVENT_TYPE_ID, activity)
+            CalDAVHandler(context).fetchCalDAVCalendarEvents(calendar.id, DBHelper.REGULAR_EVENT_TYPE_ID, activity, "sync")
         }
         context.scheduleCalDAVSync(true)
         callback()
@@ -192,13 +194,17 @@ class CalDAVHandler(val context: Context) {
         return sortedColors
     }
 
-    private fun fetchCalDAVCalendarEvents(calendarId: Int, eventTypeId: Int, activity: SimpleActivity?) {
+    private fun fetchCalDAVCalendarEvents(calendarId: Int, eventTypeId: Int, activity: SimpleActivity?,importOrSync: String?="import") {
+        if (importOrSync != "import") {
+            fetchCalDAVCalendarEventSynced(calendarId,eventTypeId,activity)
+            return
+        }
         val importIdsMap = HashMap<String, Event>()
         val fetchedEventIds = ArrayList<String>()
         val existingEvents = context.dbHelper.getEventsFromCalDAVCalendar(calendarId)
-        existingEvents.forEach {
-            importIdsMap[it.importId] = it
-        }
+            existingEvents.forEach {
+                importIdsMap[it.importId] = it
+            }
 
         val uri = CalendarContract.Events.CONTENT_URI
         val projection = arrayOf(
@@ -232,8 +238,9 @@ class CalDAVHandler(val context: Context) {
                     val location = cursor.getStringValue(CalendarContract.Events.EVENT_LOCATION) ?: ""
                     val originalId = cursor.getStringValue(CalendarContract.Events.ORIGINAL_ID)
                     val originalInstanceTime = cursor.getLongValue(CalendarContract.Events.ORIGINAL_INSTANCE_TIME)
-                    val reminders = listOf(REMINDER_INITIAL_MINUTES)
                     val color=cursor.getIntValue(CalendarContract.Events.EVENT_COLOR)
+
+                    var reminders:List<Int>
 
                     if (endTS == 0) {
                         val duration = cursor.getStringValue(CalendarContract.Events.DURATION) ?: ""
@@ -243,36 +250,54 @@ class CalDAVHandler(val context: Context) {
                     val importId = getCalDAVEventImportId(calendarId, id)
                     val source = "$CALDAV-$calendarId"
                     val repeatRule = Parser().parseRepeatInterval(rrule, startTS)
-                    val event = Event(0, startTS, endTS, title, description, reminders.getOrElse(0, { -1 }),
-                            reminders.getOrElse(1, { -1 }), reminders.getOrElse(2, { -1 }), repeatRule.repeatInterval,
-                            importId, allDay, repeatRule.repeatLimit, repeatRule.repeatRule, eventTypeId, source = source, color = color,location = location)
-
-                    if (event.getIsAllDay()) {
-                        event.startTS = Formatter.getShiftedImportTimestamp(event.startTS)
-                        event.endTS = Formatter.getShiftedImportTimestamp(event.endTS)
-                        if (event.endTS > event.startTS) {
-                            event.endTS -= DAY
-                        }
-                    }
 
                     fetchedEventIds.add(importId)
-                    if (importIdsMap.containsKey(event.importId)) {
+                    if (importIdsMap.containsKey(importId)) {
                         val existingEvent = importIdsMap[importId]
                         val originalEventId = existingEvent!!.id
 
-
+                        //guess the existingEvent is constucted to make as same as possible with event.
                         existingEvent.apply {
                             this.id = 0
                             ignoreEventOccurrences = ArrayList()
                             lastUpdated = 0L
                             offset = ""
                         }
+                        reminders = listOf(context.config.currentReminderMinutes)
 
+                        val event = Event(0, startTS, endTS, title, description, reminders.getOrElse(0, { -1 }),
+                                reminders.getOrElse(1, { -1 }), reminders.getOrElse(2, { -1 }), repeatRule.repeatInterval,
+                                importId, allDay, repeatRule.repeatLimit, repeatRule.repeatRule, eventTypeId, source = source, color = color,location = location)
+
+                        if (event.getIsAllDay()) {
+                            event.startTS = Formatter.getShiftedImportTimestamp(event.startTS)
+                            event.endTS = Formatter.getShiftedImportTimestamp(event.endTS)
+                            if (event.endTS > event.startTS) {
+                                event.endTS -= DAY
+                            }
+                        }
+
+                        // guess the constructed existingEvent and event are ready for compare the whole contents,
+                        //which throught hashCode(); if their contents are not the same,update accordingly
                         if (existingEvent.hashCode() != event.hashCode() && title.isNotEmpty()) {
                             event.id = originalEventId
                             context.dbHelper.update(event, false)
                         }
                     } else {
+                        reminders = listOf(REMINDER_INITIAL_MINUTES)
+
+                        val event = Event(0, startTS, endTS, title, description, reminders.getOrElse(0, { -1 }),
+                                reminders.getOrElse(1, { -1 }), reminders.getOrElse(2, { -1 }), repeatRule.repeatInterval,
+                                importId, allDay, repeatRule.repeatLimit, repeatRule.repeatRule, eventTypeId, source = source, color = color,location = location)
+
+                        if (event.getIsAllDay()) {
+                            event.startTS = Formatter.getShiftedImportTimestamp(event.startTS)
+                            event.endTS = Formatter.getShiftedImportTimestamp(event.endTS)
+                            if (event.endTS > event.startTS) {
+                                event.endTS -= DAY
+                            }
+                        }
+
                         // if the event is an exception from another events repeat rule, find the original parent event
                         if (originalInstanceTime != 0L) {
                             val parentImportId = "$source-$originalId"
@@ -310,6 +335,145 @@ class CalDAVHandler(val context: Context) {
         eventIdsToDelete.forEach {
             context.dbHelper.deleteEvents(eventIdsToDelete.toTypedArray(), false)
         }
+    }
+
+    private fun fetchCalDAVCalendarEventSynced(calendarId: Int, eventTypeId: Int, activity: SimpleActivity?) {
+        val syncUidsMap = HashMap<String,Event>()
+        val fetchedEventSyncUids = ArrayList<String>()
+        val existingEvents = context.dbHelper.getEventsFromCalDAVCalendar(calendarId)
+        existingEvents.forEach {
+            syncUidsMap.put(it.syncUid,it)
+        }
+
+        val uri = CalendarContract.Events.CONTENT_URI
+        val projection = arrayOf(
+                CalendarContract.Events._ID,
+                CalendarContract.Events.TITLE,
+                CalendarContract.Events.DESCRIPTION,
+                CalendarContract.Events.DTSTART,
+                CalendarContract.Events.DTEND,
+                CalendarContract.Events.EVENT_TIMEZONE,
+                CalendarContract.Events.DURATION,
+                CalendarContract.Events.ALL_DAY,
+                CalendarContract.Events.RRULE,
+                CalendarContract.Events.ORIGINAL_ID,
+                CalendarContract.Events.ORIGINAL_INSTANCE_TIME,
+                CalendarContract.Events.EVENT_LOCATION,
+                CalendarContract.Events.EVENT_COLOR,
+                CalendarContract.Events._SYNC_ID)
+
+        val selection = "${CalendarContract.Events.CALENDAR_ID} = $calendarId"
+        var cursor: Cursor? = null
+        try {
+            cursor = context.contentResolver.query(uri, projection, selection, null, null)
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    val id = cursor.getLongValue(CalendarContract.Events._ID)
+                    val title = cursor.getStringValue(CalendarContract.Events.TITLE) ?: ""
+                    val description = cursor.getStringValue(CalendarContract.Events.DESCRIPTION) ?: ""
+                    val startTS = (cursor.getLongValue(CalendarContract.Events.DTSTART) / 1000).toInt()
+                    var endTS = (cursor.getLongValue(CalendarContract.Events.DTEND) / 1000).toInt()
+                    val allDay = cursor.getIntValue(CalendarContract.Events.ALL_DAY)
+                    val rrule = cursor.getStringValue(CalendarContract.Events.RRULE) ?: ""
+                    val location = cursor.getStringValue(CalendarContract.Events.EVENT_LOCATION) ?: ""
+                    val originalId = cursor.getStringValue(CalendarContract.Events.ORIGINAL_ID)
+                    val originalInstanceTime = cursor.getLongValue(CalendarContract.Events.ORIGINAL_INSTANCE_TIME)
+                    val color=cursor.getIntValue(CalendarContract.Events.EVENT_COLOR)
+                    val syncUid=cursor.getStringValue(CalendarContract.Events._SYNC_ID)
+
+                    var reminders:List<Int>
+
+                    if (endTS == 0) {
+                        val duration = cursor.getStringValue(CalendarContract.Events.DURATION) ?: ""
+                        endTS = startTS + Parser().parseDurationSeconds(duration)
+                    }
+
+                    val source = "$CALDAV-$calendarId"
+                    val repeatRule = Parser().parseRepeatInterval(rrule, startTS)
+
+                    fetchedEventSyncUids.add(syncUid)
+                    if (syncUidsMap.containsKey(syncUid)) {
+                        val existingEvent = syncUidsMap[syncUid]
+                        val originalEventId = existingEvent!!.id
+
+
+                        existingEvent.apply {
+                            this.id = 0
+                            ignoreEventOccurrences = ArrayList()
+                            lastUpdated = 0L
+                            offset = ""
+                        }
+                        reminders = listOf(context.config.currentReminderMinutes)
+
+                        val event = Event(0, startTS, endTS, title, description, reminders.getOrElse(0, { -1 }),
+                                reminders.getOrElse(1, { -1 }), reminders.getOrElse(2, { -1 }), repeatRule.repeatInterval,
+                                "", allDay, repeatRule.repeatLimit, repeatRule.repeatRule, eventTypeId, source = source, color = color,location = location,syncUid = syncUid)
+
+//                        if (event.getIsAllDay()) {
+//                            event.startTS = Formatter.getShiftedImportTimestamp(event.startTS)
+//                            event.endTS = Formatter.getShiftedImportTimestamp(event.endTS)
+//                            if (event.endTS > event.startTS) {
+//                                event.endTS -= DAY
+//                            }
+//                        }
+
+                        if (existingEvent.hashCode() != event.hashCode() && title.isNotEmpty()) {
+                            event.id = originalEventId
+                            context.dbHelper.update(event, false)
+                        }
+                    } else {
+                        reminders = listOf(REMINDER_INITIAL_MINUTES)
+
+                        val event = Event(0, startTS, endTS, title, description, reminders.getOrElse(0, { -1 }),
+                                reminders.getOrElse(1, { -1 }), reminders.getOrElse(2, { -1 }), repeatRule.repeatInterval,
+                                "", allDay, repeatRule.repeatLimit, repeatRule.repeatRule, eventTypeId, source = source, color = color,location = location,syncUid = syncUid)
+
+//                        if (event.getIsAllDay()) {
+//                            event.startTS = Formatter.getShiftedImportTimestamp(event.startTS)
+//                            event.endTS = Formatter.getShiftedImportTimestamp(event.endTS)
+//                            if (event.endTS > event.startTS) {
+//                                event.endTS -= DAY
+//                            }
+//                        }
+
+                        // if the event is an exception from another events repeat rule, find the original parent event
+//                        if (originalInstanceTime != 0L) {
+//                            val parentsyncUid = "$source-$originalId"
+//                            val parentEventId = context.dbHelper.getEventIdWithsyncUid(parentsyncUid)
+//                            if (parentEventId != 0) {
+//                                event.parentId = parentEventId
+//                                context.dbHelper.addEventRepeatException(parentEventId, (originalInstanceTime / 1000).toInt(), false, event.syncUid)
+//                            }
+//                        }
+
+                        if (title.isNotEmpty()) {
+                            context.dbHelper.insert(event, false) {
+                                syncUidsMap[event.syncUid] = event
+                            }
+                        }
+                    }
+                } while (cursor.moveToNext())
+            }
+        } catch (e: Exception) {
+            activity?.showErrorToast(e)
+        } finally {
+            cursor?.close()
+        }
+
+        val eventIdsToDelete = ArrayList<String>()
+        syncUidsMap.keys.filter { !fetchedEventSyncUids.contains(it) }.forEach {
+            val caldavEventId = it
+            existingEvents.forEach {
+                if (it.syncUid == caldavEventId) {
+                    eventIdsToDelete.add(it.id.toString())
+                }
+            }
+        }
+
+        eventIdsToDelete.forEach {
+            context.dbHelper.deleteEvents(eventIdsToDelete.toTypedArray(), false)
+        }
+
     }
 
     fun insertCalDAVEvent(event: Event) {

@@ -38,6 +38,7 @@ import org.joda.time.DateTimeZone
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 val Context.config: Config get() = Config.newInstance(applicationContext)
 
@@ -157,13 +158,45 @@ fun Context.notifyEvent(event: Event) {
     val endTime = Formatter.getTimeFromTS(applicationContext, event.endTS)
     val timeRange = if (event.getIsAllDay()) getString(R.string.all_day) else getFormattedEventTime(startTime, endTime)
     val descriptionOrLocation = if (config.replaceDescription) event.location else event.description
-    val notification = getNotification(applicationContext, pendingIntent, event, "$timeRange $descriptionOrLocation")
+    //notifyID is defined as the DAY which get from startTS,thats to say:all events with the same start *Day* share 1 notifyID
+    val myId=Formatter.getDayCodeFromTS(event.startTS).toInt()
+    var myTitle:String=""
+    var myContent:String=""
+    var bEventProcessed =false
+
+    var eventNotifications:ArrayList<EventNotification>?=dbHelper.getEventNotifications(myId)
+    if (eventNotifications!=null){
+        val iLen=eventNotifications.size
+        for (i in 0 until iLen) {
+            if (eventNotifications[i].eventId != event.id) {
+                myTitle += eventNotifications[i].title
+                myContent += eventNotifications[i].content
+            } else {
+                myTitle += event.title
+                myContent += descriptionOrLocation
+                dbHelper.updateEventNotification(EventNotification(event.id,event.title,descriptionOrLocation,myId))
+                bEventProcessed=true
+            }
+        }
+        if (!bEventProcessed){
+            myTitle += event.title
+            myContent += descriptionOrLocation
+            dbHelper.insertEventNotification(EventNotification(event.id,event.title,descriptionOrLocation,myId))
+        }
+    }
+    else{
+        myTitle=event.title
+        myContent=descriptionOrLocation
+        dbHelper.insertEventNotification(EventNotification(event.id,myTitle,myContent,myId))
+    }
+
+    val notification = getNotification(applicationContext, pendingIntent, event, myContent,myTitle)
     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    notificationManager.notify(event.id, notification)
+    notificationManager.notify(myId, notification) //notification id always set to event-startTS, which make all the event with the same startTS has the same notificationId
 }
 
 @SuppressLint("NewApi")
-private fun getNotification(context: Context, pendingIntent: PendingIntent, event: Event, content: String): Notification {
+private fun getNotification(context: Context, pendingIntent: PendingIntent, event: Event, content: String,title:String): Notification {
     val channelId = "reminder_channel"
     if (isOreoPlus()) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -431,43 +464,4 @@ fun Context.getEventListItems(events: List<Event>): ArrayList<ListItem> {
         listItems.add(ListEvent(it.id, it.startTS, it.endTS, it.title, it.description, it.getIsAllDay(), it.color, it.location))
     }
     return listItems
-}
-
-fun Context.cancelAllEvents() {
-    val events = dbHelper.getEventsAfterward()
-    events.forEach {
-        cancelNextEventReminder(it, dbHelper)
-    }
-}
-
-fun Context.cancelNextEventReminder(event: Event?, dbHelper: DBHelper) {
-    if (event == null || event.getReminders().isEmpty()) {
-        return
-    }
-
-    val now = getNowSeconds()
-    val reminderSeconds = event.getReminders().reversed().map { it * 60 }
-    dbHelper.getEvents(now, now + YEAR, event.id) {
-        if (it.isNotEmpty()) {
-            for (curEvent in it) {
-                for (curReminder in reminderSeconds) {
-                    if (curEvent.getEventStartTS() - curReminder > now) {
-                        cancelEventIn((curEvent.getEventStartTS() - curReminder) * 1000L, curEvent)
-                        return@getEvents
-                    }
-                }
-            }
-        }
-    }
-}
-
-fun Context.cancelEventIn(notifTS: Long, event: Event) {
-    if (notifTS < System.currentTimeMillis()) {
-        return
-    }
-
-    val pendingIntent = getNotificationIntent(applicationContext, event)
-    val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-    alarmManager.cancel(pendingIntent)
 }

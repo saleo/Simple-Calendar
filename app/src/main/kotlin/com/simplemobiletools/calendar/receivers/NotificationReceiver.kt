@@ -31,6 +31,6 @@ class NotificationReceiver : BroadcastReceiver() {
         if (!event.ignoreEventOccurrences.contains(Formatter.getDayCodeFromTS(event.startTS).toInt())) {
             context.notifyEvent(event)
         }
-        context.scheduleAllEvents()
+//        context.scheduleAllEvents()
     }
 }

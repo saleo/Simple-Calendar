@@ -453,8 +453,6 @@ class SettingsActivity : SimpleActivity() {
             Thread {
                 dbHelper.updateReminder(mReminderMinutes)
             }.start()
-            cancelAllEvents()
-            scheduleAllEvents()
         }
     }
 }
