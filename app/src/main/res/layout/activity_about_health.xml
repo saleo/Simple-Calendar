@@ -69,7 +69,8 @@
         android:layout_height="wrap_content"
         android:text="@string/str_health_originator"
         android:textStyle="italic"
-        android:textSize="@dimen/small_text_size"/>
+        android:textSize="@dimen/small_text_size"
+        android:gravity="right"/>
 
 
     <include

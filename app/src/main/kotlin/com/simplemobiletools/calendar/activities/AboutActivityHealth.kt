@@ -74,21 +74,18 @@ class AboutActivityHealth: ListActivity(),RadioGroup.OnCheckedChangeListener {
                 iLen = sa1.size / 3
                 mHeader?.header_health_title.text = resources.getString(R.string.str_health_headerviewtext1)
                 mHeader?.header_health_content?.text = resources.getString(R.string.str_health_headerviewtext1_1)
-                txt_health_originator.visibility = GONE
             }
             1 -> {
                 sa1 = resources.getStringArray(R.array.health2)
                 iLen = sa1.size / 2
                 mHeader!!.header_health_title.text = resources.getString(R.string.str_health_headerviewtext2)
                 mHeader!!.header_health_content.text = resources.getString(R.string.str_health_headerviewtext2_1)
-                txt_health_originator.visibility = GONE
             }
             2 -> {
                 sa1 = resources.getStringArray(R.array.health3)
                 iLen = sa1.size / 2
                 mHeader!!.header_health_title.text = resources.getString(R.string.str_health_headerviewtext3)
                 mHeader!!.header_health_content.text == resources.getString(R.string.str_health_headerviewtext3_1)
-                txt_health_originator.visibility = VISIBLE
             }
         }
         setBottomBorder(tabSelected)
