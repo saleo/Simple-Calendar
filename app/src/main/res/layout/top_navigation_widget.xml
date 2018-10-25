@@ -7,7 +7,7 @@
         android:id="@+id/top_month"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/placeholder"/>
+        android:src="@drawable/sk_banner"/>
     <!--<TextView-->
         <!--android:id="@+id/top_value"-->
         <!--style="@style/MonthStyle"-->
