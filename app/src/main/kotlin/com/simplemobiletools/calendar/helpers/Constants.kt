@@ -148,3 +148,6 @@ const val HEALTH_TITLE="health_title"
 const val HEALTH_CONTENT="health_content"
 const val HEALTH_CONTENT2="health_content2"
 
+const val NOTIFICATION_ID="notification_id"
+const val NOTIFICATION_TITLE="notification_title"
+const val NOTIFICATION_CONTENT="notification_content"

@@ -4,12 +4,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.PowerManager
-import com.simplemobiletools.calendar.extensions.dbHelper
-import com.simplemobiletools.calendar.extensions.notifyEvent
-import com.simplemobiletools.calendar.extensions.scheduleAllEvents
-import com.simplemobiletools.calendar.extensions.updateListWidget
-import com.simplemobiletools.calendar.helpers.EVENT_ID
-import com.simplemobiletools.calendar.helpers.Formatter
+import com.simplemobiletools.calendar.extensions.*
+import com.simplemobiletools.calendar.helpers.*
 
 class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -28,8 +24,12 @@ class NotificationReceiver : BroadcastReceiver() {
             return
         }
 
+        val myId = intent.getIntExtra(NOTIFICATION_ID, -1)
+        val myTitle = intent.getStringExtra(NOTIFICATION_TITLE)
+        val myContent = intent.getStringExtra(NOTIFICATION_CONTENT)
+
         if (!event.ignoreEventOccurrences.contains(Formatter.getDayCodeFromTS(event.startTS).toInt())) {
-            context.notifyEvent(event)
+            context.postGroupedNotify(event,myId,myTitle,myContent)
         }
 //        context.scheduleAllEvents()
     }

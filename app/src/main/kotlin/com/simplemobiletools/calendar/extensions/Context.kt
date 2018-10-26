@@ -121,9 +121,47 @@ fun Context.cancelNotification(id: Int) {
 }
 
 private fun getNotificationIntent(context: Context, event: Event): PendingIntent {
+
+    val descriptionOrLocation = if (context.config.replaceDescription) event.location else event.description
+    //notifyID is defined as the DAY which get from startTS,thats to say:all events with the same start *Day* share 1 notifyID
+    val myId=Formatter.getDayCodeFromTS(event.startTS).toInt()
+    var myTitle:String=""
+    var myContent:String=""
+    var bEventProcessed =false
+    var eventNotifications:ArrayList<EventNotification>?=context.dbHelper.getEventNotifications(myId)
+    if (eventNotifications!=null){
+        val iLen=eventNotifications.size
+        for (i in 0 until iLen) {
+            if (eventNotifications[i].eventId != event.id) {
+                myTitle += eventNotifications[i].title
+                myContent += eventNotifications[i].content
+            } else {
+                myTitle += event.title
+                myContent += descriptionOrLocation
+                context.dbHelper.updateEventNotification(EventNotification(event.id,event.title,descriptionOrLocation,myId))
+                bEventProcessed=true
+            }
+        }
+        if (!bEventProcessed){
+            myTitle += event.title
+            myContent += descriptionOrLocation
+            context.dbHelper.insertEventNotification(EventNotification(event.id,event.title,descriptionOrLocation,myId))
+        }
+    }
+    else{
+        myTitle=event.title
+        myContent=descriptionOrLocation
+        context.dbHelper.insertEventNotification(EventNotification(event.id,myTitle,myContent,myId))
+    }
+
     val intent = Intent(context, NotificationReceiver::class.java)
     intent.putExtra(EVENT_ID, event.id)
     intent.putExtra(EVENT_OCCURRENCE_TS, event.startTS)
+    intent.putExtra(NOTIFICATION_ID,myId)
+    intent.putExtra(NOTIFICATION_TITLE,myTitle)
+    intent.putExtra(NOTIFICATION_CONTENT,myContent)
+
+
     return PendingIntent.getBroadcast(context, event.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 }
 
@@ -194,6 +232,63 @@ fun Context.notifyEvent(event: Event) {
     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     notificationManager.notify(myId, notification) //notification id always set to event-startTS, which make all the event with the same startTS has the same notificationId
 }
+
+fun Context.postGroupedNotify(event: Event,notificationId:Int,notificationTitle:String,notificationContent:String){
+    val pendingIntent = getPendingIntent(applicationContext, event)
+
+    val notification= buildGroupedNotification(applicationContext,pendingIntent,event,notificationContent,notificationTitle)
+    val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    notificationManager.notify(notificationId, notification) //notification id always set to event-startTS, which make all the event with the same startTS has the same notificationId
+
+}
+
+@SuppressLint("NewApi")
+private fun buildGroupedNotification(context: Context, pendingIntent: PendingIntent, event: Event, content: String,title:String): Notification {
+    val channelId = "reminder_channel"
+    if (isOreoPlus()) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val name = context.resources.getString(R.string.event_reminders)
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        NotificationChannel(channelId, name, importance).apply {
+            enableLights(true)
+            lightColor = event.color
+            enableVibration(false)
+            notificationManager.createNotificationChannel(this)
+        }
+    }
+
+    var soundUri = Uri.parse(context.config.reminderSound)
+    if (soundUri.scheme == "file") {
+        try {
+            soundUri = context.getFilePublicUri(File(soundUri.path), BuildConfig.APPLICATION_ID)
+        } catch (ignored: Exception) {
+        }
+    }
+
+    val builder = NotificationCompat.Builder(context)
+            .setContentTitle(title)
+            .setContentText(content)
+            .setSmallIcon(R.drawable.ic_calendar)
+            .setContentIntent(pendingIntent)
+            .setPriority(Notification.PRIORITY_HIGH)
+            .setDefaults(Notification.DEFAULT_LIGHTS)
+            .setAutoCancel(true)
+            .setSound(soundUri)
+            .setChannelId(channelId)
+            .addAction(R.drawable.ic_snooze, context.getString(R.string.snooze), getSnoozePendingIntent(context, event))
+
+
+    if (isLollipopPlus()) {
+        builder.setVisibility(Notification.VISIBILITY_PUBLIC)
+    }
+
+    if (context.config.vibrateOnReminder) {
+        builder.setVibrate(longArrayOf(0, 300, 300, 300))
+    }
+
+    return builder.build()
+}
+
 
 @SuppressLint("NewApi")
 private fun getNotification(context: Context, pendingIntent: PendingIntent, event: Event, content: String,title:String): Notification {
