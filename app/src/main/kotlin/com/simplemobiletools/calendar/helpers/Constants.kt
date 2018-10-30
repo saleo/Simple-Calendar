@@ -1,6 +1,7 @@
 package com.simplemobiletools.calendar.helpers
 
 import com.simplemobiletools.calendar.R
+import com.simplemobiletools.commons.helpers.DAY_SECONDS
 
 const val LOW_ALPHA = .3f
 const val MEDIUM_ALPHA = .6f
@@ -31,7 +32,6 @@ const val MONTH = 2592001    // exact value not taken into account, Joda is used
 const val YEAR = 31536000
 
 const val DAY_MINUTES = 24 * 60
-const val DAY_SECONDS = 24 * 60 * 60
 const val WEEK_SECONDS = 7 * DAY_SECONDS
 
 // Shared Preferences
@@ -151,3 +151,4 @@ const val HEALTH_CONTENT2="health_content2"
 const val NOTIFICATION_ID="notification_id"
 const val NOTIFICATION_TITLE="notification_title"
 const val NOTIFICATION_CONTENT="notification_content"
+const val APP_TAG="SKCAL"

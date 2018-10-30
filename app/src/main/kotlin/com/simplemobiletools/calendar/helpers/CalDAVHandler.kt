@@ -6,12 +6,11 @@ import android.content.Context
 import android.database.Cursor
 import android.provider.CalendarContract
 import android.provider.CalendarContract.Reminders
+import android.util.Log
 import android.util.SparseArray
 import android.util.SparseIntArray
 import com.simplemobiletools.calendar.activities.SimpleActivity
-import com.simplemobiletools.calendar.extensions.config
-import com.simplemobiletools.calendar.extensions.dbHelper
-import com.simplemobiletools.calendar.extensions.scheduleCalDAVSync
+import com.simplemobiletools.calendar.extensions.*
 import com.simplemobiletools.calendar.models.CalDAVCalendar
 import com.simplemobiletools.calendar.models.Event
 import com.simplemobiletools.calendar.models.EventType
@@ -340,6 +339,7 @@ class CalDAVHandler(val context: Context) {
     private fun fetchCalDAVCalendarEventSynced(calendarId: Int, eventTypeId: Int, activity: SimpleActivity?) {
         val syncUidsMap = HashMap<String,Event>()
         val fetchedEventSyncUids = ArrayList<String>()
+        val updatedEventSyncUids = ArrayList<String>()
         val existingEvents = context.dbHelper.getEventsFromCalDAVCalendar(calendarId)
         existingEvents.forEach {
             syncUidsMap.put(it.syncUid,it)
@@ -381,6 +381,8 @@ class CalDAVHandler(val context: Context) {
                     val color=cursor.getIntValue(CalendarContract.Events.EVENT_COLOR)
                     val syncUid=cursor.getStringValue(CalendarContract.Events._SYNC_ID)
 
+                    fetchedEventSyncUids.add(syncUid)
+
                     var reminders:List<Int>
 
                     if (endTS == 0) {
@@ -391,7 +393,6 @@ class CalDAVHandler(val context: Context) {
                     val source = "$CALDAV-$calendarId"
                     val repeatRule = Parser().parseRepeatInterval(rrule, startTS)
 
-                    fetchedEventSyncUids.add(syncUid)
                     if (syncUidsMap.containsKey(syncUid)) {
                         val existingEvent = syncUidsMap[syncUid]
                         val originalEventId = existingEvent!!.id
@@ -419,14 +420,18 @@ class CalDAVHandler(val context: Context) {
 
                         if (existingEvent.hashCode() != event.hashCode() && title.isNotEmpty()) {
                             event.id = originalEventId
-                            context.dbHelper.update(event, false)
+                            context.dbHelper.update(event, false){
+                                if (existingEvent.startTS != event.startTS)
+                                    updatedEventSyncUids.add(syncUid)
+                            }
                         }
                     } else {
                         reminders = listOf(REMINDER_INITIAL_MINUTES)
 
                         val event = Event(0, startTS, endTS, title, description, reminders.getOrElse(0, { -1 }),
                                 reminders.getOrElse(1, { -1 }), reminders.getOrElse(2, { -1 }), repeatRule.repeatInterval,
-                                "", allDay, repeatRule.repeatLimit, repeatRule.repeatRule, eventTypeId, source = source, color = color,location = location,syncUid = syncUid)
+                                "", allDay, repeatRule.repeatLimit, repeatRule.repeatRule, eventTypeId, source = source,
+                                color = color,location = location,syncUid = syncUid)
 
 //                        if (event.getIsAllDay()) {
 //                            event.startTS = Formatter.getShiftedImportTimestamp(event.startTS)
@@ -448,11 +453,14 @@ class CalDAVHandler(val context: Context) {
 
                         if (title.isNotEmpty()) {
                             context.dbHelper.insert(event, false) {
+                                updatedEventSyncUids.add(syncUid)
                                 syncUidsMap[event.syncUid] = event
                             }
                         }
                     }
                 } while (cursor.moveToNext())
+                //process notifications here, instead of scheduleNextEventReminder(), since we have NOT recurrences and more than
+                // one reminder_minutes. Although
             }
         } catch (e: Exception) {
             activity?.showErrorToast(e)
@@ -462,9 +470,9 @@ class CalDAVHandler(val context: Context) {
 
         val eventIdsToDelete = ArrayList<String>()
         syncUidsMap.keys.filter { !fetchedEventSyncUids.contains(it) }.forEach {
-            val caldavEventId = it
+            val caldavEventSyncUid = it
             existingEvents.forEach {
-                if (it.syncUid == caldavEventId) {
+                if (it.syncUid == caldavEventSyncUid) {
                     eventIdsToDelete.add(it.id.toString())
                 }
             }
@@ -473,6 +481,28 @@ class CalDAVHandler(val context: Context) {
         eventIdsToDelete.forEach {
             context.dbHelper.deleteEvents(eventIdsToDelete.toTypedArray(), false)
         }
+
+        val idsToProcess = ArrayList<String>()
+        var notifyTSs=ArrayList<Long>()
+        var currentNotifyTs=0L
+        val now = context.getNowSeconds()
+
+        val updatedEvents=context.dbHelper.getEventsWithSyncUids(updatedEventSyncUids)
+        updatedEvents.forEach{
+            currentNotifyTs=(it.startTS-(it.reminder1Minutes*60))*1000L
+            if (currentNotifyTs>now) {
+                idsToProcess.add(it.id.toString())
+                notifyTSs.add(currentNotifyTs)
+            }
+        }
+
+
+        if (idsToProcess.size>0 && notifyTSs.size>0){
+            context.processReminders(idsToProcess,notifyTSs.min()!!)
+            Log.d(APP_TAG,"reminders processed")
+        }
+        else
+            Log.d(APP_TAG,"reminders NOT processed,for no data")
 
     }
 

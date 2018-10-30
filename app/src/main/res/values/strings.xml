@@ -352,6 +352,7 @@
     <string name="str_health_headerviewtext3">感觉</string>
     <string name="str_health_headerviewtext3_1">心情对应</string>
     <string name="str_health_originator">选自王中平《心灵的潜能》-商丘寿康学会身心健康课题组整理</string>
+    <string name="str_notification_content">点击打开列表显示</string>
     <!--
         Haven't found some stringsh? There's more at
         https://github.com/SimpleMobileTools/Simple-Commons/tree/master/commons/src/main/res

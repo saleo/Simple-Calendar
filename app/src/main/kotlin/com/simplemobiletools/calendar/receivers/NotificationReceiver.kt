@@ -14,23 +14,23 @@ class NotificationReceiver : BroadcastReceiver() {
         wakelock.acquire(5000)
 
         context.updateListWidget()
-        val id = intent.getIntExtra(EVENT_ID, -1)
-        if (id == -1) {
-            return
-        }
+//        val id = intent.getIntExtra(EVENT_ID, -1)
+//        if (id == -1) {
+//            return
+//        }
+//
+//        val event = context.dbHelper.getEventWithId(id)
+//        if (event == null || event.getReminders().isEmpty()) {
+//            return
+//        }
 
-        val event = context.dbHelper.getEventWithId(id)
-        if (event == null || event.getReminders().isEmpty()) {
-            return
-        }
-
-        val myId = intent.getIntExtra(NOTIFICATION_ID, -1)
-        val myTitle = intent.getStringExtra(NOTIFICATION_TITLE)
-        val myContent = intent.getStringExtra(NOTIFICATION_CONTENT)
-
-        if (!event.ignoreEventOccurrences.contains(Formatter.getDayCodeFromTS(event.startTS).toInt())) {
-            context.postGroupedNotify(event,myId,myTitle,myContent)
-        }
+        val ntfId = intent.getIntExtra(NOTIFICATION_ID, -1)
+        val ntfTitle = intent.getStringExtra(NOTIFICATION_TITLE)
+        val ntfContent = intent.getStringExtra(NOTIFICATION_CONTENT)
+        context.postGroupedNotify(ntfId,ntfTitle,ntfContent)
+//        if (!event.ignoreEventOccurrences.contains(Formatter.getDayCodeFromTS(event.startTS).toInt())) {
+//            context.postGroupedNotify(event,myId,myTitle,myContent)
+//        }
 //        context.scheduleAllEvents()
     }
 }

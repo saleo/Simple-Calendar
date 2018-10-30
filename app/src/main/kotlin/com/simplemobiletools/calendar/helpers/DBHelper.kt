@@ -13,10 +13,11 @@ import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.extensions.*
 import com.simplemobiletools.calendar.models.Event
 import com.simplemobiletools.calendar.models.EventType
-import com.simplemobiletools.calendar.models.EventNotification
+import com.simplemobiletools.calendar.models.GroupedNotification
 import com.simplemobiletools.commons.extensions.getIntValue
 import com.simplemobiletools.commons.extensions.getLongValue
 import com.simplemobiletools.commons.extensions.getStringValue
+import com.simplemobiletools.commons.helpers.DAY_SECONDS
 import org.joda.time.DateTime
 import java.util.*
 import kotlin.collections.ArrayList
@@ -64,12 +65,6 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
     private val COL_PARENT_EVENT_ID = "event_parent_id"
     private val COL_CHILD_EVENT_ID = "event_child_id"
 
-    private val EVENTNOTIFICATION_TABLE_NAME="eventNotifications"
-    private val COL_EVENTNOTIFICATION_EVENTID ="eventNotification_eventId"
-    private val COL_EVENTNOTIFICATION_TITLE= "eventNotification_title"
-    private val COL_EVENTNOTIFICATION_CONTENT= "eventNotification_content"
-    private val COL_EVENTNOTIFICATION_NOTIFICATIONID="eventNotification_notificationId"
-
     private val mDb: SQLiteDatabase = writableDatabase
 
     companion object {
@@ -96,7 +91,6 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         createMetaTable(db)
         createTypesTable(db)
         createExceptionsTable(db)
-        createNotificationTable(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -204,11 +198,6 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
                 "$COL_OCCURRENCE_TIMESTAMP INTEGER, $COL_OCCURRENCE_DAYCODE INTEGER, $COL_CHILD_EVENT_ID INTEGER)")
     }
 
-    private fun createNotificationTable(db: SQLiteDatabase) {
-        db.execSQL("CREATE TABLE $EVENTNOTIFICATION_TABLE_NAME ($COL_EVENTNOTIFICATION_EVENTID INTEGER, $COL_EVENTNOTIFICATION_TITLE TEXT, $COL_EVENTNOTIFICATION_CONTENT TEXT,$COL_EVENTNOTIFICATION_NOTIFICATIONID INTEGER)")
-    }
-
-
     private fun addRegularEventType(db: SQLiteDatabase) {
         val regularEvent = context.resources.getString(R.string.regular_event)
         val eventType = EventType(REGULAR_EVENT_TYPE_ID, regularEvent, context.config.primaryColor)
@@ -231,7 +220,7 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         }
 
         context.updateWidgets()
-        context.scheduleNextEventReminder(event, this)
+//        context.scheduleNextEventReminder(event, this)
 
         if (addToCalDAV && event.source != SOURCE_SIMPLE_CALENDAR && context.config.caldavSync) {
             CalDAVHandler(context).insertCalDAVEvent(event)
@@ -255,7 +244,7 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         }
 
         context.updateWidgets()
-        context.scheduleNextEventReminder(event, this)
+//        context.scheduleNextEventReminder(event, this)
         if (updateAtCalDAV && event.source != SOURCE_SIMPLE_CALENDAR && context.config.caldavSync) {
             CalDAVHandler(context).updateCalDAVEvent(event)
         }
@@ -1024,52 +1013,28 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         val i:Int=mDb.update(MAIN_TABLE_NAME,contentValues,selection, arrayOf(ts))
     }
 
-    fun getEventNotifications(notificationId: Int): ArrayList<EventNotification>?{
-        val cols= arrayOf(COL_EVENTNOTIFICATION_EVENTID,COL_EVENTNOTIFICATION_TITLE,COL_EVENTNOTIFICATION_CONTENT,COL_EVENTNOTIFICATION_NOTIFICATIONID)
-        val selection = "${COL_EVENTNOTIFICATION_NOTIFICATIONID} = ?"
-        val selectionArgs = arrayOf(notificationId.toString())
+    fun getGroupedNotification(eventIdsToProcess:ArrayList<String>):GroupedNotification {
+        val args = TextUtils.join(", ", eventIdsToProcess)
+        val selection = "$COL_ID in ($args)"
+        val cols = arrayOf(COL_START_TS, "group_concat($COL_TITLE) as gnTitle", "group_concat($COL_DESCRIPTION) as gnContent")
+        val groupBy = "$COL_START_TS/$DAY_SECONDS"
+        var gnId = 0
+        var gnTitle = ""
+        var gnContent = ""
         var cursor: Cursor? = null
-        var alResult:ArrayList<EventNotification>?=null
         try {
-            cursor = mDb.query(EVENTNOTIFICATION_TABLE_NAME, cols, selection, selectionArgs, null, null, null)
+            cursor = mDb.query(MAIN_TABLE_NAME, cols, selection, null, groupBy, null, null)
             if (cursor?.moveToFirst() == true) {
-                do {
-                    val myEventId=cursor.getIntValue(COL_EVENTNOTIFICATION_EVENTID)
-                    val myTitle=cursor.getStringValue(COL_EVENTNOTIFICATION_TITLE)
-                    val myContent=cursor.getStringValue(COL_EVENTNOTIFICATION_CONTENT)
-                    val myNotificationId=cursor.getIntValue(COL_EVENTNOTIFICATION_NOTIFICATIONID)
-                    alResult?.plusElement(EventNotification(myEventId,myTitle,myContent,myNotificationId))
-                }while (cursor.moveToNext())
+                gnId = (cursor.getIntValue(COL_START_TS)) / DAY_SECONDS
+                gnTitle = cursor.getStringValue("gnTitle")
+                gnContent = cursor.getStringValue("gnContent")
             }
-        }
-        finally {
+        } finally {
             cursor?.close()
         }
-        return alResult
+        return GroupedNotification(gnId, gnTitle, gnContent)
     }
 
-    fun insertEventNotification(eventNotification: EventNotification, db: SQLiteDatabase = mDb): Int {
-        val values = fillEventNotificationValues(eventNotification,eventNotification.eventId)
-        val insertedId = db.insert(EVENTNOTIFICATION_TABLE_NAME, null, values).toInt()
-        return insertedId
-    }
-
-    fun updateEventNotification(eventNotification: EventNotification): Int {
-        val selectionArgs = arrayOf(eventNotification.eventId.toString())
-        val values = fillEventNotificationValues(eventNotification)
-        val selection = "$COL_EVENTNOTIFICATION_EVENTID = ?"
-        return mDb.update(EVENTNOTIFICATION_TABLE_NAME, values, selection, selectionArgs)
-    }
-
-    private fun fillEventNotificationValues(eventNotification: EventNotification,id: Int=0): ContentValues {
-        return ContentValues().apply {
-            if (id != 0)
-                put(COL_EVENTNOTIFICATION_EVENTID, eventNotification.eventId)
-
-            put(COL_EVENTNOTIFICATION_TITLE, eventNotification.title)
-            put(COL_EVENTNOTIFICATION_CONTENT, eventNotification.content)
-            put(COL_EVENTNOTIFICATION_NOTIFICATIONID, eventNotification.notificationId)
-        }
-    }
+    fun getEventsWithSyncUids(syncUids:List<String>) = getEvents("").filter {syncUids.contains(it.syncUid) } as ArrayList<Event>
 
 }

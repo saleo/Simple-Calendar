@@ -23,6 +23,7 @@ import android.widget.TextView
 import com.simplemobiletools.calendar.*
 import com.simplemobiletools.calendar.R.drawable.*
 import com.simplemobiletools.calendar.activities.EventActivity
+import com.simplemobiletools.calendar.activities.MainActivity
 import com.simplemobiletools.calendar.activities.SimpleActivity
 import com.simplemobiletools.calendar.activities.SnoozeReminderActivity
 import com.simplemobiletools.calendar.helpers.*
@@ -121,48 +122,20 @@ fun Context.cancelNotification(id: Int) {
 }
 
 private fun getNotificationIntent(context: Context, event: Event): PendingIntent {
-
-    val descriptionOrLocation = if (context.config.replaceDescription) event.location else event.description
-    //notifyID is defined as the DAY which get from startTS,thats to say:all events with the same start *Day* share 1 notifyID
-    val myId=Formatter.getDayCodeFromTS(event.startTS).toInt()
-    var myTitle:String=""
-    var myContent:String=""
-    var bEventProcessed =false
-    var eventNotifications:ArrayList<EventNotification>?=context.dbHelper.getEventNotifications(myId)
-    if (eventNotifications!=null){
-        val iLen=eventNotifications.size
-        for (i in 0 until iLen) {
-            if (eventNotifications[i].eventId != event.id) {
-                myTitle += eventNotifications[i].title
-                myContent += eventNotifications[i].content
-            } else {
-                myTitle += event.title
-                myContent += descriptionOrLocation
-                context.dbHelper.updateEventNotification(EventNotification(event.id,event.title,descriptionOrLocation,myId))
-                bEventProcessed=true
-            }
-        }
-        if (!bEventProcessed){
-            myTitle += event.title
-            myContent += descriptionOrLocation
-            context.dbHelper.insertEventNotification(EventNotification(event.id,event.title,descriptionOrLocation,myId))
-        }
-    }
-    else{
-        myTitle=event.title
-        myContent=descriptionOrLocation
-        context.dbHelper.insertEventNotification(EventNotification(event.id,myTitle,myContent,myId))
-    }
-
     val intent = Intent(context, NotificationReceiver::class.java)
     intent.putExtra(EVENT_ID, event.id)
     intent.putExtra(EVENT_OCCURRENCE_TS, event.startTS)
-    intent.putExtra(NOTIFICATION_ID,myId)
-    intent.putExtra(NOTIFICATION_TITLE,myTitle)
-    intent.putExtra(NOTIFICATION_CONTENT,myContent)
-
-
     return PendingIntent.getBroadcast(context, event.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+}
+
+private fun getGroupedNotificationIntent(context: Context,ntfId:Int,ntfTitle:String,ntfContent:String):PendingIntent{
+    val intent = Intent(context, NotificationReceiver::class.java)
+    intent.putExtra(NOTIFICATION_ID,ntfId)
+    intent.putExtra(NOTIFICATION_TITLE,ntfTitle)
+    intent.putExtra(NOTIFICATION_CONTENT,ntfContent)
+
+
+    return PendingIntent.getBroadcast(context, ntfId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 }
 
 fun Context.getRepetitionText(seconds: Int) = when (seconds) {
@@ -196,54 +169,22 @@ fun Context.notifyEvent(event: Event) {
     val endTime = Formatter.getTimeFromTS(applicationContext, event.endTS)
     val timeRange = if (event.getIsAllDay()) getString(R.string.all_day) else getFormattedEventTime(startTime, endTime)
     val descriptionOrLocation = if (config.replaceDescription) event.location else event.description
-    //notifyID is defined as the DAY which get from startTS,thats to say:all events with the same start *Day* share 1 notifyID
-    val myId=Formatter.getDayCodeFromTS(event.startTS).toInt()
-    var myTitle:String=""
-    var myContent:String=""
-    var bEventProcessed =false
-
-    var eventNotifications:ArrayList<EventNotification>?=dbHelper.getEventNotifications(myId)
-    if (eventNotifications!=null){
-        val iLen=eventNotifications.size
-        for (i in 0 until iLen) {
-            if (eventNotifications[i].eventId != event.id) {
-                myTitle += eventNotifications[i].title
-                myContent += eventNotifications[i].content
-            } else {
-                myTitle += event.title
-                myContent += descriptionOrLocation
-                dbHelper.updateEventNotification(EventNotification(event.id,event.title,descriptionOrLocation,myId))
-                bEventProcessed=true
-            }
-        }
-        if (!bEventProcessed){
-            myTitle += event.title
-            myContent += descriptionOrLocation
-            dbHelper.insertEventNotification(EventNotification(event.id,event.title,descriptionOrLocation,myId))
-        }
-    }
-    else{
-        myTitle=event.title
-        myContent=descriptionOrLocation
-        dbHelper.insertEventNotification(EventNotification(event.id,myTitle,myContent,myId))
-    }
-
-    val notification = getNotification(applicationContext, pendingIntent, event, myContent,myTitle)
+    val notification = getNotification(applicationContext, pendingIntent, event, "$timeRange $descriptionOrLocation",event.title)
     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    notificationManager.notify(myId, notification) //notification id always set to event-startTS, which make all the event with the same startTS has the same notificationId
+    notificationManager.notify(event.id, notification)
 }
 
-fun Context.postGroupedNotify(event: Event,notificationId:Int,notificationTitle:String,notificationContent:String){
-    val pendingIntent = getPendingIntent(applicationContext, event)
+fun Context.postGroupedNotify(notificationId:Int,notificationTitle:String,notificationContent:String){
+    val pendingIntent = getPendingIntentWithGroupedNtfId(applicationContext, notificationId)
 
-    val notification= buildGroupedNotification(applicationContext,pendingIntent,event,notificationContent,notificationTitle)
+    val notification= buildGroupedNotification(applicationContext,pendingIntent,notificationTitle,notificationContent)
     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     notificationManager.notify(notificationId, notification) //notification id always set to event-startTS, which make all the event with the same startTS has the same notificationId
 
 }
 
 @SuppressLint("NewApi")
-private fun buildGroupedNotification(context: Context, pendingIntent: PendingIntent, event: Event, content: String,title:String): Notification {
+private fun buildGroupedNotification(context: Context, pendingIntent: PendingIntent, ntfTitle: String,ntfContent:String): Notification {
     val channelId = "reminder_channel"
     if (isOreoPlus()) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -251,7 +192,7 @@ private fun buildGroupedNotification(context: Context, pendingIntent: PendingInt
         val importance = NotificationManager.IMPORTANCE_HIGH
         NotificationChannel(channelId, name, importance).apply {
             enableLights(true)
-            lightColor = event.color
+            lightColor = Color.RED
             enableVibration(false)
             notificationManager.createNotificationChannel(this)
         }
@@ -265,8 +206,9 @@ private fun buildGroupedNotification(context: Context, pendingIntent: PendingInt
         }
     }
 
+    val content= if (ntfContent == "," || ntfContent== "") context.getString(R.string.str_notification_content) else ntfContent
     val builder = NotificationCompat.Builder(context)
-            .setContentTitle(title)
+            .setContentTitle(ntfTitle)
             .setContentText(content)
             .setSmallIcon(R.drawable.ic_calendar)
             .setContentIntent(pendingIntent)
@@ -343,6 +285,13 @@ private fun getPendingIntent(context: Context, event: Event): PendingIntent {
     intent.putExtra(EVENT_ID, event.id)
     intent.putExtra(EVENT_OCCURRENCE_TS, event.startTS)
     return PendingIntent.getActivity(context, event.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+}
+
+private fun getPendingIntentWithGroupedNtfId(context: Context,groupedNtfId:Int):PendingIntent{
+    val intent = Intent(context, MainActivity::class.java)
+    val datetime =Formatter.getDateTimeFromTS(groupedNtfId* DAY_SECONDS)
+    intent.putExtra(DATE, datetime)
+    return PendingIntent.getActivity(context, groupedNtfId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 }
 
 private fun getSnoozePendingIntent(context: Context, event: Event): PendingIntent {
@@ -559,4 +508,16 @@ fun Context.getEventListItems(events: List<Event>): ArrayList<ListItem> {
         listItems.add(ListEvent(it.id, it.startTS, it.endTS, it.title, it.description, it.getIsAllDay(), it.color, it.location))
     }
     return listItems
+}
+
+fun Context.processReminders(eventIdsToProcess:ArrayList<String>,notifyTS: Long) {
+    val gn=dbHelper.getGroupedNotification(eventIdsToProcess)
+    val pendingIntent = getGroupedNotificationIntent(this,gn.ntfId,gn.ntfTitle,gn.ntfContent)
+    val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+    when {
+        isMarshmallowPlus() -> alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, notifyTS, pendingIntent)
+        isKitkatPlus() -> alarmManager.setExact(AlarmManager.RTC_WAKEUP, notifyTS, pendingIntent)
+        else -> alarmManager.set(AlarmManager.RTC_WAKEUP, notifyTS, pendingIntent)
+    }
 }

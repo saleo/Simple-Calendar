@@ -55,6 +55,7 @@ import com.karumi.expandableselector.ExpandableItem
 import com.karumi.expandableselector.ExpandableSelector
 import com.karumi.expandableselector.ExpandableSelectorListener
 import com.karumi.expandableselector.OnExpandableItemClickListener
+import kotlin.system.exitProcess
 
 const val MY_PERMISSIONS_REQUEST_READ_CALENDAR=1
 
@@ -105,6 +106,12 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
 
         if (intent?.action == Intent.ACTION_VIEW && intent.data != null) {
+            val dayCode= intent?.extras?.getInt(DAY_CODE).toString()
+            if (dayCode != "0"){
+                openDayFromMonthly(Formatter.getDateTimeFromCode(dayCode))
+                return
+            }
+
             val uri = intent.data
             if (uri.authority == "com.android.calendar") {
                 // clicking date on a third party widget: content://com.android.calendar/time/1507309245683
@@ -149,6 +156,9 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                         this.config.caldavSyncedCalendarIDs=res.toString()
                     }
                 }
+            }
+            else{
+                finish()
             }
         }
 
