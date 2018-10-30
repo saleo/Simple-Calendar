@@ -217,7 +217,7 @@ private fun buildGroupedNotification(context: Context, pendingIntent: PendingInt
             .setAutoCancel(true)
             .setSound(soundUri)
             .setChannelId(channelId)
-            .addAction(R.drawable.ic_snooze, context.getString(R.string.snooze), getSnoozePendingIntent(context, event))
+            //.addAction(R.drawable.ic_snooze, context.getString(R.string.snooze), getSnoozePendingIntent(context, event))
 
 
     if (isLollipopPlus()) {
@@ -289,8 +289,8 @@ private fun getPendingIntent(context: Context, event: Event): PendingIntent {
 
 private fun getPendingIntentWithGroupedNtfId(context: Context,groupedNtfId:Int):PendingIntent{
     val intent = Intent(context, MainActivity::class.java)
-    val datetime =Formatter.getDateTimeFromTS(groupedNtfId* DAY_SECONDS)
-    intent.putExtra(DATE, datetime)
+    val dayCode =Formatter.getDayCodeFromTS(groupedNtfId* DAY_SECONDS)
+    intent.putExtra(DAY_CODE,dayCode)
     return PendingIntent.getActivity(context, groupedNtfId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 }
 
