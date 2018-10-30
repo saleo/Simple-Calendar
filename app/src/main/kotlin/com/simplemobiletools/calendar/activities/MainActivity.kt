@@ -275,6 +275,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             mStoredPrimaryColor = primaryColor
             mStoredBackgroundColor = backgroundColor
             mStoredUse24HourFormat = use24hourFormat
+            storedView= MONTHLY_VIEW //override stored ones
         }
         mStoredDayCode = Formatter.getTodayCode(applicationContext)
     }

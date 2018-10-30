@@ -27,7 +27,8 @@ class NotificationReceiver : BroadcastReceiver() {
         val ntfId = intent.getIntExtra(NOTIFICATION_ID, -1)
         val ntfTitle = intent.getStringExtra(NOTIFICATION_TITLE)
         val ntfContent = intent.getStringExtra(NOTIFICATION_CONTENT)
-        context.postGroupedNotify(ntfId,ntfTitle,ntfContent)
+        val ntfTS=intent.getLongExtra(NOTIFICATION_TS,0)
+        context.postGroupedNotify(ntfId,ntfTitle,ntfContent,ntfTS)
 //        if (!event.ignoreEventOccurrences.contains(Formatter.getDayCodeFromTS(event.startTS).toInt())) {
 //            context.postGroupedNotify(event,myId,myTitle,myContent)
 //        }

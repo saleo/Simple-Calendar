@@ -151,4 +151,6 @@ const val HEALTH_CONTENT2="health_content2"
 const val NOTIFICATION_ID="notification_id"
 const val NOTIFICATION_TITLE="notification_title"
 const val NOTIFICATION_CONTENT="notification_content"
+const val NOTIFICATION_TS="notification_ts"
 const val APP_TAG="SKCAL"
+const val POSTPONE_TS=5*60*1000

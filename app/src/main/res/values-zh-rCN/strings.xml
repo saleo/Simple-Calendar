@@ -12,7 +12,7 @@
     <string name="add_some_events">点击右下角加号添加.</string>
     <string name="details">详情</string>
     <string name="go_to_today">回到今天</string>
-    <string name="snooze">缩放</string>
+    <string name="snooze">延后5分钟提醒</string>
 
     <!-- Widget titles -->
     <string name="widget_monthly">月历</string>

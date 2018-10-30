@@ -31,6 +31,7 @@ import com.simplemobiletools.calendar.helpers.Formatter
 import com.simplemobiletools.calendar.models.*
 import com.simplemobiletools.calendar.receivers.CalDAVSyncReceiver
 import com.simplemobiletools.calendar.receivers.NotificationReceiver
+import com.simplemobiletools.calendar.services.PostponeService
 import com.simplemobiletools.calendar.services.SnoozeService
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.*
@@ -128,14 +129,24 @@ private fun getNotificationIntent(context: Context, event: Event): PendingIntent
     return PendingIntent.getBroadcast(context, event.id, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 }
 
-private fun getGroupedNotificationIntent(context: Context,ntfId:Int,ntfTitle:String,ntfContent:String):PendingIntent{
+private fun getGroupedNotificationIntent(context: Context,ntfId:Int,ntfTitle:String,ntfContent:String,ntfTS:Long):PendingIntent{
     val intent = Intent(context, NotificationReceiver::class.java)
     intent.putExtra(NOTIFICATION_ID,ntfId)
     intent.putExtra(NOTIFICATION_TITLE,ntfTitle)
     intent.putExtra(NOTIFICATION_CONTENT,ntfContent)
-
+    intent.putExtra(NOTIFICATION_TS,ntfTS)
 
     return PendingIntent.getBroadcast(context, ntfId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+}
+
+private fun getPostponeNotificationIntent(context: Context,ntfId:Int,ntfTitle:String,ntfContent:String,ntfTS:Long):PendingIntent{
+    val intent = Intent(context, PostponeService::class.java)
+    intent.putExtra(NOTIFICATION_ID,ntfId)
+    intent.putExtra(NOTIFICATION_TITLE,ntfTitle)
+    intent.putExtra(NOTIFICATION_CONTENT,ntfContent)
+    intent.putExtra(NOTIFICATION_TS,ntfTS)
+
+    return PendingIntent.getService(context, ntfId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 }
 
 fun Context.getRepetitionText(seconds: Int) = when (seconds) {
@@ -174,17 +185,17 @@ fun Context.notifyEvent(event: Event) {
     notificationManager.notify(event.id, notification)
 }
 
-fun Context.postGroupedNotify(notificationId:Int,notificationTitle:String,notificationContent:String){
-    val pendingIntent = getPendingIntentWithGroupedNtfId(applicationContext, notificationId)
+fun Context.postGroupedNotify(ntfId:Int,ntfTitle:String,ntfContent:String,ntfTS:Long){
+    val pendingIntent = getPendingIntentWithGroupedNtfId(applicationContext, ntfId)
 
-    val notification= buildGroupedNotification(applicationContext,pendingIntent,notificationTitle,notificationContent)
+    val notification= buildGroupedNotification(applicationContext,pendingIntent,ntfId,ntfTitle,ntfContent,ntfTS)
     val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    notificationManager.notify(notificationId, notification) //notification id always set to event-startTS, which make all the event with the same startTS has the same notificationId
+    notificationManager.notify(ntfId, notification) //notification id always set to event-startTS, which make all the event with the same startTS has the same notificationId
 
 }
 
 @SuppressLint("NewApi")
-private fun buildGroupedNotification(context: Context, pendingIntent: PendingIntent, ntfTitle: String,ntfContent:String): Notification {
+private fun buildGroupedNotification(context: Context, pendingIntent: PendingIntent, ntfId:Int,ntfTitle: String,ntfContent:String,ntfTS:Long): Notification {
     val channelId = "reminder_channel"
     if (isOreoPlus()) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -217,7 +228,7 @@ private fun buildGroupedNotification(context: Context, pendingIntent: PendingInt
             .setAutoCancel(true)
             .setSound(soundUri)
             .setChannelId(channelId)
-            //.addAction(R.drawable.ic_snooze, context.getString(R.string.snooze), getSnoozePendingIntent(context, event))
+            .addAction(R.drawable.ic_snooze, context.getString(R.string.snooze), getPostponeNotificationIntent(context, ntfId,ntfTitle,content,ntfTS))
 
 
     if (isLollipopPlus()) {
@@ -510,9 +521,15 @@ fun Context.getEventListItems(events: List<Event>): ArrayList<ListItem> {
     return listItems
 }
 
-fun Context.processReminders(eventIdsToProcess:ArrayList<String>,notifyTS: Long) {
-    val gn=dbHelper.getGroupedNotification(eventIdsToProcess)
-    val pendingIntent = getGroupedNotificationIntent(this,gn.ntfId,gn.ntfTitle,gn.ntfContent)
+fun Context.processReminders(eventIdsToProcess:ArrayList<String>,notifyTS: Long,inNtfId:Int=0,inNtfTitle:String="",inNtfContent:String="") {
+    val pendingIntent:PendingIntent
+    if (inNtfId == 0) {
+        val gn = dbHelper.getGroupedNotification(eventIdsToProcess)
+        pendingIntent = getGroupedNotificationIntent(this, gn.ntfId, gn.ntfTitle, gn.ntfContent,notifyTS)
+    }
+    else
+        pendingIntent = getGroupedNotificationIntent(this,inNtfId,inNtfTitle,inNtfContent,notifyTS)
+
     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
     when {
