@@ -94,5 +94,5 @@ class AboutActivity : BaseSimpleActivity() {
         about_copyright.text = String.format(getString(R.string.copyright), year)
     }
 
-    private fun getStoreUrl() = "https://play.google.com/store/apps/details?id=$packageName"
+
 }

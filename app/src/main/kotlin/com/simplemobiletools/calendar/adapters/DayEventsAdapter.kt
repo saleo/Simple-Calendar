@@ -1,5 +1,7 @@
 package com.simplemobiletools.calendar.adapters
 
+import android.content.Intent
+import android.content.Intent.createChooser
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +13,13 @@ import com.simplemobiletools.calendar.extensions.dbHelper
 import com.simplemobiletools.calendar.extensions.shareEvents
 import com.simplemobiletools.calendar.helpers.Formatter
 import com.simplemobiletools.calendar.models.Event
-import com.simplemobiletools.calendar.views.skRecyclerView
 import com.simplemobiletools.commons.adapters.MyRecyclerViewAdapter
 import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.beInvisible
 import com.simplemobiletools.commons.extensions.beInvisibleIf
 import com.simplemobiletools.commons.views.MyRecyclerView
 import kotlinx.android.synthetic.main.event_item_day_view.view.*
+
 
 class DayEventsAdapter(activity: SimpleActivity, val events: ArrayList<Event>, recyclerView: MyRecyclerView, itemClick: (Any) -> Unit)
     : MyRecyclerViewAdapter(activity, recyclerView, null, itemClick) {
@@ -72,8 +74,12 @@ class DayEventsAdapter(activity: SimpleActivity, val events: ArrayList<Event>, r
             event_item_description.text = if (replaceDescriptionWithLocation) event.location else event.description
             event_item_start.text = if (event.getIsAllDay()) allDayString else Formatter.getTimeFromTS(context, event.startTS)
             event_item_end.beInvisibleIf(event.startTS == event.endTS)
-            event_item_color.applyColorFilter(event.color)
+            event_item_shareto.applyColorFilter(textColor)
 
+            event_item_start.setTextColor(textColor)
+            event_item_end.setTextColor(textColor)
+            event_section_title.setTextColor(event.color)
+            event_item_description.setTextColor(event.color)
             if (event.startTS != event.endTS) {
                 val startCode = Formatter.getDayCodeFromTS(event.startTS)
                 val endCode = Formatter.getDayCodeFromTS(event.endTS)
@@ -92,10 +98,10 @@ class DayEventsAdapter(activity: SimpleActivity, val events: ArrayList<Event>, r
                 }
             }
 
-            event_item_start.setTextColor(textColor)
-            event_item_end.setTextColor(textColor)
-            event_section_title.setTextColor(textColor)
-            event_item_description.setTextColor(textColor)
+
+            setOnClickListener {
+                shareEventTitle(event_section_title.text.toString())
+            }
         }
     }
 
@@ -133,4 +139,19 @@ class DayEventsAdapter(activity: SimpleActivity, val events: ArrayList<Event>, r
             removeSelectedItems()
         }
     }
+
+    private fun shareEventTitle(title:String){
+        var text=""
+        activity.applicationContext.apply {text =String.format(getString(R.string.share_events_title),title, getString(R.string.app_name))}
+        activity.startActivity(
+            Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_SUBJECT, activity.applicationContext.getString(R.string.app_name))
+                putExtra(Intent.EXTRA_TEXT, text)
+                type = "text/plain"
+                createChooser(this, activity.applicationContext.getString(R.string.invite_via))
+            }
+        )
+    }
+
 }

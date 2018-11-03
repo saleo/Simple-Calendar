@@ -122,4 +122,5 @@ fun Activity.showEventRepeatIntervalDialog(curSeconds: Int, callback: (minutes: 
             callback(it as Int)
         }
     }
+
 }

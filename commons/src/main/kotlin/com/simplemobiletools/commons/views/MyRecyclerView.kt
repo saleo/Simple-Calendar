@@ -48,6 +48,7 @@ open class MyRecyclerView : RecyclerView {
     // cut from https://github.com/ksoichiro/Android-ObservableScrollView
     var recyclerScrollCallback: RecyclerScrollCallback? = null
     private var mPrevFirstVisiblePosition = 0
+
     private var mPrevScrolledChildrenHeight = 0
     private var mPrevFirstVisibleChildHeight = -1
     private var mScrollY = 0

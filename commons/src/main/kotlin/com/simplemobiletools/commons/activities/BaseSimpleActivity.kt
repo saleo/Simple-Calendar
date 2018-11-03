@@ -322,4 +322,6 @@ open class BaseSimpleActivity : AppCompatActivity() {
             }
         }
     }
+
+    fun getStoreUrl() = "https://play.google.com/store/apps/details?id=$packageName"
 }
