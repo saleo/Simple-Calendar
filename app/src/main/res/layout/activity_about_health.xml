@@ -67,6 +67,7 @@
     <TextView android:id="@+id/txt_health_originator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="@dimen/small_margin"
         android:text="@string/str_health_originator"
         android:textStyle="italic"
         android:textSize="@dimen/small_text_size"

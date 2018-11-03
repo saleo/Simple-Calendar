@@ -337,6 +337,7 @@
     <string name="str_intro">介绍</string>>
     <string name="str_health">身心健康</string>>
     <string name="no_data">没有数据</string>
+    <string name="share_events_title">今日戒期信息： %1$s ，请慎重！\n\n转自 %2$s</string>
 
     <!--
         Haven't found some strings? There's more at
