@@ -15,8 +15,6 @@ import com.simplemobiletools.calendar.helpers.Formatter
 import com.simplemobiletools.calendar.models.Event
 import com.simplemobiletools.commons.adapters.MyRecyclerViewAdapter
 import com.simplemobiletools.commons.extensions.applyColorFilter
-import com.simplemobiletools.commons.extensions.beInvisible
-import com.simplemobiletools.commons.extensions.beInvisibleIf
 import com.simplemobiletools.commons.views.MyRecyclerView
 import kotlinx.android.synthetic.main.event_item_day_view.view.*
 
@@ -71,33 +69,11 @@ class DayEventsAdapter(activity: SimpleActivity, val events: ArrayList<Event>, r
     private fun setupView(view: View, event: Event) {
         view.apply {
             event_section_title.text = event.title
-            event_item_description.text = if (replaceDescriptionWithLocation) event.location else event.description
-            event_item_start.text = if (event.getIsAllDay()) allDayString else Formatter.getTimeFromTS(context, event.startTS)
-            event_item_end.beInvisibleIf(event.startTS == event.endTS)
+            event_reminder_time.text = Formatter.getTimeFromTS(context,event.startTS-context.config.currentReminderMinutes*60)
             event_item_shareto.applyColorFilter(textColor)
 
-            event_item_start.setTextColor(textColor)
-            event_item_end.setTextColor(textColor)
+            event_reminder_time.setTextColor(textColor)
             event_section_title.setTextColor(event.color)
-            event_item_description.setTextColor(event.color)
-            if (event.startTS != event.endTS) {
-                val startCode = Formatter.getDayCodeFromTS(event.startTS)
-                val endCode = Formatter.getDayCodeFromTS(event.endTS)
-
-                event_item_end.apply {
-                    text = Formatter.getTimeFromTS(context, event.endTS)
-                    if (startCode != endCode) {
-                        if (event.getIsAllDay()) {
-                            text = Formatter.getDateFromCode(context, endCode, true)
-                        } else {
-                            append(" (${Formatter.getDateFromCode(context, endCode, true)})")
-                        }
-                    } else if (event.getIsAllDay()) {
-                        beInvisible()
-                    }
-                }
-            }
-
 
             setOnClickListener {
                 shareEventTitle(event_section_title.text.toString())

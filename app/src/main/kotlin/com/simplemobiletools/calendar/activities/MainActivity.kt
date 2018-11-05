@@ -92,6 +92,9 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         appLaunched()
+        if (baseConfig.appRunCount==1)
+            config.currentReminderMinutes= REMINDER_INITIAL_MINUTES
+
         checkWhatsNewDialog()
         //calendar_fab.beVisibleIf(config.storedView != YEARLY_VIEW)
         calendar_fab.setOnClickListener {

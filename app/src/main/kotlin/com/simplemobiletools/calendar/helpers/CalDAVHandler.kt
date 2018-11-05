@@ -283,7 +283,7 @@ class CalDAVHandler(val context: Context) {
                             context.dbHelper.update(event, false)
                         }
                     } else {
-                        reminders = listOf(REMINDER_INITIAL_MINUTES)
+                        reminders = listOf(context.config.currentReminderMinutes)
 
                         val event = Event(0, startTS, endTS, title, description, reminders.getOrElse(0, { -1 }),
                                 reminders.getOrElse(1, { -1 }), reminders.getOrElse(2, { -1 }), repeatRule.repeatInterval,
@@ -426,7 +426,7 @@ class CalDAVHandler(val context: Context) {
                             }
                         }
                     } else {
-                        reminders = listOf(REMINDER_INITIAL_MINUTES)
+                        reminders = listOf(context.config.currentReminderMinutes)
 
                         val event = Event(0, startTS, endTS, title, description, reminders.getOrElse(0, { -1 }),
                                 reminders.getOrElse(1, { -1 }), reminders.getOrElse(2, { -1 }), repeatRule.repeatInterval,
