@@ -44,8 +44,7 @@
         android:label="@string/app_launcher_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:theme="@style/AppTheme"
-        tools:replace="android:label"
-        android:permission="android.permission.WRITE_CALENDAR">
+        tools:replace="android:label">
 
         <activity
             android:name=".activities.SplashActivity"
@@ -53,7 +52,9 @@
 
         </activity>
 
-        <activity android:name=".activities.MainActivity">
+        <activity android:name=".activities.MainActivity"
+            android:exported="true"
+            >
             <meta-data
                 android:name="android.app.default_searchable"
                 android:resource="@xml/searchable"/>
