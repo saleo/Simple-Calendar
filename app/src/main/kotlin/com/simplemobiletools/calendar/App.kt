@@ -15,7 +15,6 @@ class App : MultiDexApplication() {
             LeakCanary.install(this)
             Stetho.initializeWithDefaults(this)
         }
-
         checkUseEnglish()
     }
 }

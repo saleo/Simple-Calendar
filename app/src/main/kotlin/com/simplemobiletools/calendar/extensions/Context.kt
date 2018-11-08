@@ -11,6 +11,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.database.ContentObserver
 import android.graphics.Color
+import android.graphics.Point
 import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
@@ -18,6 +19,7 @@ import android.support.v4.app.NotificationCompat
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.simplemobiletools.calendar.*
@@ -538,3 +540,4 @@ fun Context.processReminders(eventIdsToProcess:ArrayList<String>,notifyTS: Long,
         else -> alarmManager.set(AlarmManager.RTC_WAKEUP, notifyTS, pendingIntent)
     }
 }
+

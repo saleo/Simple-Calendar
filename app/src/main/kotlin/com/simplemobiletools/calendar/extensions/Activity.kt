@@ -1,6 +1,7 @@
 package com.simplemobiletools.calendar.extensions
 
 import android.app.Activity
+import android.content.Context
 import com.simplemobiletools.calendar.BuildConfig
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.dialogs.CustomEventReminderDialog
@@ -16,6 +17,10 @@ import com.simplemobiletools.commons.models.RadioItem
 import java.io.File
 import java.util.TreeSet
 import kotlin.collections.ArrayList
+import android.graphics.Bitmap
+import android.graphics.Point
+import android.view.WindowManager
+
 
 fun BaseSimpleActivity.shareEvents(ids: List<Int>) {
     val file = getTempFile()
@@ -123,4 +128,25 @@ fun Activity.showEventRepeatIntervalDialog(curSeconds: Int, callback: (minutes: 
         }
     }
 
+}
+
+/**
+ * 获取当前屏幕截图，包含状态栏
+ *
+ * @param activity activity
+ * @return Bitmap
+ */
+fun Activity.captureWithStatusBar(context: Context): Bitmap {
+    val view = this.window.decorView
+    view.isDrawingCacheEnabled = true
+    view.buildDrawingCache()
+    val bmp = view.drawingCache
+    val wm: WindowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    val p = Point(0,0)
+    wm.defaultDisplay.getSize(p)
+    val width = p.x
+    val height = p.y
+    val ret = Bitmap.createBitmap(bmp, 0, 0, width, height)
+    view.destroyDrawingCache()
+    return ret
 }

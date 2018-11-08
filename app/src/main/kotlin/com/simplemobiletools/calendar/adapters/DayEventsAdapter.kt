@@ -1,13 +1,14 @@
 package com.simplemobiletools.calendar.adapters
 
-import android.content.Intent
-import android.content.Intent.createChooser
+import android.graphics.Bitmap
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import com.simplemobiletools.calendar.BuildConfig
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.activities.SimpleActivity
 import com.simplemobiletools.calendar.dialogs.DeleteEventDialog
+import com.simplemobiletools.calendar.extensions.captureWithStatusBar
 import com.simplemobiletools.calendar.extensions.config
 import com.simplemobiletools.calendar.extensions.dbHelper
 import com.simplemobiletools.calendar.extensions.shareEvents
@@ -15,15 +16,17 @@ import com.simplemobiletools.calendar.helpers.Formatter
 import com.simplemobiletools.calendar.models.Event
 import com.simplemobiletools.commons.adapters.MyRecyclerViewAdapter
 import com.simplemobiletools.commons.extensions.applyColorFilter
+import com.simplemobiletools.commons.extensions.getFileOutputStream
+import com.simplemobiletools.commons.extensions.sharePathIntent
+import com.simplemobiletools.commons.extensions.showErrorToast
+import com.simplemobiletools.commons.models.FileDirItem
 import com.simplemobiletools.commons.views.MyRecyclerView
 import kotlinx.android.synthetic.main.event_item_day_view.view.*
+import java.io.File
 
 
 class DayEventsAdapter(activity: SimpleActivity, val events: ArrayList<Event>, recyclerView: MyRecyclerView, itemClick: (Any) -> Unit)
     : MyRecyclerViewAdapter(activity, recyclerView, null, itemClick) {
-
-    private var allDayString = resources.getString(R.string.all_day)
-    private var replaceDescriptionWithLocation = activity.config.replaceDescription
 
     override fun getActionMenuId() = R.menu.cab_day
 
@@ -117,17 +120,34 @@ class DayEventsAdapter(activity: SimpleActivity, val events: ArrayList<Event>, r
     }
 
     private fun shareEventTitle(title:String){
-        var text=""
-        activity.applicationContext.apply {text =String.format(getString(R.string.share_events_title),title, getString(R.string.app_name))}
-        activity.startActivity(
-            Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_SUBJECT, activity.applicationContext.getString(R.string.app_name))
-                putExtra(Intent.EXTRA_TEXT, text)
-                type = "text/plain"
-                createChooser(this, activity.applicationContext.getString(R.string.invite_via))
+        val saveFile=File(activity.externalCacheDir,"share.png")
+        val saveFileItem=FileDirItem(saveFile.absolutePath,saveFile.name)
+        val bitmap:Bitmap=activity.captureWithStatusBar(activity.applicationContext)
+
+        try {
+            activity.getFileOutputStream(saveFileItem,true){
+                if (it == null){
+                    activity.showErrorToast("outputStream is null")
+                    return@getFileOutputStream
+                }
+
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it);
+                it.flush()
+                it.close();
+                activity.sharePathIntent(saveFile.path,BuildConfig.APPLICATION_ID)
             }
-        )
+
+//            activity.startActivity(
+//                    Intent().apply {
+//                        action = Intent.ACTION_SEND
+//                        putExtra(Intent.EXTRA_STREAM,saveFileUri)
+//                        type = "*/*"
+//                        createChooser(this, activity.applicationContext.getString(R.string.invite_via))
+//                    }
+//           )
+        } catch (e: Exception) {
+            activity.showErrorToast(e)
+        }
     }
 
 }
