@@ -20,9 +20,11 @@ import com.simplemobiletools.commons.helpers.PERMISSION_READ_CALENDAR
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CALENDAR
 import com.simplemobiletools.commons.models.RadioItem
 import com.simplemobiletools.calendar.R
+import com.simplemobiletools.calendar.models.Event
 import kotlinx.android.synthetic.main.activity_settings.*
 import java.io.File
 import java.util.*
+import kotlin.collections.ArrayList
 
 class SettingsActivity : SimpleActivity() {
     private val GET_RINGTONE_URI = 1
@@ -435,7 +437,7 @@ class SettingsActivity : SimpleActivity() {
             setupReminderSound(reminderOnOff)
             if (!reminderOnOff)
                 Thread {
-                    dbHelper.updateReminder(REMINDER_OFF)
+                    dbHelper.updateEventReminder(REMINDER_OFF)
                 }.start()
         }
     }
@@ -451,7 +453,8 @@ class SettingsActivity : SimpleActivity() {
             settings_reminder_unified_minute.text=getFormattedMinutes(mReminderMinutes)
             config.currentReminderMinutes=mReminderMinutes
             Thread {
-                dbHelper.updateReminder(mReminderMinutes)
+                dbHelper.updateEventReminder(mReminderMinutes)
+                applicationContext.processEventRemindersNotification(dbHelper.getEventsToExport(false))
             }.start()
         }
     }

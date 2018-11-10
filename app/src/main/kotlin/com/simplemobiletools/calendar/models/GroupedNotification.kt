@@ -1,3 +1,3 @@
 package com.simplemobiletools.calendar.models
 
-class GroupedNotification(var ntfId:Int, var ntfTitle: String = "", var ntfContent: String = "")
+class GroupedNotification(var ntfId:Int, var ntfTitle: String = "", var ntfContent: String = "",var ntfTms:Long)

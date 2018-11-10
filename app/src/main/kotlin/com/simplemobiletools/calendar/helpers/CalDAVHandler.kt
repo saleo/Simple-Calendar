@@ -7,7 +7,6 @@ import android.database.Cursor
 import android.provider.CalendarContract
 import android.provider.CalendarContract.Reminders
 import android.util.Log
-import android.util.SparseArray
 import android.util.SparseIntArray
 import com.simplemobiletools.calendar.activities.SimpleActivity
 import com.simplemobiletools.calendar.extensions.*
@@ -482,27 +481,9 @@ class CalDAVHandler(val context: Context) {
             context.dbHelper.deleteEvents(eventIdsToDelete.toTypedArray(), false)
         }
 
-        val idsToProcess = ArrayList<String>()
-        var notifyTSs=ArrayList<Long>()
-        var currentNotifyTs=0L
-        val now = context.getNowSeconds()
 
         val updatedEvents=context.dbHelper.getEventsWithSyncUids(updatedEventSyncUids)
-        updatedEvents.forEach{
-            currentNotifyTs=(it.startTS-(it.reminder1Minutes*60))*1000L
-            if (currentNotifyTs>now) {
-                idsToProcess.add(it.id.toString())
-                notifyTSs.add(currentNotifyTs)
-            }
-        }
-
-
-        if (idsToProcess.size>0 && notifyTSs.size>0){
-            context.processReminders(idsToProcess,notifyTSs.min()!!)
-            Log.d(APP_TAG,"reminders processed")
-        }
-        else
-            Log.d(APP_TAG,"reminders NOT processed,for no data")
+        context.processEventRemindersNotification(updatedEvents)
 
     }
 

@@ -16,6 +16,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.support.v4.app.NotificationCompat
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -523,21 +524,50 @@ fun Context.getEventListItems(events: List<Event>): ArrayList<ListItem> {
     return listItems
 }
 
-fun Context.processReminders(eventIdsToProcess:ArrayList<String>,notifyTS: Long,inNtfId:Int=0,inNtfTitle:String="",inNtfContent:String="") {
-    val pendingIntent:PendingIntent
-    if (inNtfId == 0) {
-        val gn = dbHelper.getGroupedNotification(eventIdsToProcess)
-        pendingIntent = getGroupedNotificationIntent(this, gn.ntfId, gn.ntfTitle, gn.ntfContent,notifyTS)
+fun Context.processEventRemindersNotification(eventsToProcess:ArrayList<Event>){
+    val idsToProcess = ArrayList<String>()
+    var currentNotifyTs=0
+    val now = getNowSeconds()
+
+    eventsToProcess.forEach{
+        currentNotifyTs=it.startTS-it.reminder1Minutes*60
+        if (currentNotifyTs>now) {
+            idsToProcess.add(it.id.toString())
+        }
+    }
+
+
+    if (idsToProcess.size>0){
+        processEventRemindersNotification(idsToProcess)
+        Log.d(APP_TAG,"reminders notification processed")
     }
     else
-        pendingIntent = getGroupedNotificationIntent(this,inNtfId,inNtfTitle,inNtfContent,notifyTS)
+        Log.d(APP_TAG,"reminders notification NOT processed,for no data")
+}
 
+fun Context.processEventRemindersNotification(eventIdsToProcess:ArrayList<String>, notifyTms: Long=0, inNtfId:Int=0, inNtfTitle:String="", inNtfContent:String="") {
     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    when {
-        isMarshmallowPlus() -> alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, notifyTS, pendingIntent)
-        isKitkatPlus() -> alarmManager.setExact(AlarmManager.RTC_WAKEUP, notifyTS, pendingIntent)
-        else -> alarmManager.set(AlarmManager.RTC_WAKEUP, notifyTS, pendingIntent)
+    if (inNtfId == 0) {
+        val gns = dbHelper.getGroupedNotifications(eventIdsToProcess)
+        gns.forEach {
+            val pendingIntent = getGroupedNotificationIntent(this, it.ntfId, it.ntfTitle, it.ntfContent,it.ntfTms)
+            when {
+                isMarshmallowPlus() -> alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, it.ntfTms, pendingIntent)
+                isKitkatPlus() -> alarmManager.setExact(AlarmManager.RTC_WAKEUP, it.ntfTms, pendingIntent)
+                else -> alarmManager.set(AlarmManager.RTC_WAKEUP, it.ntfTms, pendingIntent)
+            }
+        }
     }
+    else {
+        //for postponed notification
+        val pendingIntent = getGroupedNotificationIntent(this, inNtfId, inNtfTitle, inNtfContent, notifyTms)
+        when {
+            isMarshmallowPlus() -> alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, notifyTms, pendingIntent)
+            isKitkatPlus() -> alarmManager.setExact(AlarmManager.RTC_WAKEUP, notifyTms, pendingIntent)
+            else -> alarmManager.set(AlarmManager.RTC_WAKEUP, notifyTms, pendingIntent)
+        }
+    }
+
 }
 

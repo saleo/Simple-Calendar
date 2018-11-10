@@ -1006,33 +1006,41 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         }
     }
 
-    fun updateReminder(reminderMinutes:Int){
+    fun updateEventReminder(reminderMinutes:Int){
         val contentValues=ContentValues().apply {put(COL_REMINDER_MINUTES, reminderMinutes)}
         val ts = context.getNowSeconds().toString()
         val selection = "$COL_START_TS >= ?"
         val i:Int=mDb.update(MAIN_TABLE_NAME,contentValues,selection, arrayOf(ts))
     }
 
-    fun getGroupedNotification(eventIdsToProcess:ArrayList<String>):GroupedNotification {
+    fun getGroupedNotifications(eventIdsToProcess:ArrayList<String>):List<GroupedNotification> {
         val args = TextUtils.join(", ", eventIdsToProcess)
         val selection = "$COL_ID in ($args)"
-        val cols = arrayOf(COL_START_TS, "group_concat($COL_TITLE) as gnTitle", "group_concat($COL_DESCRIPTION) as gnContent")
+        val cols = arrayOf(COL_START_TS, "group_concat($COL_TITLE) as gnTitle", "group_concat($COL_DESCRIPTION) as gnContent",COL_REMINDER_MINUTES)
         val groupBy = "$COL_START_TS/$DAY_SECONDS"
-        var gnId = 0
-        var gnTitle = ""
-        var gnContent = ""
+
         var cursor: Cursor? = null
+        val gns=ArrayList<GroupedNotification>()
+
         try {
             cursor = mDb.query(MAIN_TABLE_NAME, cols, selection, null, groupBy, null, null)
-            if (cursor?.moveToFirst() == true) {
-                gnId = (cursor.getIntValue(COL_START_TS)) / DAY_SECONDS
-                gnTitle = cursor.getStringValue("gnTitle")
-                gnContent = cursor.getStringValue("gnContent")
+            cursor?.use {
+                if (cursor.moveToFirst() == true) {
+                    do {
+                        val gnId = (cursor.getIntValue(COL_START_TS)) / DAY_SECONDS
+                        val gnTitle = cursor.getStringValue("gnTitle")
+                        val gnContent = cursor.getStringValue("gnContent")
+                        val gnTms=(cursor.getLongValue(COL_START_TS)-cursor.getIntValue(COL_REMINDER_MINUTES)*60)*1000L
+                        val gn=GroupedNotification(gnId,gnTitle,gnContent,gnTms)
+                        gns.add(gn)
+                    }while (cursor.moveToNext())
+                }
             }
+
         } finally {
             cursor?.close()
         }
-        return GroupedNotification(gnId, gnTitle, gnContent)
+        return gns
     }
 
     fun getEventsWithSyncUids(syncUids:List<String>) = getEvents("").filter {syncUids.contains(it.syncUid) } as ArrayList<Event>
