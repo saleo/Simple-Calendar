@@ -420,14 +420,6 @@ fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: Linea
             linearLayout.setBackgroundResource(today_border)
         }
 
-        val dayEventsString:String=day.dayEvents.toString()
-        when  //eventColor only show one if there're more than 1, and the priority is:red,blue, gray
-        {
-            dayEventsString.contains("-65536") -> setBackgroundResource(circle_empty_red)
-            dayEventsString.contains("-16776961") -> setBackgroundResource(circle_empty_blue)
-            dayEventsString.contains("-7829368") -> setBackgroundResource(circle_empty_gray)
-        }
-
     }
     //show chinese lunar when in zh-cn,or zh-tw,etc
     val strCountry = resources.getConfiguration().locale.getCountry()

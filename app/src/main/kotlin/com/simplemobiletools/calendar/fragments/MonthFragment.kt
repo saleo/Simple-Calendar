@@ -240,9 +240,9 @@ class MonthFragment : Fragment(), MonthlyCalendar {
                 11 -> mHolder.top_month.setImageResource(R.drawable.sk2018_11)
                 12 -> mHolder.top_month.setImageResource(R.drawable.sk2018_12)
             }
-            bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+3*(mCurrentMonthDisplayed-1)]
-            bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+3*(mCurrentMonthDisplayed-1)+1]
-            bottom_sentense2.text=mBottomSentences[mCurrentMonthDisplayed+3*(mCurrentMonthDisplayed-1)+2]
+            bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
+            bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
+            bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
         } else if (intYear == 2017 || intYear==2019) {
             when (mCurrentMonthDisplayed) {
                 1 -> mHolder.top_month.setImageResource(R.drawable.sk2019_1)
@@ -258,9 +258,9 @@ class MonthFragment : Fragment(), MonthlyCalendar {
                 11 -> mHolder.top_month.setImageResource(R.drawable.sk2019_11)
                 12 -> mHolder.top_month.setImageResource(R.drawable.sk2019_12)
             }
-            bottom_sentense0.text=mBottomSentences[mCurrentMonthDisplayed+36+3*(mCurrentMonthDisplayed-1)]
-            bottom_sentense1.text=mBottomSentences[mCurrentMonthDisplayed+36+3*(mCurrentMonthDisplayed-1)+1]
-            bottom_sentense2.text=mBottomSentences[mCurrentMonthDisplayed+36+3*(mCurrentMonthDisplayed-1)+2]
+            bottom_sentense0.text=mBottomSentences[36+3*(mCurrentMonthDisplayed-1)]
+            bottom_sentense1.text=mBottomSentences[36+3*(mCurrentMonthDisplayed-1)+1]
+            bottom_sentense2.text=mBottomSentences[36+3*(mCurrentMonthDisplayed-1)+2]
         } else {
             mHolder.top_month.setImageResource(R.drawable.placeholder)
             bottom_sentense0.text=mBottomSentences[0]

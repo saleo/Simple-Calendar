@@ -9,6 +9,13 @@
     android:paddingBottom="@dimen/small_margin"
     android:background="@drawable/bmp_bottom_bg">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/divider"
+        android:paddingTop="@dimen/activity_margin"/>
+
+
     <TextView android:id="@+id/bottom_sentense0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

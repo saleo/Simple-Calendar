@@ -13,9 +13,11 @@ import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.activities.MainActivity
 import com.simplemobiletools.calendar.helpers.DAY_CODE
 import com.simplemobiletools.calendar.helpers.Formatter
+import kotlinx.android.synthetic.main.bottom_contact_copyright.*
 import kotlinx.android.synthetic.main.fragment_qingxin.*
 import kotlinx.android.synthetic.main.fragment_qingxin.view.*
 import org.joda.time.DateTime
+import java.util.*
 
 class QingxinFragment:MyFragmentHolder() {
 
@@ -34,12 +36,20 @@ class QingxinFragment:MyFragmentHolder() {
         mHolder=view.rl_qingxin_holder
 
         mDayCode=arguments!!.getString(DAY_CODE)
+
         return view
     }
 
     override fun onResume() {
         super.onResume()
+        setupCopyright()
         setupQingxin(Formatter.getDateTimeFromCode(mDayCode))
+
+    }
+
+    private fun setupCopyright() {
+        val year = Calendar.getInstance().get(Calendar.YEAR)
+        about_copyright.text = String.format(getString(R.string.copyright), year)
     }
 
     private fun setupQingxin(time: DateTime){
