@@ -23,7 +23,6 @@ class AboutActivityCredit:SimpleActivity() {
             }
         }
 
-        about_sklogo.visibility=INVISIBLE
         setupCopyright()
     }
 

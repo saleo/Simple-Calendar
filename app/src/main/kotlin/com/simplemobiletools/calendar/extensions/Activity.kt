@@ -9,10 +9,6 @@ import com.simplemobiletools.calendar.dialogs.CustomEventRepeatIntervalDialog
 import com.simplemobiletools.calendar.helpers.*
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.RadioGroupDialog
-import com.simplemobiletools.commons.extensions.getFormattedMinutes
-import com.simplemobiletools.commons.extensions.hideKeyboard
-import com.simplemobiletools.commons.extensions.sharePathIntent
-import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.models.RadioItem
 import java.io.File
 import java.util.TreeSet
@@ -20,6 +16,8 @@ import kotlin.collections.ArrayList
 import android.graphics.Bitmap
 import android.graphics.Point
 import android.view.WindowManager
+import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.models.FileDirItem
 
 
 fun BaseSimpleActivity.shareEvents(ids: List<Int>) {
@@ -149,4 +147,35 @@ fun Activity.captureWithStatusBar(context: Context): Bitmap {
     val ret = Bitmap.createBitmap(bmp, 0, 0, width, height)
     view.destroyDrawingCache()
     return ret
+}
+
+fun BaseSimpleActivity.shareScreen(){
+    val saveFile=File(externalCacheDir,"share.png")
+    val saveFileItem= FileDirItem(saveFile.absolutePath,saveFile.name)
+    val bitmap:Bitmap=captureWithStatusBar(applicationContext)
+
+    try {
+        getFileOutputStream(saveFileItem,true){
+            if (it == null){
+                showErrorToast("outputStream is null")
+                return@getFileOutputStream
+            }
+
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, it);
+            it.flush()
+            it.close();
+            sharePathIntent(saveFile.path,BuildConfig.APPLICATION_ID)
+        }
+
+//            activity.startActivity(
+//                    Intent().apply {
+//                        action = Intent.ACTION_SEND
+//                        putExtra(Intent.EXTRA_STREAM,saveFileUri)
+//                        type = "*/*"
+//                        createChooser(this, activity.applicationContext.getString(R.string.invite_via))
+//                    }
+//           )
+    } catch (e: Exception) {
+        showErrorToast(e)
+    }
 }

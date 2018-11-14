@@ -25,14 +25,6 @@
         android:visibility="gone"
         app:rippleColor="@color/pressed_item_foreground"/>
 
-    <com.karumi.expandableselector.ExpandableSelector
-        android:id="@+id/es_icons"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:background="@drawable/circle_empty"
-        />
-
     <RelativeLayout
         android:id="@+id/search_holder"
         android:layout_width="match_parent"

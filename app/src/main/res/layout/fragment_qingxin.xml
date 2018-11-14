@@ -9,14 +9,6 @@
 
     <include layout="@layout/top_navigation"/>
 
-    <ImageView
-        android:id="@+id/img_forward1"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_gravity="right"
-        android:src="@drawable/forward"
-        android:visibility="invisible"/>
-
     <com.simplemobiletools.commons.views.MyTextView
         android:id="@+id/txt_qingxin1"
         android:layout_width="match_parent"
@@ -36,13 +28,6 @@
         android:layout_width="match_parent"
         android:layout_height="1px"/>
 
-    <ImageView android:id="@+id/img_forward2"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:src="@drawable/forward"
-        android:layout_gravity="right"
-        android:visibility="invisible"/>
-
     <com.simplemobiletools.commons.views.MyTextView
         android:id="@+id/txt_qingxin2"
         android:layout_width="match_parent"
@@ -60,14 +45,6 @@
         android:id="@+id/divider_qingxin2"
         android:layout_width="match_parent"
         android:layout_height="1px"/>
-
-    <ImageView android:id="@+id/img_forward3"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:src="@drawable/forward"
-        android:layout_gravity="right"
-        android:visibility="invisible"/>
-
 
     <com.simplemobiletools.commons.views.MyTextView
         android:id="@+id/txt_qingxin3"

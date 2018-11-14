@@ -70,15 +70,15 @@ class QingxinFragment:MyFragmentHolder() {
             txt_qingxin3!!.text=bottomeSentences[2]
         }
 
-        img_forward1.setOnClickListener {
-            Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-                putExtra(Intent.EXTRA_TEXT, txt_qingxin1.text)
-                type = "text/plain"
-                activity!!.startActivity(Intent.createChooser(this, getString(R.string.invite_via)))
-            }
-        }
+//        img_forward1.setOnClickListener {
+//            Intent().apply {
+//                action = Intent.ACTION_SEND
+//                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+//                putExtra(Intent.EXTRA_TEXT, txt_qingxin1.text)
+//                type = "text/plain"
+//                activity!!.startActivity(Intent.createChooser(this, getString(R.string.invite_via)))
+//            }
+//        }
     }
 
     //all below are for placeholder purpose

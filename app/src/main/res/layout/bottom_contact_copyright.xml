@@ -7,19 +7,17 @@
     android:background="@android:color/white"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ImageView
-        android:id="@+id/about_sklogo"
-        android:layout_width="@dimen/social_logo"
-        android:layout_height="@dimen/social_logo"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_launcher_transparent"/>
+<include android:id="@+id/bottom_buttonbar_holder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    layout="@layout/bottom_buttonbar"/>
 
     <LinearLayout android:id="@+id/bottom_contact_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_horizontal|center_vertical"
-        android:layout_below="@id/about_sklogo">
+        android:layout_below="@id/bottom_buttonbar_holder">
 
         <com.simplemobiletools.commons.views.MyTextView
             android:id="@+id/about_website"
@@ -37,12 +35,16 @@
     </LinearLayout>
 
 
-    <com.simplemobiletools.commons.views.MyTextView
+    <TextView
         android:id="@+id/about_copyright"
-        android:layout_width="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/bottom_contact_holder"
         android:gravity="center_horizontal|bottom"
-        android:text="@string/copyright"/>
+        android:foregroundGravity=""
+        android:text="@string/copyright"
+        android:drawableLeft="@drawable/ic_launcher_transparent"
+        android:drawablePadding="0dp"/>
 
 </RelativeLayout>

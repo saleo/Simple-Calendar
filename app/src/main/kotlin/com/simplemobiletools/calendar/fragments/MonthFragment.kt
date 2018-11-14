@@ -1,6 +1,7 @@
 package com.simplemobiletools.calendar.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -25,6 +26,9 @@ import kotlinx.android.synthetic.main.fragment_month.view.*
 import kotlinx.android.synthetic.main.top_navigation.view.*
 import org.joda.time.DateTime
 import android.widget.TextView
+import com.simplemobiletools.calendar.extensions.shareScreen
+import com.simplemobiletools.commons.activities.BaseSimpleActivity
+import kotlinx.android.synthetic.main.bottom_buttonbar.*
 import kotlinx.android.synthetic.main.bottom_sentense.*
 import kotlinx.android.synthetic.main.bottom_sentense.view.*
 
@@ -92,9 +96,11 @@ class MonthFragment : Fragment(), MonthlyCalendar {
 
         mLastHash = newHash
 
+
         activity?.runOnUiThread {
-            updateMonth(Formatter.getDateTimeFromCode(mDayCode))
             updateDays(days)
+            (activity as MainActivity).updateTopBottomBasedMonth(Formatter.getDateTimeFromCode(mDayCode),mHolder)
+
         }
     }
 
@@ -164,6 +170,7 @@ class MonthFragment : Fragment(), MonthlyCalendar {
         }
     }
 
+
     private fun updateDays(days: List<DayMonthly>) {
         val displayWeekNumbers = mConfig.displayWeekNumbers
         val len = days.size
@@ -201,71 +208,4 @@ class MonthFragment : Fragment(), MonthlyCalendar {
         }
     }
     
-    private fun updateMonth(time: DateTime)
-    {
-        
-
-            //        CharSequence oldMonth = mMonthName.getText();
-            //        mMonthName.setText(Utils.formatMonthYear(mContext, time));
-            //        mMonthName.invalidate();
-            //        if (!TextUtils.equals(oldMonth, mMonthName.getText())) {
-            //            mMonthName.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
-            //        }
-            val intYear = time.year
-            val mCurrentMonthDisplayed = time.monthOfYear
-            val mBottomSentences: Array<String>
-
-        mHolder.id_bottom_sentense.setOnClickListener {
-            (activity as MainActivity).openQingxinFromMonthly(time)
-        }
-
-        bottom_sentense0.setTextSize(mConfig.getFontSize()*1.01.toFloat())
-        bottom_sentense1.setTextSize(mConfig.getFontSize()*1.01.toFloat())
-        bottom_sentense2.setTextSize(mConfig.getFontSize()*1.01.toFloat())
-        val res = resources
-        mBottomSentences = res.getStringArray(R.array.bottom_sentences_digest)
-
-        if (intYear == 2016 || intYear==2018) {
-            when (mCurrentMonthDisplayed) {
-                1 -> mHolder.top_month.setImageResource(R.drawable.sk2018_1)
-                2 -> mHolder.top_month.setImageResource(R.drawable.sk2018_2)
-                3 -> mHolder.top_month.setImageResource(R.drawable.sk2018_3)
-                4 -> mHolder.top_month.setImageResource(R.drawable.sk2018_4)
-                5 -> mHolder.top_month.setImageResource(R.drawable.sk2018_5)
-                6 -> mHolder.top_month.setImageResource(R.drawable.sk2018_6)
-                7 -> mHolder.top_month.setImageResource(R.drawable.sk2018_7)
-                8 -> mHolder.top_month.setImageResource(R.drawable.sk2018_8)
-                9 -> mHolder.top_month.setImageResource(R.drawable.sk2018_9)
-                10 -> mHolder.top_month.setImageResource(R.drawable.sk2018_10)
-                11 -> mHolder.top_month.setImageResource(R.drawable.sk2018_11)
-                12 -> mHolder.top_month.setImageResource(R.drawable.sk2018_12)
-            }
-            bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
-            bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
-            bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
-        } else if (intYear == 2017 || intYear==2019) {
-            when (mCurrentMonthDisplayed) {
-                1 -> mHolder.top_month.setImageResource(R.drawable.sk2019_1)
-                2 -> mHolder.top_month.setImageResource(R.drawable.sk2019_2)
-                3 -> mHolder.top_month.setImageResource(R.drawable.sk2019_3)
-                4 -> mHolder.top_month.setImageResource(R.drawable.sk2019_4)
-                5 -> mHolder.top_month.setImageResource(R.drawable.sk2019_5)
-                6 -> mHolder.top_month.setImageResource(R.drawable.sk2019_6)
-                7 -> mHolder.top_month.setImageResource(R.drawable.sk2019_7)
-                8 -> mHolder.top_month.setImageResource(R.drawable.sk2019_8)
-                9 -> mHolder.top_month.setImageResource(R.drawable.sk2019_9)
-                10 -> mHolder.top_month.setImageResource(R.drawable.sk2019_10)
-                11 -> mHolder.top_month.setImageResource(R.drawable.sk2019_11)
-                12 -> mHolder.top_month.setImageResource(R.drawable.sk2019_12)
-            }
-            bottom_sentense0.text=mBottomSentences[36+3*(mCurrentMonthDisplayed-1)]
-            bottom_sentense1.text=mBottomSentences[36+3*(mCurrentMonthDisplayed-1)+1]
-            bottom_sentense2.text=mBottomSentences[36+3*(mCurrentMonthDisplayed-1)+2]
-        } else {
-            mHolder.top_month.setImageResource(R.drawable.placeholder)
-            bottom_sentense0.text=mBottomSentences[0]
-            bottom_sentense1.text=mBottomSentences[1]
-            bottom_sentense2.text=mBottomSentences[2]
-        }
-    }
 }

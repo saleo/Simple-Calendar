@@ -9,12 +9,10 @@
     android:paddingBottom="@dimen/small_margin"
     android:background="@drawable/bmp_bottom_bg">
 
-    <ImageView
+    <include android:id="@+id/bottom_buttonbar_holder"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@drawable/divider"
-        android:paddingTop="@dimen/activity_margin"/>
-
+        android:layout_height="wrap_content"
+        layout="@layout/bottom_buttonbar"/>
 
     <TextView android:id="@+id/bottom_sentense0"
         android:layout_width="match_parent"

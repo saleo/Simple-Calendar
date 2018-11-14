@@ -77,10 +77,6 @@ class DayEventsAdapter(activity: SimpleActivity, val events: ArrayList<Event>, r
 
             event_reminder_time.setTextColor(textColor)
             event_section_title.setTextColor(event.color)
-
-            setOnClickListener {
-                shareEventTitle(event_section_title.text.toString())
-            }
         }
     }
 
@@ -116,37 +112,6 @@ class DayEventsAdapter(activity: SimpleActivity, val events: ArrayList<Event>, r
                 }
             }
             removeSelectedItems()
-        }
-    }
-
-    private fun shareEventTitle(title:String){
-        val saveFile=File(activity.externalCacheDir,"share.png")
-        val saveFileItem=FileDirItem(saveFile.absolutePath,saveFile.name)
-        val bitmap:Bitmap=activity.captureWithStatusBar(activity.applicationContext)
-
-        try {
-            activity.getFileOutputStream(saveFileItem,true){
-                if (it == null){
-                    activity.showErrorToast("outputStream is null")
-                    return@getFileOutputStream
-                }
-
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it);
-                it.flush()
-                it.close();
-                activity.sharePathIntent(saveFile.path,BuildConfig.APPLICATION_ID)
-            }
-
-//            activity.startActivity(
-//                    Intent().apply {
-//                        action = Intent.ACTION_SEND
-//                        putExtra(Intent.EXTRA_STREAM,saveFileUri)
-//                        type = "*/*"
-//                        createChooser(this, activity.applicationContext.getString(R.string.invite_via))
-//                    }
-//           )
-        } catch (e: Exception) {
-            activity.showErrorToast(e)
         }
     }
 

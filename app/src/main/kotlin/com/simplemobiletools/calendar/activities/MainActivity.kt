@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.RelativeLayout
 import android.widget.Toast
 import at.bitfire.ical4android.AndroidCalendar
 import at.bitfire.ical4android.CalendarStorageException
@@ -51,10 +52,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import at.bitfire.icsdroid.db.LocalCalendar
-import com.karumi.expandableselector.ExpandableItem
-import com.karumi.expandableselector.ExpandableSelector
-import com.karumi.expandableselector.ExpandableSelectorListener
-import com.karumi.expandableselector.OnExpandableItemClickListener
+import kotlinx.android.synthetic.main.bottom_buttonbar.*
+import kotlinx.android.synthetic.main.bottom_buttonbar.view.*
+import kotlinx.android.synthetic.main.bottom_sentense.*
+import kotlinx.android.synthetic.main.bottom_sentense.view.*
+import kotlinx.android.synthetic.main.top_navigation.*
+import kotlinx.android.synthetic.main.top_navigation.view.*
 import kotlin.system.exitProcess
 
 const val MY_PERMISSIONS_REQUEST_READ_CALENDAR=1
@@ -85,9 +88,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     private var mStoredIsSundayFirst = false
     private var mStoredUse24HourFormat = false
     private var mStoredUseEnglish = false
-    private var expandableSelector: ExpandableSelector? = null
 
-    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -100,8 +101,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         calendar_fab.setOnClickListener {
             launchNewEventIntent(currentFragments.last().getNewEventDayCode())
         }
-
-        initializeExpandableSelector()
 
         storeStateVariables()
         if (resources.getBoolean(R.bool.portrait_only)) {
@@ -202,9 +201,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         calendar_fab.setColors(config.textColor, getAdjustedPrimaryColor(), config.backgroundColor)
         search_holder.background = ColorDrawable(config.backgroundColor)
 
-        if ((expandableSelector as ExpandableSelector).isExpanded())
-            (expandableSelector as ExpandableSelector).collapse()
-
         refreshCalDAVCalendars(true)
     }
 
@@ -260,9 +256,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     override fun onBackPressed() {
-        if ((expandableSelector as ExpandableSelector).isExpanded())
-            (expandableSelector as ExpandableSelector).collapse()
-
         if (currentFragments.size > 1) {
             removeTopFragment()
         } else {
@@ -368,7 +361,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
     }
 
-    private fun goToToday() {
+    public fun goToToday() {
         currentFragments.last().goToToday()
     }
 
@@ -612,9 +605,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     fun openDayFromMonthly(dateTime: DateTime) {
-        if ((expandableSelector as ExpandableSelector).isExpanded())
-            (expandableSelector as ExpandableSelector).collapse()
-
         if (currentFragments.last() is DayFragmentsHolder) {
             return
         }
@@ -737,11 +727,11 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
     }
 
-    private fun launchSettings() {
+    public fun launchSettings() {
         startActivity(Intent(applicationContext, SettingsActivity::class.java))
     }
 
-    private fun launchAbout() {
+    public fun launchAbout() {
         val faqItems = arrayListOf(
                 FAQItem(R.string.faq_1_title_commons, R.string.faq_1_text_commons),
                 FAQItem(R.string.faq_2_title_commons, R.string.faq_2_text_commons),
@@ -925,61 +915,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
     }
 
-  private fun initializeExpandableSelector(): Unit {
-     expandableSelector = findViewById(R.id.es_icons)
-    var expandableItems = ArrayList<ExpandableItem>()
-      val item1 = ExpandableItem()
-      item1.resourceId = R.drawable.ic_up_red1
-      expandableItems.add(item1)
-      val item2 = ExpandableItem()
-      item2.resourceId = R.drawable.settings_solid
-      expandableItems.add(item2)
-      val item3 = ExpandableItem()
-      item3.resourceId = R.drawable.about_us
-      expandableItems.add(item3)
-      (expandableSelector as ExpandableSelector).showExpandableItems(expandableItems)
-      (expandableSelector as ExpandableSelector).setOnExpandableItemClickListener(object : OnExpandableItemClickListener {
-       override fun onExpandableItemClickListener(index: Int, view: View) {
-        if (index == 0 ) {
-            if ((expandableSelector as ExpandableSelector).isExpanded())
-                (expandableSelector as ExpandableSelector).collapse()
-            else
-                (expandableSelector as ExpandableSelector).expand()
-        }
-
-       when (index) {
-           1 -> launchSettings()
-           2 -> launchAbout()
-       }
-      }
-    })
-
-      (expandableSelector as ExpandableSelector).setExpandableSelectorListener(object : ExpandableSelectorListener {
-
-      override fun onCollapse() {
-          updateIconsFirstButtonResource(R.drawable.ic_up_red1)
-      }
-
-      override fun onExpand() {
-          updateIconsFirstButtonResource(R.drawable.ic_down_red1)
-      }
-
-      override fun onCollapsed() {
-
-      }
-
-      override fun onExpanded() {
-
-      }
-    })
-  }
-
-    private fun updateIconsFirstButtonResource(resourceId: Int) {
-        val arrowUpExpandableItem = ExpandableItem()
-        arrowUpExpandableItem.resourceId = resourceId
-        (expandableSelector as ExpandableSelector).updateExpandableItem(0, arrowUpExpandableItem)
-    }
-
     fun startAboutActivity(appNameId: Int, licenseMask: Int, versionName: String, faqItems: java.util.ArrayList<FAQItem> = arrayListOf()) {
         Intent(applicationContext, AboutActivity::class.java).apply {
             putExtra(APP_NAME, getString(appNameId))
@@ -991,8 +926,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     fun openQingxinFromMonthly(dateTime: DateTime) {
-        if ((expandableSelector as ExpandableSelector).isExpanded())
-            (expandableSelector as ExpandableSelector).collapse()
 
         if (currentFragments.last() is QingxinFragment) {
             return
@@ -1005,6 +938,118 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         fragment.arguments = bundle
         supportFragmentManager.beginTransaction().add(R.id.fragments_holder, fragment).commitNow()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    fun updateTopBottomBasedMonth(time: DateTime,mHolder: RelativeLayout)
+    {
+
+
+        //        CharSequence oldMonth = mMonthName.getText();
+        //        mMonthName.setText(Utils.formatMonthYear(mContext, time));
+        //        mMonthName.invalidate();
+        //        if (!TextUtils.equals(oldMonth, mMonthName.getText())) {
+        //            mMonthName.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+        //        }
+        val intYear = time.year
+        val mCurrentMonthDisplayed = time.monthOfYear
+        val res = resources
+        val mBottomSentences= res.getStringArray(R.array.bottom_sentences_digest)
+
+        mHolder.apply {
+            bottom_sentense0.setTextSize(config.getFontSize()*1.01.toFloat())
+            bottom_sentense1.setTextSize(config.getFontSize()*1.01.toFloat())
+            bottom_sentense2.setTextSize(config.getFontSize()*1.01.toFloat())
+
+            bottom_sentense0.setOnClickListener {
+                openQingxinFromMonthly(time)
+            }
+            bottom_sentense1.setOnClickListener {
+                openQingxinFromMonthly(time)
+            }
+            bottom_sentense2.setOnClickListener {
+                openQingxinFromMonthly(time)
+            }
+
+
+            if (intYear == 2016 || intYear==2018) {
+                when (mCurrentMonthDisplayed) {
+                    1 -> top_month.setImageResource(R.drawable.sk2018_1)
+                    2 -> top_month.setImageResource(R.drawable.sk2018_2)
+                    3 -> top_month.setImageResource(R.drawable.sk2018_3)
+                    4 -> top_month.setImageResource(R.drawable.sk2018_4)
+                    5 -> top_month.setImageResource(R.drawable.sk2018_5)
+                    6 -> top_month.setImageResource(R.drawable.sk2018_6)
+                    7 -> top_month.setImageResource(R.drawable.sk2018_7)
+                    8 -> top_month.setImageResource(R.drawable.sk2018_8)
+                    9 -> top_month.setImageResource(R.drawable.sk2018_9)
+                    10 -> top_month.setImageResource(R.drawable.sk2018_10)
+                    11 -> top_month.setImageResource(R.drawable.sk2018_11)
+                    12 -> top_month.setImageResource(R.drawable.sk2018_12)
+                }
+                bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
+                bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
+                bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
+            } else if (intYear == 2017 || intYear==2019) {
+                when (mCurrentMonthDisplayed) {
+                    1 -> top_month.setImageResource(R.drawable.sk2019_1)
+                    2 -> top_month.setImageResource(R.drawable.sk2019_2)
+                    3 -> top_month.setImageResource(R.drawable.sk2019_3)
+                    4 -> top_month.setImageResource(R.drawable.sk2019_4)
+                    5 -> top_month.setImageResource(R.drawable.sk2019_5)
+                    6 -> top_month.setImageResource(R.drawable.sk2019_6)
+                    7 -> top_month.setImageResource(R.drawable.sk2019_7)
+                    8 -> top_month.setImageResource(R.drawable.sk2019_8)
+                    9 -> top_month.setImageResource(R.drawable.sk2019_9)
+                    10 -> top_month.setImageResource(R.drawable.sk2019_10)
+                    11 -> top_month.setImageResource(R.drawable.sk2019_11)
+                    12 -> top_month.setImageResource(R.drawable.sk2019_12)
+                }
+                bottom_sentense0.text=mBottomSentences[36+3*(mCurrentMonthDisplayed-1)]
+                bottom_sentense1.text=mBottomSentences[36+3*(mCurrentMonthDisplayed-1)+1]
+                bottom_sentense2.text=mBottomSentences[36+3*(mCurrentMonthDisplayed-1)+2]
+            } else {
+                top_month.setImageResource(R.drawable.placeholder)
+                bottom_sentense0.text=mBottomSentences[0]
+                bottom_sentense1.text=mBottomSentences[1]
+                bottom_sentense2.text=mBottomSentences[2]
+            }
+        }
+
+        setupBottomButtonBar(mHolder)
+    }
+
+    private fun  setupBottomButtonBar(mHolder: RelativeLayout){
+        mHolder.apply {
+            ib_bcc_info.setOnClickListener {
+                launchAbout()
+            }
+
+            ib_bcc_setting.setOnClickListener {
+                launchSettings()
+            }
+
+            ib_bcc_today.setOnClickListener {
+                goToToday()
+            }
+
+            ib_bcc_share.setOnClickListener {
+                shareScreen()
+            }
+
+            ib_bcc_recommend.setOnClickListener {
+                val appName=getString(R.string.app_name)
+                val text = String.format(getString(R.string.share_text), appName, getString(R.string.my_website))
+                Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_SUBJECT, appName)
+                    putExtra(Intent.EXTRA_TEXT, text)
+                    type = "text/plain"
+                    startActivity(Intent.createChooser(this, getString(R.string.invite_via)))
+                }
+
+            }
+        }
+
     }
 
 }
