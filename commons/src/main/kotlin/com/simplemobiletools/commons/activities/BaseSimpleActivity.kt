@@ -170,16 +170,6 @@ open class BaseSimpleActivity : AppCompatActivity() {
 
     fun startCustomizationActivity() = startActivity(Intent(this, CustomizationActivity::class.java))
 
-    fun handleSAFDialog(path: String, callback: () -> Unit): Boolean {
-        return if (!path.startsWith(OTG_PATH) && isShowingSAFDialog(path, baseConfig.treeUri, OPEN_DOCUMENT_TREE)) {
-            funAfterSAFPermission = callback
-            true
-        } else {
-            callback()
-            false
-        }
-    }
-
     fun copyMoveFilesTo(fileDirItems: ArrayList<FileDirItem>, source: String, destination: String, isCopyOperation: Boolean, copyPhotoVideoOnly: Boolean,
                         copyHidden: Boolean, callback: (destinationPath: String) -> Unit) {
         if (source == destination) {

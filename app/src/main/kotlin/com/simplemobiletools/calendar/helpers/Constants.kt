@@ -154,3 +154,4 @@ const val NOTIFICATION_CONTENT="notification_content"
 const val NOTIFICATION_TS="notification_ts"
 const val APP_TAG="SKCAL"
 const val POSTPONE_TS=5*60*1000
+const val TODAY_CODE = "today_code"

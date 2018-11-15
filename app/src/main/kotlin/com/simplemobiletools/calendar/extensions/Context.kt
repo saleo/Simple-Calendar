@@ -25,10 +25,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.simplemobiletools.calendar.*
 import com.simplemobiletools.calendar.R.drawable.*
-import com.simplemobiletools.calendar.activities.EventActivity
-import com.simplemobiletools.calendar.activities.MainActivity
-import com.simplemobiletools.calendar.activities.SimpleActivity
-import com.simplemobiletools.calendar.activities.SnoozeReminderActivity
+import com.simplemobiletools.calendar.activities.*
 import com.simplemobiletools.calendar.helpers.*
 import com.simplemobiletools.calendar.helpers.Formatter
 import com.simplemobiletools.calendar.models.*
@@ -38,6 +35,7 @@ import com.simplemobiletools.calendar.services.PostponeService
 import com.simplemobiletools.calendar.services.SnoozeService
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.*
+import com.simplemobiletools.commons.models.FAQItem
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import java.io.File
@@ -560,6 +558,32 @@ fun Context.processEventRemindersNotification(eventIdsToProcess:ArrayList<String
             else -> alarmManager.set(AlarmManager.RTC_WAKEUP, notifyTms, pendingIntent)
         }
     }
+}
 
+fun Context.launchSettings() {
+    startActivity(Intent(applicationContext, SettingsActivity::class.java))
+}
+
+fun Context.launchAbout() {
+    val faqItems = arrayListOf(
+            FAQItem(R.string.faq_1_title_commons, R.string.faq_1_text_commons),
+            FAQItem(R.string.faq_2_title_commons, R.string.faq_2_text_commons),
+            FAQItem(R.string.faq_4_title_commons, R.string.faq_4_text_commons),
+            FAQItem(getString(R.string.faq_1_title), getString(R.string.faq_1_text)),
+            FAQItem(getString(R.string.faq_2_title), getString(R.string.faq_2_text)))
+
+    val licenseMask=LICENSE_SMT or LICENSE_KOTLIN or LICENSE_JODA or LICENSE_STETHO or LICENSE_MULTISELECT or LICENSE_LEAK_CANARY
+
+    Intent(applicationContext, AboutActivity::class.java).apply {
+        putExtra(APP_NAME, getString(R.string.app_name))
+        putExtra(APP_LICENSES, licenseMask)
+        putExtra(APP_VERSION_NAME, BuildConfig.VERSION_NAME)
+        putExtra(APP_FAQ, faqItems)
+        startActivity(this)
+    }
+}
+
+fun Context.gotoToday(){
+    startActivity(Intent(this, MainActivity::class.java))
 }
 

@@ -9,8 +9,8 @@
         <ImageView
             android:id="@+id/iv_bcc_divider1"
             android:layout_width="0dp"
-            android:layout_height="1px"
-            android:background="@color/divider_grey"
+            android:layout_height="1dp"
+            android:background="@color/md_green"
             android:layout_weight="1"
             android:importantForAccessibility="no"/>
 
@@ -58,9 +58,9 @@
         <ImageView
             android:id="@+id/iv_bcc_divider2"
             android:layout_width="0dp"
-            android:layout_height="1px"
+            android:layout_height="1dp"
             android:layout_weight="1"
-            android:background="@color/divider_grey"
+            android:background="@color/md_green"
             android:importantForAccessibility="no"/>
 
 </LinearLayout>

@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     android:paddingTop="1dp"
-    android:paddingBottom="@dimen/small_margin"
     android:background="@drawable/bmp_bottom_bg">
 
     <include android:id="@+id/bottom_buttonbar_holder"

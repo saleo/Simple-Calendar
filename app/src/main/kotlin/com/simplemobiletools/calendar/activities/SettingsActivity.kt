@@ -20,7 +20,6 @@ import com.simplemobiletools.commons.helpers.PERMISSION_READ_CALENDAR
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CALENDAR
 import com.simplemobiletools.commons.models.RadioItem
 import com.simplemobiletools.calendar.R
-import com.simplemobiletools.calendar.models.Event
 import kotlinx.android.synthetic.main.activity_settings.*
 import java.io.File
 import java.util.*
@@ -36,6 +35,7 @@ class SettingsActivity : SimpleActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+
         res = resources
         mStoredPrimaryColor = config.primaryColor
         setupCaldavSync()
@@ -57,12 +57,13 @@ class SettingsActivity : SimpleActivity() {
         setupWeeklyEnd()
         setupDisplayPastEvents()
         setupFontSize()
-        updateTextColors(settings_holder)
+        updateTextColors(ll_settings_holder)
         checkPrimaryColor()
         setupSectionColors()
         setupSnoozeDelay()
         setupUseSameSnooze()
         setupReminerGeneral()
+        setupBottomButtonBar(cl_settings_holder)
     }
 
     override fun onPause() {

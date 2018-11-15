@@ -1,7 +1,6 @@
 package com.simplemobiletools.calendar.fragments
 
 import android.content.Context
-import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -23,14 +22,8 @@ import com.simplemobiletools.calendar.models.DayMonthly
 import com.simplemobiletools.commons.extensions.*
 import kotlinx.android.synthetic.main.first_row.*
 import kotlinx.android.synthetic.main.fragment_month.view.*
-import kotlinx.android.synthetic.main.top_navigation.view.*
 import org.joda.time.DateTime
 import android.widget.TextView
-import com.simplemobiletools.calendar.extensions.shareScreen
-import com.simplemobiletools.commons.activities.BaseSimpleActivity
-import kotlinx.android.synthetic.main.bottom_buttonbar.*
-import kotlinx.android.synthetic.main.bottom_sentense.*
-import kotlinx.android.synthetic.main.bottom_sentense.view.*
 
 
 class MonthFragment : Fragment(), MonthlyCalendar {
@@ -52,7 +45,7 @@ class MonthFragment : Fragment(), MonthlyCalendar {
         val view = inflater.inflate(R.layout.fragment_month, container, false)
         mRes = resources
         mPackageName = activity!!.packageName
-        mHolder = view.month_calendar_holder
+        mHolder = view.rl_monthcalendar_holder
         mDayCode = arguments!!.getString(DAY_CODE)
         mConfig = context!!.config
         mSundayFirst = mConfig.isSundayFirst
@@ -99,7 +92,7 @@ class MonthFragment : Fragment(), MonthlyCalendar {
 
         activity?.runOnUiThread {
             updateDays(days)
-            (activity as MainActivity).updateTopBottomBasedMonth(Formatter.getDateTimeFromCode(mDayCode),mHolder)
+            (activity as MainActivity).updateContentBasedMonth(Formatter.getDateTimeFromCode(mDayCode),mHolder)
 
         }
     }

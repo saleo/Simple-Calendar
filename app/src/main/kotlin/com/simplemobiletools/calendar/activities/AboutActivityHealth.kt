@@ -1,28 +1,20 @@
 package com.simplemobiletools.calendar.activities
 
 import android.app.ListActivity
-import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.view.Display
-import android.view.LayoutInflater
 import android.view.View
 import android.view.View.*
 import android.widget.*
-import com.simplemobiletools.calendar.helpers.SKCAL_AS_DEFAULT
-import kotlinx.android.synthetic.main.activity_about_credits.*
 import com.simplemobiletools.calendar.R
-import com.simplemobiletools.commons.helpers.APP_VERSION_NAME
+import com.simplemobiletools.calendar.extensions.setupBottomButtonBar
 import kotlinx.android.synthetic.main.bottom_contact_copyright.*
 import java.util.*
-import kotlin.collections.LinkedHashMap
 import com.simplemobiletools.calendar.helpers.HEALTH_TITLE
 import com.simplemobiletools.calendar.helpers.HEALTH_CONTENT
 import com.simplemobiletools.calendar.helpers.HEALTH_CONTENT2
 import kotlinx.android.synthetic.main.activity_about_health.*
 import kotlinx.android.synthetic.main.health_list_header.view.*
-import org.apache.commons.lang3.ObjectUtils
 
 
 class AboutActivityHealth: ListActivity(),RadioGroup.OnCheckedChangeListener {
@@ -44,6 +36,7 @@ class AboutActivityHealth: ListActivity(),RadioGroup.OnCheckedChangeListener {
         setupTabs()
         setupListview()
         setupCopyright()
+        setupBottomButtonBar(ll_health_holder)
 
     }
 

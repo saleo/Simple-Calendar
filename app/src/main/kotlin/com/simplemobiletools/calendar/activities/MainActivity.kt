@@ -17,6 +17,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.Toast
 import at.bitfire.ical4android.AndroidCalendar
@@ -56,6 +58,7 @@ import kotlinx.android.synthetic.main.bottom_buttonbar.*
 import kotlinx.android.synthetic.main.bottom_buttonbar.view.*
 import kotlinx.android.synthetic.main.bottom_sentense.*
 import kotlinx.android.synthetic.main.bottom_sentense.view.*
+import kotlinx.android.synthetic.main.fragment_qingxin.view.*
 import kotlinx.android.synthetic.main.top_navigation.*
 import kotlinx.android.synthetic.main.top_navigation.view.*
 import kotlin.system.exitProcess
@@ -168,7 +171,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             config.caldavSync = false
         }
         config.isSundayFirst = false
-        supportActionBar?.hide()
     }
 
     override fun onResume() {
@@ -361,7 +363,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
     }
 
-    public fun goToToday() {
+    fun goToToday() {
         currentFragments.last().goToToday()
     }
 
@@ -727,22 +729,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
     }
 
-    public fun launchSettings() {
-        startActivity(Intent(applicationContext, SettingsActivity::class.java))
-    }
-
-    public fun launchAbout() {
-        val faqItems = arrayListOf(
-                FAQItem(R.string.faq_1_title_commons, R.string.faq_1_text_commons),
-                FAQItem(R.string.faq_2_title_commons, R.string.faq_2_text_commons),
-                FAQItem(R.string.faq_4_title_commons, R.string.faq_4_text_commons),
-                FAQItem(getString(R.string.faq_1_title), getString(R.string.faq_1_text)),
-                FAQItem(getString(R.string.faq_2_title), getString(R.string.faq_2_text)))
-
-        startAboutActivity(R.string.app_name, LICENSE_SMT or LICENSE_KOTLIN or LICENSE_JODA or LICENSE_STETHO or LICENSE_MULTISELECT or LICENSE_LEAK_CANARY,
-                BuildConfig.VERSION_NAME, faqItems)
-    }
-
     private fun searchQueryChanged(text: String) {
         mLatestSearchQuery = text
         search_placeholder_2.beGoneIf(text.length >= 2)
@@ -940,7 +926,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    fun updateTopBottomBasedMonth(time: DateTime,mHolder: RelativeLayout)
+    fun updateContentBasedMonth(time: DateTime, mHolder: ViewGroup)
     {
 
 
@@ -953,22 +939,29 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         val intYear = time.year
         val mCurrentMonthDisplayed = time.monthOfYear
         val res = resources
-        val mBottomSentences= res.getStringArray(R.array.bottom_sentences_digest)
+        var mBottomSentences: Array<String>
 
         mHolder.apply {
-            bottom_sentense0.setTextSize(config.getFontSize()*1.01.toFloat())
-            bottom_sentense1.setTextSize(config.getFontSize()*1.01.toFloat())
-            bottom_sentense2.setTextSize(config.getFontSize()*1.01.toFloat())
 
-            bottom_sentense0.setOnClickListener {
-                openQingxinFromMonthly(time)
+            if (mHolder is RelativeLayout){
+                //from dayfragement,monthfragment
+                mBottomSentences=res.getStringArray(R.array.bottom_sentences_digest)
+                bottom_sentense0.setTextSize(config.getFontSize()*1.01.toFloat())
+                bottom_sentense1.setTextSize(config.getFontSize()*1.01.toFloat())
+                bottom_sentense2.setTextSize(config.getFontSize()*1.01.toFloat())
+
+                bottom_sentense0.setOnClickListener {
+                    openQingxinFromMonthly(time)
+                }
+                bottom_sentense1.setOnClickListener {
+                    openQingxinFromMonthly(time)
+                }
+                bottom_sentense2.setOnClickListener {
+                    openQingxinFromMonthly(time)
+                }
             }
-            bottom_sentense1.setOnClickListener {
-                openQingxinFromMonthly(time)
-            }
-            bottom_sentense2.setOnClickListener {
-                openQingxinFromMonthly(time)
-            }
+            else
+                mBottomSentences=res.getStringArray(R.array.bottom_sentences)
 
 
             if (intYear == 2016 || intYear==2018) {
@@ -986,9 +979,18 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                     11 -> top_month.setImageResource(R.drawable.sk2018_11)
                     12 -> top_month.setImageResource(R.drawable.sk2018_12)
                 }
-                bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
-                bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
-                bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
+                if (mHolder is LinearLayout){
+                    //from qingxin fragment
+                    txt_qingxin1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
+                    txt_qingxin2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
+                    txt_qingxin3.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
+                }else{
+                    //from dayfragement,monthfragment
+                    bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
+                    bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
+                    bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
+                }
+
             } else if (intYear == 2017 || intYear==2019) {
                 when (mCurrentMonthDisplayed) {
                     1 -> top_month.setImageResource(R.drawable.sk2019_1)
@@ -1004,52 +1006,35 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                     11 -> top_month.setImageResource(R.drawable.sk2019_11)
                     12 -> top_month.setImageResource(R.drawable.sk2019_12)
                 }
-                bottom_sentense0.text=mBottomSentences[36+3*(mCurrentMonthDisplayed-1)]
-                bottom_sentense1.text=mBottomSentences[36+3*(mCurrentMonthDisplayed-1)+1]
-                bottom_sentense2.text=mBottomSentences[36+3*(mCurrentMonthDisplayed-1)+2]
+                if (mHolder is LinearLayout){
+                    //from qingxin fragment
+                    txt_qingxin1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
+                    txt_qingxin2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
+                    txt_qingxin3.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
+                }else{
+                    //from dayfragement,monthfragment
+                    bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
+                    bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
+                    bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
+                }
             } else {
                 top_month.setImageResource(R.drawable.placeholder)
-                bottom_sentense0.text=mBottomSentences[0]
-                bottom_sentense1.text=mBottomSentences[1]
-                bottom_sentense2.text=mBottomSentences[2]
+                if (mHolder is LinearLayout){
+                    //from qingxin fragment
+                    txt_qingxin1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
+                    txt_qingxin2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
+                    txt_qingxin3.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
+                }else{
+                    //from dayfragement,monthfragment
+                    bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
+                    bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
+                    bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
+                }
             }
         }
 
         setupBottomButtonBar(mHolder)
     }
 
-    private fun  setupBottomButtonBar(mHolder: RelativeLayout){
-        mHolder.apply {
-            ib_bcc_info.setOnClickListener {
-                launchAbout()
-            }
-
-            ib_bcc_setting.setOnClickListener {
-                launchSettings()
-            }
-
-            ib_bcc_today.setOnClickListener {
-                goToToday()
-            }
-
-            ib_bcc_share.setOnClickListener {
-                shareScreen()
-            }
-
-            ib_bcc_recommend.setOnClickListener {
-                val appName=getString(R.string.app_name)
-                val text = String.format(getString(R.string.share_text), appName, getString(R.string.my_website))
-                Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_SUBJECT, appName)
-                    putExtra(Intent.EXTRA_TEXT, text)
-                    type = "text/plain"
-                    startActivity(Intent.createChooser(this, getString(R.string.invite_via)))
-                }
-
-            }
-        }
-
-    }
 
 }

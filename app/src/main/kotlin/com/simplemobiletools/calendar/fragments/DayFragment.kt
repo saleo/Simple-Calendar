@@ -8,15 +8,11 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.VISIBLE
-import android.view.View.inflate
 import android.view.ViewGroup
 import android.widget.DatePicker
-import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.simplemobiletools.calendar.R
-import com.simplemobiletools.calendar.R.string.days_raw
 import com.simplemobiletools.calendar.activities.EventActivity
 import com.simplemobiletools.calendar.activities.MainActivity
 import com.simplemobiletools.calendar.activities.SimpleActivity
@@ -30,9 +26,7 @@ import com.simplemobiletools.calendar.interfaces.NavigationListener
 import com.simplemobiletools.calendar.models.Event
 import com.simplemobiletools.commons.extensions.getDialogTheme
 import com.simplemobiletools.commons.extensions.setupDialogStuff
-import kotlinx.android.synthetic.main.bottom_sentense.*
 import kotlinx.android.synthetic.main.fragment_day.view.*
-import kotlinx.android.synthetic.main.top_navigation.view.*
 import org.joda.time.DateTime
 import java.util.*
 
@@ -49,7 +43,7 @@ class DayFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_day, container, false)
         mRes = resources
-        mHolder = view.day_holder
+        mHolder = view.rl_day_holder
 
         mDayCode = arguments!!.getString(DAY_CODE)
         setupButtons()
@@ -167,7 +161,7 @@ class DayFragment : Fragment() {
         val mCurrentDay = mDayCode.substring(6,8)
         var dayNumber:TextView
 
-        (activity as MainActivity).updateTopBottomBasedMonth(time,mHolder)
+        (activity as MainActivity).updateContentBasedMonth(time,mHolder)
         dayNumber=mHolder.findViewById(R.id.day_monthly_number)
         dayNumber.text=mCurrentDay+context!!.getString(R.string.days_raw)
         dayNumber.setTextColor(Color.WHITE)

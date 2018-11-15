@@ -1,24 +1,18 @@
 package com.simplemobiletools.calendar.activities
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.text.Html
-import android.text.method.LinkMovementMethod
 import com.simplemobiletools.calendar.R
-import com.simplemobiletools.commons.activities.BaseSimpleActivity
-import com.simplemobiletools.commons.activities.FAQActivity
+import com.simplemobiletools.calendar.extensions.setupBottomButtonBar
 import com.simplemobiletools.commons.activities.LicenseActivity
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.APP_LICENSES
 import com.simplemobiletools.commons.helpers.APP_NAME
-import com.simplemobiletools.commons.helpers.APP_VERSION_NAME
-import com.simplemobiletools.commons.models.FAQItem
 import kotlinx.android.synthetic.main.activity_about.*
 import kotlinx.android.synthetic.main.bottom_contact_copyright.*
 import java.util.*
 
-class AboutActivity : BaseSimpleActivity() {
+class AboutActivity : SimpleActivity() {
     private var appName = ""
     private var linkColor = 0
 
@@ -31,14 +25,14 @@ class AboutActivity : BaseSimpleActivity() {
 
     override fun onResume() {
         super.onResume()
-        updateTextColors(about_holder)
+        updateTextColors(rl_about_holder)
 
         setupIntro()
         setupCredit()
         setupHealth()
-        setupShare()
         setupLicense()
         setupCopyright()
+        setupBottomButtonBar(rl_about_holder)
     }
 
     private fun setupIntro(){
@@ -58,26 +52,13 @@ class AboutActivity : BaseSimpleActivity() {
     }
 
     private fun setupHealth() {
-        about_health_holder.setOnClickListener {
+        ll_health_holder.setOnClickListener {
             Intent(applicationContext,AboutActivityHealth::class.java).apply {
                 startActivity(this)
             }
         }
     }
 
-
-    private fun setupShare() {
-        about_share_holder.setOnClickListener {
-            val text = String.format(getString(R.string.share_text), appName, getStoreUrl())
-            Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_SUBJECT, appName)
-                putExtra(Intent.EXTRA_TEXT, text)
-                type = "text/plain"
-                startActivity(Intent.createChooser(this, getString(R.string.invite_via)))
-            }
-        }
-    }
 
     private fun setupLicense() {
         about_license_holder.setOnClickListener {

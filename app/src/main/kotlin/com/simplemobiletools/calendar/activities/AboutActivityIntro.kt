@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout
 import android.text.method.ScrollingMovementMethod
 import android.view.ViewGroup
 import com.simplemobiletools.calendar.R
+import com.simplemobiletools.calendar.extensions.setupBottomButtonBar
 import com.simplemobiletools.calendar.helpers.SKCAL_AS_DEFAULT
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.helpers.APP_VERSION_NAME
@@ -13,7 +14,7 @@ import kotlinx.android.synthetic.main.bottom_contact_copyright.*
 import java.util.*
 
 
-class AboutActivityIntro: BaseSimpleActivity() ,TabLayout.OnTabSelectedListener{
+class AboutActivityIntro: SimpleActivity() ,TabLayout.OnTabSelectedListener{
 
     private var skcal_as_default:Boolean=true
 
@@ -33,6 +34,7 @@ class AboutActivityIntro: BaseSimpleActivity() ,TabLayout.OnTabSelectedListener{
         }
         setupTabs()
         setupCopyright()
+        setupBottomButtonBar(ll_intro_holder)
         txt_about_intro.movementMethod=ScrollingMovementMethod()
     }
 

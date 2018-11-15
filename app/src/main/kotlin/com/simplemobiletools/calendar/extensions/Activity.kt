@@ -2,6 +2,12 @@ package com.simplemobiletools.calendar.extensions
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Point
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.RelativeLayout
 import com.simplemobiletools.calendar.BuildConfig
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.dialogs.CustomEventReminderDialog
@@ -13,11 +19,9 @@ import com.simplemobiletools.commons.models.RadioItem
 import java.io.File
 import java.util.TreeSet
 import kotlin.collections.ArrayList
-import android.graphics.Bitmap
-import android.graphics.Point
-import android.view.WindowManager
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.models.FileDirItem
+import kotlinx.android.synthetic.main.bottom_buttonbar.view.*
 
 
 fun BaseSimpleActivity.shareEvents(ids: List<Int>) {
@@ -102,7 +106,6 @@ fun Activity.showEventRepeatIntervalDialog(curSeconds: Int, callback: (minutes: 
         add(YEAR)
         add(curSeconds)
     }
-
     val items = ArrayList<RadioItem>(seconds.size + 1)
     seconds.mapIndexedTo(items, { index, value ->
         RadioItem(index, getRepetitionText(value), value)
@@ -128,19 +131,49 @@ fun Activity.showEventRepeatIntervalDialog(curSeconds: Int, callback: (minutes: 
 
 }
 
-/**
- * 获取当前屏幕截图，包含状态栏
- *
- * @param activity activity
- * @return Bitmap
- */
-fun Activity.captureWithStatusBar(context: Context): Bitmap {
-    val view = this.window.decorView
+fun Activity.setupBottomButtonBar(mHolder: ViewGroup) {
+    mHolder.apply {
+        ib_bcc_info.setOnClickListener {
+            context.launchAbout()
+        }
+
+        ib_bcc_setting.setOnClickListener {
+            context.launchSettings()
+        }
+
+        ib_bcc_today.setOnClickListener {
+            context.gotoToday()
+        }
+
+        ib_bcc_share.setOnClickListener {
+            shareScreen()
+        }
+
+        ib_bcc_recommend.setOnClickListener {
+            val appName = getString(R.string.app_name)
+            val text = String.format(getString(R.string.share_text), appName, getString(R.string.my_website))
+            Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_SUBJECT, appName)
+                putExtra(Intent.EXTRA_TEXT, text)
+                type = "text/plain"
+                startActivity(Intent.createChooser(this, getString(R.string.invite_via)))
+            }
+
+        }
+    }
+
+}
+
+
+fun Activity.captureWithStatusBar(): Bitmap {
+
+    val view = window.decorView
     view.isDrawingCacheEnabled = true
     view.buildDrawingCache()
     val bmp = view.drawingCache
-    val wm: WindowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-    val p = Point(0,0)
+    val wm: WindowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    val p = Point(0, 0)
     wm.defaultDisplay.getSize(p)
     val width = p.x
     val height = p.y
@@ -149,10 +182,11 @@ fun Activity.captureWithStatusBar(context: Context): Bitmap {
     return ret
 }
 
-fun BaseSimpleActivity.shareScreen(){
-    val saveFile=File(externalCacheDir,"share.png")
-    val saveFileItem= FileDirItem(saveFile.absolutePath,saveFile.name)
-    val bitmap:Bitmap=captureWithStatusBar(applicationContext)
+fun Activity.shareScreen(){
+
+    val saveFile= File(externalCacheDir, "share.png")
+    val saveFileItem= FileDirItem(saveFile.absolutePath, saveFile.name)
+    val bitmap: Bitmap =captureWithStatusBar()
 
     try {
         getFileOutputStream(saveFileItem,true){
@@ -164,17 +198,17 @@ fun BaseSimpleActivity.shareScreen(){
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, it);
             it.flush()
             it.close();
-            sharePathIntent(saveFile.path,BuildConfig.APPLICATION_ID)
+            sharePathIntent(saveFile.path, BuildConfig.APPLICATION_ID)
         }
 
-//            activity.startActivity(
-//                    Intent().apply {
-//                        action = Intent.ACTION_SEND
-//                        putExtra(Intent.EXTRA_STREAM,saveFileUri)
-//                        type = "*/*"
-//                        createChooser(this, activity.applicationContext.getString(R.string.invite_via))
-//                    }
-//           )
+        //            activity.startActivity(
+        //                    Intent().apply {
+        //                        action = Intent.ACTION_SEND
+        //                        putExtra(Intent.EXTRA_STREAM,saveFileUri)
+        //                        type = "*/*"
+        //                        createChooser(this, activity.applicationContext.getString(R.string.invite_via))
+        //                    }
+        //           )
     } catch (e: Exception) {
         showErrorToast(e)
     }

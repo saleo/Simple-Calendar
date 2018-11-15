@@ -35,6 +35,7 @@ import kotlinx.android.synthetic.main.dialog_title.view.*
 import java.io.*
 import java.util.*
 
+
 fun Activity.toast(id: Int, length: Int = Toast.LENGTH_SHORT) {
     if (isOnMainThread()) {
         showToast(this, id, length)
@@ -563,7 +564,16 @@ fun Activity.hideKeyboard(view: View) {
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
-fun BaseSimpleActivity.getFileOutputStream(fileDirItem: FileDirItem, allowCreatingNewFile: Boolean = false, callback: (outputStream: OutputStream?) -> Unit) {
+fun Activity.handleSAFDialog(path: String, callback: () -> Unit): Boolean {
+    return if (!path.startsWith(OTG_PATH) && isShowingSAFDialog(path, baseConfig.treeUri, OPEN_DOCUMENT_TREE)) {
+        BaseSimpleActivity.funAfterSAFPermission = callback
+        true
+    } else {
+        callback()
+        false
+    }
+}
+fun Activity.getFileOutputStream(fileDirItem: FileDirItem, allowCreatingNewFile: Boolean = false, callback: (outputStream: OutputStream?) -> Unit) {
     if (needsStupidWritePermissions(fileDirItem.path)) {
         handleSAFDialog(fileDirItem.path) {
             var document = getDocumentFile(fileDirItem.path)
