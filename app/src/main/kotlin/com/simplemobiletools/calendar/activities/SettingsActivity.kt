@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.TextUtils
 import com.simplemobiletools.calendar.BuildConfig
+import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.dialogs.CustomEventReminderDialog
 import com.simplemobiletools.calendar.dialogs.SelectCalendarsDialog
 import com.simplemobiletools.calendar.extensions.*
@@ -19,7 +20,6 @@ import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.PERMISSION_READ_CALENDAR
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CALENDAR
 import com.simplemobiletools.commons.models.RadioItem
-import com.simplemobiletools.calendar.R
 import kotlinx.android.synthetic.main.activity_settings.*
 import java.io.File
 import java.util.*

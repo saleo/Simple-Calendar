@@ -16,12 +16,10 @@
 
 package com.simplemobiletools.calendar
 
+import android.content.Context
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-
-import android.content.Context
+import java.util.*
 
 //import com.android.internal.R;
 
@@ -183,11 +181,7 @@ class Lunar(private val mCalendar: Calendar, private val mContext: Context) {
     }
 
     fun isBigMonth(lunarFestivalStr: String): Boolean {
-        return if (monthDays(year, month) == 30) {
-            true
-        } else {
-            false
-        }
+        return monthDays(year, month) == 30
     }
 
     companion object {

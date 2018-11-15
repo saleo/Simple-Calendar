@@ -7,7 +7,6 @@ import android.graphics.Bitmap
 import android.graphics.Point
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.RelativeLayout
 import com.simplemobiletools.calendar.BuildConfig
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.dialogs.CustomEventReminderDialog
@@ -15,13 +14,13 @@ import com.simplemobiletools.calendar.dialogs.CustomEventRepeatIntervalDialog
 import com.simplemobiletools.calendar.helpers.*
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.RadioGroupDialog
+import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.models.FileDirItem
 import com.simplemobiletools.commons.models.RadioItem
+import kotlinx.android.synthetic.main.bottom_buttonbar.view.*
 import java.io.File
 import java.util.TreeSet
 import kotlin.collections.ArrayList
-import com.simplemobiletools.commons.extensions.*
-import com.simplemobiletools.commons.models.FileDirItem
-import kotlinx.android.synthetic.main.bottom_buttonbar.view.*
 
 
 fun BaseSimpleActivity.shareEvents(ids: List<Int>) {
@@ -195,9 +194,9 @@ fun Activity.shareScreen(){
                 return@getFileOutputStream
             }
 
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, it);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
             it.flush()
-            it.close();
+            it.close()
             sharePathIntent(saveFile.path, BuildConfig.APPLICATION_ID)
         }
 

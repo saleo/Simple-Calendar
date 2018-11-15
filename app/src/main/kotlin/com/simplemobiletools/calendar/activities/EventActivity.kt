@@ -20,7 +20,6 @@ import com.simplemobiletools.calendar.models.Event
 import com.simplemobiletools.commons.dialogs.RadioGroupDialog
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.isLollipopPlus
-import com.simplemobiletools.calendar.helpers.Config
 import com.simplemobiletools.commons.models.RadioItem
 import kotlinx.android.synthetic.main.activity_event.*
 import org.joda.time.DateTime

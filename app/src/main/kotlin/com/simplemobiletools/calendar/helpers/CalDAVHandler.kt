@@ -6,10 +6,12 @@ import android.content.Context
 import android.database.Cursor
 import android.provider.CalendarContract
 import android.provider.CalendarContract.Reminders
-import android.util.Log
 import android.util.SparseIntArray
 import com.simplemobiletools.calendar.activities.SimpleActivity
-import com.simplemobiletools.calendar.extensions.*
+import com.simplemobiletools.calendar.extensions.config
+import com.simplemobiletools.calendar.extensions.dbHelper
+import com.simplemobiletools.calendar.extensions.processEventRemindersNotification
+import com.simplemobiletools.calendar.extensions.scheduleCalDAVSync
 import com.simplemobiletools.calendar.models.CalDAVCalendar
 import com.simplemobiletools.calendar.models.Event
 import com.simplemobiletools.calendar.models.EventType

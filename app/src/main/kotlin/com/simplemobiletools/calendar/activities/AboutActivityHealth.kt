@@ -4,17 +4,18 @@ import android.app.ListActivity
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
-import android.view.View.*
-import android.widget.*
+import android.view.View.inflate
+import android.widget.RadioGroup
+import android.widget.SimpleAdapter
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.extensions.setupBottomButtonBar
-import kotlinx.android.synthetic.main.bottom_contact_copyright.*
-import java.util.*
-import com.simplemobiletools.calendar.helpers.HEALTH_TITLE
 import com.simplemobiletools.calendar.helpers.HEALTH_CONTENT
 import com.simplemobiletools.calendar.helpers.HEALTH_CONTENT2
+import com.simplemobiletools.calendar.helpers.HEALTH_TITLE
 import kotlinx.android.synthetic.main.activity_about_health.*
+import kotlinx.android.synthetic.main.bottom_contact_copyright.*
 import kotlinx.android.synthetic.main.health_list_header.view.*
+import java.util.*
 
 
 class AboutActivityHealth: ListActivity(),RadioGroup.OnCheckedChangeListener {
@@ -65,20 +66,20 @@ class AboutActivityHealth: ListActivity(),RadioGroup.OnCheckedChangeListener {
             0 -> {
                 sa1 = resources.getStringArray(R.array.health1)
                 iLen = sa1.size / 3
-                mHeader?.header_health_title.text = resources.getString(R.string.str_health_headerviewtext1)
-                mHeader?.header_health_content?.text = resources.getString(R.string.str_health_headerviewtext1_1)
+                mHeader.header_health_title.text = resources.getString(R.string.str_health_headerviewtext1)
+                mHeader.header_health_content?.text = resources.getString(R.string.str_health_headerviewtext1_1)
             }
             1 -> {
                 sa1 = resources.getStringArray(R.array.health2)
                 iLen = sa1.size / 2
-                mHeader!!.header_health_title.text = resources.getString(R.string.str_health_headerviewtext2)
-                mHeader!!.header_health_content.text = resources.getString(R.string.str_health_headerviewtext2_1)
+                mHeader.header_health_title.text = resources.getString(R.string.str_health_headerviewtext2)
+                mHeader.header_health_content.text = resources.getString(R.string.str_health_headerviewtext2_1)
             }
             2 -> {
                 sa1 = resources.getStringArray(R.array.health3)
                 iLen = sa1.size / 2
-                mHeader!!.header_health_title.text = resources.getString(R.string.str_health_headerviewtext3)
-                mHeader!!.header_health_content.text == resources.getString(R.string.str_health_headerviewtext3_1)
+                mHeader.header_health_title.text = resources.getString(R.string.str_health_headerviewtext3)
+                mHeader.header_health_content.text == resources.getString(R.string.str_health_headerviewtext3_1)
             }
         }
         setBottomBorder(tabSelected)

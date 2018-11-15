@@ -30,24 +30,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_margin"
-            android:layout_toLeftOf="@+id/event_item_shareto"
-            android:layout_toRightOf="@+id/event_reminder_time"
+            android:layout_alignParentRight="true"
             android:ellipsize="end"
             android:maxLines="1"
             android:paddingRight="@dimen/activity_margin"
             android:textSize="@dimen/day_text_size"
             tools:text="Event title"/>
-
-        <ImageView
-            android:id="@+id/event_item_shareto"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignBottom="@+id/event_section_title"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/event_section_title"
-            android:paddingRight="@dimen/activity_margin"
-            android:src="@drawable/ic_share"/>
 
     </RelativeLayout>
 </FrameLayout>

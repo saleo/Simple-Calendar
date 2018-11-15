@@ -40,7 +40,7 @@ class DayEventsAdapter(activity: SimpleActivity, val events: ArrayList<Event>, r
     override fun getSelectableItemCount() = events.size
 
     override fun getItemViewType(position: Int): Int {
-        if (itemCount<=0) return -1;
+        if (itemCount<=0) return -1
         return super.getItemViewType(position)
     }
 
@@ -65,7 +65,6 @@ class DayEventsAdapter(activity: SimpleActivity, val events: ArrayList<Event>, r
         view.apply {
             event_section_title.text = event.title
             event_reminder_time.text = Formatter.getTimeFromTS(context,event.startTS-context.config.currentReminderMinutes*60)
-            event_item_shareto.applyColorFilter(textColor)
 
             event_reminder_time.setTextColor(textColor)
             event_section_title.setTextColor(event.color)

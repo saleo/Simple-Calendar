@@ -11,9 +11,9 @@ import com.simplemobiletools.calendar.extensions.getNowSeconds
 import com.simplemobiletools.calendar.extensions.seconds
 import com.simplemobiletools.calendar.helpers.Formatter
 import com.simplemobiletools.commons.extensions.getDialogTheme
-import com.simplemobiletools.commons.helpers.isLollipopPlus
 import com.simplemobiletools.commons.extensions.setupDialogStuff
 import com.simplemobiletools.commons.extensions.value
+import com.simplemobiletools.commons.helpers.isLollipopPlus
 import kotlinx.android.synthetic.main.dialog_repeat_limit_type_picker.view.*
 import org.joda.time.DateTime
 import java.util.*

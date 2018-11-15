@@ -26,6 +26,7 @@ import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.icsdroid.AppAccount
 import at.bitfire.icsdroid.AppAccount.account
 import at.bitfire.icsdroid.Constants
+import at.bitfire.icsdroid.db.LocalCalendar
 import com.simplemobiletools.calendar.BuildConfig
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.adapters.EventListAdapter
@@ -48,20 +49,14 @@ import com.simplemobiletools.commons.models.FAQItem
 import com.simplemobiletools.commons.models.RadioItem
 import com.simplemobiletools.commons.models.Release
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.bottom_sentense.view.*
+import kotlinx.android.synthetic.main.fragment_qingxin.view.*
+import kotlinx.android.synthetic.main.top_navigation.view.*
 import org.joda.time.DateTime
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import at.bitfire.icsdroid.db.LocalCalendar
-import kotlinx.android.synthetic.main.bottom_buttonbar.*
-import kotlinx.android.synthetic.main.bottom_buttonbar.view.*
-import kotlinx.android.synthetic.main.bottom_sentense.*
-import kotlinx.android.synthetic.main.bottom_sentense.view.*
-import kotlinx.android.synthetic.main.fragment_qingxin.view.*
-import kotlinx.android.synthetic.main.top_navigation.*
-import kotlinx.android.synthetic.main.top_navigation.view.*
-import kotlin.system.exitProcess
 
 const val MY_PERMISSIONS_REQUEST_READ_CALENDAR=1
 
@@ -946,9 +941,9 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             if (mHolder is RelativeLayout){
                 //from dayfragement,monthfragment
                 mBottomSentences=res.getStringArray(R.array.bottom_sentences_digest)
-                bottom_sentense0.setTextSize(config.getFontSize()*1.01.toFloat())
-                bottom_sentense1.setTextSize(config.getFontSize()*1.01.toFloat())
-                bottom_sentense2.setTextSize(config.getFontSize()*1.01.toFloat())
+                bottom_sentense0.textSize = config.getFontSize()*1.01.toFloat()
+                bottom_sentense1.textSize = config.getFontSize()*1.01.toFloat()
+                bottom_sentense2.textSize = config.getFontSize()*1.01.toFloat()
 
                 bottom_sentense0.setOnClickListener {
                     openQingxinFromMonthly(time)

@@ -5,7 +5,8 @@ import android.os.Bundle
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.extensions.setupBottomButtonBar
 import com.simplemobiletools.commons.activities.LicenseActivity
-import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.extensions.getAdjustedPrimaryColor
+import com.simplemobiletools.commons.extensions.updateTextColors
 import com.simplemobiletools.commons.helpers.APP_LICENSES
 import com.simplemobiletools.commons.helpers.APP_NAME
 import kotlinx.android.synthetic.main.activity_about.*

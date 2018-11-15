@@ -4,8 +4,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.PowerManager
-import com.simplemobiletools.calendar.extensions.*
-import com.simplemobiletools.calendar.helpers.*
+import com.simplemobiletools.calendar.extensions.postGroupedNotify
+import com.simplemobiletools.calendar.extensions.updateListWidget
+import com.simplemobiletools.calendar.helpers.NOTIFICATION_CONTENT
+import com.simplemobiletools.calendar.helpers.NOTIFICATION_ID
+import com.simplemobiletools.calendar.helpers.NOTIFICATION_TITLE
+import com.simplemobiletools.calendar.helpers.NOTIFICATION_TS
 
 class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {

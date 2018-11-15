@@ -8,22 +8,26 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.DatePicker
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.activities.MainActivity
 import com.simplemobiletools.calendar.extensions.addDayEvents
 import com.simplemobiletools.calendar.extensions.addDayNumber
 import com.simplemobiletools.calendar.extensions.config
 import com.simplemobiletools.calendar.helpers.*
-import com.simplemobiletools.calendar.helpers.Formatter
 import com.simplemobiletools.calendar.interfaces.MonthlyCalendar
 import com.simplemobiletools.calendar.interfaces.NavigationListener
 import com.simplemobiletools.calendar.models.DayMonthly
-import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.extensions.beGone
+import com.simplemobiletools.commons.extensions.beVisibleIf
+import com.simplemobiletools.commons.extensions.getDialogTheme
+import com.simplemobiletools.commons.extensions.setupDialogStuff
 import kotlinx.android.synthetic.main.first_row.*
 import kotlinx.android.synthetic.main.fragment_month.view.*
 import org.joda.time.DateTime
-import android.widget.TextView
 
 
 class MonthFragment : Fragment(), MonthlyCalendar {

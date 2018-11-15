@@ -11,7 +11,6 @@ import android.content.Intent
 import android.content.res.Resources
 import android.database.ContentObserver
 import android.graphics.Color
-import android.graphics.Point
 import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
@@ -20,11 +19,10 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.simplemobiletools.calendar.*
-import com.simplemobiletools.calendar.R.drawable.*
+import com.simplemobiletools.calendar.R.drawable.today_border
 import com.simplemobiletools.calendar.activities.*
 import com.simplemobiletools.calendar.helpers.*
 import com.simplemobiletools.calendar.helpers.Formatter
@@ -33,7 +31,10 @@ import com.simplemobiletools.calendar.receivers.CalDAVSyncReceiver
 import com.simplemobiletools.calendar.receivers.NotificationReceiver
 import com.simplemobiletools.calendar.services.PostponeService
 import com.simplemobiletools.calendar.services.SnoozeService
-import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.extensions.applyColorFilter
+import com.simplemobiletools.commons.extensions.getAdjustedPrimaryColor
+import com.simplemobiletools.commons.extensions.getFilePublicUri
+import com.simplemobiletools.commons.extensions.onGlobalLayout
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.models.FAQItem
 import org.joda.time.DateTime
@@ -399,7 +400,7 @@ fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: Linea
     (View.inflate(applicationContext, R.layout.day_monthly_number_view, null) as TextView).apply {
         text = day.value.toString()
         setTextColor(Color.BLACK)
-        setTextSize((context.config.getFontSize()) * 1.5.toFloat())
+        textSize = (context.config.getFontSize()) * 1.5.toFloat()
         gravity = Gravity.TOP or Gravity.LEFT
         layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         linearLayout.addView(this)
@@ -420,7 +421,7 @@ fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: Linea
 
     }
     //show chinese lunar when in zh-cn,or zh-tw,etc
-    val strCountry = resources.getConfiguration().locale.getCountry()
+    val strCountry = resources.configuration.locale.country
     if (strCountry == "CN" || strCountry == "TW") {
         val calendar = Calendar.getInstance()
         val datetime=Formatter.getDateTimeFromCode(day.code)

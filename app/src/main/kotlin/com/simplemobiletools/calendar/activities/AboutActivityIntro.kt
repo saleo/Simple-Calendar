@@ -3,12 +3,9 @@ package com.simplemobiletools.calendar.activities
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.text.method.ScrollingMovementMethod
-import android.view.ViewGroup
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.extensions.setupBottomButtonBar
 import com.simplemobiletools.calendar.helpers.SKCAL_AS_DEFAULT
-import com.simplemobiletools.commons.activities.BaseSimpleActivity
-import com.simplemobiletools.commons.helpers.APP_VERSION_NAME
 import kotlinx.android.synthetic.main.activity_about_intro.*
 import kotlinx.android.synthetic.main.bottom_contact_copyright.*
 import java.util.*
@@ -42,8 +39,8 @@ class AboutActivityIntro: SimpleActivity() ,TabLayout.OnTabSelectedListener{
     private fun setupTabs(){
         val tabLayout:TabLayout?=findViewById(R.id.intro_tabs)
         tabLayout!!.newTab().setText(R.string.title_intro_skcal)
-        tabLayout!!.newTab().setText(R.string.title_intro_sk)
-        tabLayout!!.newTab().setText(R.string.title_intro_xiangyu)
+        tabLayout.newTab().setText(R.string.title_intro_sk)
+        tabLayout.newTab().setText(R.string.title_intro_xiangyu)
 
         tabLayout.addOnTabSelectedListener(this)
     }

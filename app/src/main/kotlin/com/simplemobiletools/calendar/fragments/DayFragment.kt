@@ -133,6 +133,7 @@ class DayFragment : Fragment() {
 
         activity?.runOnUiThread {
             updateEvents(sorted)
+            (activity as MainActivity).updateContentBasedMonth(Formatter.getDateTimeFromCode(mDayCode),mHolder)
         }
     }
 

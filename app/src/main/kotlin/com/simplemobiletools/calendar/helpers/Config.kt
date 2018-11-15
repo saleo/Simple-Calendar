@@ -1,14 +1,11 @@
 package com.simplemobiletools.calendar.helpers
 
 import android.content.Context
-import android.graphics.Color
 import android.media.RingtoneManager
-import android.provider.CalendarContract
 import android.text.format.DateFormat
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.extensions.scheduleCalDAVSync
 import com.simplemobiletools.commons.helpers.BaseConfig
-import org.joda.time.DateTime
 import java.util.*
 
 class Config(context: Context) : BaseConfig(context) {

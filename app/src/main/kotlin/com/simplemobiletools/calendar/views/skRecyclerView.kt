@@ -20,7 +20,7 @@ open class skRecyclerView : MyRecyclerView{
     }
     private fun checkIfEmpty() {
         if (emptyView != null && adapter != null) {
-            (emptyView as View).setVisibility(if (adapter.itemCount == 0) View.VISIBLE else View.GONE)
+            (emptyView as View).visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
             visibility = if (adapter.itemCount == 0) View.GONE else View.VISIBLE
         }
     }

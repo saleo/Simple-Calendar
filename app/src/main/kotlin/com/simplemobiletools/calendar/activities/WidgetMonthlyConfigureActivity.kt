@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
@@ -22,10 +21,8 @@ import com.simplemobiletools.calendar.interfaces.MonthlyCalendar
 import com.simplemobiletools.calendar.models.DayMonthly
 import com.simplemobiletools.commons.dialogs.ColorPickerDialog
 import com.simplemobiletools.commons.extensions.adjustAlpha
-import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.beVisible
 import kotlinx.android.synthetic.main.first_row.*
-import kotlinx.android.synthetic.main.top_navigation.*
 import kotlinx.android.synthetic.main.widget_config_monthly.*
 import org.joda.time.DateTime
 
