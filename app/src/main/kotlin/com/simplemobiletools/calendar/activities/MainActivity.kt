@@ -69,7 +69,8 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
     private lateinit var layout: View
 
-    private var showCalDAVRefreshToast = false
+    private var showRefreshToastOnCalDataChange = true
+    private var showRefreshToastOnActivityResume = false
     private var mShouldFilterBeVisible = false
     private var mIsSearchOpen = false
     private var mLatestSearchQuery = ""
@@ -198,7 +199,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         calendar_fab.setColors(config.textColor, getAdjustedPrimaryColor(), config.backgroundColor)
         search_holder.background = ColorDrawable(config.backgroundColor)
 
-        refreshCalDAVCalendars(true)
+        refreshCalDAVCalendars(showRefreshToastOnActivityResume)
     }
 
     override fun onPause() {
@@ -381,7 +382,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     private fun refreshCalDAVCalendars(showRefreshToast: Boolean) {
-        showCalDAVRefreshToast = showRefreshToast
         if (showRefreshToast) {
             toast(R.string.refreshing)
         }
@@ -399,7 +399,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                 mCalDAVSyncHandler.postDelayed({
                     recheckCalDAVCalendars {
                         refreshViewPager()
-                        if (showCalDAVRefreshToast) {
+                        if (showRefreshToastOnCalDataChange) {
                             toast(R.string.refreshing_complete)
                         }
                     }
