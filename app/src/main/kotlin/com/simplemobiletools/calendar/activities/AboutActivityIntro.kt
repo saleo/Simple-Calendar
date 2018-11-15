@@ -29,7 +29,7 @@ class AboutActivityIntro: SimpleActivity() ,TabLayout.OnTabSelectedListener{
             intro_tabs.getTabAt(0)
         }
         else {
-            txt_about_intro.text = getString(R.string.str_intro_donate)
+            txt_about_intro.text = getString(R.string.str_intro_sk)
             intro_tabs.getTabAt(2)
         }
         setupTabs()
@@ -43,7 +43,6 @@ class AboutActivityIntro: SimpleActivity() ,TabLayout.OnTabSelectedListener{
         val tabLayout:TabLayout?=findViewById(R.id.intro_tabs)
         tabLayout!!.newTab().setText(R.string.title_intro_skcal)
         tabLayout!!.newTab().setText(R.string.title_intro_sk)
-        tabLayout!!.newTab().setText(R.string.title_intro_donate)
         tabLayout!!.newTab().setText(R.string.title_intro_xiangyu)
 
         tabLayout.addOnTabSelectedListener(this)
@@ -58,7 +57,6 @@ class AboutActivityIntro: SimpleActivity() ,TabLayout.OnTabSelectedListener{
         when (tab!!.text){
             getString(R.string.title_intro_skcal)-> txt_about_intro.text=getString(R.string.str_intro_skcal)
             getString(R.string.title_intro_sk)-> txt_about_intro.text=getString(R.string.str_intro_sk)
-            getString(R.string.title_intro_donate)-> txt_about_intro.text=getString(R.string.str_intro_donate)
             getString(R.string.title_intro_xiangyu)-> txt_about_intro.text=getString(R.string.str_intro_xiangyu)
         }
     }

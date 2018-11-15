@@ -22,8 +22,6 @@
             android:id="@+id/intro_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/about_topimage"
-            android:paddingVertical="2sp"
             android:textSize="@dimen/bigger_text_size"
             android:textStyle="bold">
 
@@ -38,12 +36,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/title_intro_sk" />
-
-            <android.support.design.widget.TabItem
-                android:id="@+id/tab_intro_donate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_intro_donate" />
 
             <android.support.design.widget.TabItem
                 android:id="@+id/tab_intro_xiangyu"

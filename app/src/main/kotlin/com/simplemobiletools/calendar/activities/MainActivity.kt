@@ -1018,7 +1018,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                     bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
                 }
             } else {
-                top_month.setImageResource(R.drawable.placeholder)
+                top_month.setImageResource(R.drawable.sk_banner)
                 if (mHolder is LinearLayout){
                     //from qingxin fragment
                     txt_qingxin1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
