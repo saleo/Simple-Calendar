@@ -55,6 +55,7 @@ dependencies {
     implementation 'com.android.support:design:27.1.0'
     implementation project(':icsdroid_lib')
     implementation project(':commons')
+    implementation project(':GregorianLunarCalendarView')
 }
 
 Properties props = new Properties()

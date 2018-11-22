@@ -199,7 +199,7 @@
     <string name="end_day_at">Окончание дня (неделя)</string>
     <string name="week_numbers">Отображать номера недель</string>
     <string name="vibrate">Вибрация при напоминании</string>
-    <string name="reminder_sound">Звук напоминания</string>
+    <string name="reminder_sound_label">Звук напоминания</string>
     <string name="no_ringtone_picker">Не найдено приложение для выбора рингтона</string>
     <string name="no_ringtone_selected">Нет</string>
     <string name="day_end_before_start">Конец дня не может быть раньше начала</string>

@@ -1,4 +1,4 @@
-include ':app', ':commons',':icsdroid_lib', ':cert4android', ':ical4android'
+include ':app', ':commons',':icsdroid_lib', ':cert4android', ':ical4android',':GregorianLunarCalendarView'
 project(':icsdroid_lib').projectDir = new File('icsdroid/icsdroid_lib')
 project(':cert4android').projectDir = new File('icsdroid/cert4android')
 project(':ical4android').projectDir = new File('icsdroid/ical4android')

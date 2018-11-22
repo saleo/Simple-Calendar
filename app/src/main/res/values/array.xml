@@ -464,5 +464,17 @@
         <item>犹豫不决，事情来回变，拿不定主意</item>
     </string-array>
 
+    <string-array name="whomfor">
+        <item>本人</item>
+        <item>配偶</item>
+        <item>父母</item>
+        <item>祖先</item>
+        <item>师长</item>
+    </string-array>
 
+    <string-array name="whatfor">
+        <item>生日</item>
+        <item>忌日</item>
+        <item>纪念日</item>
+    </string-array>
 </resources>

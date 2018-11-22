@@ -192,7 +192,7 @@
     <string name="end_day_at">Konec dne v</string>
     <string name="week_numbers">Zobrazovat číslo týdne</string>
     <string name="vibrate">Vibrovat</string>
-    <string name="reminder_sound">Tón oznámení</string>
+    <string name="reminder_sound_label">Tón oznámení</string>
     <string name="no_ringtone_picker">Nebyla nalezena žádná aplikace, která by mohla nastavit vyzvánění</string>
     <string name="no_ringtone_selected">žádný</string>
     <string name="day_end_before_start">Den nemůže skončit dřív, než začne</string>

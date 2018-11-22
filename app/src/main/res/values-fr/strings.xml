@@ -185,7 +185,7 @@
     <string name="end_day_at">Jour de fin de la vue hebdomadaire</string>
     <string name="week_numbers">Afficher les numéros de semaine</string>
     <string name="vibrate">Vibrer à la notification de rappel</string>
-    <string name="reminder_sound">Son de rappel</string>
+    <string name="reminder_sound_label">Son de rappel</string>
     <string name="no_ringtone_picker">Aucune application capable de configurer la sonnerie trouvée</string>
     <string name="no_ringtone_selected">Aucune</string>
     <string name="day_end_before_start">Le jour ne peut pas se terminer plus tôt qu\'il ne débute</string>

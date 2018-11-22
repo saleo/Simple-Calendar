@@ -185,7 +185,7 @@
     <string name="end_day_at">Dag beëindigen om</string>
     <string name="week_numbers">Weeknummers tonen</string>
     <string name="vibrate">Trillen bij notificaties</string>
-    <string name="reminder_sound">Geluid voor herinnering</string>
+    <string name="reminder_sound_label">Geluid voor herinnering</string>
     <string name="no_ringtone_picker">Geen app gevonden om geluid te kiezen</string>
     <string name="no_ringtone_selected">Geen</string>
     <string name="day_end_before_start">De begintijd valt na de eindtijd</string>

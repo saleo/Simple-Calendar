@@ -1,4 +1,6 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_settings_holder"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -12,7 +14,7 @@
         android:scaleType="fitXY"/>
 
     <ScrollView
-        android:id="@+id/settings_scrollview"
+        android:id="@+id/sv_settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/padding1">
@@ -23,43 +25,33 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <View
-                android:id="@+id/reminders_divider"
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:visibility="invisible"
-                android:background="@color/divider_grey"
-                android:importantForAccessibility="no"/>
-
-            <com.simplemobiletools.commons.views.MyTextView
-                android:id="@+id/settings_reminder_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/bigger_margin"
-                android:layout_marginStart="@dimen/bigger_margin"
-                android:layout_marginTop="@dimen/activity_margin"
-                android:text="@string/event_reminders"
-                android:textAllCaps="true"
-                android:textSize="@dimen/day_text_size"/>
-
             <RelativeLayout
-                android:id="@+id/settings_reminder_holder"
+                android:id="@+id/rl_settings_reminder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/medium_margin"
                 android:background="?attr/selectableItemBackground"
-                android:paddingBottom="@dimen/activity_margin"
-                android:paddingLeft="@dimen/normal_margin"
-                android:paddingRight="@dimen/normal_margin"
-                android:paddingTop="@dimen/activity_margin">
+                android:padding="@dimen/activity_margin">
+
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/tv_settings_reminder_caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/event_reminders"
+                    android:textSize="@dimen/month_text_size"
+                    android:drawableLeft="@color/divider_grey"
+                    android:drawableRight="@color/divider_grey"/>
 
                 <RelativeLayout
-                    android:id="@+id/settings_reminder_switch_holder"
+                    android:id="@+id/rl_settings_reminder_switch_holder"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/rl_settings_reminder_switch_holder"
+                    android:layout_below="@id/tv_settings_reminder_caption"
+                    android:paddingTop="@dimen/activity_margin">
 
                     <com.simplemobiletools.commons.views.MySwitchCompat
-                        android:id="@+id/settings_reminder_switch"
+                        android:id="@+id/sc_settings_reminder_switch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
@@ -74,37 +66,37 @@
 
 
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:id="@+id/settings_reminder_time_label"
+                    android:id="@+id/tv_settings_builtin_events_reminder_time_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/settings_reminder_switch_holder"
-                    android:layout_alignLeft="@id/settings_reminder_switch_holder"
+                    android:layout_below="@+id/rl_settings_reminder_switch_holder"
+                    android:layout_alignLeft="@id/rl_settings_reminder_switch_holder"
                     android:background="?attr/selectableItemBackground"
                     android:padding="@dimen/medium_margin"
                     android:textSize="@dimen/day_text_size"
-                    android:text="@string/reminder_time_label"/>
+                    android:text="@string/builtin_event_reminder_label"/>
 
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:id="@+id/settings_reminder_unified_minute"
+                    android:id="@+id/tv_settings_builtin_events_reminder_unified_minute"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/settings_reminder_switch_holder"
-                    android:layout_alignRight="@id/settings_reminder_switch_holder"
+                    android:layout_below="@+id/rl_settings_reminder_switch_holder"
+                    android:layout_alignRight="@id/rl_settings_reminder_switch_holder"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:background="?attr/selectableItemBackground"
                     android:padding="@dimen/medium_margin"
                     android:textSize="@dimen/day_text_size"
-                    android:text="@string/reminder_time_label"/>
+                    android:text="@string/builtin_event_reminder"/>
 
                 <RelativeLayout
-                    android:id="@+id/settings_reminder_vibrate_holder"
+                    android:id="@+id/rl_settings_reminder_vibrate_holder"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/settings_reminder_unified_minute">
+                    android:layout_below="@id/tv_settings_builtin_events_reminder_time_label">
 
                     <com.simplemobiletools.commons.views.MySwitchCompat
-                        android:id="@+id/settings_reminder_vibrate"
+                        android:id="@+id/sc_settings_reminder_vibrate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
@@ -116,34 +108,32 @@
                 </RelativeLayout>
 
                 <com.simplemobiletools.commons.views.MyTextView
-                    android:id="@+id/settings_reminder_sound_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/settings_reminder_vibrate_holder"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/settings_reminder_sound"
-                    android:layout_toStartOf="@+id/settings_reminder_sound"
-                    android:padding="@dimen/medium_margin"
-                    android:textSize="@dimen/day_text_size"
-                    android:text="@string/reminder_sound"/>
-
-                <com.simplemobiletools.commons.views.MyTextView
-                    android:id="@+id/settings_reminder_sound"
+                    android:id="@+id/tv_settings_reminder_sound_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/settings_reminder_vibrate_holder"
-                    android:layout_alignParentEnd="true"
+                    android:layout_below="@id/rl_settings_reminder_vibrate_holder"
+                    android:layout_alignLeft="@id/rl_settings_reminder_vibrate_holder"
+                    android:padding="@dimen/medium_margin"
+                    android:textSize="@dimen/day_text_size"
+                    android:text="@string/reminder_sound_label"/>
+
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/tv_settings_reminder_sound"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/rl_settings_reminder_vibrate_holder"
                     android:layout_alignParentRight="true"
                     android:padding="@dimen/medium_margin"
                     android:textSize="@dimen/day_text_size"
                     android:background="@null"
-                    android:clickable="false" />
+                    android:clickable="false"
+                    android:text="@string/reminder_sound"/>
 
                 <RelativeLayout
                     android:id="@+id/settings_use_same_snooze_holder"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/settings_reminder_sound"
+                    android:layout_height="0dp"
+                    android:layout_below="@id/tv_settings_reminder_sound"
                     android:visibility="invisible">
 
                     <com.simplemobiletools.commons.views.MySwitchCompat
@@ -160,7 +150,7 @@
                 <com.simplemobiletools.commons.views.MyTextView
                     android:id="@+id/settings_snooze_delay_label"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:visibility="invisible"
                     android:layout_below="@id/settings_use_same_snooze_holder"
                     android:layout_centerVertical="true"
@@ -172,7 +162,7 @@
                 <com.simplemobiletools.commons.views.MyTextView
                     android:id="@+id/settings_snooze_delay"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:visibility="invisible"
                     android:layout_below="@id/settings_use_same_snooze_holder"
                     android:layout_alignParentEnd="true"
@@ -183,6 +173,116 @@
 
             </RelativeLayout>
 
+
+            <RelativeLayout
+                android:id="@+id/rl_customize_event_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:padding="@dimen/activity_margin">
+
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/tv_settings_customize_event_caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="@string/customize_event_caption"
+                    android:textSize="@dimen/month_text_size"
+                    android:drawableLeft="@color/divider_grey"
+                    android:drawableRight="@color/divider_grey"/>
+
+                <LinearLayout android:id="@+id/ll_customize_event_line1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_settings_customize_event_caption"
+                    android:paddingTop="@dimen/activity_margin">
+
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/tv_settings_customize_event_whomfor_label"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:textSize="@dimen/day_text_size"
+                        android:text="@string/customize_event_whomfor_label"/>
+
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/tv_settings_customize_event_whatfor_label"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:textSize="@dimen/day_text_size"
+                        android:text="@string/customize_event_whatfor_label"/>
+
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/tv_settings_customize_event_when_label"
+                        android:layout_width="0dp"
+                        android:layout_weight="3"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:textSize="@dimen/day_text_size"
+                        android:text="@string/customize_event_when_label"/>
+
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/tv_settings_customize_event_placeholder"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:textSize="@dimen/day_text_size"/>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/ll_customize_event_line2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ll_customize_event_line1"
+                    android:paddingTop="@dimen/activity_margin">
+
+                    <com.simplemobiletools.commons.views.MyAppCompatSpinner
+                        android:id="@+id/acs_customize_event_whomfor"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2">
+
+
+                    </com.simplemobiletools.commons.views.MyAppCompatSpinner>
+
+                    <com.simplemobiletools.commons.views.MyAppCompatSpinner
+                        android:id="@+id/acs_customize_event_whatfor"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2">
+
+
+                    </com.simplemobiletools.commons.views.MyAppCompatSpinner>
+
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/tv_settings_customize_event_when"
+                        android:layout_width="0dp"
+                        android:layout_weight="3"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:textSize="@dimen/day_text_size"
+                        android:text="@string/customize_event_when"/>
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/btn_customize_event_add"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_plus1"/>
+
+                </LinearLayout>
+
+                <ListView android:id="@+id/lv_customize_event"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ll_customize_event_line2"
+                    android:paddingTop="@dimen/activity_margin"/>
+
+            </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/settings_customize_colors_holder"
                 android:layout_width="match_parent"

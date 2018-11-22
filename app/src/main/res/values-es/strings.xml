@@ -185,7 +185,7 @@
     <string name="end_day_at">El día en la vista semanal finaliza a las</string>
     <string name="week_numbers">Mostrar los números de la semana</string>
     <string name="vibrate">Vibración en notificación de recordatorio</string>
-    <string name="reminder_sound">Sonido de recordatorio</string>
+    <string name="reminder_sound_label">Sonido de recordatorio</string>
     <string name="no_ringtone_picker">No se ha encontrado ninguna aplicación capaz de establecer el tono de llamada</string>
     <string name="no_ringtone_selected">Ninguno</string>
     <string name="day_end_before_start">El día no puede terminar antes de que comience</string>

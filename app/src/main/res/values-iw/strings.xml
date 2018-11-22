@@ -186,7 +186,7 @@
     <string name="end_day_at">התחלת תצפית שבועית בשעה</string>
     <string name="week_numbers">הצגת מספרי השבועות בתצפית חודשית</string>
     <string name="vibrate">רטט בהתראת תזכורת</string>
-    <string name="reminder_sound">צליל תזכורת</string>
+    <string name="reminder_sound_label">צליל תזכורת</string>
     <string name="no_ringtone_picker">לא נמצאה אפליקציה להגדרת רינגטון</string>
     <string name="no_ringtone_selected">ללא</string>
     <string name="day_end_before_start">היום לא יכול להסתיים מוקדם משהוא מתחיל</string>

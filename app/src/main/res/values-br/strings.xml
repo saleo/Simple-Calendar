@@ -185,7 +185,7 @@
     <string name="end_day_at">Echuiñ an devezh da</string>
     <string name="week_numbers">Diskouez niverennoù ar sizhun</string>
     <string name="vibrate">Froumal evit ar rebuzadurioù adc\'halv</string>
-    <string name="reminder_sound">Soniri adc\'halv</string>
+    <string name="reminder_sound_label">Soniri adc\'halv</string>
     <string name="no_ringtone_picker">N\'eus bet kavet arload ebet gouest da arventennañ ur soniri</string>
     <string name="no_ringtone_selected">Hini ebet</string>
     <string name="day_end_before_start">An devezh n\'hall ket echuiñ abretoc\'h eget ma krog</string>

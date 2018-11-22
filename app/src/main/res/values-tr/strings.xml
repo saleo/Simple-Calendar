@@ -185,7 +185,7 @@
     <string name="end_day_at">Haftalık görüntüleme gününü bitiştir</string>
     <string name="week_numbers">Aylık görünümde hafta sayılarını göster</string>
     <string name="vibrate">Hatırlatma bildiriminde titreşim</string>
-    <string name="reminder_sound">Hatırlatma sesi</string>
+    <string name="reminder_sound_label">Hatırlatma sesi</string>
     <string name="no_ringtone_picker">Zil sesi ayarlayabilen hiçbir uygulama bulunamadı</string>
     <string name="no_ringtone_selected">Boş</string>
     <string name="day_end_before_start">Gün başlamadan önce bitemez</string>

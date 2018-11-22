@@ -192,7 +192,7 @@
     <string name="end_day_at">Ukončiť deň o</string>
     <string name="week_numbers">Zobraziť čísla týždňov</string>
     <string name="vibrate">Vibrovať pri pripomienke</string>
-    <string name="reminder_sound">Zvučka pripomienky</string>
+    <string name="reminder_sound_label">Zvučka pripomienky</string>
     <string name="no_ringtone_picker">Nenašla sa žiadna aplikácia na zmenu zvučky</string>
     <string name="no_ringtone_selected">Žiadna</string>
     <string name="day_end_before_start">Deň nemôže skončiť skôr než začne</string>
