@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+    <com.simplemobiletools.commons.views.MyTextView
+        android:id="@+id/tv_customize_item_whomfor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="gan"
+        android:layout_weight="2"
+        android:layout_gravity="left|center_vertical"
+        android:gravity="center"/>
+
+    <ImageView
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/divider"
+        android:paddingTop="@dimen/activity_margin"/>
+
+    <com.simplemobiletools.commons.views.MyTextView
+        android:id="@+id/tv_customize_item_whatfor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="8"
+        android:text="gan structure"/>
+
+    <ImageView
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/divider"
+        android:paddingTop="@dimen/activity_margin"/>
+
+    <com.simplemobiletools.commons.views.MyTextView
+        android:id="@+id/tv_customize_item_when"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="8"
+        android:text="gan structure"/>
+</LinearLayout>
