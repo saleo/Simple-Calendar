@@ -5,8 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Point
+import android.opengl.Visibility
+import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.RelativeLayout
 import com.simplemobiletools.calendar.BuildConfig
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.dialogs.CustomEventReminderDialog
@@ -17,7 +20,12 @@ import com.simplemobiletools.commons.dialogs.RadioGroupDialog
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.models.FileDirItem
 import com.simplemobiletools.commons.models.RadioItem
+import kotlinx.android.synthetic.main.bottom_buttonbar.*
 import kotlinx.android.synthetic.main.bottom_buttonbar.view.*
+import kotlinx.android.synthetic.main.fragment_day.*
+import kotlinx.android.synthetic.main.fragment_day.view.*
+import kotlinx.android.synthetic.main.fragment_month.*
+import kotlinx.android.synthetic.main.fragment_month.view.*
 import java.io.File
 import java.util.TreeSet
 import kotlin.collections.ArrayList
@@ -160,6 +168,11 @@ fun Activity.setupBottomButtonBar(mHolder: ViewGroup) {
             }
 
         }
+    }
+
+    if (mHolder as RelativeLayout == rl_day_holder || mHolder == rl_monthcalendar_holder){
+        ib_bcc_plus.visibility= View.VISIBLE
+        ib_bcc_plus.setOnClickListener { launchNewEventIntent() }
     }
 
 }

@@ -140,6 +140,8 @@ const val SOURCE_IMPORTED_ICS = "imported-ics"
 const val SOURCE_CONTACT_BIRTHDAY = "contact-birthday"
 const val SOURCE_CONTACT_ANNIVERSARY = "contact-anniversary"
 
+const val SOURCE_CUSTOMIZE_ANNIVERSARY = "customize-anniversary"
+
 const val REMINDER_SWITCH ="reminder_switch"
 const val REMINDER_INITIAL_MINUTES=240 //4 hours before REMINDER_UNIFIED_TIME_VALUE
 const val SKCAL_AS_DEFAULT="skcal_as_default"
@@ -155,3 +157,13 @@ const val NOTIFICATION_TS="notification_ts"
 const val APP_TAG="SKCAL"
 const val POSTPONE_TS=5*60*1000
 const val TODAY_CODE = "today_code"
+
+const val ANCESTOR =1
+const val PARENTS= 2
+const val RESPECTER= 3
+const val SPOUSE= 4
+const val YOURSELF= 5
+
+const val BIRTH_DAY= 1
+const val FORBIDDEN_DAY= 2
+const val ANNIVERSARY_DAY= 3

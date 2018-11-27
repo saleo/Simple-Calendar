@@ -65,7 +65,7 @@ class EventActivity : SimpleActivity() {
             mEventOccurrenceTS = intent.getIntExtra(EVENT_OCCURRENCE_TS, 0)
             setupEditEvent()
         } else {
-            mEvent = Event()
+            mEvent = Event(lunar = "")
             mReminder1Minutes = config.defaultReminderMinutes
             mReminder2Minutes = config.defaultReminderMinutes3
             mReminder3Minutes = config.defaultReminderMinutes2

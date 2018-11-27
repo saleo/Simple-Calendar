@@ -100,6 +100,10 @@ class Config(context: Context) : BaseConfig(context) {
         get() = prefs.getInt(CURRENT_REMINDER_MINUTES, 10)
         set(currentReminderMinutes) = prefs.edit().putInt(CURRENT_REMINDER_MINUTES, currentReminderMinutes).apply()
 
+    var unifiedReminderTs:Int
+        get()= prefs.getInt(REMINDER_UNIFIED_TIME,72000)//20:00 per day
+        set(unifiedReminderTs) = prefs.edit().putInt(REMINDER_UNIFIED_TIME,unifiedReminderTs).apply()
+
     fun getSyncedCalendarIdsAsList() = caldavSyncedCalendarIDs.split(",").filter { it.trim().isNotEmpty() } as ArrayList<String>
 
     fun addDisplayEventType(type: String) {

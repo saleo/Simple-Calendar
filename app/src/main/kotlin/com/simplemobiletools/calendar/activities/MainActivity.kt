@@ -18,8 +18,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.Toast
 import at.bitfire.ical4android.AndroidCalendar
 import at.bitfire.ical4android.CalendarStorageException
@@ -50,6 +48,8 @@ import com.simplemobiletools.commons.models.RadioItem
 import com.simplemobiletools.commons.models.Release
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sentense.view.*
+import kotlinx.android.synthetic.main.fragment_day.view.*
+import kotlinx.android.synthetic.main.fragment_month.view.*
 import kotlinx.android.synthetic.main.fragment_qingxin.view.*
 import kotlinx.android.synthetic.main.top_navigation.view.*
 import org.joda.time.DateTime
@@ -512,8 +512,8 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                             val timestamp = (date.time / 1000).toInt()
                             val source = if (birthdays) SOURCE_CONTACT_BIRTHDAY else SOURCE_CONTACT_ANNIVERSARY
                             val lastUpdated = cursor.getLongValue(ContactsContract.CommonDataKinds.Event.CONTACT_LAST_UPDATED_TIMESTAMP)
-                            val event = Event(0, timestamp, timestamp, name, importId = contactId, flags = FLAG_ALL_DAY, repeatInterval = YEAR,
-                                    eventType = eventTypeId, source = source, lastUpdated = lastUpdated)
+                            val event = Event(0, timestamp, timestamp, name, repeatInterval = YEAR, importId = contactId, flags = FLAG_ALL_DAY,
+                                    eventType = eventTypeId, lastUpdated = lastUpdated, source = source, lunar = "")
 
                             if (!importIDs.contains(contactId)) {
                                 dbHelper.insert(event, false) {
@@ -938,7 +938,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
         mHolder.apply {
 
-            if (mHolder is RelativeLayout){
+            if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder){
                 //from dayfragement,monthfragment
                 mBottomSentences=res.getStringArray(R.array.bottom_sentences_digest)
                 bottom_sentense0.textSize = config.getFontSize()*1.01.toFloat()
@@ -961,69 +961,69 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
             if (intYear == 2016 || intYear==2018) {
                 when (mCurrentMonthDisplayed) {
-                    1 -> top_month.setImageResource(R.drawable.sk2018_1)
-                    2 -> top_month.setImageResource(R.drawable.sk2018_2)
-                    3 -> top_month.setImageResource(R.drawable.sk2018_3)
-                    4 -> top_month.setImageResource(R.drawable.sk2018_4)
-                    5 -> top_month.setImageResource(R.drawable.sk2018_5)
-                    6 -> top_month.setImageResource(R.drawable.sk2018_6)
-                    7 -> top_month.setImageResource(R.drawable.sk2018_7)
-                    8 -> top_month.setImageResource(R.drawable.sk2018_8)
-                    9 -> top_month.setImageResource(R.drawable.sk2018_9)
-                    10 -> top_month.setImageResource(R.drawable.sk2018_10)
-                    11 -> top_month.setImageResource(R.drawable.sk2018_11)
-                    12 -> top_month.setImageResource(R.drawable.sk2018_12)
+                    1 -> top_month.setImageResource(R.drawable.sk20181)
+                    2 -> top_month.setImageResource(R.drawable.sk20182)
+                    3 -> top_month.setImageResource(R.drawable.sk20183)
+                    4 -> top_month.setImageResource(R.drawable.sk20184)
+                    5 -> top_month.setImageResource(R.drawable.sk20185)
+                    6 -> top_month.setImageResource(R.drawable.sk20186)
+                    7 -> top_month.setImageResource(R.drawable.sk20187)
+                    8 -> top_month.setImageResource(R.drawable.sk20188)
+                    9 -> top_month.setImageResource(R.drawable.sk20189)
+                    10 -> top_month.setImageResource(R.drawable.sk201810)
+                    11 -> top_month.setImageResource(R.drawable.sk201811)
+                    12 -> top_month.setImageResource(R.drawable.sk201812)
                 }
-                if (mHolder is LinearLayout){
-                    //from qingxin fragment
-                    txt_qingxin1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
-                    txt_qingxin2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
-                    txt_qingxin3.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
-                }else{
+                if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder){
                     //from dayfragement,monthfragment
                     bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
                     bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
                     bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
+                }else{
+                    //from qingxin fragment
+                    txt_qingxin1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
+                    txt_qingxin2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
+                    txt_qingxin3.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
                 }
 
             } else if (intYear == 2017 || intYear==2019) {
                 when (mCurrentMonthDisplayed) {
-                    1 -> top_month.setImageResource(R.drawable.sk2019_1)
-                    2 -> top_month.setImageResource(R.drawable.sk2019_2)
-                    3 -> top_month.setImageResource(R.drawable.sk2019_3)
-                    4 -> top_month.setImageResource(R.drawable.sk2019_4)
-                    5 -> top_month.setImageResource(R.drawable.sk2019_5)
-                    6 -> top_month.setImageResource(R.drawable.sk2019_6)
-                    7 -> top_month.setImageResource(R.drawable.sk2019_7)
-                    8 -> top_month.setImageResource(R.drawable.sk2019_8)
-                    9 -> top_month.setImageResource(R.drawable.sk2019_9)
-                    10 -> top_month.setImageResource(R.drawable.sk2019_10)
-                    11 -> top_month.setImageResource(R.drawable.sk2019_11)
-                    12 -> top_month.setImageResource(R.drawable.sk2019_12)
+                    1 -> top_month.setImageResource(R.drawable.sk20191)
+                    2 -> top_month.setImageResource(R.drawable.sk20192)
+                    3 -> top_month.setImageResource(R.drawable.sk20193)
+                    4 -> top_month.setImageResource(R.drawable.sk20194)
+                    5 -> top_month.setImageResource(R.drawable.sk20195)
+                    6 -> top_month.setImageResource(R.drawable.sk20196)
+                    7 -> top_month.setImageResource(R.drawable.sk20197)
+                    8 -> top_month.setImageResource(R.drawable.sk20198)
+                    9 -> top_month.setImageResource(R.drawable.sk20199)
+                    10 -> top_month.setImageResource(R.drawable.sk201910)
+                    11 -> top_month.setImageResource(R.drawable.sk201911)
+                    12 -> top_month.setImageResource(R.drawable.sk201912)
                 }
-                if (mHolder is LinearLayout){
-                    //from qingxin fragment
-                    txt_qingxin1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
-                    txt_qingxin2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
-                    txt_qingxin3.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
-                }else{
+                if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder){
                     //from dayfragement,monthfragment
-                    bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
-                    bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
-                    bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
+                    bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+36]
+                    bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+37]
+                    bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+38]
+                }else{
+                    //from qingxin fragment
+                    txt_qingxin1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+36]
+                    txt_qingxin2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+37]
+                    txt_qingxin3.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+38]
                 }
             } else {
                 top_month.setImageResource(R.drawable.sk_banner)
-                if (mHolder is LinearLayout){
-                    //from qingxin fragment
-                    txt_qingxin1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
-                    txt_qingxin2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
-                    txt_qingxin3.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
-                }else{
+                if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder){
                     //from dayfragement,monthfragment
                     bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
                     bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
                     bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
+                }else{
+                    //from qingxin fragment
+                    txt_qingxin1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
+                    txt_qingxin2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
+                    txt_qingxin3.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
                 }
             }
         }

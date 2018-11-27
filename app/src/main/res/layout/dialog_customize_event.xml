@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_dialog_customize_event_holder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:padding="@dimen/activity_margin"
+    android:orientation="vertical">
+
+    <com.simplemobiletools.commons.views.MyTextView
+        android:id="@+id/tv_dialog_customize_event_caption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/customize_event_caption"
+        android:textSize="@dimen/month_text_size"
+        android:drawableLeft="@color/divider_grey"
+        android:drawableRight="@color/divider_grey"/>
+
+    <LinearLayout android:id="@+id/ll_dialog_customize_event_line1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/activity_margin">
+
+        <com.simplemobiletools.commons.views.MyTextView
+            android:id="@+id/tv_dialog_customize_event_whomfor_label"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:textSize="@dimen/day_text_size"
+            android:text="@string/customize_event_whomfor_label"/>
+
+        <com.simplemobiletools.commons.views.MyAppCompatSpinner
+            android:id="@+id/acs_dialog_customize_event_whomfor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2">
+        </com.simplemobiletools.commons.views.MyAppCompatSpinner>
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/ll_dialog_customize_event_line2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/activity_margin">
+
+        <com.simplemobiletools.commons.views.MyTextView
+            android:id="@+id/tv_dialog_customize_event_whatfor_label"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:textSize="@dimen/day_text_size"
+            android:text="@string/customize_event_whatfor_label"/>
+
+        <com.simplemobiletools.commons.views.MyAppCompatSpinner
+            android:id="@+id/acs_dialog_customize_event_whatfor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2">
+        </com.simplemobiletools.commons.views.MyAppCompatSpinner>
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/ll_dialog_customize_event_line3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/activity_margin">
+
+        <com.simplemobiletools.commons.views.MyTextView
+            android:id="@+id/tv_dialog_customize_event_when_label"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:textSize="@dimen/day_text_size"
+            android:text="@string/customize_event_when_label"/>
+
+        <com.simplemobiletools.commons.views.MyTextView
+            android:id="@+id/tv_dialog_customize_event_when"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:textSize="@dimen/day_text_size"
+            android:text="@string/customize_event_when"/>
+
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/ll_dialog_customize_event_line4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/activity_margin">
+
+        <com.simplemobiletools.commons.views.MyTextView
+            android:id="@+id/tv_dialog_customize_event_placeholder"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:textSize="@dimen/day_text_size"/>
+
+        <com.simplemobiletools.commons.views.MyTextView
+            android:id="@+id/tv_dialog_customize_event_when_gregorian"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:textSize="@dimen/day_text_size"
+            android:text="@string/customize_event_when"
+            android:visibility="invisible"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>
+

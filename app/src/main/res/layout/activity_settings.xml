@@ -174,12 +174,13 @@
             </RelativeLayout>
 
 
-            <RelativeLayout
-                android:id="@+id/rl_customize_event_holder"
+            <LinearLayout
+                android:id="@+id/ll_customize_event_holder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:padding="@dimen/activity_margin">
+                android:padding="@dimen/activity_margin"
+                android:orientation="vertical">
 
                 <com.simplemobiletools.commons.views.MyTextView
                     android:id="@+id/tv_settings_customize_event_caption"
@@ -191,80 +192,96 @@
                     android:drawableLeft="@color/divider_grey"
                     android:drawableRight="@color/divider_grey"/>
 
-                <LinearLayout android:id="@+id/ll_customize_event_line1"
+                <LinearLayout android:id="@+id/ll_customize_event_line"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_settings_customize_event_caption"
                     android:paddingTop="@dimen/activity_margin">
 
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/tv_settings_customize_event_whomfor_label"
-                        android:layout_width="0dp"
-                        android:layout_weight="2"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:textSize="@dimen/day_text_size"
-                        android:text="@string/customize_event_whomfor_label"/>
-
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/tv_settings_customize_event_whatfor_label"
-                        android:layout_width="0dp"
-                        android:layout_weight="2"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:textSize="@dimen/day_text_size"
-                        android:text="@string/customize_event_whatfor_label"/>
-
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/tv_settings_customize_event_when_label"
-                        android:layout_width="0dp"
-                        android:layout_weight="3"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:textSize="@dimen/day_text_size"
-                        android:text="@string/customize_event_when_label"/>
-
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/tv_settings_customize_event_placeholder"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:textSize="@dimen/day_text_size"/>
-                </LinearLayout>
-
-                <LinearLayout android:id="@+id/ll_customize_event_line2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/ll_customize_event_line1"
-                    android:paddingTop="@dimen/activity_margin">
-
-                    <com.simplemobiletools.commons.views.MyAppCompatSpinner
-                        android:id="@+id/acs_customize_event_whomfor"
+                    <RelativeLayout android:id="@+id/rl_whomfor_holder"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2">
 
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:id="@+id/tv_settings_customize_event_whomfor_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:textSize="@dimen/day_text_size"
+                            android:text="@string/customize_event_whomfor_label"/>
 
-                    </com.simplemobiletools.commons.views.MyAppCompatSpinner>
+                        <com.simplemobiletools.commons.views.MyAppCompatSpinner
+                            android:id="@+id/acs_customize_event_whomfor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv_settings_customize_event_whomfor_label"
+                            android:layout_alignLeft="@id/tv_settings_customize_event_whomfor_label">
 
-                    <com.simplemobiletools.commons.views.MyAppCompatSpinner
-                        android:id="@+id/acs_customize_event_whatfor"
+                        </com.simplemobiletools.commons.views.MyAppCompatSpinner>
+                    </RelativeLayout>
+
+                    <RelativeLayout android:id="@+id/rl_whatfor_holder"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2">
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:id="@+id/tv_settings_customize_event_whatfor_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:textSize="@dimen/day_text_size"
+                            android:text="@string/customize_event_whatfor_label"/>
 
+                        <com.simplemobiletools.commons.views.MyAppCompatSpinner
+                            android:id="@+id/acs_customize_event_whatfor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/tv_settings_customize_event_whatfor_label"
+                            android:layout_alignLeft="@id/tv_settings_customize_event_whatfor_label">
 
-                    </com.simplemobiletools.commons.views.MyAppCompatSpinner>
+                        </com.simplemobiletools.commons.views.MyAppCompatSpinner>
+                    </RelativeLayout>
 
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/tv_settings_customize_event_when"
+                    <RelativeLayout android:id="@+id/rl_when_holder"
                         android:layout_width="0dp"
-                        android:layout_weight="3"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:textSize="@dimen/day_text_size"
-                        android:text="@string/customize_event_when"/>
+                        android:layout_weight="3">
+
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:id="@+id/tv_settings_customize_event_when_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:textSize="@dimen/day_text_size"
+                            android:text="@string/customize_event_when_label"/>
+
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:id="@+id/tv_settings_customize_event_placeholder"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:textSize="@dimen/day_text_size"
+                            android:layout_toRightOf="@id/tv_settings_customize_event_when_label"/>
+
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:id="@+id/tv_settings_customize_event_when"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:textSize="@dimen/day_text_size"
+                            android:text="@string/customize_event_when"
+                            android:layout_below="@id/tv_settings_customize_event_when_label"
+                            android:layout_alignLeft="@id/tv_settings_customize_event_when_label"/>
+
+
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:id="@+id/tv_settings_customize_event_when_gregorian"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:textSize="@dimen/day_text_size"
+                            android:layout_toRightOf="@id/tv_settings_customize_event_when"/>
+                    </RelativeLayout>
 
                     <android.support.v7.widget.AppCompatImageButton
                         android:id="@+id/btn_customize_event_add"
@@ -273,16 +290,15 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:src="@drawable/ic_plus1"/>
-
                 </LinearLayout>
 
                 <ListView android:id="@+id/lv_customize_event"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/ll_customize_event_line2"
+                    android:layout_below="@id/ll_customize_event_line"
                     android:paddingTop="@dimen/activity_margin"/>
 
-            </RelativeLayout>
+            </LinearLayout>
             <RelativeLayout
                 android:id="@+id/settings_customize_colors_holder"
                 android:layout_width="match_parent"

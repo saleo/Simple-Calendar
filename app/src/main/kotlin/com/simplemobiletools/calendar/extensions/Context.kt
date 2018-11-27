@@ -395,7 +395,7 @@ fun Context.syncCalDAVCalendars(activity: SimpleActivity?, calDAVSyncObserver: C
 
 fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: LinearLayout, dayLabelHeight: Int, callback: (Int) -> Unit) {
     var textColor = rawTextColor
-    var holidayOrLunar=""
+    var solarTerm=""
 
     (View.inflate(applicationContext, R.layout.day_monthly_number_view, null) as TextView).apply {
         text = day.value.toString()
@@ -429,19 +429,19 @@ fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: Linea
         val month=datetime.monthOfYear-1
         calendar.set(year,month,day.value)
         val lunar = Lunar(calendar, applicationContext)
-        holidayOrLunar = SolarTerm.getSolarTermStr(year, month, day.value, applicationContext)
-        if (holidayOrLunar.length == 0) {
+        solarTerm = SolarTerm.getSolarTermStr(year, month, day.value, applicationContext)
+        if (solarTerm.length == 0) {
             val SolarHoliDayStr = SolarHoliday.getSolarHoliday(month, day.value, applicationContext)
             if (SolarHoliDayStr.length == 0) {
                 val fullchinadatestr = lunar.toString()
                 val LunarFestivalStr = LunarFestival.getLunarFestival(fullchinadatestr, lunar, applicationContext)
                 if (LunarFestivalStr.length != 0) {
-                    holidayOrLunar=LunarFestivalStr
+                    solarTerm=LunarFestivalStr
                 } else {
-                    holidayOrLunar = fullchinadatestr.substring(fullchinadatestr.length - 2, fullchinadatestr.length)
+                    solarTerm = fullchinadatestr.substring(fullchinadatestr.length - 2, fullchinadatestr.length)
                 }
             } else {
-                holidayOrLunar=SolarHoliDayStr
+                solarTerm=SolarHoliDayStr
             }
         }
 
@@ -453,7 +453,7 @@ fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: Linea
 
     (View.inflate(applicationContext, R.layout.day_monthly_number_lunar_view, null) as TextView).apply {
         setTextColor(Color.BLACK)
-        text = holidayOrLunar
+        text = solarTerm
         gravity = Gravity.BOTTOM or Gravity.LEFT
         layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         linearLayout.addView(this)

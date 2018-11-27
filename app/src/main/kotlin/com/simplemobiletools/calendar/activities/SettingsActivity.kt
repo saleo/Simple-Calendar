@@ -1,18 +1,34 @@
 package com.simplemobiletools.calendar.activities
 
+import android.app.LoaderManager
+import android.content.CursorLoader
 import android.content.Intent
+import android.content.Loader
 import android.content.res.Resources
+import android.database.Cursor
+import android.graphics.Color
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.TextUtils
+import android.util.Log
+import android.view.View
+import android.view.View.inflate
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.SimpleCursorAdapter
+import cn.carbs.android.gregorianlunarcalendar.library.view.GregorianLunarCalendarView
 import com.simplemobiletools.calendar.BuildConfig
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.dialogs.CustomEventReminderDialog
+import com.simplemobiletools.calendar.dialogs.CustomizeEventDialog
+import com.simplemobiletools.calendar.dialogs.CustomizeLunarDialog
 import com.simplemobiletools.calendar.dialogs.SelectCalendarsDialog
 import com.simplemobiletools.calendar.extensions.*
 import com.simplemobiletools.calendar.helpers.*
+import com.simplemobiletools.calendar.helpers.Formatter
+import com.simplemobiletools.calendar.models.Event
 import com.simplemobiletools.calendar.models.EventType
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.RadioGroupDialog
@@ -21,16 +37,45 @@ import com.simplemobiletools.commons.helpers.PERMISSION_READ_CALENDAR
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CALENDAR
 import com.simplemobiletools.commons.models.RadioItem
 import kotlinx.android.synthetic.main.activity_settings.*
+import kotlinx.android.synthetic.main.customize_event_list_header.*
+import kotlinx.android.synthetic.main.customize_event_list_item.*
+import org.joda.time.DateTime
 import java.io.File
 import java.util.*
+import java.util.logging.Logger
 import kotlin.collections.ArrayList
 
-class SettingsActivity : SimpleActivity() {
+class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,AdapterView.OnItemLongClickListener,
+    AdapterView.OnItemClickListener,LoaderManager.LoaderCallbacks<Cursor>,View.OnClickListener {
     private val GET_RINGTONE_URI = 1
+    private val COL_ID = "id"
+    private val COL_START_TS = "start_ts"
+    private val COL_TITLE = "title"
+    private val COL_LUNAR = "lunar"
+    private val COL_SOURCE = "source"
+    private val COL_WHOMFOR = "whomfor"
+    private val COL_WHATFOR = "whatfor"
+    private val COL_PARENT_EVENT_ID = "event_parent_id"
 
     lateinit var res: Resources
     private var mStoredPrimaryColor = 0
     private var mReminderMinutes = 0
+    private var mWhomFor=""
+    private var mWhatFor=""
+    private var mListHeader:View?=null
+    private var mOldListHeader:View?=null
+    private val mDbFile = File(applicationInfo.dataDir, DBHelper.DB_NAME)
+    private val mDbUri = getMyFileUri(mDbFile)
+    // This is the Adapter being used to display the list's data
+    private var mAdapter: SimpleCursorAdapter? = null
+
+    // These are the Contacts rows that we will retrieve
+    val PROJECTION = arrayOf(COL_ID, "substr($COL_TITLE,1,instr($COL_TITLE,' ')-1) as whomfor",
+            "substr($COL_TITLE,instr($COL_TITLE,' ')+1) as whatfor", COL_LUNAR)
+
+
+    // This is the select criteria
+    val SELECTION_CUSTOMIZED_EVENT_ORIGIN = "$COL_SOURCE=$SOURCE_CUSTOMIZE_ANNIVERSARY and $COL_PARENT_EVENT_ID=0"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +84,19 @@ class SettingsActivity : SimpleActivity() {
         res = resources
         mStoredPrimaryColor = config.primaryColor
         setupCaldavSync()
+
+        // For the cursor adapter, specify which columns go into which views
+        val fromColumns = arrayOf<String>(COL_WHOMFOR, COL_WHATFOR, COL_LUNAR)
+        val toViews = intArrayOf(tv_customize_item_whomfor.id, tv_customize_item_whatfor.id, tv_customize_item_when.id) // The TextView in simple_list_item_1
+
+        // Create an empty adapter we will use to display the loaded data.
+        // We pass null for the cursor, then update it in onLoadFinished()
+        mAdapter = SimpleCursorAdapter(this, R.layout.customize_event_list_item, null, fromColumns, toViews, 0)
+        lv_customize_event.adapter = mAdapter
+
+        mListHeader=inflate(applicationContext,R.layout.customize_event_list_header,null)
+
+        loaderManager.initLoader(0, null, this)
     }
 
     override fun onResume() {
@@ -63,6 +121,8 @@ class SettingsActivity : SimpleActivity() {
         setupSnoozeDelay()
         setupUseSameSnooze()
         setupReminerGeneral()
+        setupCustomizeEvent()
+
         setupBottomButtonBar(cl_settings_holder)
     }
 
@@ -83,9 +143,102 @@ class SettingsActivity : SimpleActivity() {
         }
     }
 
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        when (parent){
+            acs_customize_event_whomfor -> {mWhomFor= parent?.getItemAtPosition(position).toString()}
+            acs_customize_event_whatfor -> {mWhatFor= parent?.getItemAtPosition(position).toString()}
+        }
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        if (parent == lv_customize_event) {
+            processListViewClick(position)
+        } else {//spinner item
+
+        }
+    }
+
+    override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
+        if (parent == lv_customize_event) {
+            val cursor=lv_customize_event.getItemAtPosition(position) as Cursor
+            val id=cursor.getInt(cursor.getColumnIndex(COL_ID)).toString()
+            dbHelper.deleteEvents(arrayOf(id),true)
+            Log.d(APP_TAG,"customized event deleted with id=$id")
+        } else {//spinner item
+
+        }
+        return true
+    }
+
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
+        return CursorLoader(this, mDbUri, PROJECTION, SELECTION_CUSTOMIZED_EVENT_ORIGIN, null, null)
+    }
+
+    override fun onLoadFinished(loader: Loader<Cursor>?, data: Cursor?) {
+        mAdapter!!.swapCursor(data)
+    }
+
+    override fun onLoaderReset(loader: Loader<Cursor>?) {
+        mAdapter!!.swapCursor(null)
+    }
+
+    override fun onClick(v: View?) {//for several coomponent:add button, when textview
+        if (v ==  tv_settings_customize_event_when)
+            CustomizeLunarDialog(this,tv_customize_item_when.value){lunarDate, gregorianDate ->
+                tv_settings_customize_event_when.text=lunarDate
+                tv_settings_customize_event_when_gregorian.text=gregorianDate
+            }
+        else{//for add button
+            if (mWhomFor.isEmpty()){
+                toast(R.string.whomfor_empty)
+                acs_customize_event_whomfor.requestFocus()
+                return
+            }
+            if (mWhatFor.isEmpty()){
+                toast(R.string.whatfor_empty)
+                acs_customize_event_whatfor.requestFocus()
+                return
+            }
+            if (tv_settings_customize_event_when.value.isEmpty()){
+                toast(R.string.when_empty)
+                tv_settings_customize_event_when.requestFocus()
+                return
+            }
+
+            val title=mWhomFor+" "+mWhatFor
+            dbHelper.getEventsWithSearchQuery(title) exithere@{searchedText, events ->
+                if (!events.isEmpty()) {
+                    var events1=events.filter { event -> event.lunar==tv_settings_customize_event_when.value }
+                    if (!events1.isEmpty()) {
+                        toast(R.string.customized_event_already_exist)
+                        acs_customize_event_whomfor.requestFocus()
+                        return@exithere
+                    }
+
+                    // lunar and when differs
+                    events1=events.sortedBy { event -> event.id  }
+                    ConfirmationDialog(this,R.string.replace_existTitle_orNot.toString(),negative = 1){
+                        val id=events1[0].id
+                        val title=events1[0].title
+                        dbHelper.deleteEvents(arrayOf(id.toString()),true)
+                        addCustomizeEvent(title)
+                    }
+                }
+                else
+                    addCustomizeEvent(title)
+            }
+
+        }
+
+    }
+
     private fun setupSectionColors() {
         val adjustedPrimaryColor = getAdjustedPrimaryColor()
-        arrayListOf(settings_reminder_label, caldav_label, weekly_view_label, monthly_view_label, simple_event_list_label, simple_font_size_label).forEach {
+        arrayListOf(tv_settings_builtin_events_reminder_time_label, caldav_label, weekly_view_label, monthly_view_label, simple_event_list_label, simple_font_size_label).forEach {
             it.setTextColor(adjustedPrimaryColor)
         }
     }
@@ -275,19 +428,19 @@ class SettingsActivity : SimpleActivity() {
         }
     }
 
-    private fun setupReminderSound(isEnabled:Boolean=true) {
-        settings_reminder_sound.isEnabled=isEnabled
+    private fun setupReminderSound(isEnabled: Boolean = true) {
+        tv_settings_reminder_sound.isEnabled = isEnabled
 
         val noRingtone = res.getString(R.string.no_ringtone_selected)
         if (config.reminderSound.isEmpty()) {
-            settings_reminder_sound.text = noRingtone
+            tv_settings_reminder_sound.text = noRingtone
         } else {
-            settings_reminder_sound.text = RingtoneManager.getRingtone(this, Uri.parse(config.reminderSound))?.getTitle(this) ?: noRingtone
+            tv_settings_reminder_sound.text = RingtoneManager.getRingtone(this, Uri.parse(config.reminderSound))?.getTitle(this) ?: noRingtone
         }
-        settings_reminder_sound.setOnClickListener {
+        tv_settings_reminder_sound.setOnClickListener {
             Intent(RingtoneManager.ACTION_RINGTONE_PICKER).apply {
                 putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
-                putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, res.getString(R.string.reminder_sound))
+                putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, res.getString(R.string.reminder_sound_label))
                 putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(config.reminderSound))
 
                 if (resolveActivity(packageManager) != null)
@@ -299,19 +452,18 @@ class SettingsActivity : SimpleActivity() {
         }
     }
 
-    private fun setupVibrate(isEnabled:Boolean=true) {
-        settings_reminder_vibrate.isEnabled=isEnabled
-        settings_reminder_vibrate_holder.isEnabled=isEnabled
+    private fun setupVibrate(isEnabled: Boolean = true) {
+        sc_settings_reminder_vibrate.isEnabled = isEnabled
+        rl_settings_reminder_vibrate_holder.isEnabled = isEnabled
         if (isEnabled) {
-            settings_reminder_vibrate_holder.setOnClickListener {
-                settings_reminder_vibrate.toggle()
-                config.vibrateOnReminder=settings_reminder_vibrate.isChecked
+            rl_settings_reminder_vibrate_holder.setOnClickListener {
+                sc_settings_reminder_vibrate.toggle()
+                config.vibrateOnReminder = sc_settings_reminder_vibrate.isChecked
             }
-            settings_reminder_vibrate.isChecked=config.vibrateOnReminder
-        }
-        else
-            settings_reminder_vibrate.isChecked = false
-        config.vibrateOnReminder = settings_reminder_vibrate.isChecked
+            sc_settings_reminder_vibrate.isChecked = config.vibrateOnReminder
+        } else
+            sc_settings_reminder_vibrate.isChecked = false
+        config.vibrateOnReminder = sc_settings_reminder_vibrate.isChecked
     }
 
     private fun setupUseSameSnooze() {
@@ -404,7 +556,7 @@ class SettingsActivity : SimpleActivity() {
                         if ((uri as Uri).scheme == "file") {
                             uri = getFilePublicUri(File(uri.path), BuildConfig.APPLICATION_ID)
                         }
-                        settings_reminder_sound.text = RingtoneManager.getRingtone(this, uri)?.getTitle(this)
+                        tv_settings_reminder_sound.text = RingtoneManager.getRingtone(this, uri)?.getTitle(this)
                         config.reminderSound = uri.toString()
                     } catch (e: Exception) {
                         showErrorToast(e)
@@ -414,25 +566,25 @@ class SettingsActivity : SimpleActivity() {
         }
     }
 
-    private fun setupReminderUnifiedMinute(isEnabled:Boolean=true){
+    private fun setupReminderUnifiedMinute(isEnabled: Boolean = true) {
 
-        settings_reminder_unified_minute.isEnabled=isEnabled
-        settings_reminder_unified_minute.text=getFormattedMinutes(config.currentReminderMinutes)
+        tv_settings_builtin_events_reminder_unified_minute.isEnabled = isEnabled
+        tv_settings_builtin_events_reminder_unified_minute.text = getFormattedMinutes(config.currentReminderMinutes)
         if (isEnabled)
-            settings_reminder_unified_minute.setOnClickListener { showReminderDialog() }
+            tv_settings_builtin_events_reminder_unified_minute.setOnClickListener { showReminderDialog() }
     }
 
-    private fun setupReminderSwitch(isChecked: Boolean=true){
-        settings_reminder_switch.isChecked=isChecked //no trigger clicklistener when enter here FIRST
+    private fun setupReminderSwitch(isChecked: Boolean = true) {
+        sc_settings_reminder_switch.isChecked = isChecked //no trigger clicklistener when enter here FIRST
 //        settings_reminder_switch.textSize=config.fontSize.toFloat()
         setupReminderUnifiedMinute(isChecked)
         setupVibrate(isChecked)
         setupReminderSound(isChecked)
 
-        settings_reminder_switch_holder.setOnClickListener {
-            settings_reminder_switch.toggle()
-            val reminderOnOff=settings_reminder_switch.isChecked
-            config.reminderSwitch=reminderOnOff
+        rl_settings_reminder_switch_holder.setOnClickListener {
+            sc_settings_reminder_switch.toggle()
+            val reminderOnOff = sc_settings_reminder_switch.isChecked
+            config.reminderSwitch = reminderOnOff
             setupReminderUnifiedMinute(reminderOnOff)
             setupVibrate(reminderOnOff)
             setupReminderSound(reminderOnOff)
@@ -443,20 +595,128 @@ class SettingsActivity : SimpleActivity() {
         }
     }
 
-    private fun setupReminerGeneral(){
-        val reminderOnOff=config.reminderSwitch
+    private fun setupReminerGeneral() {
+        val reminderOnOff = config.reminderSwitch
         setupReminderSwitch(reminderOnOff)
+    }
+
+    private fun setupCustomizeEvent() {
+        val whomfor_array = resources.getStringArray(R.array.whomfor)
+        val whomfor_adapter = ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, whomfor_array)
+        whomfor_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        acs_customize_event_whomfor.adapter = whomfor_adapter
+        acs_customize_event_whomfor.onItemSelectedListener = this
+
+        val whatfor_array = resources.getStringArray(R.array.whatfor)
+        val whatfor_adapter = ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, whatfor_array)
+        whatfor_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        acs_customize_event_whatfor.adapter = whatfor_adapter
+        acs_customize_event_whatfor.onItemSelectedListener = this
+
+        tv_settings_customize_event_when.setOnClickListener {
+            CustomizeLunarDialog(this, tv_settings_customize_event_when.value) { lunarDate, gregorianDate ->
+                tv_settings_customize_event_when.text = lunarDate.substring(4,8)
+                tv_settings_customize_event_when_gregorian.text = gregorianDate
+            }
+        }
+
+        setupCustomizeEventList()
+
+        btn_customize_event_add.setOnClickListener(this)
+    }
+
+    private fun setupCustomizeEventList() {
+        mListHeader.apply {
+            tv_customize_event_header_whomfor.text=resources.getString(R.string.customize_event_whomfor_label)
+            tv_customize_event_header_whatfor.text=resources.getString(R.string.customize_event_whatfor_label)
+            tv_customize_event_header_when.text=resources.getString(R.string.customize_event_when_label)
+        }
+
+        if (mOldListHeader!=null)
+            lv_customize_event.removeHeaderView(mOldListHeader)
+
+        lv_customize_event.addHeaderView(mListHeader)
+        mOldListHeader=mListHeader
+
+        lv_customize_event.onItemClickListener = this
+        lv_customize_event.onItemLongClickListener = this
     }
 
     private fun showReminderDialog() {
         showEventReminderDialog(mReminderMinutes) {
             mReminderMinutes = it
-            settings_reminder_unified_minute.text=getFormattedMinutes(mReminderMinutes)
-            config.currentReminderMinutes=mReminderMinutes
+            tv_settings_builtin_events_reminder_unified_minute.text = getFormattedMinutes(mReminderMinutes)
+            config.currentReminderMinutes = mReminderMinutes
             Thread {
                 dbHelper.updateEventReminder(mReminderMinutes)
                 applicationContext.processEventRemindersNotification(dbHelper.getEventsToExport(false))
             }.start()
         }
     }
+
+
+    private fun processListViewClick(position: Int) {
+        val cursor = lv_customize_event.getItemAtPosition(position) as Cursor
+        val id=cursor.getIntValue(COL_ID)
+        val whomfor = cursor.getStringValue(COL_WHOMFOR)
+        val whatfor = cursor.getStringValue(COL_WHATFOR)
+        val lunarDate = cursor.getStringValue(COL_LUNAR)
+        val startTs=cursor.getIntValue(COL_START_TS)
+
+        CustomizeEventDialog(this, whomfor, whatfor, lunarDate) { cb_whomfor, cb_whatfor, cb_lunarDate, cb_gregorianDate ->
+            val title=cb_whomfor+" "+cb_whatfor
+            val cb_startTs=Formatter.getDayStartTS(cb_gregorianDate)
+            if (title == whomfor+" "+whatfor && lunarDate == cb_lunarDate) return@CustomizeEventDialog
+            addCustomizeEvent(title,cb_startTs,cb_lunarDate)
+        }
+    }
+
+
+    private fun addCustomizeEvent(title:String,inStartTs:Int=0,inLunarDate:String=""){
+        val gregorian=tv_settings_customize_event_when_gregorian.value
+        var startTs: Int
+        val lundarDate:String
+        if (inStartTs==0) {
+            //implicit: selectTs is the begining milliSeconds of the day
+            startTs = Formatter.getDayStartTS(gregorian)
+        } else {
+            startTs=inStartTs
+        }
+
+        if (inLunarDate.isEmpty()){
+            lundarDate=tv_settings_customize_event_when.value
+        }else{
+            lundarDate=inLunarDate
+        }
+
+        var yearsToAdd=(getNowSeconds()-startTs)/ YEAR
+        var idsToProcessNotification=ArrayList<String>()
+
+        if (yearsToAdd == 0) yearsToAdd++
+        else if ((DateTime().dayOfYear) < (DateTime(startTs*1000).dayOfYear)) yearsToAdd++
+
+        val reminderMinute1=config.unifiedReminderTs/60*1000
+        var lunarYear=lundarDate.substring(0,4).toInt()
+        val lunarMonth=lundarDate.substring(4,6).toInt()
+        val lunarDay=lundarDate.substring(6,8).toInt()
+
+        for (i in 0..9)
+        {
+            lunarYear+=yearsToAdd+i
+            val calendarData=GregorianLunarCalendarView.CalendarData(lunarYear,lunarMonth,lunarDay,false)
+            val ggYear=calendarData.chineseCalendar.get(Calendar.YEAR)
+            val ggMonth=calendarData.chineseCalendar.get(Calendar.MONTH)
+            val ggDayofMonth=calendarData.chineseCalendar.get(Calendar.DAY_OF_MONTH)
+
+            startTs=Formatter.getDayStartTS("$ggYear$ggMonth$ggDayofMonth")
+            val event = Event(0, startTs, title = title, reminder1Minutes = reminderMinute1, source = SOURCE_CUSTOMIZE_ANNIVERSARY,
+                    color = Color.BLUE, lunar = lundarDate)
+            dbHelper.insert(event, true) {
+                Log.d(APP_TAG, "customized event inserted with id=$it,title=$title,startTs=$startTs")
+                idsToProcessNotification.add(it.toString())
+            }
+        }
+        processEventRemindersNotification(idsToProcessNotification)
+    }
+
 }

@@ -356,12 +356,18 @@
     <string name="builtin_event_reminder_caption">内置戒期设置</string>
     <string name="builtin_event_reminder">请设置提醒时间</string>
     <string name="builtin_event_reminder_label">提醒时间</string>
-    <string name="customize_event_caption">自定义戒期(父母诞忌等)设置</string>
+    <string name="customize_event_caption">自定义戒期(点击/长按列表项修改/删除)</string>
     <string name="customize_event_whomfor_label">关系</string>
     <string name="customize_event_whatfor_label">诞忌</string>
     <string name="customize_event_when">点击设置日期</string>
     <string name="reminder_sound">请设置提示音</string>
-    <string name="customize_event_when_label">戒期</string>
+    <string name="customize_event_when_label">农历日期</string>
+    <string name="get_data">获取数据</string>
+    <string name="whomfor_empty">关系不能为空</string>
+    <string name="whatfor_empty">诞忌不能为空</string>
+    <string name="when_empty">日期不能为空</string>
+    <string name="customized_event_already_exist">同样戒期已存在</string>
+    <string name="replace_existTitle_orNot">同样戒期内容已存在，是否要替换?(可用作修改戒期时间)</string>
     <!--
         Haven't found some stringsh? There's more at
         https://github.com/SimpleMobileTools/Simple-Commons/tree/master/commons/src/main/res

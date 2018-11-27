@@ -42,6 +42,7 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
     private val COL_LOCATION = "location"
     private val COL_COLOR="color"
     private val COL_SYNC_UID="sync_uid"
+    private val COL_LUNAR="lunar"
 
     private val META_TABLE_NAME = "events_meta"
     private val COL_EVENT_ID = "event_id"
@@ -86,7 +87,7 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
                 "$COL_TITLE TEXT, $COL_DESCRIPTION TEXT, $COL_REMINDER_MINUTES INTEGER, $COL_REMINDER_MINUTES_2 INTEGER, $COL_REMINDER_MINUTES_3 INTEGER, " +
                 "$COL_IMPORT_ID TEXT, $COL_FLAGS INTEGER, $COL_EVENT_TYPE INTEGER NOT NULL DEFAULT $REGULAR_EVENT_TYPE_ID, " +
                 "$COL_PARENT_EVENT_ID INTEGER, $COL_OFFSET TEXT, $COL_IS_DST_INCLUDED INTEGER, $COL_LAST_UPDATED INTEGER, $COL_EVENT_SOURCE TEXT, " +
-                "$COL_LOCATION TEXT,$COL_COLOR INTEGER,$COL_SYNC_UID TEXT)")
+                "$COL_LOCATION TEXT,$COL_COLOR INTEGER,$COL_SYNC_UID TEXT,$COL_LUNAR TEXT)")
 
         createMetaTable(db)
         createTypesTable(db)
@@ -251,6 +252,25 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         callback?.invoke()
     }
 
+    fun updateCustomizedEvent(id: Int=0, title: String="", lunar:String="", daysDiffInGregorian: Int=0, callback: (() -> Unit)? = null) {
+        val sqlPrefix="update $MAIN_TABLE_NAME "
+        var sql=""
+        val sqlCriteria=" where $COL_ID=$id or $COL_PARENT_EVENT_ID=$id"
+
+        if (lunar.isEmpty())
+            sql=sqlPrefix+"set $COL_TITLE=$title"+sqlCriteria
+        else if (title.isEmpty())
+            sql=sqlPrefix+"set $COL_LUNAR=$lunar,$COL_START_TS=$COL_START_TS+$daysDiffInGregorian"+sqlCriteria
+        else
+            sql=sqlPrefix+"set $COL_TITLE=$title,$COL_LUNAR=$lunar,$COL_START_TS=$COL_START_TS+$daysDiffInGregorian"+sqlCriteria
+
+        mDb.execSQL(sql)
+
+        context.updateWidgets()
+        callback?.invoke()
+    }
+
+
     private fun fillEventValues(event: Event): ContentValues {
         return ContentValues().apply {
             put(COL_START_TS, event.startTS)
@@ -271,6 +291,8 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
             put(COL_LOCATION, event.location)
             put(COL_COLOR,event.color)
             put(COL_SYNC_UID,event.syncUid)
+            put(COL_LUNAR,event.lunar)
+
         }
     }
 
@@ -836,7 +858,7 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
     private val allColumns: Array<String>
         get() = arrayOf("$MAIN_TABLE_NAME.$COL_ID", COL_START_TS, COL_END_TS, COL_TITLE, COL_DESCRIPTION, COL_REMINDER_MINUTES, COL_REMINDER_MINUTES_2,
                 COL_REMINDER_MINUTES_3, COL_REPEAT_INTERVAL, COL_REPEAT_RULE, COL_IMPORT_ID, COL_FLAGS, COL_REPEAT_LIMIT, COL_EVENT_TYPE, COL_OFFSET,
-                COL_IS_DST_INCLUDED, COL_LAST_UPDATED, COL_EVENT_SOURCE, COL_LOCATION,COL_COLOR,COL_SYNC_UID)
+                COL_IS_DST_INCLUDED, COL_LAST_UPDATED, COL_EVENT_SOURCE, COL_LOCATION,COL_COLOR,COL_SYNC_UID,COL_LUNAR)
 
     private fun fillEvents(cursor: Cursor?): List<Event> {
         val eventTypeColors = SparseIntArray()
@@ -869,6 +891,7 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
                     val location = cursor.getStringValue(COL_LOCATION)
                     val color = cursor.getIntValue(COL_COLOR)
                     val syncUid = cursor.getStringValue(COL_SYNC_UID)
+                    val lunar=cursor.getStringValue(COL_LUNAR)
 
                     val ignoreEventOccurrences = if (repeatInterval != 0) {
                         getIgnoredOccurrences(id)
@@ -882,7 +905,7 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
 
                     val event = Event(id, startTS, endTS, title, description, reminder1Minutes, reminder2Minutes, reminder3Minutes,
                             repeatInterval, importId, flags, repeatLimit, repeatRule, eventType, ignoreEventOccurrences, offset, isDstIncluded,
-                            0, lastUpdated, source, color, location,syncUid)
+                            0, lastUpdated, source, color, location, syncUid, lunar)
                     events.add(event)
                 } while (cursor.moveToNext())
             }
@@ -1044,5 +1067,6 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
     }
 
     fun getEventsWithSyncUids(syncUids:List<String>) = getEvents("").filter {syncUids.contains(it.syncUid) } as ArrayList<Event>
+
 
 }

@@ -104,4 +104,9 @@ object Formatter {
     }
 
     fun getShiftedImportTimestamp(ts: Int) = getUTCDateTimeFromTS(ts).withTime(13, 0, 0, 0).withZoneRetainFields(DateTimeZone.getDefault()).seconds()
+
+    fun getNextStartTsFromDaycode(dayCode: String,yearsToAdd: Int) = getLocalDateTimeFromCode(dayCode).plusYears(yearsToAdd).seconds()
+
+    fun getNextDayEndTS(dayCode: String,yearsToAdd: Int) = getLocalDateTimeFromCode(dayCode).plusYears(yearsToAdd).plusDays(1).minusMinutes(1).seconds()
+
 }

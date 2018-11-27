@@ -141,7 +141,7 @@ class IcsImporter(val activity: SimpleActivity) {
                         val event = Event(0, curStart, curEnd, curTitle, curDescription, curReminderMinutes.getOrElse(0, { -1 }),
                                 curReminderMinutes.getOrElse(1, { -1 }), curReminderMinutes.getOrElse(2, { -1 }), curRepeatInterval,
                                 curImportId, curFlags, curRepeatLimit, curRepeatRule, curEventType, lastUpdated = curLastModified,
-                                source = source, location = curLocation)
+                                source = source, location = curLocation, lunar = "")
 
                         if (event.getIsAllDay() && curEnd > curStart) {
                             event.endTS -= DAY
