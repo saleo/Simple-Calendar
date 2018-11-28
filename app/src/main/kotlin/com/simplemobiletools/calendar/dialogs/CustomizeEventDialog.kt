@@ -36,6 +36,7 @@ class CustomizeEventDialog(val activity: SimpleActivity, val whomfor: String="",
     init{
         dialog = android.support.v7.app.AlertDialog.Builder(activity)
                 .setPositiveButton(R.string.ok,this)
+                .setNegativeButton(R.string.cancel,null)
                 .create().apply {
                     activity.setupDialogStuff(view, this) {
                         window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)

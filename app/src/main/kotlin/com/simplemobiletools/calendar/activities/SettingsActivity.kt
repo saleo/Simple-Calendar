@@ -64,8 +64,9 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Ad
     private var mWhatFor=""
     private var mListHeader:View?=null
     private var mOldListHeader:View?=null
-    private val mDbFile = File(applicationInfo.dataDir, DBHelper.DB_NAME)
-    private val mDbUri = getMyFileUri(mDbFile)
+    //todo: make filesDir relative, instead of absolute,to ensure the persistence
+    private var mDbFile=File("")
+    private var mDbUri :Uri?=null
     // This is the Adapter being used to display the list's data
     private var mAdapter: SimpleCursorAdapter? = null
 
@@ -81,6 +82,8 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Ad
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
+        mDbFile=getDatabasePath(DBHelper.DB_NAME)
+        mDbUri=getMyFileUri(mDbFile)
         res = resources
         mStoredPrimaryColor = config.primaryColor
         setupCaldavSync()
@@ -188,7 +191,7 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Ad
 
     override fun onClick(v: View?) {//for several coomponent:add button, when textview
         if (v ==  tv_settings_customize_event_when)
-            CustomizeLunarDialog(this,tv_customize_item_when.value){lunarDate, gregorianDate ->
+            CustomizeLunarDialog(this,tv_settings_customize_event_when.value){lunarDate, gregorianDate ->
                 tv_settings_customize_event_when.text=lunarDate
                 tv_settings_customize_event_when_gregorian.text=gregorianDate
             }
@@ -673,11 +676,14 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Ad
 
 
     private fun addCustomizeEvent(title:String,inStartTs:Int=0,inLunarDate:String=""){
-        val gregorian=tv_settings_customize_event_when_gregorian.value
         var startTs: Int
         val lundarDate:String
+        var idsToProcessNotification=ArrayList<String>()
+
         if (inStartTs==0) {
+            val gregorian=tv_settings_customize_event_when_gregorian.value
             //implicit: selectTs is the begining milliSeconds of the day
+
             startTs = Formatter.getDayStartTS(gregorian)
         } else {
             startTs=inStartTs
@@ -690,7 +696,6 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Ad
         }
 
         var yearsToAdd=(getNowSeconds()-startTs)/ YEAR
-        var idsToProcessNotification=ArrayList<String>()
 
         if (yearsToAdd == 0) yearsToAdd++
         else if ((DateTime().dayOfYear) < (DateTime(startTs*1000).dayOfYear)) yearsToAdd++
@@ -700,7 +705,7 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Ad
         val lunarMonth=lundarDate.substring(4,6).toInt()
         val lunarDay=lundarDate.substring(6,8).toInt()
 
-        for (i in 0..9)
+        for (i in 0..2)
         {
             lunarYear+=yearsToAdd+i
             val calendarData=GregorianLunarCalendarView.CalendarData(lunarYear,lunarMonth,lunarDay,false)

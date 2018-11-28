@@ -34,6 +34,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignWithParentIfMissing="trcdue"
         layout="@layout/bottom_sentense" />
 </RelativeLayout>

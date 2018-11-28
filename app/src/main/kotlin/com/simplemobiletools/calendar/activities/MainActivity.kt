@@ -961,18 +961,18 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
             if (intYear == 2016 || intYear==2018) {
                 when (mCurrentMonthDisplayed) {
-                    1 -> top_month.setImageResource(R.drawable.sk20181)
-                    2 -> top_month.setImageResource(R.drawable.sk20182)
-                    3 -> top_month.setImageResource(R.drawable.sk20183)
-                    4 -> top_month.setImageResource(R.drawable.sk20184)
-                    5 -> top_month.setImageResource(R.drawable.sk20185)
-                    6 -> top_month.setImageResource(R.drawable.sk20186)
-                    7 -> top_month.setImageResource(R.drawable.sk20187)
-                    8 -> top_month.setImageResource(R.drawable.sk20188)
-                    9 -> top_month.setImageResource(R.drawable.sk20189)
-                    10 -> top_month.setImageResource(R.drawable.sk201810)
-                    11 -> top_month.setImageResource(R.drawable.sk201811)
-                    12 -> top_month.setImageResource(R.drawable.sk201812)
+                    1 -> top_month.setImageResource(R.drawable.sk2018_1)
+                    2 -> top_month.setImageResource(R.drawable.sk2018_2)
+                    3 -> top_month.setImageResource(R.drawable.sk2018_3)
+                    4 -> top_month.setImageResource(R.drawable.sk2018_4)
+                    5 -> top_month.setImageResource(R.drawable.sk2018_5)
+                    6 -> top_month.setImageResource(R.drawable.sk2018_6)
+                    7 -> top_month.setImageResource(R.drawable.sk2018_7)
+                    8 -> top_month.setImageResource(R.drawable.sk2018_8)
+                    9 -> top_month.setImageResource(R.drawable.sk2018_9)
+                    10 -> top_month.setImageResource(R.drawable.sk2018_10)
+                    11 -> top_month.setImageResource(R.drawable.sk2018_11)
+                    12 -> top_month.setImageResource(R.drawable.sk2018_12)
                 }
                 if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder){
                     //from dayfragement,monthfragment
@@ -988,18 +988,18 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
             } else if (intYear == 2017 || intYear==2019) {
                 when (mCurrentMonthDisplayed) {
-                    1 -> top_month.setImageResource(R.drawable.sk20191)
-                    2 -> top_month.setImageResource(R.drawable.sk20192)
-                    3 -> top_month.setImageResource(R.drawable.sk20193)
-                    4 -> top_month.setImageResource(R.drawable.sk20194)
-                    5 -> top_month.setImageResource(R.drawable.sk20195)
-                    6 -> top_month.setImageResource(R.drawable.sk20196)
-                    7 -> top_month.setImageResource(R.drawable.sk20197)
-                    8 -> top_month.setImageResource(R.drawable.sk20198)
-                    9 -> top_month.setImageResource(R.drawable.sk20199)
-                    10 -> top_month.setImageResource(R.drawable.sk201910)
-                    11 -> top_month.setImageResource(R.drawable.sk201911)
-                    12 -> top_month.setImageResource(R.drawable.sk201912)
+                    1 -> top_month.setImageResource(R.drawable.sk2019_1)
+                    2 -> top_month.setImageResource(R.drawable.sk2019_2)
+                    3 -> top_month.setImageResource(R.drawable.sk2019_3)
+                    4 -> top_month.setImageResource(R.drawable.sk2019_4)
+                    5 -> top_month.setImageResource(R.drawable.sk2019_5)
+                    6 -> top_month.setImageResource(R.drawable.sk2019_6)
+                    7 -> top_month.setImageResource(R.drawable.sk2019_7)
+                    8 -> top_month.setImageResource(R.drawable.sk2019_8)
+                    9 -> top_month.setImageResource(R.drawable.sk2019_9)
+                    10 -> top_month.setImageResource(R.drawable.sk2019_10)
+                    11 -> top_month.setImageResource(R.drawable.sk2019_11)
+                    12 -> top_month.setImageResource(R.drawable.sk2019_12)
                 }
                 if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder){
                     //from dayfragement,monthfragment

@@ -19,7 +19,7 @@ class CustomizeLunarDialog(val activity: SimpleActivity, val lunarDate: String="
     val view = (activity.layoutInflater.inflate(R.layout.dialog_customize_lunar, null) as ViewGroup).apply {
         val customizedCalendar = Calendar.getInstance()
         if (lunarDate!="")
-            customizedCalendar.set(lunarDate.substring(0, 3).toInt(), lunarDate.substring(4, 5).toInt(), lunarDate.substring(6, 7).toInt())
+            customizedCalendar.set(lunarDate.substring(0, 4).toInt(), lunarDate.substring(4, 6).toInt(), lunarDate.substring(6, 8).toInt())
         //no else needed, since getInstance() created a calendar based current time in the defaulst zone
         calendar_view.init(customizedCalendar, false)
     }
@@ -27,6 +27,7 @@ class CustomizeLunarDialog(val activity: SimpleActivity, val lunarDate: String="
     init{
         dialog = android.support.v7.app.AlertDialog.Builder(activity)
                 .setPositiveButton(R.string.ok,this)
+                .setNegativeButton(R.string.cancel,null)
                 .create().apply {
                     activity.setupDialogStuff(view, this) {
                         window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)

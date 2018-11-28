@@ -15,6 +15,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.support.v4.app.NotificationCompat
+import android.support.v4.content.FileProvider
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -587,4 +588,3 @@ fun Context.launchAbout() {
 fun Context.gotoToday(){
     startActivity(Intent(this, MainActivity::class.java))
 }
-
