@@ -21,7 +21,7 @@ import com.simplemobiletools.commons.views.MyRecyclerView
 import java.util.*
 
 abstract class MyRecyclerViewAdapter(val activity: BaseSimpleActivity, val recyclerView: MyRecyclerView, val fastScroller: FastScroller? = null,
-                                     val itemClick: (Any) -> Unit) : RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder>() {
+                                     val itemClick: (Any) -> Unit,val itemLongClick: ((Any) -> Unit)?=null) : RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder>() {
     val baseConfig = activity.baseConfig
     val resources = activity.resources!!
     val layoutInflater = activity.layoutInflater
@@ -256,7 +256,7 @@ abstract class MyRecyclerViewAdapter(val activity: BaseSimpleActivity, val recyc
         fun bindView(any: Any, allowLongClick: Boolean = true, callback: (itemView: View, layoutPosition: Int) -> Unit): View {
             return itemView.apply {
                 callback(this, layoutPosition)
-//                setOnClickListener(null)
+                setOnClickListener(null)
                 setOnLongClickListener(null)
             }
         }
@@ -266,7 +266,7 @@ abstract class MyRecyclerViewAdapter(val activity: BaseSimpleActivity, val recyc
                 val isSelected = adapterListener?.getSelectedPositions()?.contains(adapterPosition - positionOffset) ?: false
                 adapterListener?.toggleItemSelectionAdapter(!isSelected, adapterPosition - positionOffset)
             } else {
-                itemClick?.invoke(any)
+            itemClick?.invoke(any)
             }
         }
 

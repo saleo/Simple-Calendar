@@ -167,3 +167,5 @@ const val YOURSELF= 5
 const val BIRTH_DAY= 1
 const val FORBIDDEN_DAY= 2
 const val ANNIVERSARY_DAY= 3
+
+const val PLACEHOLDER_8WHITESPACE="                "

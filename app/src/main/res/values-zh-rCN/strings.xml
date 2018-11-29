@@ -109,6 +109,7 @@
     <string name="anniversaries_added">纪念日添加成功</string>
 
     <!-- Event Reminders -->
+    <string name="event_reminders">提醒设置</string>
     <string name="reminder">提醒</string>
     <string name="no_reminder">没提醒</string>
     <string name="at_start">开始</string>
@@ -120,11 +121,11 @@
     <string name="add_another_reminder">再添加一个提醒</string>
     <string name="builtin_event_reminder_caption">内置戒期设置</string>
     <string name="builtin_event_reminder">请设置提醒时间</string>
-    <string name="customize_event_caption">自定义戒期(父母诞忌等)设置</string>
+    <string name="customize_event_caption">自定义戒期(父母诞忌等)</string>
     <string name="customize_event_whomfor_label">关系</string>
     <string name="customize_event_whatfor_label">诞忌</string>
     <string name="customize_event_when_label">农历日期</string>
-    <string name="customize_event_when">请设置日期</string>
+    <string name="customize_event_when">点击设置日期</string>
     <string name="get_data">获取数据</string>
 
     <plurals name="minutes_before">

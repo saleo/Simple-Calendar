@@ -81,8 +81,7 @@
             android:layout_weight="3"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
-            android:textSize="@dimen/day_text_size"
-            android:text="@string/customize_event_when"/>
+            android:textSize="@dimen/day_text_size"/>
 
     </LinearLayout>
 

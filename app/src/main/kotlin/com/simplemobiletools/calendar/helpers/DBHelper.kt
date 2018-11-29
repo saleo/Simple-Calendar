@@ -270,6 +270,12 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         callback?.invoke()
     }
 
+    fun getCustomizedEvents(): List<Event> {
+        val selection = "$MAIN_TABLE_NAME.$COL_EVENT_SOURCE = ? and $COL_PARENT_EVENT_ID=0"
+        val selectionArgs = arrayOf(SOURCE_CUSTOMIZE_ANNIVERSARY)
+        val cursor = getEventsCursor(selection, selectionArgs)
+        return fillEvents(cursor)
+    }
 
     private fun fillEventValues(event: Event): ContentValues {
         return ContentValues().apply {

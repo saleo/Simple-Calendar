@@ -1,25 +1,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical">
 
 
     <cn.carbs.android.gregorianlunarcalendar.library.view.GregorianLunarCalendarView
-        android:id="@+id/calendar_view"
+        android:id="@+id/glc_calendar_view"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="wrap_content"
         app:glcv_GregorianThemeColor="@color/colorGregorian"
         app:glcv_LunarThemeColor="@color/colorLunar"
         app:glcv_NormalTextColor="#FF777777"
-        app:glcv_ScrollAnimation="true" />
+        app:glcv_ScrollAnimation="true"
+        android:paddingTop="@dimen/small_margin"/>
 
     <Button
         android:id="@+id/button_confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/medium_margin"
         android:text="@string/get_data" />
 
 </LinearLayout>

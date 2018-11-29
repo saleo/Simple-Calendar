@@ -119,7 +119,7 @@
     <string name="hours_raw">hours</string>
     <string name="days_raw">days</string>
     <string name="add_another_reminder">Add another reminder</string>
-    <string name="event_reminders">Event reminders</string>
+    <string name="event_reminders">提醒设置</string>
 
     <plurals name="minutes_before">
         <item quantity="one">%d minute before</item>
@@ -356,7 +356,7 @@
     <string name="builtin_event_reminder_caption">内置戒期设置</string>
     <string name="builtin_event_reminder">请设置提醒时间</string>
     <string name="builtin_event_reminder_label">提醒时间</string>
-    <string name="customize_event_caption">自定义戒期(点击/长按列表项修改/删除)</string>
+    <string name="customize_event_caption">自定义戒期(父母诞忌等)</string>
     <string name="customize_event_whomfor_label">关系</string>
     <string name="customize_event_whatfor_label">诞忌</string>
     <string name="customize_event_when">点击设置日期</string>
@@ -368,6 +368,8 @@
     <string name="when_empty">日期不能为空</string>
     <string name="customized_event_already_exist">同样戒期已存在</string>
     <string name="replace_existTitle_orNot">同样戒期内容已存在，是否要替换?(可用作修改戒期时间)</string>
+    <string name="customized_event_succeeded">戒期添加成功！</string>
+    <string name="customized_event_failed">戒期添加失败</string>
     <!--
         Haven't found some stringsh? There's more at
         https://github.com/SimpleMobileTools/Simple-Commons/tree/master/commons/src/main/res

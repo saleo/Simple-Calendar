@@ -11,16 +11,18 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
+import android.text.Editable
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
-import android.view.View.inflate
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.SimpleCursorAdapter
+import android.widget.RelativeLayout
+import cn.carbs.android.gregorianlunarcalendar.library.data.ChineseCalendar
 import cn.carbs.android.gregorianlunarcalendar.library.view.GregorianLunarCalendarView
 import com.simplemobiletools.calendar.BuildConfig
 import com.simplemobiletools.calendar.R
+import com.simplemobiletools.calendar.adapters.CustomizeEventsAdapter
 import com.simplemobiletools.calendar.dialogs.CustomEventReminderDialog
 import com.simplemobiletools.calendar.dialogs.CustomizeEventDialog
 import com.simplemobiletools.calendar.dialogs.CustomizeLunarDialog
@@ -35,18 +37,18 @@ import com.simplemobiletools.commons.dialogs.RadioGroupDialog
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.PERMISSION_READ_CALENDAR
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CALENDAR
+import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
 import com.simplemobiletools.commons.models.RadioItem
 import kotlinx.android.synthetic.main.activity_settings.*
-import kotlinx.android.synthetic.main.customize_event_list_header.*
-import kotlinx.android.synthetic.main.customize_event_list_item.*
+import kotlinx.android.synthetic.main.activity_settings.view.*
+import kotlinx.android.synthetic.main.customize_event_item_settings_view.*
+import kotlinx.android.synthetic.main.customize_event_item_settings_view.view.*
 import org.joda.time.DateTime
 import java.io.File
 import java.util.*
-import java.util.logging.Logger
 import kotlin.collections.ArrayList
 
-class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,AdapterView.OnItemLongClickListener,
-    AdapterView.OnItemClickListener,LoaderManager.LoaderCallbacks<Cursor>,View.OnClickListener {
+class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,View.OnClickListener,RefreshRecyclerViewListener {
     private val GET_RINGTONE_URI = 1
     private val COL_ID = "id"
     private val COL_START_TS = "start_ts"
@@ -60,15 +62,11 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Ad
     lateinit var res: Resources
     private var mStoredPrimaryColor = 0
     private var mReminderMinutes = 0
+
     private var mWhomFor=""
     private var mWhatFor=""
-    private var mListHeader:View?=null
-    private var mOldListHeader:View?=null
-    //todo: make filesDir relative, instead of absolute,to ensure the persistence
-    private var mDbFile=File("")
-    private var mDbUri :Uri?=null
-    // This is the Adapter being used to display the list's data
-    private var mAdapter: SimpleCursorAdapter? = null
+    lateinit var mHolder:RelativeLayout
+    private var lastHash=0
 
     // These are the Contacts rows that we will retrieve
     val PROJECTION = arrayOf(COL_ID, "substr($COL_TITLE,1,instr($COL_TITLE,' ')-1) as whomfor",
@@ -81,30 +79,18 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Ad
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+        tv_settings_customize_event_when.text= PLACEHOLDER_8WHITESPACE
+        tv_settings_customize_event_when.underlineText()
 
-        mDbFile=getDatabasePath(DBHelper.DB_NAME)
-        mDbUri=getMyFileUri(mDbFile)
         res = resources
+
         mStoredPrimaryColor = config.primaryColor
         setupCaldavSync()
 
-        // For the cursor adapter, specify which columns go into which views
-        val fromColumns = arrayOf<String>(COL_WHOMFOR, COL_WHATFOR, COL_LUNAR)
-        val toViews = intArrayOf(tv_customize_item_whomfor.id, tv_customize_item_whatfor.id, tv_customize_item_when.id) // The TextView in simple_list_item_1
-
-        // Create an empty adapter we will use to display the loaded data.
-        // We pass null for the cursor, then update it in onLoadFinished()
-        mAdapter = SimpleCursorAdapter(this, R.layout.customize_event_list_item, null, fromColumns, toViews, 0)
-        lv_customize_event.adapter = mAdapter
-
-        mListHeader=inflate(applicationContext,R.layout.customize_event_list_header,null)
-
-        loaderManager.initLoader(0, null, this)
     }
 
     override fun onResume() {
         super.onResume()
-
         setupCustomizeColors()
         setupUseEnglish()
         setupManageEventTypes()
@@ -157,45 +143,9 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Ad
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        if (parent == lv_customize_event) {
-            processListViewClick(position)
-        } else {//spinner item
-
-        }
-    }
-
-    override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
-        if (parent == lv_customize_event) {
-            val cursor=lv_customize_event.getItemAtPosition(position) as Cursor
-            val id=cursor.getInt(cursor.getColumnIndex(COL_ID)).toString()
-            dbHelper.deleteEvents(arrayOf(id),true)
-            Log.d(APP_TAG,"customized event deleted with id=$id")
-        } else {//spinner item
-
-        }
-        return true
-    }
-
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
-        return CursorLoader(this, mDbUri, PROJECTION, SELECTION_CUSTOMIZED_EVENT_ORIGIN, null, null)
-    }
-
-    override fun onLoadFinished(loader: Loader<Cursor>?, data: Cursor?) {
-        mAdapter!!.swapCursor(data)
-    }
-
-    override fun onLoaderReset(loader: Loader<Cursor>?) {
-        mAdapter!!.swapCursor(null)
-    }
 
     override fun onClick(v: View?) {//for several coomponent:add button, when textview
-        if (v ==  tv_settings_customize_event_when)
-            CustomizeLunarDialog(this,tv_settings_customize_event_when.value){lunarDate, gregorianDate ->
-                tv_settings_customize_event_when.text=lunarDate
-                tv_settings_customize_event_when_gregorian.text=gregorianDate
-            }
-        else{//for add button
+        if (v == btn_customize_event_add ){
             if (mWhomFor.isEmpty()){
                 toast(R.string.whomfor_empty)
                 acs_customize_event_whomfor.requestFocus()
@@ -224,19 +174,28 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Ad
 
                     // lunar and when differs
                     events1=events.sortedBy { event -> event.id  }
-                    ConfirmationDialog(this,R.string.replace_existTitle_orNot.toString(),negative = 1){
+                    ConfirmationDialog(this,R.string.replace_existTitle_orNot.toString(),negative = R.string.no){
                         val id=events1[0].id
                         val title=events1[0].title
-                        dbHelper.deleteEvents(arrayOf(id.toString()),true)
-                        addCustomizeEvent(title)
+                        dbHelper.deleteEvents(arrayOf(id.toString()),false)
+                        addCustomizeEvent(title){
+                            toast(R.string.customized_event_succeeded)
+                        }
                     }
                 }
                 else
-                    addCustomizeEvent(title)
+                    addCustomizeEvent(title){
+                        toast(R.string.customized_event_succeeded)
+                    }
             }
 
         }
+        //no else since txt-when click was processed in setupCustomizeEvents
 
+    }
+
+    override fun refreshItems() {
+        setupCustomizeEventList()
     }
 
     private fun setupSectionColors() {
@@ -617,8 +576,8 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Ad
         acs_customize_event_whatfor.onItemSelectedListener = this
 
         tv_settings_customize_event_when.setOnClickListener {
-            CustomizeLunarDialog(this, tv_settings_customize_event_when.value) { lunarDate, gregorianDate ->
-                tv_settings_customize_event_when.text = lunarDate.substring(4,8)
+            CustomizeLunarDialog(this, lunarDate=tv_settings_customize_event_when.value) { lunarDate, gregorianDate ->
+                tv_settings_customize_event_when.text = lunarDate
                 tv_settings_customize_event_when_gregorian.text = gregorianDate
             }
         }
@@ -629,20 +588,22 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Ad
     }
 
     private fun setupCustomizeEventList() {
-        mListHeader.apply {
-            tv_customize_event_header_whomfor.text=resources.getString(R.string.customize_event_whomfor_label)
-            tv_customize_event_header_whatfor.text=resources.getString(R.string.customize_event_whatfor_label)
-            tv_customize_event_header_when.text=resources.getString(R.string.customize_event_when_label)
+        val le=dbHelper.getCustomizedEvents()
+
+        val newHash=le.hashCode()
+        if (newHash == lastHash) {
+            return
         }
 
-        if (mOldListHeader!=null)
-            lv_customize_event.removeHeaderView(mOldListHeader)
+        lastHash = newHash
 
-        lv_customize_event.addHeaderView(mListHeader)
-        mOldListHeader=mListHeader
+        CustomizeEventsAdapter(this as SimpleActivity, java.util.ArrayList<Event>(le) , rv_customize_events,
+                this,{it -> processRVItemClick(it as Event)},{ it -> processRVItemLongClick(it as Event)})
+        .apply {
+            rv_customize_events.adapter=this
+        }
 
-        lv_customize_event.onItemClickListener = this
-        lv_customize_event.onItemLongClickListener = this
+
     }
 
     private fun showReminderDialog() {
@@ -658,70 +619,82 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Ad
     }
 
 
-    private fun processListViewClick(position: Int) {
-        val cursor = lv_customize_event.getItemAtPosition(position) as Cursor
-        val id=cursor.getIntValue(COL_ID)
-        val whomfor = cursor.getStringValue(COL_WHOMFOR)
-        val whatfor = cursor.getStringValue(COL_WHATFOR)
-        val lunarDate = cursor.getStringValue(COL_LUNAR)
-        val startTs=cursor.getIntValue(COL_START_TS)
+    private fun processRVItemClick(event:Event) {
+        val title=event.title.split(" ")
+        val whomfor = title[0]
+        val whatfor = title[1]
+        val lunarDate = event.lunar
+        val id=event.id.toString()
 
         CustomizeEventDialog(this, whomfor, whatfor, lunarDate) { cb_whomfor, cb_whatfor, cb_lunarDate, cb_gregorianDate ->
             val title=cb_whomfor+" "+cb_whatfor
             val cb_startTs=Formatter.getDayStartTS(cb_gregorianDate)
             if (title == whomfor+" "+whatfor && lunarDate == cb_lunarDate) return@CustomizeEventDialog
-            addCustomizeEvent(title,cb_startTs,cb_lunarDate)
+            dbHelper.deleteEvents(arrayOf(id),true)
+            addCustomizeEvent(title,cb_startTs,cb_lunarDate){
+                toast(APP_TAG,R.string.customized_event_succeeded)
+            }
         }
     }
 
+    private fun processRVItemLongClick(event:Event) {
+        val id=event.id.toString()
+        dbHelper.deleteEvents(arrayOf(id),true)
+        Log.d(APP_TAG,"customized event deleted with id=$id,so do whose parentId is this id")
+    }
 
-    private fun addCustomizeEvent(title:String,inStartTs:Int=0,inLunarDate:String=""){
-        var startTs: Int
-        val lundarDate:String
-        var idsToProcessNotification=ArrayList<String>()
+    private fun addCustomizeEvent(title:String,inStartTs:Int=0,inLunarDate:String="",callback:()->Unit) {
+        var startTs=0;var endTs= 0; var parentId=0
+        var iGregDayofMonth=0; var iGregMonth=0;var iGregYear=0
+        var ggMonth="";var ggDayofMonth=""
+        val lundarDate: String
+        var idsToProcessNotification = ArrayList<String>()
 
-        if (inStartTs==0) {
-            val gregorian=tv_settings_customize_event_when_gregorian.value
-            //implicit: selectTs is the begining milliSeconds of the day
+        if (inStartTs == 0) {
+            val gregorian = tv_settings_customize_event_when_gregorian.value
 
             startTs = Formatter.getDayStartTS(gregorian)
         } else {
-            startTs=inStartTs
+            startTs = inStartTs
         }
 
-        if (inLunarDate.isEmpty()){
-            lundarDate=tv_settings_customize_event_when.value
-        }else{
-            lundarDate=inLunarDate
+        if (inLunarDate.isEmpty()) {
+            lundarDate = tv_settings_customize_event_when.value
+        } else {
+            lundarDate = inLunarDate
         }
 
-        var yearsToAdd=(getNowSeconds()-startTs)/ YEAR
+        var yearsToAdd = (getNowSeconds() - startTs) / YEAR
 
         if (yearsToAdd == 0) yearsToAdd++
-        else if ((DateTime().dayOfYear) < (DateTime(startTs*1000).dayOfYear)) yearsToAdd++
+        else if ((DateTime().dayOfYear) < (DateTime(startTs.toLong()).dayOfYear)) yearsToAdd++
 
-        val reminderMinute1=config.unifiedReminderTs/60*1000
-        var lunarYear=lundarDate.substring(0,4).toInt()
-        val lunarMonth=lundarDate.substring(4,6).toInt()
-        val lunarDay=lundarDate.substring(6,8).toInt()
+        val reminderMinute1 = config.unifiedReminderTs / 60
+        var lunarYear = lundarDate.substring(0, 4).toInt()
+        val lunarMonth = lundarDate.substring(4, 6).toInt()
+        val lunarDay = lundarDate.substring(6, 8).toInt()
 
-        for (i in 0..2)
-        {
-            lunarYear+=yearsToAdd+i
-            val calendarData=GregorianLunarCalendarView.CalendarData(lunarYear,lunarMonth,lunarDay,false)
-            val ggYear=calendarData.chineseCalendar.get(Calendar.YEAR)
-            val ggMonth=calendarData.chineseCalendar.get(Calendar.MONTH)
-            val ggDayofMonth=calendarData.chineseCalendar.get(Calendar.DAY_OF_MONTH)
+        for (i in 0..2) {
+            lunarYear += yearsToAdd
+            val myCal = ChineseCalendar(true, lunarYear, lunarMonth, lunarDay)
+            iGregYear = myCal.get(Calendar.YEAR)
+            iGregMonth = myCal.get(Calendar.MONTH)
+            iGregDayofMonth = myCal.get(Calendar.DAY_OF_MONTH)
+            if (iGregMonth<10) ggMonth="0$iGregMonth" else ggMonth="$iGregDayofMonth"
+            if (iGregDayofMonth<10) ggDayofMonth="0$iGregDayofMonth" else ggDayofMonth="$iGregDayofMonth"
 
-            startTs=Formatter.getDayStartTS("$ggYear$ggMonth$ggDayofMonth")
-            val event = Event(0, startTs, title = title, reminder1Minutes = reminderMinute1, source = SOURCE_CUSTOMIZE_ANNIVERSARY,
-                    color = Color.BLUE, lunar = lundarDate)
-            dbHelper.insert(event, true) {
+            startTs = Formatter.getDayStartTS("$iGregYear$ggMonth$ggDayofMonth")
+            endTs = startTs + 1
+            if (i==0) parentId=0
+            val event = Event(0, startTs, endTs, title = title, reminder1Minutes = reminderMinute1, source = SOURCE_CUSTOMIZE_ANNIVERSARY,
+                    color = Color.BLUE, lunar = lundarDate,parentId =parentId )
+            dbHelper.insert(event, false) {
                 Log.d(APP_TAG, "customized event inserted with id=$it,title=$title,startTs=$startTs")
                 idsToProcessNotification.add(it.toString())
+                parentId=it
             }
         }
         processEventRemindersNotification(idsToProcessNotification)
+        callback()
     }
-
 }
