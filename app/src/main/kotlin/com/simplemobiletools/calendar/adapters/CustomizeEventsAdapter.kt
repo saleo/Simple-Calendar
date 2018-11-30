@@ -5,22 +5,16 @@ import android.view.View
 import android.view.ViewGroup
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.activities.SimpleActivity
-import com.simplemobiletools.calendar.dialogs.DeleteEventDialog
-import com.simplemobiletools.calendar.extensions.config
-import com.simplemobiletools.calendar.extensions.dbHelper
-import com.simplemobiletools.calendar.extensions.shareEvents
-import com.simplemobiletools.calendar.helpers.Formatter
 import com.simplemobiletools.calendar.models.Event
 import com.simplemobiletools.commons.adapters.MyRecyclerViewAdapter
-import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.views.MyRecyclerView
 import kotlinx.android.synthetic.main.customize_event_item_settings_view.view.*
 import kotlinx.android.synthetic.main.event_item_day_view.view.*
 
 
 class CustomizeEventsAdapter(activity: SimpleActivity, val events: ArrayList<Event>, recyclerView: MyRecyclerView,
-                             itemClick: (Any) -> Unit,itemLongClick: (Any) -> Boolean)
-    : MyRecyclerViewAdapter(activity, recyclerView, null, itemClick,itemLongClick) {
+                             itemClick: (Any) -> Unit, itemRemoveClick: ((Any) -> Unit)?)
+    : MyRecyclerViewAdapter(activity, recyclerView, null, itemClick,itemRemoveClick) {
 
     override fun getActionMenuId() = 0
 
@@ -52,30 +46,28 @@ class CustomizeEventsAdapter(activity: SimpleActivity, val events: ArrayList<Eve
     override fun onBindViewHolder(holder: MyRecyclerViewAdapter.ViewHolder, position: Int) {
         val event = events[position]
         val view = holder.bindView(event) { itemView, layoutPosition ->
-            setupView(itemView, event)
+            setupView(itemView, event,position+1)
         }
         bindViewHolder(holder, position, view)
     }
 
     override fun getItemCount() = events.size
 
-    private fun setupView(view: View, event: Event) {
+    private fun setupView(view: View, event: Event,position: Int) {
         view.apply {
+            tv_customize_event_item_serialNo.text=position.toString()
+
             tv_customize_event_item_title.apply {
                 text = event.title
                 setOnClickListener({itemClick(event)})
-                setOnLongClickListener({
-                    itemLongClick!!.invoke(event)
-                })
             }
 
             tv_customize_event_item_lunar.apply {
                 text = event.lunar
                 setOnClickListener({itemClick(event)})
-                setOnLongClickListener({
-                    itemLongClick!!.invoke(event)
-                })
             }
+
+            iv_customize_event_item_remove.setOnClickListener {itemRemoveClick!!.invoke(event)}
 
         }
     }

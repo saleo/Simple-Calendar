@@ -368,9 +368,10 @@
     <string name="when_empty">日期不能为空</string>
     <string name="customized_event_already_exist">同样戒期已存在</string>
     <string name="replace_existTitle_orNot">同样戒期内容已存在，是否要替换?(可用作修改戒期时间)</string>
-    <string name="customized_event_succeeded">戒期添加成功！</string>
-    <string name="customized_event_failed">戒期添加失败</string>
-    <string name="customized_event_delted">戒期删除成功！</string>
+    <string name="customized_event_added">戒期添加成功！</string>
+    <string name="customized_event_deleted">戒期删除成功！</string>
+    <string name="customized_event_updated">戒期修改成功！</string>
+
     <!--
         Haven't found some stringsh? There's more at
         https://github.com/SimpleMobileTools/Simple-Commons/tree/master/commons/src/main/res

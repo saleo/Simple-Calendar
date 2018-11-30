@@ -20,7 +20,7 @@ import com.simplemobiletools.commons.views.FastScroller
 import com.simplemobiletools.commons.views.MyRecyclerView
 import java.util.*
 
-abstract class MyRecyclerViewAdapter(val activity: BaseSimpleActivity, val recyclerView: MyRecyclerView, val fastScroller: FastScroller? = null, val itemClick: (Any) -> Unit,val itemLongClick: ((Any) -> Boolean)?=null) : RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder>() {
+abstract class MyRecyclerViewAdapter(val activity: BaseSimpleActivity, val recyclerView: MyRecyclerView, val fastScroller: FastScroller? = null, val itemClick: (Any) -> Unit, val itemRemoveClick: ((Any) -> Unit)? =null) : RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder>() {
     val baseConfig = activity.baseConfig
     val resources = activity.resources!!
     val layoutInflater = activity.layoutInflater
@@ -224,7 +224,7 @@ abstract class MyRecyclerViewAdapter(val activity: BaseSimpleActivity, val recyc
 
     fun createViewHolder(layoutType: Int, parent: ViewGroup?): ViewHolder {
         val view = layoutInflater.inflate(layoutType, parent, false)
-        return ViewHolder(view, adapterListener, activity, multiSelectorMode, multiSelector, positionOffset, itemClick,itemLongClick)
+        return ViewHolder(view, adapterListener, activity, multiSelectorMode, multiSelector, positionOffset, itemClick,itemRemoveClick)
     }
 
     fun bindViewHolder(holder: MyRecyclerViewAdapter.ViewHolder, position: Int, view: View) {
@@ -251,7 +251,7 @@ abstract class MyRecyclerViewAdapter(val activity: BaseSimpleActivity, val recyc
 
     open class ViewHolder(view: View, val adapterListener: MyAdapterListener? = null, val activity: BaseSimpleActivity? = null,
                           val multiSelectorCallback: ModalMultiSelectorCallback? = null, val multiSelector: MultiSelector,
-                          val positionOffset: Int = 0, val itemClick: ((Any) -> (Unit))? = null,val itemLongClick: ((Any) -> Boolean?)?=null) : SwappingHolder(view, multiSelector) {
+                          val positionOffset: Int = 0, val itemClick: ((Any) -> (Unit))? = null, val itemRemoveClick: ((Any) -> Unit)? =null) : SwappingHolder(view, multiSelector) {
         fun bindView(any: Any, allowLongClick: Boolean = true, callback: (itemView: View, layoutPosition: Int) -> Unit): View {
             return itemView.apply {
                 callback(this, layoutPosition)

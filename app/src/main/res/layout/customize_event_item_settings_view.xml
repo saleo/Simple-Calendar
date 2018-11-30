@@ -11,31 +11,43 @@
     android:foreground="@drawable/selector"
     android:paddingLeft="@dimen/activity_margin">
 
-    <RelativeLayout
-        android:id="@+id/rl_customize_event_item_holder"
+    <LinearLayout
+        android:id="@+id/ll_customize_event_item_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/medium_margin"
         android:paddingTop="@dimen/medium_margin">
 
         <com.simplemobiletools.commons.views.MyTextView
-            android:id="@+id/tv_customize_event_item_lunar"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_customize_event_item_serialNo"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="@dimen/day_text_size"
+            android:layout_weight="1"
+            tools:text="13:00"/>
+
+        <com.simplemobiletools.commons.views.MyTextView
+            android:id="@+id/tv_customize_event_item_lunar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/day_text_size"
+            android:layout_weight="3"
             tools:text="13:00"/>
 
         <com.simplemobiletools.commons.views.MyTextView
             android:id="@+id/tv_customize_event_item_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_margin"
-            android:layout_alignParentRight="true"
             android:ellipsize="end"
             android:maxLines="1"
-            android:paddingRight="@dimen/activity_margin"
             android:textSize="@dimen/day_text_size"
+            android:layout_weight="4"
             tools:text="Event title"/>
 
-    </RelativeLayout>
+        <ImageView android:id="@+id/iv_customize_event_item_remove"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:src="@drawable/ic_minus1"/>
+    </LinearLayout>
 </FrameLayout>

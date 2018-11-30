@@ -1,17 +1,12 @@
 package com.simplemobiletools.calendar.activities
 
-import android.app.LoaderManager
-import android.content.CursorLoader
 import android.content.Intent
-import android.content.Loader
 import android.content.res.Resources
-import android.database.Cursor
 import android.graphics.Color
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
-import android.text.Editable
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -19,7 +14,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.RelativeLayout
 import cn.carbs.android.gregorianlunarcalendar.library.data.ChineseCalendar
-import cn.carbs.android.gregorianlunarcalendar.library.view.GregorianLunarCalendarView
 import com.simplemobiletools.calendar.BuildConfig
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.adapters.CustomizeEventsAdapter
@@ -37,12 +31,8 @@ import com.simplemobiletools.commons.dialogs.RadioGroupDialog
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.PERMISSION_READ_CALENDAR
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CALENDAR
-import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
 import com.simplemobiletools.commons.models.RadioItem
 import kotlinx.android.synthetic.main.activity_settings.*
-import kotlinx.android.synthetic.main.activity_settings.view.*
-import kotlinx.android.synthetic.main.customize_event_item_settings_view.*
-import kotlinx.android.synthetic.main.customize_event_item_settings_view.view.*
 import org.joda.time.DateTime
 import java.io.File
 import java.util.*
@@ -180,14 +170,14 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Vi
                         val iDeleted=dbHelper.deleteEvents(arrayOf(id.toString()),true)
                         Log.d(APP_TAG,"customized event deleted both id=$id and those whose parentId is this $id,total count=$iDeleted")
                         addCustomizeEvent(title){
-                            toast(R.string.customized_event_succeeded)
+                            toast(R.string.customized_event_added)
                             refreshItems()
                         }
                     }
                 }
                 else
                     addCustomizeEvent(title){
-                        toast(R.string.customized_event_succeeded)
+                        toast(R.string.customized_event_added)
                         refreshItems()
                     }
             }
@@ -203,7 +193,7 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Vi
 
     private fun setupSectionColors() {
         val adjustedPrimaryColor = getAdjustedPrimaryColor()
-        arrayListOf(tv_settings_builtin_events_reminder_time_label, caldav_label, weekly_view_label, monthly_view_label, simple_event_list_label, simple_font_size_label).forEach {
+        arrayListOf( caldav_label, weekly_view_label, monthly_view_label, simple_event_list_label, simple_font_size_label).forEach {
             it.setTextColor(adjustedPrimaryColor)
         }
     }
@@ -591,7 +581,7 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Vi
     }
 
     private fun setupCustomizeEventList() {
-        val le=dbHelper.getCustomizedEvents()
+        val le=dbHelper.getCustomizedEvents().sortedByDescending { event ->event.id  }
 
         val newHash=le.hashCode()
         if (newHash == lastHash) {
@@ -601,8 +591,11 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Vi
         lastHash = newHash
 
         val ceAdapter = CustomizeEventsAdapter(this as SimpleActivity, java.util.ArrayList<Event>(le) , rv_customize_events,
-                {any -> processRVItemClick(any as Event)},{any -> processRVItemLongClick(any as Event)})
-        this.runOnUiThread { rv_customize_events.adapter=ceAdapter }
+                {any -> itemModifyClick(any as Event)},{ any -> itemRemoveClick(any as Event)})
+
+
+
+        this.runOnUiThread { ceAdapter.addVerticalDividers(true);rv_customize_events.adapter=ceAdapter }
 
 
     }
@@ -620,7 +613,7 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Vi
     }
 
 
-    private fun processRVItemClick(event:Event) {
+    private fun itemModifyClick(event:Event) {
         val title=event.title.split(" ")
         val whomfor = title[0]
         val whatfor = title[1]
@@ -634,19 +627,18 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Vi
             val iDeleted=dbHelper.deleteEvents(arrayOf(id),true)
             Log.d(APP_TAG,"customized event deleted both id=$id and those whose parentId is this $id,total count=$iDeleted")
             addCustomizeEvent(title,cb_startTs,cb_lunarDate){
-                toast(R.string.customized_event_succeeded)
+                toast(R.string.customized_event_updated)
                 refreshItems()
             }
         }
     }
 
-    private fun processRVItemLongClick(event:Event):Boolean {
+    private fun itemRemoveClick(event:Event) {
         val id=event.id.toString()
         val iDeleted=dbHelper.deleteEvents(arrayOf(id),true)
-        toast(R.string.customized_event_delted)
+        toast(R.string.customized_event_deleted)
         Log.d(APP_TAG,"customized event deleted both id=$id and those whose parentId is this $id,total count=$iDeleted")
         refreshItems()
-        return true
     }
 
     private fun addCustomizeEvent(title:String,inStartTs:Int=0,inLunarDate:String="",callback:()->Unit) {
