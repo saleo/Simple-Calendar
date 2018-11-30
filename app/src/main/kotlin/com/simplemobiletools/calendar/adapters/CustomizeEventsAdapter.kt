@@ -13,14 +13,13 @@ import com.simplemobiletools.calendar.helpers.Formatter
 import com.simplemobiletools.calendar.models.Event
 import com.simplemobiletools.commons.adapters.MyRecyclerViewAdapter
 import com.simplemobiletools.commons.extensions.applyColorFilter
-import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
 import com.simplemobiletools.commons.views.MyRecyclerView
 import kotlinx.android.synthetic.main.customize_event_item_settings_view.view.*
 import kotlinx.android.synthetic.main.event_item_day_view.view.*
 
 
 class CustomizeEventsAdapter(activity: SimpleActivity, val events: ArrayList<Event>, recyclerView: MyRecyclerView,
-                             val listener: RefreshRecyclerViewListener?,itemClick: (Any) -> Unit, itemLongClick: ((Any) -> Unit)?=null)
+                             itemClick: (Any) -> Unit,itemLongClick: (Any) -> Boolean)
     : MyRecyclerViewAdapter(activity, recyclerView, null, itemClick,itemLongClick) {
 
     override fun getActionMenuId() = 0
@@ -62,47 +61,22 @@ class CustomizeEventsAdapter(activity: SimpleActivity, val events: ArrayList<Eve
 
     private fun setupView(view: View, event: Event) {
         view.apply {
-            tv_customize_event_item_title.text = event.title
-            tv_customize_event_item_lunar.text = event.lunar
-
-            tv_customize_event_item_title.setOnClickListener({itemClick(event)})
-            tv_customize_event_item_lunar.setOnClickListener({itemClick(event)})
-        }
-    }
-
-    private fun shareEvents() {
-        val eventIds = ArrayList<Int>(selectedPositions.size)
-        selectedPositions.forEach {
-            eventIds.add(events[it].id)
-        }
-        activity.shareEvents(eventIds.distinct())
-    }
-
-    private fun askConfirmDelete() {
-        val eventIds = ArrayList<Int>(selectedPositions.size)
-        val timestamps = ArrayList<Int>(selectedPositions.size)
-        selectedPositions.forEach {
-            eventIds.add(events[it].id)
-            timestamps.add(events[it].startTS)
-        }
-
-        DeleteEventDialog(activity, eventIds) {
-            val eventsToDelete = ArrayList<Event>(selectedPositions.size)
-            selectedPositions.sortedDescending().forEach {
-                eventsToDelete.add(events[it])
+            tv_customize_event_item_title.apply {
+                text = event.title
+                setOnClickListener({itemClick(event)})
+                setOnLongClickListener({
+                    itemLongClick!!.invoke(event)
+                })
             }
-            events.removeAll(eventsToDelete)
 
-            if (it) {
-                val eventIDs = Array(eventIds.size, { i -> (eventIds[i].toString()) })
-                activity.dbHelper.deleteEvents(eventIDs, true)
-            } else {
-                eventIds.forEachIndexed { index, value ->
-                    activity.dbHelper.addEventRepeatException(value, timestamps[index], true)
-                }
+            tv_customize_event_item_lunar.apply {
+                text = event.lunar
+                setOnClickListener({itemClick(event)})
+                setOnLongClickListener({
+                    itemLongClick!!.invoke(event)
+                })
             }
-            removeSelectedItems()
+
         }
     }
-
 }

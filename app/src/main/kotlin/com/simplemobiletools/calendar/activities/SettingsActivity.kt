@@ -48,7 +48,7 @@ import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,View.OnClickListener,RefreshRecyclerViewListener {
+class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,View.OnClickListener {
     private val GET_RINGTONE_URI = 1
     private val COL_ID = "id"
     private val COL_START_TS = "start_ts"
@@ -177,15 +177,18 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Vi
                     ConfirmationDialog(this,R.string.replace_existTitle_orNot.toString(),negative = R.string.no){
                         val id=events1[0].id
                         val title=events1[0].title
-                        dbHelper.deleteEvents(arrayOf(id.toString()),false)
+                        val iDeleted=dbHelper.deleteEvents(arrayOf(id.toString()),true)
+                        Log.d(APP_TAG,"customized event deleted both id=$id and those whose parentId is this $id,total count=$iDeleted")
                         addCustomizeEvent(title){
                             toast(R.string.customized_event_succeeded)
+                            refreshItems()
                         }
                     }
                 }
                 else
                     addCustomizeEvent(title){
                         toast(R.string.customized_event_succeeded)
+                        refreshItems()
                     }
             }
 
@@ -194,7 +197,7 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Vi
 
     }
 
-    override fun refreshItems() {
+    private fun refreshItems() {
         setupCustomizeEventList()
     }
 
@@ -597,11 +600,9 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Vi
 
         lastHash = newHash
 
-        CustomizeEventsAdapter(this as SimpleActivity, java.util.ArrayList<Event>(le) , rv_customize_events,
-                this,{it -> processRVItemClick(it as Event)},{ it -> processRVItemLongClick(it as Event)})
-        .apply {
-            rv_customize_events.adapter=this
-        }
+        val ceAdapter = CustomizeEventsAdapter(this as SimpleActivity, java.util.ArrayList<Event>(le) , rv_customize_events,
+                {any -> processRVItemClick(any as Event)},{any -> processRVItemLongClick(any as Event)})
+        this.runOnUiThread { rv_customize_events.adapter=ceAdapter }
 
 
     }
@@ -630,17 +631,22 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Vi
             val title=cb_whomfor+" "+cb_whatfor
             val cb_startTs=Formatter.getDayStartTS(cb_gregorianDate)
             if (title == whomfor+" "+whatfor && lunarDate == cb_lunarDate) return@CustomizeEventDialog
-            dbHelper.deleteEvents(arrayOf(id),true)
+            val iDeleted=dbHelper.deleteEvents(arrayOf(id),true)
+            Log.d(APP_TAG,"customized event deleted both id=$id and those whose parentId is this $id,total count=$iDeleted")
             addCustomizeEvent(title,cb_startTs,cb_lunarDate){
-                toast(APP_TAG,R.string.customized_event_succeeded)
+                toast(R.string.customized_event_succeeded)
+                refreshItems()
             }
         }
     }
 
-    private fun processRVItemLongClick(event:Event) {
+    private fun processRVItemLongClick(event:Event):Boolean {
         val id=event.id.toString()
-        dbHelper.deleteEvents(arrayOf(id),true)
-        Log.d(APP_TAG,"customized event deleted with id=$id,so do whose parentId is this id")
+        val iDeleted=dbHelper.deleteEvents(arrayOf(id),true)
+        toast(R.string.customized_event_delted)
+        Log.d(APP_TAG,"customized event deleted both id=$id and those whose parentId is this $id,total count=$iDeleted")
+        refreshItems()
+        return true
     }
 
     private fun addCustomizeEvent(title:String,inStartTs:Int=0,inLunarDate:String="",callback:()->Unit) {
@@ -680,7 +686,7 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Vi
             iGregYear = myCal.get(Calendar.YEAR)
             iGregMonth = myCal.get(Calendar.MONTH)
             iGregDayofMonth = myCal.get(Calendar.DAY_OF_MONTH)
-            if (iGregMonth<10) ggMonth="0$iGregMonth" else ggMonth="$iGregDayofMonth"
+            if (iGregMonth<10) ggMonth="0$iGregMonth" else ggMonth="$iGregMonth"
             if (iGregDayofMonth<10) ggDayofMonth="0$iGregDayofMonth" else ggDayofMonth="$iGregDayofMonth"
 
             startTs = Formatter.getDayStartTS("$iGregYear$ggMonth$ggDayofMonth")
@@ -691,7 +697,7 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Vi
             dbHelper.insert(event, false) {
                 Log.d(APP_TAG, "customized event inserted with id=$it,title=$title,startTs=$startTs")
                 idsToProcessNotification.add(it.toString())
-                parentId=it
+                if (i==0) parentId=it
             }
         }
         processEventRemindersNotification(idsToProcessNotification)

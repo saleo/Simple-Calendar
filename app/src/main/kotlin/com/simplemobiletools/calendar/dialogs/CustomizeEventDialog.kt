@@ -28,9 +28,7 @@ class CustomizeEventDialog(val activity: SimpleActivity, val whomfor: String="",
 
     var dialog: AlertDialog
 
-    val view = (activity.layoutInflater.inflate(R.layout.dialog_customize_event, null) as ViewGroup).apply {
-        setupDialogComponents()
-    }
+    val view = (activity.layoutInflater.inflate(R.layout.dialog_customize_event, null) as ViewGroup)
 
     init{
         dialog = android.support.v7.app.AlertDialog.Builder(activity)
@@ -41,6 +39,7 @@ class CustomizeEventDialog(val activity: SimpleActivity, val whomfor: String="",
                         window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
                         window!!.decorView.setPadding(0, 0, 0, 0)
                     }
+                    setupDialogComponents()
                 }
     }
 
