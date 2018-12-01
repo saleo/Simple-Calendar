@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/calendar_holder">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_top_holder">
 
     <ImageView
         android:id="@+id/top_month"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/sk2018_12"
+        android:src="@drawable/sk2018"
         android:scaleType="fitXY"/>
+
+    <TextView
+        android:id="@+id/tv_month_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/default_holidays_color"
+        android:text="12月"
+        android:textSize="30sp"
+        android:layout_alignBottom="@+id/top_month"/>
 
     <!--<com.simplemobiletools.commons.views.MyTextView-->
         <!--android:id="@+id/top_value"-->
@@ -34,4 +48,4 @@
         <!--android:paddingRight="@dimen/activity_margin"-->
         <!--android:src="@drawable/ic_pointer_right"/>-->
 
-</merge>
+</RelativeLayout>

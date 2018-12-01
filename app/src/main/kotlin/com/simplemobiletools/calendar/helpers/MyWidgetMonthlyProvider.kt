@@ -160,7 +160,7 @@ class MyWidgetMonthlyProvider : AppWidgetProvider() {
                 val views = RemoteViews(context.packageName, R.layout.fragment_month_widget)
                 setMonthDisplayed(views,DateTime.now())
 
-                views.setBackgroundColor(R.id.calendar_holder, context.config.widgetBgColor)
+                views.setBackgroundColor(R.id.rl_top_holder, context.config.widgetBgColor)
 
                 var bmp =  resources.getColoredBitmap(R.drawable.ic_plus, textColor)
                 views.setImageViewBitmap(R.id.top_new_event, bmp)

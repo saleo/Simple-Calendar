@@ -170,10 +170,10 @@ fun Activity.setupBottomButtonBar(mHolder: ViewGroup) {
         }
     }
 
-    if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder){
-        ib_bcc_plus.visibility= View.VISIBLE
-        ib_bcc_plus.setOnClickListener { launchNewEventIntent() }
-    }
+//    if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder){
+//        ib_bcc_plus.visibility= View.VISIBLE
+//        ib_bcc_plus.setOnClickListener { launchNewEventIntent() }
+//    }
 
 }
 

@@ -12,20 +12,18 @@
         android:id="@+id/day_monthly_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/top_month"
-        android:layout_alignBottom="@+id/top_month"
-        android:paddingLeft="@dimen/day_number_over_image_left_padding"
-        android:shadowColor="#ff000000"
-        android:shadowRadius="10"
-        android:shadowDx="-10"
-        android:shadowDy="-10"
-        android:text="10000" />
+        android:layout_alignBottom="@+id/rl_top_holder"
+        android:paddingLeft="70dp"
+        android:paddingBottom="10dp"
+        android:textSize="20dp"
+        android:textColor="@color/default_holidays_color"
+        android:text="10日" />
 
     <com.simplemobiletools.commons.views.MyRecyclerView
         android:id="@+id/day_events"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/top_month"
+        android:layout_below="@+id/rl_top_holder"
         android:orientation="vertical"
         android:clipToPadding="true"
         app:layoutManager="com.simplemobiletools.commons.views.MyLinearLayoutManager"/>

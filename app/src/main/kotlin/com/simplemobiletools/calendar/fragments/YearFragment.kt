@@ -33,7 +33,7 @@ class YearFragment : Fragment(), YearlyCalendar {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater.inflate(R.layout.fragment_year, container, false)
         mYear = arguments!!.getInt(YEAR_LABEL)
-        context!!.updateTextColors(mView.calendar_holder)
+        context!!.updateTextColors(mView.rl_top_holder)
         setupMonths()
 
         mCalendar = YearlyCalendarImpl(this, context!!, mYear)
