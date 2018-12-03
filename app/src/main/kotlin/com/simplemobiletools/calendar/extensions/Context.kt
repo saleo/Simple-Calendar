@@ -562,11 +562,12 @@ fun Context.processEventRemindersNotification(eventIdsToProcess:ArrayList<String
     }
 }
 
-fun Context.launchSettings() {
+fun Context.launchSettings(shortClassName:String) {
     startActivity(Intent(applicationContext, SettingsActivity::class.java))
 }
 
-fun Context.launchAbout() {
+fun Context.launchAbout(shortClassName:String) {
+    if (shortClassName.contains(ABOUT_ACTIVITY_CLASSNAME,true)) return
     val faqItems = arrayListOf(
             FAQItem(R.string.faq_1_title_commons, R.string.faq_1_text_commons),
             FAQItem(R.string.faq_2_title_commons, R.string.faq_2_text_commons),
@@ -585,6 +586,3 @@ fun Context.launchAbout() {
     }
 }
 
-fun Context.gotoToday(){
-    startActivity(Intent(this, MainActivity::class.java))
-}

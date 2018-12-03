@@ -62,6 +62,7 @@ import kotlin.collections.ArrayList
 const val MY_PERMISSIONS_REQUEST_READ_CALENDAR=1
 
 class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
+//    var mCurrentShownMonth="";var mCurrentShownDay=""
     private val CALDAV_SYNC_DELAY = 1000L
     private val SKCAL_NON_EXIST=1
     private val SKCAL_CHECK_ERROR=0
@@ -102,17 +103,12 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             launchNewEventIntent(currentFragments.last().getNewEventDayCode())
         }
 
-        storeStateVariables()
+        getStoredStateVariables()
         if (resources.getBoolean(R.bool.portrait_only)) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
         if (intent?.action == Intent.ACTION_VIEW && intent.data != null) {
-            val dayCode= intent?.extras?.getInt(DAY_CODE).toString()
-            if (dayCode != "0"){
-                openDayFromMonthly(Formatter.getDateTimeFromCode(dayCode))
-                return
-            }
 
             val uri = intent.data
             if (uri.authority == "com.android.calendar") {
@@ -167,7 +163,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         if (!hasPermission(PERMISSION_WRITE_CALENDAR) || !hasPermission(PERMISSION_READ_CALENDAR)) {
             config.caldavSync = false
         }
-        config.isSundayFirst = false
     }
 
     override fun onResume() {
@@ -186,26 +181,28 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             mShouldFilterBeVisible = it.size > 1 || config.displayEventTypes.isEmpty()
         }
 
-        if (config.storedView == WEEKLY_VIEW) {
-            if (mStoredIsSundayFirst != config.isSundayFirst || mStoredUse24HourFormat != config.use24hourFormat) {
-                updateViewPager()
+        if (config.storedView != EVENTS_LIST_VIEW) {
+            updateTextColors(calendar_coordinator)
+            if (config.storedView == WEEKLY_VIEW) {
+                if (mStoredIsSundayFirst != config.isSundayFirst || mStoredUse24HourFormat != config.use24hourFormat) {
+                    updateViewPager()
+                }
             }
         }
 
-        storeStateVariables()
         updateWidgets()
-        if (config.storedView != EVENTS_LIST_VIEW) {
-            updateTextColors(calendar_coordinator)
-        }
+
         calendar_fab.setColors(config.textColor, getAdjustedPrimaryColor(), config.backgroundColor)
         search_holder.background = ColorDrawable(config.backgroundColor)
 
         refreshCalDAVCalendars(showRefreshToastOnActivityResume)
+        getStoredStateVariables()
+
     }
 
     override fun onPause() {
         super.onPause()
-        storeStateVariables()
+        getStoredStateVariables()
     }
 
     override fun onStop() {
@@ -246,8 +243,8 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             R.id.add_anniversaries -> tryAddAnniversaries()
             R.id.import_events -> tryImportEvents()
             R.id.export_events -> tryExportEvents()
-            R.id.settings -> launchSettings()
-            R.id.about -> launchAbout()
+            R.id.settings -> launchSettings(componentName.shortClassName)
+            R.id.about -> launchAbout(componentName.shortClassName)
             android.R.id.home -> onBackPressed()
             else -> return super.onOptionsItemSelected(item)
         }
@@ -262,7 +259,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
     }
 
-    private fun storeStateVariables() {
+    private fun getStoredStateVariables() {
         config.apply {
             mStoredUseEnglish = useEnglish
             mStoredIsSundayFirst = isSundayFirst
@@ -270,7 +267,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             mStoredPrimaryColor = primaryColor
             mStoredBackgroundColor = backgroundColor
             mStoredUse24HourFormat = use24hourFormat
-            storedView= MONTHLY_VIEW //override stored ones
         }
         mStoredDayCode = Formatter.getTodayCode(applicationContext)
     }
@@ -558,7 +554,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         return eventTypeId
     }
 
-    private fun updateView(view: Int) {
+    fun updateView(view: Int) {
         //calendar_fab.beVisibleIf(view != YEARLY_VIEW)
         config.storedView = view
         updateViewPager()
@@ -578,7 +574,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         val bundle = Bundle()
 
         when (config.storedView) {
-            DAILY_VIEW, MONTHLY_VIEW -> bundle.putString(DAY_CODE, dayCode)
+            DAILY_VIEW, MONTHLY_VIEW, QINGXIN_VIEW -> bundle.putString(DAY_CODE, dayCode)
             WEEKLY_VIEW -> bundle.putString(WEEK_START_DATE_TIME, getThisWeekDateTime())
         }
 
@@ -606,6 +602,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         if (currentFragments.last() is DayFragmentsHolder) {
             return
         }
+        config.storedView= DAILY_VIEW
 
         val fragment = DayFragmentsHolder()
         currentFragments.add(fragment)
@@ -629,6 +626,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         MONTHLY_VIEW -> MonthFragmentsHolder()
         YEARLY_VIEW -> YearFragmentsHolder()
         EVENTS_LIST_VIEW -> EventListFragment()
+        QINGXIN_VIEW -> QingxinFragment()
         else -> WeekFragmentsHolder()
     }
 
@@ -908,6 +906,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     fun openQingxinFromMonthly(dateTime: DateTime) {
+        config.storedView= QINGXIN_VIEW
 
         if (currentFragments.last() is QingxinFragment) {
             return

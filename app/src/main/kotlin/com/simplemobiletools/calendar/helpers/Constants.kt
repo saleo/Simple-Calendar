@@ -23,6 +23,7 @@ const val YEARLY_VIEW = 2
 const val EVENTS_LIST_VIEW = 3
 const val WEEKLY_VIEW = 4
 const val DAILY_VIEW = 5
+const val QINGXIN_VIEW=6
 
 const val REMINDER_OFF = -1
 
@@ -169,3 +170,7 @@ const val FORBIDDEN_DAY= 2
 const val ANNIVERSARY_DAY= 3
 
 const val PLACEHOLDER_8WHITESPACE="                "
+
+const val SETTINGS_ACTIVITY_CLASSNAME="SettingsActivity"
+const val ABOUT_ACTIVITY_CLASSNAME="AboutActivity"
+const val MAIN_ACTIVITY_CLASSNAME="MainActivity"

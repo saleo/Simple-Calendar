@@ -12,6 +12,7 @@ import android.view.WindowManager
 import android.widget.RelativeLayout
 import com.simplemobiletools.calendar.BuildConfig
 import com.simplemobiletools.calendar.R
+import com.simplemobiletools.calendar.activities.MainActivity
 import com.simplemobiletools.calendar.dialogs.CustomEventReminderDialog
 import com.simplemobiletools.calendar.dialogs.CustomEventRepeatIntervalDialog
 import com.simplemobiletools.calendar.helpers.*
@@ -141,15 +142,15 @@ fun Activity.showEventRepeatIntervalDialog(curSeconds: Int, callback: (minutes: 
 fun Activity.setupBottomButtonBar(mHolder: ViewGroup) {
     mHolder.apply {
         ib_bcc_info.setOnClickListener {
-            context.launchAbout()
+            context.launchAbout(componentName.shortClassName)
         }
 
         ib_bcc_setting.setOnClickListener {
-            context.launchSettings()
+            context.launchSettings(componentName.shortClassName)
         }
 
         ib_bcc_today.setOnClickListener {
-            context.gotoToday()
+            goToday(context)
         }
 
         ib_bcc_share.setOnClickListener {
@@ -170,10 +171,10 @@ fun Activity.setupBottomButtonBar(mHolder: ViewGroup) {
         }
     }
 
-//    if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder){
-//        ib_bcc_plus.visibility= View.VISIBLE
-//        ib_bcc_plus.setOnClickListener { launchNewEventIntent() }
-//    }
+    if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder){
+        ib_bcc_plus.visibility= View.VISIBLE
+        ib_bcc_plus.setOnClickListener { launchNewEventIntent() }
+    }
 
 }
 
@@ -225,3 +226,18 @@ fun Activity.shareScreen(){
         showErrorToast(e)
     }
 }
+
+fun Activity.goToday(context: Context){
+    if (componentName.shortClassName.contains(MAIN_ACTIVITY_CLASSNAME,true)) {
+        when (config.storedView){
+            MONTHLY_VIEW->(this as MainActivity)!!.goToToday()
+            else->        (this as MainActivity)!!.updateView(MONTHLY_VIEW)
+        }
+    } else
+        startActivity(Intent(context, MainActivity::class.java))
+}
+
+//fun Activity.getCurrentShownMonthPlusDay(currentDayCode:String){
+//    (this as? MainActivity)?.mCurrentShownMonth=currentDayCode.substring(4,6)
+//    (this as? MainActivity)?.mCurrentShownDay=currentDayCode.substring(6,8)
+//}
