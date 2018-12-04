@@ -12,6 +12,7 @@ import com.simplemobiletools.calendar.activities.MainActivity
 import com.simplemobiletools.calendar.activities.SimpleActivity
 import com.simplemobiletools.calendar.adapters.EventListAdapter
 import com.simplemobiletools.calendar.extensions.*
+import com.simplemobiletools.calendar.helpers.DAY_CODE
 import com.simplemobiletools.calendar.helpers.EVENT_ID
 import com.simplemobiletools.calendar.helpers.EVENT_OCCURRENCE_TS
 import com.simplemobiletools.calendar.helpers.Formatter
@@ -20,6 +21,7 @@ import com.simplemobiletools.calendar.models.ListEvent
 import com.simplemobiletools.commons.extensions.beGoneIf
 import com.simplemobiletools.commons.extensions.beVisibleIf
 import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
+import kotlinx.android.synthetic.main.bottom_contact_copyright.*
 import kotlinx.android.synthetic.main.fragment_event_list.view.*
 import org.joda.time.DateTime
 import java.util.*
@@ -29,15 +31,16 @@ class EventListFragment : MyFragmentHolder(), RefreshRecyclerViewListener {
     private var prevEventsHash = 0
     private var use24HourFormat = false
     lateinit var mView: View
+    private var mDayCode=""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater.inflate(R.layout.fragment_event_list, container, false)
         val placeholderText = String.format(getString(R.string.two_string_placeholder), "${getString(R.string.no_upcoming_events)}\n", getString(R.string.add_some_events))
         mView.calendar_empty_list_placeholder.text = placeholderText
         mView.background = ColorDrawable(context!!.config.backgroundColor)
-        mView.calendar_events_list_holder?.id = (System.currentTimeMillis() % 100000).toInt()
         use24HourFormat = context!!.config.use24hourFormat
         updateActionBarTitle()
+        mDayCode = arguments!!.getString(DAY_CODE)
         return mView
     }
 
@@ -49,6 +52,7 @@ class EventListFragment : MyFragmentHolder(), RefreshRecyclerViewListener {
             use24HourFormat = use24Hour
             (mView.calendar_events_list.adapter as? EventListAdapter)?.toggle24HourFormat(use24HourFormat)
         }
+        (activity as MainActivity).updateContentBasedMonth(Formatter.getDateTimeFromCode(mDayCode),mView.calendar_events_list_holder)
     }
 
     override fun onPause() {

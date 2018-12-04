@@ -50,6 +50,7 @@ import com.simplemobiletools.commons.models.Release
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sentense.view.*
 import kotlinx.android.synthetic.main.fragment_day.view.*
+import kotlinx.android.synthetic.main.fragment_event_list.view.*
 import kotlinx.android.synthetic.main.fragment_month.view.*
 import kotlinx.android.synthetic.main.fragment_qingxin.view.*
 import kotlinx.android.synthetic.main.top_navigation.view.*
@@ -574,7 +575,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         val bundle = Bundle()
 
         when (config.storedView) {
-            DAILY_VIEW, MONTHLY_VIEW, QINGXIN_VIEW -> bundle.putString(DAY_CODE, dayCode)
+            DAILY_VIEW, MONTHLY_VIEW, QINGXIN_VIEW, EVENTS_LIST_VIEW -> bundle.putString(DAY_CODE, dayCode)
             WEEKLY_VIEW -> bundle.putString(WEEK_START_DATE_TIME, getThisWeekDateTime())
         }
 
@@ -938,7 +939,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
         mHolder.apply {
 
-            if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder){
+            if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder || mHolder == calendar_events_list_holder){
                 //from dayfragement,monthfragment
                 mBottomSentences=res.getStringArray(R.array.bottom_sentences_digest)
                 bottom_sentense0.textSize = config.getFontSize()*1.01.toFloat()
@@ -961,7 +962,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
             if (intYear == 2016 || intYear==2018) {
                 top_month.setImageResource(R.drawable.sk2018)
-                if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder){
+                if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder || mHolder ==calendar_events_list_holder){
                     //from dayfragement,monthfragment
                     bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
                     bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
@@ -975,7 +976,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
             } else if (intYear == 2017 || intYear==2019) {
                 top_month.setImageResource(R.drawable.sk2019)
-                if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder){
+                if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder || mHolder ==calendar_events_list_holder){
                     //from dayfragement,monthfragment
                     bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+36]
                     bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+37]
@@ -988,7 +989,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                 }
             } else {
                 top_month.setImageResource(R.drawable.sk_banner)
-                if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder){
+                if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder || mHolder ==calendar_events_list_holder){
                     //from dayfragement,monthfragment
                     bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
                     bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]

@@ -169,13 +169,11 @@ fun Activity.setupBottomButtonBar(mHolder: ViewGroup) {
             }
 
         }
-    }
+        ib_bcc_list.setOnClickListener {
+            showEventList(context)
+        }
 
-    if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder){
-        ib_bcc_plus.visibility= View.VISIBLE
-        ib_bcc_plus.setOnClickListener { launchNewEventIntent() }
     }
-
 }
 
 
@@ -237,6 +235,16 @@ fun Activity.goToday(context: Context){
         startActivity(Intent(context, MainActivity::class.java))
 }
 
+    private fun Activity.showEventList(context: Context){
+        if (componentName.shortClassName.contains(MAIN_ACTIVITY_CLASSNAME,true)) {
+            when (config.storedView){
+                EVENTS_LIST_VIEW-> return
+                else-> (this as MainActivity)!!.updateView(EVENTS_LIST_VIEW)
+            }
+        } else
+            startActivity(Intent(context, MainActivity::class.java))
+
+    }
 //fun Activity.getCurrentShownMonthPlusDay(currentDayCode:String){
 //    (this as? MainActivity)?.mCurrentShownMonth=currentDayCode.substring(4,6)
 //    (this as? MainActivity)?.mCurrentShownDay=currentDayCode.substring(6,8)
