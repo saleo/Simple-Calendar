@@ -167,7 +167,7 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Vi
                     ConfirmationDialog(this,R.string.replace_existTitle_orNot.toString(),negative = R.string.no){
                         val id=events1[0].id
                         val title=events1[0].title
-                        val iDeleted=dbHelper.deleteEvents(arrayOf(id.toString()),true)
+                        val iDeleted=dbHelper.deleteEvents(arrayOf(id.toString()),false)
                         Log.d(APP_TAG,"customized event deleted both id=$id and those whose parentId is this $id,total count=$iDeleted")
                         addCustomizeEvent(title){
                             toast(R.string.customized_event_added)
@@ -624,7 +624,7 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Vi
             val title=cb_whomfor+" "+cb_whatfor
             val cb_startTs=Formatter.getDayStartTS(cb_gregorianDate)
             if (title == whomfor+" "+whatfor && lunarDate == cb_lunarDate) return@CustomizeEventDialog
-            val iDeleted=dbHelper.deleteEvents(arrayOf(id),true)
+            val iDeleted=dbHelper.deleteEvents(arrayOf(id),false)
             Log.d(APP_TAG,"customized event deleted both id=$id and those whose parentId is this $id,total count=$iDeleted")
             addCustomizeEvent(title,cb_startTs,cb_lunarDate){
                 toast(R.string.customized_event_updated)
@@ -635,7 +635,7 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Vi
 
     private fun itemRemoveClick(event:Event) {
         val id=event.id.toString()
-        val iDeleted=dbHelper.deleteEvents(arrayOf(id),true)
+        val iDeleted=dbHelper.deleteEvents(arrayOf(id),false)
         toast(R.string.customized_event_deleted)
         Log.d(APP_TAG,"customized event deleted both id=$id and those whose parentId is this $id,total count=$iDeleted")
         refreshItems()

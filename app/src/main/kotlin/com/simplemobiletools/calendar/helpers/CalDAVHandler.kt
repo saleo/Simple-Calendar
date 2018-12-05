@@ -492,14 +492,18 @@ class CalDAVHandler(val context: Context) {
     fun insertCalDAVEvent(event: Event) {
         val uri = CalendarContract.Events.CONTENT_URI
         val values = fillEventContentValues(event)
-        val newUri = context.contentResolver.insert(uri, values)
 
-        val calendarId = event.getCalDAVCalendarId()
-        val eventRemoteID = java.lang.Long.parseLong(newUri.lastPathSegment)
-        event.importId = getCalDAVEventImportId(calendarId, eventRemoteID)
+        try{
+            val newUri = context.contentResolver.insert(uri, values)
+            val calendarId = event.getCalDAVCalendarId()
+            val eventRemoteID = java.lang.Long.parseLong(newUri.lastPathSegment)
+            event.importId = getCalDAVEventImportId(calendarId, eventRemoteID)
 
-        setupCalDAVEventReminders(event)
-        setupCalDAVEventImportId(event)
+            setupCalDAVEventReminders(event)
+            setupCalDAVEventImportId(event)
+        } catch (e: Exception) {
+            context.toast(e.toString())
+        }
     }
 
     fun updateCalDAVEvent(event: Event) {

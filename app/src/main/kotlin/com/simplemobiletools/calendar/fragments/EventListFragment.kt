@@ -21,7 +21,6 @@ import com.simplemobiletools.calendar.models.ListEvent
 import com.simplemobiletools.commons.extensions.beGoneIf
 import com.simplemobiletools.commons.extensions.beVisibleIf
 import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
-import kotlinx.android.synthetic.main.bottom_contact_copyright.*
 import kotlinx.android.synthetic.main.fragment_event_list.view.*
 import org.joda.time.DateTime
 import java.util.*
@@ -46,7 +45,7 @@ class EventListFragment : MyFragmentHolder(), RefreshRecyclerViewListener {
 
     override fun onResume() {
         super.onResume()
-        checkEvents()
+        updateEvents()
         val use24Hour = context!!.config.use24hourFormat
         if (use24Hour != use24HourFormat) {
             use24HourFormat = use24Hour
@@ -60,7 +59,7 @@ class EventListFragment : MyFragmentHolder(), RefreshRecyclerViewListener {
         use24HourFormat = context!!.config.use24hourFormat
     }
 
-    private fun checkEvents() {
+    fun updateEvents() {
         val fromTS = DateTime().seconds() - context!!.config.displayPastEvents * 60
         val toTS = DateTime().plusYears(1).seconds()
         context!!.dbHelper.getEvents(fromTS, toTS) {
@@ -111,14 +110,14 @@ class EventListFragment : MyFragmentHolder(), RefreshRecyclerViewListener {
     }
 
     override fun refreshItems() {
-        checkEvents()
+        updateEvents()
     }
 
     override fun goToToday() {
     }
 
     override fun refreshEvents() {
-        checkEvents()
+        updateEvents()
     }
 
     override fun shouldGoToTodayBeVisible() = false

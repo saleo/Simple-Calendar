@@ -515,7 +515,7 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         }
 
         if (childIds.isNotEmpty())
-            deleteEvents(childIds.toTypedArray(), deleteFromCalDAV)
+            iDeletedChild=deleteEvents(childIds.toTypedArray(), deleteFromCalDAV)
 
         callback!!.invoke(iDeletedChild)
     }
