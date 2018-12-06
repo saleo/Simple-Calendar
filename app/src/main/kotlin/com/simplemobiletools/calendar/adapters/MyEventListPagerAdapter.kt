@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.util.SparseArray
-import com.simplemobiletools.calendar.fragments.DayFragment
 import com.simplemobiletools.calendar.fragments.EventListFragment
 import com.simplemobiletools.calendar.helpers.DAY_CODE
 import com.simplemobiletools.calendar.interfaces.NavigationListener
@@ -29,9 +28,9 @@ class MyEventListPagerAdapter(fm: FragmentManager, private val mCodes: List<Stri
         return fragment
     }
 
-    fun updateCalendars(pos: Int) {
+    fun updateMonthlyEventLists(pos: Int) {
         for (i in -1..1) {
-            mFragments[pos + i]?.updateEvents()
+            mFragments[pos + i]?.updateCalendar()
         }
     }
 }

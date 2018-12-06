@@ -1,8 +1,8 @@
 package com.simplemobiletools.calendar.fragments
 
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_event_list.view.*
 import org.joda.time.DateTime
 import java.util.*
 
-class EventListFragment : MyFragmentHolder(), RefreshRecyclerViewListener {
+class EventListFragment : Fragment(), RefreshRecyclerViewListener {
     private var mEvents: List<Event> = ArrayList()
     private var prevEventsHash = 0
     private var use24HourFormat = false
@@ -36,16 +36,14 @@ class EventListFragment : MyFragmentHolder(), RefreshRecyclerViewListener {
         mView = inflater.inflate(R.layout.fragment_event_list, container, false)
         val placeholderText = String.format(getString(R.string.two_string_placeholder), "${getString(R.string.no_upcoming_events)}\n", getString(R.string.add_some_events))
         mView.calendar_empty_list_placeholder.text = placeholderText
-        mView.background = ColorDrawable(context!!.config.backgroundColor)
         use24HourFormat = context!!.config.use24hourFormat
-        updateActionBarTitle()
         mDayCode = arguments!!.getString(DAY_CODE)
         return mView
     }
 
     override fun onResume() {
         super.onResume()
-        updateEvents()
+        updateCalendar()
         val use24Hour = context!!.config.use24hourFormat
         if (use24Hour != use24HourFormat) {
             use24HourFormat = use24Hour
@@ -59,9 +57,11 @@ class EventListFragment : MyFragmentHolder(), RefreshRecyclerViewListener {
         use24HourFormat = context!!.config.use24hourFormat
     }
 
-    fun updateEvents() {
-        val fromTS = DateTime().seconds() - context!!.config.displayPastEvents * 60
-        val toTS = DateTime().plusYears(1).seconds()
+    fun updateCalendar() {
+        val targetDate=Formatter.getDateTimeFromCode(mDayCode)
+        val fromTS = targetDate.dayOfMonth().withMinimumValue().seconds()
+        val toTS= targetDate.dayOfMonth().withMaximumValue().seconds()
+
         context!!.dbHelper.getEvents(fromTS, toTS) {
             receivedEvents(it)
         }
@@ -109,22 +109,9 @@ class EventListFragment : MyFragmentHolder(), RefreshRecyclerViewListener {
         }
     }
 
+
     override fun refreshItems() {
-        updateEvents()
+        updateCalendar()
     }
 
-    override fun goToToday() {
-    }
-
-    override fun refreshEvents() {
-        updateEvents()
-    }
-
-    override fun shouldGoToTodayBeVisible() = false
-
-    override fun updateActionBarTitle() {
-        (activity as MainActivity).supportActionBar?.title = getString(R.string.app_launcher_name)
-    }
-
-    override fun getNewEventDayCode() = Formatter.getTodayCode(context!!)
 }

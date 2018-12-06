@@ -626,7 +626,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         DAILY_VIEW -> DayFragmentsHolder()
         MONTHLY_VIEW -> MonthFragmentsHolder()
         YEARLY_VIEW -> YearFragmentsHolder()
-        EVENTS_LIST_VIEW -> EventListFragment()
+        EVENTS_LIST_VIEW -> EventListFragmentsHolder()
         QINGXIN_VIEW -> QingxinFragment()
         else -> WeekFragmentsHolder()
     }

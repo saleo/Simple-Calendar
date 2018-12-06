@@ -14,16 +14,15 @@ import com.simplemobiletools.calendar.helpers.DAY_CODE
 import com.simplemobiletools.calendar.helpers.Formatter
 import com.simplemobiletools.calendar.interfaces.NavigationListener
 import com.simplemobiletools.commons.views.MyViewPager
-import kotlinx.android.synthetic.main.fragment_days_holder.view.*
 import kotlinx.android.synthetic.main.fragment_eventlist_holder.view.*
 import org.joda.time.DateTime
 import java.util.*
 
 class EventListFragmentsHolder : MyFragmentHolder(), NavigationListener {
-    private val PREFILLED_DAYS = 121
+    private val PREFILLED_MONTHS = 97
 
     private var viewPager: MyViewPager? = null
-    private var defaultDailyPage = 0
+    private var defaultMonthlyPage = 0
     private var todayDayCode = ""
     private var currentDayCode = ""
     private var isGoToTodayVisible = false
@@ -44,13 +43,13 @@ class EventListFragmentsHolder : MyFragmentHolder(), NavigationListener {
     }
 
     private fun setupFragment() {
-        val codes = getDays(currentDayCode)
-        val dailyAdapter = MyEventListPagerAdapter(activity!!.supportFragmentManager, codes, this)
-        defaultDailyPage = codes.size / 2
+        val codes = getMonths(currentDayCode)
+        val monthlyAdapter = MyEventListPagerAdapter(activity!!.supportFragmentManager, codes, this)
+        defaultMonthlyPage = codes.size / 2
 
 
         viewPager!!.apply {
-            adapter = dailyAdapter
+            adapter = monthlyAdapter
             addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                 override fun onPageScrollStateChanged(state: Int) {
                 }
@@ -67,18 +66,18 @@ class EventListFragmentsHolder : MyFragmentHolder(), NavigationListener {
                     }
                 }
             })
-            currentItem = defaultDailyPage
+            currentItem = defaultMonthlyPage
         }
         updateActionBarTitle()
     }
 
-    private fun getDays(code: String): List<String> {
-        val days = ArrayList<String>(PREFILLED_DAYS)
+    private fun getMonths(code: String): List<String> {
+        val months = ArrayList<String>(PREFILLED_MONTHS)
         val today = Formatter.getDateTimeFromCode(code)
-        for (i in -PREFILLED_DAYS / 2..PREFILLED_DAYS / 2) {
-            days.add(Formatter.getDayCodeFromDateTime(today.plusDays(i)))
+        for (i in -PREFILLED_MONTHS / 2..PREFILLED_MONTHS / 2) {
+            months.add(Formatter.getDayCodeFromDateTime(today.plusMonths(i)))
         }
-        return days
+        return months
     }
 
     override fun goLeft() {
@@ -100,7 +99,7 @@ class EventListFragmentsHolder : MyFragmentHolder(), NavigationListener {
     }
 
     override fun refreshEvents() {
-        (viewPager?.adapter as? MyEventListPagerAdapter)?.updateCalendars(viewPager?.currentItem ?: 0)
+        (viewPager?.adapter as? MyEventListPagerAdapter)?.updateMonthlyEventLists(viewPager?.currentItem ?: 0)
     }
 
     override fun shouldGoToTodayBeVisible() = currentDayCode != todayDayCode
