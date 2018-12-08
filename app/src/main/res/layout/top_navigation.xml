@@ -13,6 +13,15 @@
         android:src="@drawable/sk2018"
         android:scaleType="fitXY"/>
 
+    <ImageView
+        android:id="@+id/about_topimage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/sk_banner"
+        android:scaleType="fitXY"
+        android:visibility="gone"/>
+
     <TextView
         android:id="@+id/tv_month_number"
         android:layout_width="wrap_content"

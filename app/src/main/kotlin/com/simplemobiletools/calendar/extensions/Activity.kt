@@ -140,17 +140,16 @@ fun Activity.showEventRepeatIntervalDialog(curSeconds: Int, callback: (minutes: 
 }
 
 fun Activity.setupBottomButtonBar(mHolder: ViewGroup) {
-    mHolder.apply {
         ib_bcc_info.setOnClickListener {
-            context.launchAbout(componentName.shortClassName)
+            //context.launchAbout(componentName.shortClassName)
         }
 
         ib_bcc_setting.setOnClickListener {
-            context.launchSettings(componentName.shortClassName)
+            //context.launchSettings(componentName.shortClassName)
         }
 
         ib_bcc_today.setOnClickListener {
-            goToday(context)
+            //goToday(context)
         }
 
         ib_bcc_share.setOnClickListener {
@@ -170,10 +169,8 @@ fun Activity.setupBottomButtonBar(mHolder: ViewGroup) {
 
         }
         ib_bcc_list.setOnClickListener {
-            showEventList(context)
+            //showEventList(context)
         }
-
-    }
 }
 
 

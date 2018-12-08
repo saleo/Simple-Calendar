@@ -7,8 +7,6 @@
     android:background="@drawable/bg_qingxin_opaque"
     android:orientation="vertical">
 
-    <include layout="@layout/top_navigation"/>
-
     <com.simplemobiletools.commons.views.MyTextView
         android:id="@+id/txt_qingxin1"
         android:layout_width="match_parent"
@@ -59,8 +57,4 @@
         android:text="@string/test1"
         android:gravity="center"/>
 
-    <include android:id="@+id/id_bottom_contact_copyright"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/bottom_contact_copyright" />
 </LinearLayout>

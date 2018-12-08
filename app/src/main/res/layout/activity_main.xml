@@ -6,11 +6,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/fragments_holder"
+    <LinearLayout android:id="@+id/ll_main_holder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="@dimen/small_margin"/>
+        android:orientation="vertical">
+
+        <include layout="@layout/top_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"/>
+
+        <FrameLayout
+            android:id="@+id/fragments_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/small_margin"
+            android:layout_weight="1"/>
+
+        <include android:id="@+id/bottom_buttonbar_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            layout="@layout/bottom_buttonbar" />
+
+        <include android:id="@+id/id_bottom_sentense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            layout="@layout/bottom_sentense"/>
+
+        <include android:id="@+id/id_bottom_contact_copyright"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            layout="@layout/bottom_contact_copyright"
+            android:visibility="gone"/>
+
+    </LinearLayout>
 
     <com.simplemobiletools.commons.views.MyFloatingActionButton
         android:id="@+id/calendar_fab"

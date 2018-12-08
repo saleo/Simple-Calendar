@@ -6,8 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/top_navigation"/>
-
     <com.simplemobiletools.commons.views.MyTextView
         android:id="@+id/day_monthly_number"
         android:layout_width="wrap_content"
@@ -27,11 +25,4 @@
         android:orientation="vertical"
         android:clipToPadding="true"
         app:layoutManager="com.simplemobiletools.commons.views.MyLinearLayoutManager"/>
-
-    <include android:id="@+id/id_bottom_sentense"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignWithParentIfMissing="true"
-        layout="@layout/bottom_sentense" />
 </RelativeLayout>

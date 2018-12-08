@@ -7,17 +7,11 @@
     android:background="@android:color/white"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-<include android:id="@+id/bottom_buttonbar_holder"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    layout="@layout/bottom_buttonbar"/>
-
     <LinearLayout android:id="@+id/bottom_contact_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_horizontal|center_vertical"
-        android:layout_below="@id/bottom_buttonbar_holder">
+        android:gravity="center_horizontal|center_vertical">
 
         <com.simplemobiletools.commons.views.MyTextView
             android:id="@+id/about_website"

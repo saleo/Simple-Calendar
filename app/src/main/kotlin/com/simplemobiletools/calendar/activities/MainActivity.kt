@@ -48,11 +48,17 @@ import com.simplemobiletools.commons.models.FAQItem
 import com.simplemobiletools.commons.models.RadioItem
 import com.simplemobiletools.commons.models.Release
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.bottom_sentense.*
 import kotlinx.android.synthetic.main.bottom_sentense.view.*
+import kotlinx.android.synthetic.main.fragment_day.*
 import kotlinx.android.synthetic.main.fragment_day.view.*
+import kotlinx.android.synthetic.main.fragment_event_list.*
 import kotlinx.android.synthetic.main.fragment_event_list.view.*
+import kotlinx.android.synthetic.main.fragment_month.*
 import kotlinx.android.synthetic.main.fragment_month.view.*
+import kotlinx.android.synthetic.main.fragment_qingxin.*
 import kotlinx.android.synthetic.main.fragment_qingxin.view.*
+import kotlinx.android.synthetic.main.top_navigation.*
 import kotlinx.android.synthetic.main.top_navigation.view.*
 import org.joda.time.DateTime
 import java.io.FileOutputStream
@@ -937,7 +943,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         val res = resources
         var mBottomSentences: Array<String>
 
-        mHolder.apply {
 
             if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder || mHolder == calendar_events_list_holder){
                 //from dayfragement,monthfragment
@@ -966,13 +971,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                     //from dayfragement,monthfragment
                     bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
                     bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
-                    bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
-                }else{
-                    //from qingxin fragment
-                    txt_qingxin1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
-                    txt_qingxin2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
-                    txt_qingxin3.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
-                }
+                    bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]}
 
             } else if (intYear == 2017 || intYear==2019) {
                 top_month.setImageResource(R.drawable.sk2019)
@@ -980,13 +979,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                     //from dayfragement,monthfragment
                     bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+36]
                     bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+37]
-                    bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+38]
-                }else{
-                    //from qingxin fragment
-                    txt_qingxin1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+36]
-                    txt_qingxin2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+37]
-                    txt_qingxin3.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+38]
-                }
+                    bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+38]}
             } else {
                 top_month.setImageResource(R.drawable.sk_banner)
                 if (mHolder == rl_day_holder || mHolder == rl_monthcalendar_holder || mHolder ==calendar_events_list_holder){
@@ -994,15 +987,10 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                     bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
                     bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
                     bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
-                }else{
-                    //from qingxin fragment
-                    txt_qingxin1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
-                    txt_qingxin2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
-                    txt_qingxin3.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
                 }
             }
             tv_month_number.text=mCurrentMonthDisplayed.toString()+res.getString(status_month)
-        }
+
 
         setupBottomButtonBar(mHolder)
     }
