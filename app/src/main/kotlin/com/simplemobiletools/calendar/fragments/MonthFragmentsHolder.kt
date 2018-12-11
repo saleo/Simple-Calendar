@@ -56,7 +56,7 @@ class MonthFragmentsHolder : MyFragmentHolder(), NavigationListener {
                 }
 
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                    Toast.makeText(activity,"$position-$positionOffset",Toast.LENGTH_LONG).show()
+//                    Toast.makeText(activity,"$position-$positionOffset",Toast.LENGTH_LONG).show()
                 }
 
                 override fun onPageSelected(position: Int) {
