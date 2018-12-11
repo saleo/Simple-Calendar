@@ -11,20 +11,16 @@ import com.simplemobiletools.calendar.activities.MainActivity
 import com.simplemobiletools.calendar.helpers.DAY_CODE
 import com.simplemobiletools.calendar.helpers.Formatter
 import com.simplemobiletools.calendar.helpers.QINGXIN_VIEW
-import kotlinx.android.synthetic.main.bottom_contact_copyright.*
 import kotlinx.android.synthetic.main.fragment_qingxin.*
+import org.joda.time.DateTime
 import java.util.*
 
 class QingxinFragment:MyFragmentHolder() {
 
     private var mDayCode=""
-
-    lateinit var mRes: Resources
-    lateinit var mHolder: LinearLayout
-
+    
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view=inflater.inflate(R.layout.fragment_qingxin,container,false)
-        mRes=resources
 
         mDayCode=arguments!!.getString(DAY_CODE)
 
@@ -33,17 +29,27 @@ class QingxinFragment:MyFragmentHolder() {
 
     override fun onResume() {
         super.onResume()
-        mHolder=ll_qingxin_holder
+        val dt1=Formatter.getDateTimeFromCode(mDayCode)
+        val iYear=dt1.year
+        val iMonth=dt1.monthOfYear
+        val sentences=resources.getStringArray(R.array.bottom_sentences)
 
+        if (iYear==2016 || iYear ==2018){
+            txt_qingxin1.text=sentences[3*(iMonth-1)]
+            txt_qingxin2.text=sentences[3*(iMonth-1)+1]
+            txt_qingxin3.text=sentences[3*(iMonth-1)+2]
+        }else if (iYear==2017 || iYear==2019){
+            txt_qingxin1.text=sentences[3*(iMonth-1)+36]
+            txt_qingxin2.text=sentences[3*(iMonth-1)+37]
+            txt_qingxin3.text=sentences[3*(iMonth-1)+38]
+        }else{
+            txt_qingxin1.text=sentences[3*(iMonth-1)]
+            txt_qingxin2.text=sentences[3*(iMonth-1)+1]
+            txt_qingxin3.text=sentences[3*(iMonth-1)+2]
+        }        
         (activity as MainActivity).updateTopBottom(Formatter.getDateTimeFromCode(mDayCode), QINGXIN_VIEW)
-        setupCopyright()
     }
-
-    private fun setupCopyright() {
-        val year = Calendar.getInstance().get(Calendar.YEAR)
-        about_copyright.text = String.format(getString(R.string.copyright), year)
-    }
-
+    
 //        img_forward1.setOnClickListener {
 //            Intent().apply {
 //                action = Intent.ACTION_SEND

@@ -50,7 +50,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_day.*
 import kotlinx.android.synthetic.main.fragment_event_list.*
 import kotlinx.android.synthetic.main.fragment_month.*
-import kotlinx.android.synthetic.main.fragment_qingxin.*
 import kotlinx.android.synthetic.main.top_navigation.*
 import org.joda.time.DateTime
 import java.io.FileOutputStream
@@ -932,11 +931,14 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         } else if (view == QINGXIN_VIEW){
             updateTopMonth(time)
             ll_bottom_sentense_holder.visibility=View.GONE
+            val year = Calendar.getInstance().get(Calendar.YEAR)
+            about_copyright.text = String.format(getString(R.string.copyright), year)
             rl_bottom_copyright_holder.visibility=View.VISIBLE
         }else{
             img_top.setImageResource(R.drawable.sk_banner)
             ll_bottom_sentense_holder.visibility=View.GONE
-
+            val year = Calendar.getInstance().get(Calendar.YEAR)
+            about_copyright.text = String.format(getString(R.string.copyright), year)
             rl_bottom_copyright_holder.visibility=View.VISIBLE
         }
 
