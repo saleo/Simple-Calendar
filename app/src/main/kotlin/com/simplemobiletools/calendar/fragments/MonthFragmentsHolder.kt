@@ -26,7 +26,6 @@ class MonthFragmentsHolder : MyFragmentHolder(), NavigationListener {
     private var viewPager: MyViewPager? = null
     private var defaultMonthlyPage = 0
     private var todayDayCode = ""
-    private var currentDayCode = ""
     private var isGoToTodayVisible = false
 
     override fun onCreate(savedInstanceState: Bundle?) {

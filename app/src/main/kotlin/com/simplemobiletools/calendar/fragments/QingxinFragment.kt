@@ -1,35 +1,29 @@
 package com.simplemobiletools.calendar.fragments
 
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.activities.MainActivity
 import com.simplemobiletools.calendar.helpers.DAY_CODE
 import com.simplemobiletools.calendar.helpers.Formatter
 import com.simplemobiletools.calendar.helpers.QINGXIN_VIEW
 import kotlinx.android.synthetic.main.fragment_qingxin.*
-import org.joda.time.DateTime
-import java.util.*
 
 class QingxinFragment:MyFragmentHolder() {
 
-    private var mDayCode=""
-    
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view=inflater.inflate(R.layout.fragment_qingxin,container,false)
 
-        mDayCode=arguments!!.getString(DAY_CODE)
+        currentDayCode=arguments!!.getString(DAY_CODE)
 
         return view
     }
 
     override fun onResume() {
         super.onResume()
-        val dt1=Formatter.getDateTimeFromCode(mDayCode)
+        val dt1=Formatter.getDateTimeFromCode(currentDayCode)
         val iYear=dt1.year
         val iMonth=dt1.monthOfYear
         val sentences=resources.getStringArray(R.array.bottom_sentences)
@@ -47,7 +41,7 @@ class QingxinFragment:MyFragmentHolder() {
             txt_qingxin2.text=sentences[3*(iMonth-1)+1]
             txt_qingxin3.text=sentences[3*(iMonth-1)+2]
         }        
-        (activity as MainActivity).updateTopBottom(Formatter.getDateTimeFromCode(mDayCode), QINGXIN_VIEW)
+        (activity as MainActivity).updateTopBottom(Formatter.getDateTimeFromCode(currentDayCode), QINGXIN_VIEW)
     }
     
 //        img_forward1.setOnClickListener {

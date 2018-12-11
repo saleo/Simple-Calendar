@@ -628,10 +628,18 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     private fun removeTopFragment() {
+        var dt:DateTime
         supportFragmentManager.beginTransaction().remove(currentFragments.last()).commit()
         currentFragments.removeAt(currentFragments.size - 1)
         toggleGoToTodayVisibility(currentFragments.last().shouldGoToTodayBeVisible())
         currentFragments.last().apply {
+            dt=Formatter.getDateTimeFromCode(this.currentDayCode)
+            when (this) {
+                is DayFragmentsHolder ->updateTopBottom(dt, DAILY_VIEW)
+                is MonthFragmentsHolder ->updateTopBottom(dt, MONTHLY_VIEW)
+                is EventListFragmentsHolder ->updateTopBottom(dt, EVENTS_LIST_VIEW)
+                is QingxinFragment ->updateTopBottom(dt, QINGXIN_VIEW)
+            }
             refreshEvents()
             updateActionBarTitle()
         }
