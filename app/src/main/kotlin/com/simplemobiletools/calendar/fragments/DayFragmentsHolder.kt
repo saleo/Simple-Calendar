@@ -6,14 +6,17 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.activities.MainActivity
 import com.simplemobiletools.calendar.adapters.MyDayPagerAdapter
 import com.simplemobiletools.calendar.extensions.config
+import com.simplemobiletools.calendar.helpers.DAILY_VIEW
 import com.simplemobiletools.calendar.helpers.DAY_CODE
 import com.simplemobiletools.calendar.helpers.Formatter
 import com.simplemobiletools.calendar.interfaces.NavigationListener
 import com.simplemobiletools.commons.views.MyViewPager
+import kotlinx.android.synthetic.main.fragment_day.view.*
 import kotlinx.android.synthetic.main.fragment_days_holder.view.*
 import org.joda.time.DateTime
 import java.util.*
@@ -59,6 +62,9 @@ class DayFragmentsHolder : MyFragmentHolder(), NavigationListener {
 
                 override fun onPageSelected(position: Int) {
                     currentDayCode = codes[position]
+
+                    (activity as? MainActivity)?.updateTopBottom(Formatter.getDateTimeFromCode(currentDayCode), DAILY_VIEW)
+
                     val shouldGoToTodayBeVisible = shouldGoToTodayBeVisible()
                     if (isGoToTodayVisible != shouldGoToTodayBeVisible) {
                         (activity as? MainActivity)?.toggleGoToTodayVisibility(shouldGoToTodayBeVisible)

@@ -109,9 +109,6 @@ class DayFragment : Fragment() {
     }
 
     fun updateCalendar() {
-
-        updateTopBottomPlusDay(Formatter.getDateTimeFromCode(mDayCode))
-
         val startTS = Formatter.getDayStartTS(mDayCode)
         val endTS = Formatter.getDayEndTS(mDayCode)
         context!!.dbHelper.getEvents(startTS, endTS) {
@@ -134,7 +131,6 @@ class DayFragment : Fragment() {
 
         activity?.runOnUiThread {
             updateEvents(sorted)
-            (activity as? MainActivity)?.updateTopBottom(Formatter.getDateTimeFromCode(mDayCode), DAILY_VIEW)
         }
     }
 
@@ -158,14 +154,5 @@ class DayFragment : Fragment() {
             startActivity(this)
         }
     }
-    private fun updateTopBottomPlusDay(time: DateTime)
-    {
-        val mCurrentDay = mDayCode.substring(6,8)
-        var dayNumber:TextView
 
-        (activity as MainActivity).updateTopBottom(time,mHolder.id)
-        dayNumber=mHolder.findViewById(R.id.day_monthly_number)
-        dayNumber.text=mCurrentDay+context!!.getString(R.string.days_raw)
-        dayNumber.textSize=mConfig.getFontSize()*1.07f
-    }
 }

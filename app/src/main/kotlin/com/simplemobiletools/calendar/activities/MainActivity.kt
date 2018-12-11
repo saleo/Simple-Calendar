@@ -26,6 +26,7 @@ import at.bitfire.icsdroid.Constants
 import at.bitfire.icsdroid.db.LocalCalendar
 import com.simplemobiletools.calendar.BuildConfig
 import com.simplemobiletools.calendar.R
+import com.simplemobiletools.calendar.R.string.status_day
 import com.simplemobiletools.calendar.R.string.status_month
 import com.simplemobiletools.calendar.adapters.EventListAdapter
 import com.simplemobiletools.calendar.dialogs.ExportEventsDialog
@@ -47,9 +48,6 @@ import com.simplemobiletools.commons.models.FAQItem
 import com.simplemobiletools.commons.models.RadioItem
 import com.simplemobiletools.commons.models.Release
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_day.*
-import kotlinx.android.synthetic.main.fragment_event_list.*
-import kotlinx.android.synthetic.main.fragment_month.*
 import kotlinx.android.synthetic.main.top_navigation.*
 import org.joda.time.DateTime
 import java.io.FileOutputStream
@@ -922,51 +920,56 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
     fun updateTopBottom(time: DateTime=DateTime.now(), view: Int)
     {
-
-        if (view == DAILY_VIEW || view == MONTHLY_VIEW || view == EVENTS_LIST_VIEW) {
-            //from dayfragement,monthfragment
-            updateTopMonth(time)
-            updateBottomSentense(time)
-            rl_bottom_copyright_holder.visibility=View.GONE
-        } else if (view == QINGXIN_VIEW){
-            updateTopMonth(time)
-            ll_bottom_sentense_holder.visibility=View.GONE
-            val year = Calendar.getInstance().get(Calendar.YEAR)
-            about_copyright.text = String.format(getString(R.string.copyright), year)
-            rl_bottom_copyright_holder.visibility=View.VISIBLE
-        }else{
-            img_top.setImageResource(R.drawable.sk_banner)
-            ll_bottom_sentense_holder.visibility=View.GONE
-            val year = Calendar.getInstance().get(Calendar.YEAR)
-            about_copyright.text = String.format(getString(R.string.copyright), year)
-            rl_bottom_copyright_holder.visibility=View.VISIBLE
-        }
-
+        updateTop(time,view)
+        updateBottom(time,view)
         setupBottomButtonBar(view)
     }
 
-    private fun updateTopMonth(time:DateTime){
+    private fun updateTop(time:DateTime, view:Int){
+        if (view != MONTHLY_VIEW && view != DAILY_VIEW && view != EVENTS_LIST_VIEW && view != QINGXIN_VIEW) {
+            img_top.setImageResource(R.drawable.sk_banner)
+            tv_month_number.visibility=View.GONE
+            day_monthly_number.visibility=View.GONE
+            return
+        }
+
         val intYear = time.year
-        val mCurrentMonthDisplayed = time.monthOfYear
-        val res=resources
+        val iMonth = time.monthOfYear
 
         when (intYear){
-            2018 -> {img_top.setImageResource(R.drawable.sk2018)
-                    tv_month_number.text=mCurrentMonthDisplayed.toString()+res.getString(status_month) }
-            2019 -> {img_top.setImageResource(R.drawable.sk2019)
-                    tv_month_number.text=mCurrentMonthDisplayed.toString()+res.getString(status_month) }
+            2018 -> img_top.setImageResource(R.drawable.sk2018)
+            2019 -> img_top.setImageResource(R.drawable.sk2019)
             else -> img_top.setImageResource(R.drawable.sk_banner)
         }
+        
+        tv_month_number.text=iMonth.toString()+resources.getString(status_month)
+
+        if (view == DAILY_VIEW) {
+            day_monthly_number.visibility = View.VISIBLE
+            day_monthly_number.text=time.dayOfMonth.toString()+resources.getString(status_day)
+            day_monthly_number.textSize=config.getFontSize()*1.07f
+        }else
+            day_monthly_number.visibility=View.GONE
+
     }
 
-    private fun updateBottomSentense(time:DateTime){
+    private fun updateBottom(time:DateTime, view:Int){
+
+        if (view != MONTHLY_VIEW && view != DAILY_VIEW && view != EVENTS_LIST_VIEW){
+            ll_bottom_sentense_holder.visibility=View.GONE
+            rl_bottom_copyright_holder.visibility=View.VISIBLE
+            val year = Calendar.getInstance().get(Calendar.YEAR)
+            about_copyright.text = String.format(getString(R.string.copyright), year)
+            return
+        }
+
         val intYear = time.year
-        val mCurrentMonthDisplayed = time.monthOfYear
+        val iMonth = time.monthOfYear
         var mBottomSentences: Array<String>
         val res = resources
 
         ll_bottom_sentense_holder.visibility=View.VISIBLE
-        rl_bottom_copyright_holder.visibility=View.INVISIBLE
+        rl_bottom_copyright_holder.visibility=View.GONE
 
         mBottomSentences=res.getStringArray(R.array.bottom_sentences_digest)
         bottom_sentense0.textSize = config.getFontSize()*1.01.toFloat()
@@ -984,17 +987,17 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
 
         if (intYear==2016 || intYear ==2018){
-            bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
-            bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
-            bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
+            bottom_sentense0.text=mBottomSentences[3*(iMonth-1)]
+            bottom_sentense1.text=mBottomSentences[3*(iMonth-1)+1]
+            bottom_sentense2.text=mBottomSentences[3*(iMonth-1)+2]
         }else if (intYear==2017 || intYear==2019){
-            bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+36]
-            bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+37]
-            bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+38]
+            bottom_sentense0.text=mBottomSentences[3*(iMonth-1)+36]
+            bottom_sentense1.text=mBottomSentences[3*(iMonth-1)+37]
+            bottom_sentense2.text=mBottomSentences[3*(iMonth-1)+38]
         }else{
-            bottom_sentense0.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)]
-            bottom_sentense1.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+1]
-            bottom_sentense2.text=mBottomSentences[3*(mCurrentMonthDisplayed-1)+2]
+            bottom_sentense0.text=mBottomSentences[3*(iMonth-1)]
+            bottom_sentense1.text=mBottomSentences[3*(iMonth-1)+1]
+            bottom_sentense2.text=mBottomSentences[3*(iMonth-1)+2]
         }
     }
 }

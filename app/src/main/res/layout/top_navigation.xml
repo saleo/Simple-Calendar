@@ -24,6 +24,17 @@
         android:textSize="30sp"
         android:layout_alignBottom="@+id/img_top"/>
 
+    <TextView
+        android:id="@+id/day_monthly_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_month_number"
+        android:layout_alignBottom="@id/img_top"
+        android:paddingBottom="10dp"
+        android:textSize="20dp"
+        android:textColor="@color/default_holidays_color"
+        android:text="10日" />
+
     <!--<com.simplemobiletools.commons.views.MyTextView-->
         <!--android:id="@+id/top_value"-->
         <!--style="@style/MonthStyle"-->

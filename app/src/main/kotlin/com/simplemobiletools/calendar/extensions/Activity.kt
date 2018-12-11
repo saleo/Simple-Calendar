@@ -140,7 +140,7 @@ fun Activity.setupBottomButtonBar(mHolderId: Int) {
         }
 
         ib_bcc_today.setOnClickListener {
-            //goToday(context)
+            goToday()
         }
 
         ib_bcc_share.setOnClickListener {
@@ -213,14 +213,13 @@ fun Activity.shareScreen(){
     }
 }
 
-fun Activity.goToday(context: Context){
+fun Activity.goToday(){
     if (componentName.shortClassName.contains(MAIN_ACTIVITY_CLASSNAME,true)) {
-        when (config.storedView){
-            MONTHLY_VIEW->(this as MainActivity)!!.goToToday()
-            else->        (this as MainActivity)!!.updateView(MONTHLY_VIEW)
+        when (config.storedView) {
+            MONTHLY_VIEW -> (this as MainActivity)!!.goToToday()
+            else -> (this as MainActivity)!!.updateView(MONTHLY_VIEW)
         }
-    } else
-        startActivity(Intent(context, MainActivity::class.java))
+    }
 }
 
     private fun Activity.showEventList(context: Context){

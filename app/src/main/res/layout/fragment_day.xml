@@ -6,16 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.simplemobiletools.commons.views.MyTextView
-        android:id="@+id/day_monthly_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/rl_top_holder"
-        android:paddingLeft="70dp"
-        android:paddingBottom="10dp"
-        android:textSize="20dp"
-        android:textColor="@color/default_holidays_color"
-        android:text="10日" />
+
 
     <com.simplemobiletools.commons.views.MyRecyclerView
         android:id="@+id/day_events"
