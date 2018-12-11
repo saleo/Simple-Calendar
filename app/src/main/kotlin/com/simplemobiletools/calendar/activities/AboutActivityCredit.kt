@@ -19,7 +19,6 @@ class AboutActivityCredit:SimpleActivity() {
     override fun onResume() {
         super.onResume()
         setupCopyright()
-        setupBottomButtonBar(rl_credit_holder)
     }
     private fun setupCopyright() {
         val year = Calendar.getInstance().get(Calendar.YEAR)

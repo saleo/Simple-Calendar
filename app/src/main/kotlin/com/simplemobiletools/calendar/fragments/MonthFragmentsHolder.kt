@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.activities.MainActivity
 import com.simplemobiletools.calendar.adapters.MyMonthPagerAdapter
@@ -13,6 +14,7 @@ import com.simplemobiletools.calendar.extensions.config
 import com.simplemobiletools.calendar.extensions.getMonthCode
 import com.simplemobiletools.calendar.helpers.DAY_CODE
 import com.simplemobiletools.calendar.helpers.Formatter
+import com.simplemobiletools.calendar.helpers.MONTHLY_VIEW
 import com.simplemobiletools.calendar.interfaces.NavigationListener
 import com.simplemobiletools.commons.views.MyViewPager
 import kotlinx.android.synthetic.main.fragment_months_holder.view.*
@@ -54,10 +56,13 @@ class MonthFragmentsHolder : MyFragmentHolder(), NavigationListener {
                 }
 
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                    Toast.makeText(activity,"$position-$positionOffset",Toast.LENGTH_LONG).show()
                 }
 
                 override fun onPageSelected(position: Int) {
                     currentDayCode = codes[position]
+                    (activity as MainActivity).updateTopBottom(Formatter.getDateTimeFromCode(currentDayCode), MONTHLY_VIEW)
+
                     val shouldGoToTodayBeVisible = shouldGoToTodayBeVisible()
                     if (isGoToTodayVisible != shouldGoToTodayBeVisible) {
                         (activity as? MainActivity)?.toggleGoToTodayVisibility(shouldGoToTodayBeVisible)

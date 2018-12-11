@@ -24,6 +24,7 @@ const val EVENTS_LIST_VIEW = 3
 const val WEEKLY_VIEW = 4
 const val DAILY_VIEW = 5
 const val QINGXIN_VIEW=6
+const val ABOUT_VIEW=7
 
 const val REMINDER_OFF = -1
 

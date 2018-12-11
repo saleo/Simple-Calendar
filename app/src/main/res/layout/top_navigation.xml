@@ -7,20 +7,11 @@
     android:id="@+id/rl_top_holder">
 
     <ImageView
-        android:id="@+id/top_month"
+        android:id="@+id/img_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/sk2018"
         android:scaleType="fitXY"/>
-
-    <ImageView
-        android:id="@+id/about_topimage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/sk_banner"
-        android:scaleType="fitXY"
-        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/tv_month_number"
@@ -31,7 +22,7 @@
         android:textColor="@color/default_holidays_color"
         android:text="12月"
         android:textSize="30sp"
-        android:layout_alignBottom="@+id/top_month"/>
+        android:layout_alignBottom="@+id/img_top"/>
 
     <!--<com.simplemobiletools.commons.views.MyTextView-->
         <!--android:id="@+id/top_value"-->

@@ -102,7 +102,6 @@ class SettingsActivity : SimpleActivity() ,AdapterView.OnItemSelectedListener,Vi
         setupReminerGeneral()
         setupCustomizeEvent()
 
-        setupBottomButtonBar(cl_settings_holder)
     }
 
     override fun onPause() {

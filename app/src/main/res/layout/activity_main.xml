@@ -29,18 +29,81 @@
             android:layout_weight="0"
             layout="@layout/bottom_buttonbar" />
 
-        <include android:id="@+id/id_bottom_sentense"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/ll_bottom_sentense_holder"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            layout="@layout/bottom_sentense"/>
+            android:layout_gravity="bottom"
+            android:paddingTop="1dp"
+            android:background="@drawable/bmp_bottom_bg">
 
-        <include android:id="@+id/id_bottom_contact_copyright"
+            <TextView android:id="@+id/bottom_sentense0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="1dp"
+                android:maxLines="1"
+                android:text="◎ 有求皆苦，无求乃乐..."/>
+
+            <TextView android:id="@+id/bottom_sentense1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="1dp"
+                android:text="◎ 有求皆苦，无求乃乐..." />
+
+            <TextView android:id="@+id/bottom_sentense2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="1dp"
+                android:text="◎ 有求皆苦，无求乃乐..."/>
+
+        </LinearLayout>
+
+        <RelativeLayout android:id="@+id/rl_bottom_copyright_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            layout="@layout/bottom_contact_copyright"
-            android:visibility="gone"/>
+            android:layout_alignParentBottom="true"
+            android:padding="@dimen/medium_margin"
+            android:background="@android:color/white"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:visibility="gone">
+
+            <LinearLayout android:id="@+id/bottom_contact_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal|center_vertical">
+
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/about_website"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web"
+                    android:text="@string/my_website" />
+
+                <com.simplemobiletools.commons.views.MyTextView
+                    android:id="@+id/about_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoLink="email"
+                    android:text="@string/my_email" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/about_copyright"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bottom_contact_holder"
+                android:gravity="center_horizontal|bottom"
+                android:foregroundGravity=""
+                android:text="@string/copyright"
+                android:drawableLeft="@drawable/ic_launcher_transparent"
+                android:drawablePadding="0dp"/>
+
+        </RelativeLayout>
+
 
     </LinearLayout>
 

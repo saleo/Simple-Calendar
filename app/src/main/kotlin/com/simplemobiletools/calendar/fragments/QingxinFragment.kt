@@ -10,9 +10,9 @@ import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.activities.MainActivity
 import com.simplemobiletools.calendar.helpers.DAY_CODE
 import com.simplemobiletools.calendar.helpers.Formatter
+import com.simplemobiletools.calendar.helpers.QINGXIN_VIEW
 import kotlinx.android.synthetic.main.bottom_contact_copyright.*
 import kotlinx.android.synthetic.main.fragment_qingxin.*
-import kotlinx.android.synthetic.main.fragment_qingxin.view.*
 import java.util.*
 
 class QingxinFragment:MyFragmentHolder() {
@@ -25,7 +25,6 @@ class QingxinFragment:MyFragmentHolder() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view=inflater.inflate(R.layout.fragment_qingxin,container,false)
         mRes=resources
-        mHolder=view.ll_qingxin_holder
 
         mDayCode=arguments!!.getString(DAY_CODE)
 
@@ -34,9 +33,10 @@ class QingxinFragment:MyFragmentHolder() {
 
     override fun onResume() {
         super.onResume()
-        setupCopyright()
-        (activity as MainActivity).updateContentBasedMonth(Formatter.getDateTimeFromCode(mDayCode),ll_qingxin_holder)
+        mHolder=ll_qingxin_holder
 
+        (activity as MainActivity).updateTopBottom(Formatter.getDateTimeFromCode(mDayCode), QINGXIN_VIEW)
+        setupCopyright()
     }
 
     private fun setupCopyright() {

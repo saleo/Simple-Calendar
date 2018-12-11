@@ -2,7 +2,6 @@ package com.simplemobiletools.calendar.fragments
 
 import android.content.Intent
 import android.content.res.Resources
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
@@ -26,6 +25,7 @@ import com.simplemobiletools.calendar.interfaces.NavigationListener
 import com.simplemobiletools.calendar.models.Event
 import com.simplemobiletools.commons.extensions.getDialogTheme
 import com.simplemobiletools.commons.extensions.setupDialogStuff
+import kotlinx.android.synthetic.main.fragment_day.*
 import kotlinx.android.synthetic.main.fragment_day.view.*
 import org.joda.time.DateTime
 import java.util.*
@@ -43,15 +43,16 @@ class DayFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_day, container, false)
         mRes = resources
-        mHolder = view.rl_day_holder
 
         mDayCode = arguments!!.getString(DAY_CODE)
-        setupButtons()
         return view
     }
 
     override fun onResume() {
         super.onResume()
+        mHolder = rl_day_holder
+        setupButtons()
+
         updateCalendar()
     }
 
@@ -133,7 +134,7 @@ class DayFragment : Fragment() {
 
         activity?.runOnUiThread {
             updateEvents(sorted)
-            (activity as? MainActivity)?.updateContentBasedMonth(Formatter.getDateTimeFromCode(mDayCode),mHolder)
+            (activity as? MainActivity)?.updateTopBottom(Formatter.getDateTimeFromCode(mDayCode), DAILY_VIEW)
         }
     }
 
@@ -162,7 +163,7 @@ class DayFragment : Fragment() {
         val mCurrentDay = mDayCode.substring(6,8)
         var dayNumber:TextView
 
-        (activity as MainActivity).updateContentBasedMonth(time,mHolder)
+        (activity as MainActivity).updateTopBottom(time,mHolder.id)
         dayNumber=mHolder.findViewById(R.id.day_monthly_number)
         dayNumber.text=mCurrentDay+context!!.getString(R.string.days_raw)
         dayNumber.textSize=mConfig.getFontSize()*1.07f

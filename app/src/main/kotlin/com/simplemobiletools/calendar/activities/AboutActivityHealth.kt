@@ -37,7 +37,6 @@ class AboutActivityHealth: ListActivity(),RadioGroup.OnCheckedChangeListener {
         setupTabs()
         setupListview()
         setupCopyright()
-        setupBottomButtonBar(ll_health_holder)
 
     }
 

@@ -31,7 +31,6 @@ class AboutActivityIntro: SimpleActivity() ,TabLayout.OnTabSelectedListener{
         }
         setupTabs()
         setupCopyright()
-        setupBottomButtonBar(ll_intro_holder)
         txt_about_intro.movementMethod=ScrollingMovementMethod()
     }
 

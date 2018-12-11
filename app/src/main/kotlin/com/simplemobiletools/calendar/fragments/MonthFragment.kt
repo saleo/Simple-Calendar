@@ -26,7 +26,7 @@ import com.simplemobiletools.commons.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.getDialogTheme
 import com.simplemobiletools.commons.extensions.setupDialogStuff
 import kotlinx.android.synthetic.main.first_row.*
-import kotlinx.android.synthetic.main.fragment_month.view.*
+import kotlinx.android.synthetic.main.fragment_month.*
 import org.joda.time.DateTime
 
 
@@ -49,13 +49,11 @@ class MonthFragment : Fragment(), MonthlyCalendar {
         val view = inflater.inflate(R.layout.fragment_month, container, false)
         mRes = resources
         mPackageName = activity!!.packageName
-        mHolder = view.rl_monthcalendar_holder
         mDayCode = arguments!!.getString(DAY_CODE)
         mConfig = context!!.config
         mSundayFirst = mConfig.isSundayFirst
 
         mTextColor = mConfig.textColor
-        setupLabels()
         mCalendar = MonthlyCalendarImpl(this, context!!)
 
         return view
@@ -68,6 +66,9 @@ class MonthFragment : Fragment(), MonthlyCalendar {
 
     override fun onResume() {
         super.onResume()
+        mHolder = rl_monthcalendar_holder
+        setupLabels()
+
         if (mConfig.isSundayFirst != mSundayFirst) {
             mSundayFirst = mConfig.isSundayFirst
             setupLabels()
@@ -77,6 +78,7 @@ class MonthFragment : Fragment(), MonthlyCalendar {
             mTargetDate = Formatter.getDateTimeFromCode(mDayCode)
             getDays(false)    // prefill the screen asap, even if without events
         }
+
 
         updateCalendar()
     }
@@ -96,8 +98,6 @@ class MonthFragment : Fragment(), MonthlyCalendar {
 
         activity?.runOnUiThread {
             updateDays(days)
-            (activity as MainActivity).updateContentBasedMonth(Formatter.getDateTimeFromCode(mDayCode),mHolder)
-
         }
     }
 

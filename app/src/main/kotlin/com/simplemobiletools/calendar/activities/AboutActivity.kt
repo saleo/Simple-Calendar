@@ -9,7 +9,7 @@ import com.simplemobiletools.commons.extensions.getAdjustedPrimaryColor
 import com.simplemobiletools.commons.extensions.updateTextColors
 import com.simplemobiletools.commons.helpers.APP_LICENSES
 import com.simplemobiletools.commons.helpers.APP_NAME
-import kotlinx.android.synthetic.main.activity_about.*
+import kotlinx.android.synthetic.main.fragment_about.*
 import kotlinx.android.synthetic.main.bottom_contact_copyright.*
 import java.util.*
 
@@ -19,7 +19,7 @@ class AboutActivity : SimpleActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_about)
+        setContentView(R.layout.fragment_about)
         appName = intent.getStringExtra(APP_NAME) ?: ""
         linkColor = getAdjustedPrimaryColor()
     }
@@ -33,7 +33,6 @@ class AboutActivity : SimpleActivity() {
         setupHealth()
         setupLicense()
         setupCopyright()
-        setupBottomButtonBar(rl_about_holder)
     }
 
     private fun setupIntro(){

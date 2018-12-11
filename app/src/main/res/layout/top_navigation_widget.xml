@@ -4,7 +4,7 @@
     android:id="@+id/rl_top_holder">
 
     <ImageView
-        android:id="@+id/top_month"
+        android:id="@+id/img_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/sk_banner"/>
@@ -37,9 +37,9 @@
         style="@style/ArrowStyle"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/top_month"
+        android:layout_alignBottom="@+id/img_top"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/top_month"
+        android:layout_alignTop="@+id/img_top"
         android:paddingLeft="@dimen/activity_margin"
         android:paddingRight="@dimen/activity_margin"
         android:src="@drawable/ic_plus"/>

@@ -6,8 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/top_navigation"/>
-
     <com.simplemobiletools.commons.views.MyRecyclerView
         android:id="@+id/calendar_events_list"
         android:layout_width="match_parent"
@@ -17,7 +15,7 @@
         android:scrollbars="vertical"
         android:visibility="gone"
         android:layout_below="@+id/rl_top_holder"
-        android:layout_above="@+id/ll_bottom_sentsence_holder"
+        android:layout_above="@+id/ll_bottom_sentense_holder"
         app:layoutManager="com.simplemobiletools.commons.views.MyLinearLayoutManager"/>
 
     <com.simplemobiletools.commons.views.MyTextView
@@ -29,13 +27,6 @@
         android:padding="@dimen/big_margin"
         android:text="@string/no_upcoming_events"
         android:layout_below="@+id/rl_top_holder"
-        android:layout_above="@+id/ll_bottom_sentsence_holder"
+        android:layout_above="@+id/ll_bottom_sentense_holder"
         android:visibility="gone"/>
-
-    <include android:id="@+id/id_bottom_sentense"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignWithParentIfMissing="true"
-        layout="@layout/bottom_sentense" />
 </RelativeLayout>
