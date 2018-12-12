@@ -11,6 +11,7 @@ import com.simplemobiletools.calendar.activities.MainActivity
 import com.simplemobiletools.calendar.adapters.MyEventListPagerAdapter
 import com.simplemobiletools.calendar.extensions.config
 import com.simplemobiletools.calendar.helpers.DAY_CODE
+import com.simplemobiletools.calendar.helpers.EVENTS_LIST_VIEW
 import com.simplemobiletools.calendar.helpers.Formatter
 import com.simplemobiletools.calendar.interfaces.NavigationListener
 import com.simplemobiletools.commons.views.MyViewPager
@@ -58,6 +59,8 @@ class EventListFragmentsHolder : MyFragmentHolder(), NavigationListener {
 
                 override fun onPageSelected(position: Int) {
                     currentDayCode = codes[position]
+                    (activity as? MainActivity)?.updateTopBottom(Formatter.getDateTimeFromCode(currentDayCode), EVENTS_LIST_VIEW)
+
                     val shouldGoToTodayBeVisible = shouldGoToTodayBeVisible()
                     if (isGoToTodayVisible != shouldGoToTodayBeVisible) {
                         (activity as? MainActivity)?.toggleGoToTodayVisibility(shouldGoToTodayBeVisible)

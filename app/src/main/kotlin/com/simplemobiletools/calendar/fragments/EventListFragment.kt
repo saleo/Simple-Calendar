@@ -48,7 +48,6 @@ class EventListFragment : Fragment(), RefreshRecyclerViewListener {
             use24HourFormat = use24Hour
             (mView.calendar_events_list.adapter as? EventListAdapter)?.toggle24HourFormat(use24HourFormat)
         }
-        (activity as MainActivity).updateTopBottom(Formatter.getDateTimeFromCode(mDayCode), EVENTS_LIST_VIEW)
     }
 
     override fun onPause() {
@@ -82,9 +81,9 @@ class EventListFragment : Fragment(), RefreshRecyclerViewListener {
         val listItems = context!!.getEventListItems(mEvents)
 
         val eventsAdapter = EventListAdapter(activity as SimpleActivity, listItems, true, this, mView.calendar_events_list) {
-            if (it is ListEvent) {
-                editEvent(it)
-            }
+//            if (it is ListEvent) {
+//                editEvent(it)
+//            }
         }
 
         activity?.runOnUiThread {

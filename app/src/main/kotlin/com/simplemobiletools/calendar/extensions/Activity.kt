@@ -160,7 +160,7 @@ fun Activity.setupBottomButtonBar(mHolderId: Int) {
 
         }
         ib_bcc_list.setOnClickListener {
-            //showEventList(context)
+            showEventList()
         }
 }
 
@@ -222,15 +222,11 @@ fun Activity.goToday(){
     }
 }
 
-    private fun Activity.showEventList(context: Context){
-        if (componentName.shortClassName.contains(MAIN_ACTIVITY_CLASSNAME,true)) {
-            when (config.storedView){
-                EVENTS_LIST_VIEW-> return
-                else-> (this as MainActivity)!!.updateView(EVENTS_LIST_VIEW)
-            }
-        } else
-            startActivity(Intent(context, MainActivity::class.java))
-
+    private fun Activity.showEventList(){
+        when (config.storedView){
+            EVENTS_LIST_VIEW-> return
+            else-> (this as MainActivity)!!.updateView(EVENTS_LIST_VIEW)
+        }
     }
 //fun Activity.getCurrentShownMonthPlusDay(currentDayCode:String){
 //    (this as? MainActivity)?.mCurrentShownMonth=currentDayCode.substring(4,6)
