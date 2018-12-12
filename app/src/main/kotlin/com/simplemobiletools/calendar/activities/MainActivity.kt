@@ -242,7 +242,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             R.id.import_events -> tryImportEvents()
             R.id.export_events -> tryExportEvents()
             R.id.settings -> launchSettings(componentName.shortClassName)
-            R.id.about -> launchAbout(componentName.shortClassName)
             android.R.id.home -> onBackPressed()
             else -> return super.onOptionsItemSelected(item)
         }
@@ -602,7 +601,10 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         else if ((config.storedView == MONTHLY_VIEW) && (view == MONTHLY_VIEW))
         else if ((config.storedView == EVENTS_LIST_VIEW) && (view == EVENTS_LIST_VIEW))
         else if ((config.storedView == QINGXIN_VIEW) && (view == QINGXIN_VIEW))
-        else if ((config.storedView == ABOUT_VIEW) && (view == ABOUT_VIEW)) {
+        else if ((config.storedView == ABOUT_VIEW) && (view == ABOUT_VIEW))
+        else if ((config.storedView == ABOUT_INTRO_VIEW) && (view == ABOUT_INTRO_VIEW))
+        else if ((config.storedView == ABOUT_CREDIT_VIEW) && (view == ABOUT_CREDIT_VIEW))
+        {
             return
         }
 
@@ -613,6 +615,8 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             EVENTS_LIST_VIEW -> fragment = EventListFragmentsHolder()
             QINGXIN_VIEW -> fragment = QingxinFragment()
             ABOUT_VIEW -> fragment=AboutFragment()
+            ABOUT_INTRO_VIEW -> fragment=IntroFragment()
+            ABOUT_CREDIT_VIEW -> fragment=CreditFragment()
             else -> fragment=MonthFragmentsHolder()
         }
 
@@ -639,12 +643,14 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         EVENTS_LIST_VIEW -> EventListFragmentsHolder()
         QINGXIN_VIEW -> QingxinFragment()
         ABOUT_VIEW -> AboutFragment()
+        ABOUT_INTRO_VIEW -> IntroFragment()
+        ABOUT_CREDIT_VIEW -> CreditFragment()
         else -> WeekFragmentsHolder()
     }
 
     private fun removeTopFragment() {
         var dt:DateTime
-        supportFragmentManager.beginTransaction().remove(currentFragments.last()).commit()
+        supportFragmentManager.beginTransaction().remove(currentFragments.last()).commitNow()
         currentFragments.removeAt(currentFragments.size - 1)
         toggleGoToTodayVisibility(currentFragments.last().shouldGoToTodayBeVisible())
         currentFragments.last().apply {
@@ -654,6 +660,10 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                 is MonthFragmentsHolder ->updateTopBottom(dt, MONTHLY_VIEW)
                 is EventListFragmentsHolder ->updateTopBottom(dt, EVENTS_LIST_VIEW)
                 is QingxinFragment ->updateTopBottom(dt, QINGXIN_VIEW)
+                is AboutFragment ->updateTopBottom(dt, ABOUT_VIEW)
+                is IntroFragment ->updateTopBottom(dt, ABOUT_INTRO_VIEW)
+                is CreditFragment ->updateTopBottom(dt, ABOUT_CREDIT_VIEW)
+
             }
             refreshEvents()
             updateActionBarTitle()
@@ -915,21 +925,10 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
     }
 
-    fun startAboutActivity(appNameId: Int, licenseMask: Int, versionName: String, faqItems: java.util.ArrayList<FAQItem> = arrayListOf()) {
-        Intent(applicationContext, AboutActivity::class.java).apply {
-            putExtra(APP_NAME, getString(appNameId))
-            putExtra(APP_LICENSES, licenseMask)
-            putExtra(APP_VERSION_NAME, versionName)
-            putExtra(APP_FAQ, faqItems)
-            startActivity(this)
-        }
-    }
-
     fun updateTopBottom(time: DateTime=DateTime.now(), view: Int)
     {
         updateTop(time,view)
         updateBottom(time,view)
-        setupBottomButtonBar(time)
     }
 
     private fun updateTop(time:DateTime, view:Int){
@@ -963,6 +962,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     private fun updateBottom(time:DateTime, view:Int){
+        setupBottomButtonBar(time)
 
         if (view != MONTHLY_VIEW && view != DAILY_VIEW && view != EVENTS_LIST_VIEW){
             ll_bottom_sentense_holder.visibility=View.GONE

@@ -3,7 +3,7 @@ package com.simplemobiletools.calendar.fragments
 import android.support.v4.app.Fragment
 
 abstract class MyFragmentHolder : Fragment() {
-    var currentDayCode=""
+    var currentDayCode="19700101"
 
     abstract fun goToToday()
 

@@ -565,24 +565,3 @@ fun Context.processEventRemindersNotification(eventIdsToProcess:ArrayList<String
 fun Context.launchSettings(shortClassName:String) {
     startActivity(Intent(applicationContext, SettingsActivity::class.java))
 }
-
-fun Context.launchAbout(shortClassName:String) {
-    if (shortClassName.contains(ABOUT_ACTIVITY_CLASSNAME,true)) return
-    val faqItems = arrayListOf(
-            FAQItem(R.string.faq_1_title_commons, R.string.faq_1_text_commons),
-            FAQItem(R.string.faq_2_title_commons, R.string.faq_2_text_commons),
-            FAQItem(R.string.faq_4_title_commons, R.string.faq_4_text_commons),
-            FAQItem(getString(R.string.faq_1_title), getString(R.string.faq_1_text)),
-            FAQItem(getString(R.string.faq_2_title), getString(R.string.faq_2_text)))
-
-    val licenseMask=LICENSE_SMT or LICENSE_KOTLIN or LICENSE_JODA or LICENSE_STETHO or LICENSE_MULTISELECT or LICENSE_LEAK_CANARY
-
-    Intent(applicationContext, AboutActivity::class.java).apply {
-        putExtra(APP_NAME, getString(R.string.app_name))
-        putExtra(APP_LICENSES, licenseMask)
-        putExtra(APP_VERSION_NAME, BuildConfig.VERSION_NAME)
-        putExtra(APP_FAQ, faqItems)
-        startActivity(this)
-    }
-}
-

@@ -8,7 +8,7 @@
     <string name="monthly_view">月</string>
     <string name="yearly_view">年</string>
     <string name="simple_event_list">事件列表</string>
-    <string name="no_upcoming_events">好像还没有即将到来的事件</string>
+    <string name="no_upcoming_events">本月没事件</string>
     <string name="add_some_events">点击右下角加号添加.</string>
     <string name="details">详情</string>
     <string name="go_to_today">回到今天</string>

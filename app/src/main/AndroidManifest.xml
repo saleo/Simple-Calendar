@@ -119,17 +119,7 @@
             android:parentActivityName=".activities.AboutActivity"/>
 
         <activity
-            android:name=".activities.AboutActivityIntro"
-            android:label="@string/skcal_introduction"
-            android:parentActivityName=".activities.AboutActivity"/>
-
-        <activity
-            android:name=".activities.AboutActivityCredit"
-            android:label="@string/skcal_creditlist"
-            android:parentActivityName=".activities.AboutActivity"/>
-
-        <activity
-            android:name=".activities.AboutActivityHealth"
+            android:name=".fragments.AboutActivityHealth"
             android:label="@string/str_health"
             android:parentActivityName=".activities.AboutActivity"/>
 

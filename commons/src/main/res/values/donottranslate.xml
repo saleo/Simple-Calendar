@@ -7,7 +7,7 @@
     <string name="p_m">p.m.</string>
 
     <!-- About -->
-    <string name="two_string_placeholder">%1$s%2$s</string>
+    <string name="string_placeholder">%1$s</string>
     <string name="my_website">https://www.shoukang.org</string>
     <string name="my_email">\t 452420973@qq.com</string>
     <string name="right_arrow">\></string>

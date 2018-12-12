@@ -39,7 +39,7 @@ class EventListFragment : Fragment(), RefreshRecyclerViewListener {
 
     override fun onResume() {
         super.onResume()
-        val placeholderText = String.format(getString(R.string.two_string_placeholder), "${getString(R.string.no_upcoming_events)}\n", getString(R.string.add_some_events))
+        val placeholderText = String.format(getString(R.string.string_placeholder), "${getString(R.string.no_upcoming_events)}\n")
         mView.calendar_empty_list_placeholder.text = placeholderText
 
         updateCalendar()
