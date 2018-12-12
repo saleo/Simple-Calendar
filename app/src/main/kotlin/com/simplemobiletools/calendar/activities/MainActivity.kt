@@ -1,5 +1,6 @@
 package com.simplemobiletools.calendar.activities
 
+import android.app.Fragment
 import android.app.SearchManager
 import android.content.*
 import android.content.pm.ActivityInfo
@@ -52,6 +53,7 @@ import kotlinx.android.synthetic.main.top_navigation.*
 import org.joda.time.DateTime
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
+import java.time.Month
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -594,13 +596,26 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    fun openDayFromMonthly(dateTime: DateTime) {
-        if (currentFragments.last() is DayFragmentsHolder) {
+    fun openFragment(dateTime: DateTime, view: Int= MONTHLY_VIEW) {
+        var fragment:MyFragmentHolder
+        if ((config.storedView == DAILY_VIEW) && (view == DAILY_VIEW))
+        else if ((config.storedView == MONTHLY_VIEW) && (view == MONTHLY_VIEW))
+        else if ((config.storedView == EVENTS_LIST_VIEW) && (view == EVENTS_LIST_VIEW))
+        else if ((config.storedView == QINGXIN_VIEW) && (view == QINGXIN_VIEW))
+        else if ((config.storedView == ABOUT_VIEW) && (view == ABOUT_VIEW)) {
             return
         }
-        config.storedView= DAILY_VIEW
 
-        val fragment = DayFragmentsHolder()
+        config.storedView= view
+        when (view){
+            DAILY_VIEW -> fragment = DayFragmentsHolder()
+            MONTHLY_VIEW -> fragment = MonthFragmentsHolder()
+            EVENTS_LIST_VIEW -> fragment = EventListFragmentsHolder()
+            QINGXIN_VIEW -> fragment = QingxinFragment()
+            ABOUT_VIEW -> fragment=AboutFragment()
+            else -> fragment=MonthFragmentsHolder()
+        }
+
         currentFragments.add(fragment)
         val bundle = Bundle()
         bundle.putString(DAY_CODE, Formatter.getDayCodeFromDateTime(dateTime))
@@ -910,38 +925,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
     }
 
-    fun openEventList(dateTime: DateTime) {
-        config.storedView= EVENTS_LIST_VIEW
-
-        if (currentFragments.last() is EventListFragmentsHolder) {
-            return
-        }
-
-        val fragment = EventListFragmentsHolder()
-        currentFragments.add(fragment)
-        val bundle = Bundle()
-        bundle.putString(DAY_CODE, Formatter.getDayCodeFromDateTime(dateTime))
-        fragment.arguments = bundle
-        supportFragmentManager.beginTransaction().add(R.id.fragments_holder, fragment).commitNow()
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
-
-    fun openQingxinFromMonthly(dateTime: DateTime) {
-        config.storedView= QINGXIN_VIEW
-
-        if (currentFragments.last() is QingxinFragment) {
-            return
-        }
-
-        val fragment = QingxinFragment()
-        currentFragments.add(fragment)
-        val bundle = Bundle()
-        bundle.putString(DAY_CODE, Formatter.getDayCodeFromDateTime(dateTime))
-        fragment.arguments = bundle
-        supportFragmentManager.beginTransaction().add(R.id.fragments_holder, fragment).commitNow()
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
-
     fun updateTopBottom(time: DateTime=DateTime.now(), view: Int)
     {
         updateTop(time,view)
@@ -956,6 +939,8 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             day_monthly_number.visibility=View.GONE
             return
         }
+
+        tv_month_number.visibility=View.VISIBLE
 
         val intYear = time.year
         val iMonth = time.monthOfYear
@@ -1001,13 +986,13 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         bottom_sentense2.textSize = config.getFontSize()*1.01.toFloat()
 
         bottom_sentense0.setOnClickListener {
-            openQingxinFromMonthly(time)
+            openFragment(time, QINGXIN_VIEW)
         }
         bottom_sentense1.setOnClickListener {
-            openQingxinFromMonthly(time)
+            openFragment(time, QINGXIN_VIEW)
         }
         bottom_sentense2.setOnClickListener {
-            openQingxinFromMonthly(time)
+            openFragment(time, QINGXIN_VIEW)
         }
 
         if (intYear==2016 || intYear ==2018){

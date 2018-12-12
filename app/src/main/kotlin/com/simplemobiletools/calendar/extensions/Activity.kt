@@ -133,7 +133,7 @@ fun Activity.showEventRepeatIntervalDialog(curSeconds: Int, callback: (minutes: 
 
 fun Activity.setupBottomButtonBar(time:DateTime) {
         ib_bcc_info.setOnClickListener {
-            //context.launchAbout(componentName.shortClassName)
+            (this as MainActivity).openFragment(time, ABOUT_VIEW)
         }
 
         ib_bcc_setting.setOnClickListener {
@@ -161,7 +161,7 @@ fun Activity.setupBottomButtonBar(time:DateTime) {
 
         }
         ib_bcc_list.setOnClickListener {
-            (this as MainActivity).openEventList(time)
+            (this as MainActivity).openFragment(time, EVENTS_LIST_VIEW)
         }
 }
 

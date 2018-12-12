@@ -1,6 +1,7 @@
 package com.simplemobiletools.calendar.fragments
 
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import com.simplemobiletools.calendar.activities.AboutActivityCredit
 import com.simplemobiletools.calendar.activities.AboutActivityHealth
 import com.simplemobiletools.calendar.activities.AboutActivityIntro
 import com.simplemobiletools.calendar.activities.MainActivity
+import com.simplemobiletools.calendar.extensions.config
 import com.simplemobiletools.calendar.helpers.ABOUT_VIEW
 import com.simplemobiletools.commons.activities.LicenseActivity
 import com.simplemobiletools.commons.helpers.APP_LICENSES
@@ -22,6 +24,7 @@ class AboutFragment : MyFragmentHolder() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val view = inflater.inflate(R.layout.fragment_about, container, false)
+        view.background = ColorDrawable(context!!.config.backgroundColor)
 
         return view
     }
