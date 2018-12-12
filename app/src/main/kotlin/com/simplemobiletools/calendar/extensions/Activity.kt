@@ -18,6 +18,7 @@ import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.models.FileDirItem
 import com.simplemobiletools.commons.models.RadioItem
 import kotlinx.android.synthetic.main.bottom_buttonbar.*
+import org.joda.time.DateTime
 import java.io.File
 import java.util.TreeSet
 import kotlin.collections.ArrayList
@@ -130,7 +131,7 @@ fun Activity.showEventRepeatIntervalDialog(curSeconds: Int, callback: (minutes: 
 
 }
 
-fun Activity.setupBottomButtonBar(mHolderId: Int) {
+fun Activity.setupBottomButtonBar(time:DateTime) {
         ib_bcc_info.setOnClickListener {
             //context.launchAbout(componentName.shortClassName)
         }
@@ -160,7 +161,7 @@ fun Activity.setupBottomButtonBar(mHolderId: Int) {
 
         }
         ib_bcc_list.setOnClickListener {
-            showEventList()
+            (this as MainActivity).openEventList(time)
         }
 }
 
@@ -214,11 +215,9 @@ fun Activity.shareScreen(){
 }
 
 fun Activity.goToday(){
-    if (componentName.shortClassName.contains(MAIN_ACTIVITY_CLASSNAME,true)) {
-        when (config.storedView) {
-            MONTHLY_VIEW -> (this as MainActivity)!!.goToToday()
-            else -> (this as MainActivity)!!.updateView(MONTHLY_VIEW)
-        }
+    when (config.storedView) {
+        MONTHLY_VIEW -> (this as MainActivity)!!.goToToday()
+        else -> (this as MainActivity)!!.updateView(MONTHLY_VIEW)
     }
 }
 

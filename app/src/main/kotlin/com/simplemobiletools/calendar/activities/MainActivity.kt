@@ -910,6 +910,22 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
     }
 
+    fun openEventList(dateTime: DateTime) {
+        config.storedView= EVENTS_LIST_VIEW
+
+        if (currentFragments.last() is EventListFragmentsHolder) {
+            return
+        }
+
+        val fragment = EventListFragmentsHolder()
+        currentFragments.add(fragment)
+        val bundle = Bundle()
+        bundle.putString(DAY_CODE, Formatter.getDayCodeFromDateTime(dateTime))
+        fragment.arguments = bundle
+        supportFragmentManager.beginTransaction().add(R.id.fragments_holder, fragment).commitNow()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
     fun openQingxinFromMonthly(dateTime: DateTime) {
         config.storedView= QINGXIN_VIEW
 
@@ -930,7 +946,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     {
         updateTop(time,view)
         updateBottom(time,view)
-        setupBottomButtonBar(view)
+        setupBottomButtonBar(time)
     }
 
     private fun updateTop(time:DateTime, view:Int){

@@ -33,7 +33,6 @@ class AboutFragment : MyFragmentHolder() {
         setupCredit()
         setupHealth()
         setupLicense()
-        setupCopyright()
     }
 
     private fun setupIntro(){
@@ -68,12 +67,6 @@ class AboutFragment : MyFragmentHolder() {
                 startActivity(this)
             }
         }
-    }
-
-
-    private fun setupCopyright() {
-        val year = Calendar.getInstance().get(Calendar.YEAR)
-        about_copyright.text = String.format(getString(R.string.copyright), year)
     }
 
     //all below are for placeholder purpose
