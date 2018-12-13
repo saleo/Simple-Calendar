@@ -10,7 +10,6 @@ import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.activities.MainActivity
 import com.simplemobiletools.calendar.extensions.config
 import com.simplemobiletools.calendar.helpers.*
-import com.simplemobiletools.commons.activities.LicenseActivity
 import com.simplemobiletools.commons.helpers.APP_LICENSES
 import kotlinx.android.synthetic.main.fragment_about.*
 
@@ -57,10 +56,8 @@ class AboutFragment : MyFragmentHolder() {
 
     private fun setupLicense() {
         about_license_holder.setOnClickListener {
-            Intent(context, LicenseActivity::class.java).apply {
-                putExtra(APP_LICENSES, this.getIntExtra(APP_LICENSES, 0))
-                startActivity(this)
-            }
+            val dt=Formatter.getDateTimeFromCode(currentDayCode)
+            (activity as MainActivity).openFragmentHolder(dt, ABOUT_LICENSE_VIEW)
         }
     }
 

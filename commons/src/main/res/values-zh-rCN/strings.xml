@@ -451,8 +451,9 @@
     <string name="notice">此应用使用了以下三方库。谢谢。</string>
     <string name="third_party_licences">开放源代码</string>
     <string name="simplecalendar_title">SimpleCalenar</string>
-    <string name="icsdroid_title">ICSDroid</string>
-    <string name="ical4android_title">iCal4Android</string>
+    <string name="icsdroid_title">ICSDroid(app to subscribe remote calendar file)</string>
+    <string name="ical4android_title">iCal4Android(library that brings together iCalendar and Android)</string>
+    <string name="glcv_title">GregorianLunarCalendarView(提供农历选择)</string>
     <string name="kotlin_title">Kotlin (programming language)</string>
     <string name="subsampling_title">Subsampling Scale Image View (zoomable imageviews)</string>
     <string name="glide_title">Glide (image loading and caching)</string>
