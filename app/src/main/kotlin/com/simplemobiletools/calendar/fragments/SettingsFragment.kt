@@ -78,7 +78,6 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
 
         activity!!.updateTextColors(ll_settings_holder)
         checkPrimaryColor()
-        setupUseSameSnooze()
         setupReminerGeneral()
         setupCustomizeEvent()        
     }
@@ -202,15 +201,6 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
             sc_settings_reminder_vibrate.isChecked = false
         activity!!.config.vibrateOnReminder = sc_settings_reminder_vibrate.isChecked
     }
-
-    private fun setupUseSameSnooze() {
-        settings_use_same_snooze.isChecked = activity!!.config.useSameSnooze
-        settings_use_same_snooze_holder.setOnClickListener {
-            settings_use_same_snooze.toggle()
-            activity!!.config.useSameSnooze = settings_use_same_snooze.isChecked
-        }
-    }
-
 
     private fun setupReminderUnifiedMinute(isEnabled: Boolean = true) {
 
