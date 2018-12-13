@@ -9,10 +9,7 @@ import android.view.ViewGroup
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.activities.MainActivity
 import com.simplemobiletools.calendar.extensions.config
-import com.simplemobiletools.calendar.helpers.ABOUT_CREDIT_VIEW
-import com.simplemobiletools.calendar.helpers.ABOUT_INTRO_VIEW
-import com.simplemobiletools.calendar.helpers.ABOUT_VIEW
-import com.simplemobiletools.calendar.helpers.Formatter
+import com.simplemobiletools.calendar.helpers.*
 import com.simplemobiletools.commons.activities.LicenseActivity
 import com.simplemobiletools.commons.helpers.APP_LICENSES
 import kotlinx.android.synthetic.main.fragment_about.*
@@ -39,22 +36,21 @@ class AboutFragment : MyFragmentHolder() {
     private fun setupIntro(){
         about_introduction_holder.setOnClickListener{
             val dt=Formatter.getDateTimeFromCode(currentDayCode)
-            (activity as MainActivity).openFragment(dt, ABOUT_INTRO_VIEW)
+            (activity as MainActivity).openFragmentHolder(dt, ABOUT_INTRO_VIEW)
         }
     }
 
     private fun setupCredit(){
         about_credit_holder.setOnClickListener{
             val dt=Formatter.getDateTimeFromCode(currentDayCode)
-            (activity as MainActivity).openFragment(dt, ABOUT_CREDIT_VIEW)
+            (activity as MainActivity).openFragmentHolder(dt, ABOUT_CREDIT_VIEW)
         }
     }
 
     private fun setupHealth() {
         ll_health_holder.setOnClickListener {
-            Intent(context, AboutActivityHealth::class.java).apply {
-                startActivity(this)
-            }
+            val dt=Formatter.getDateTimeFromCode(currentDayCode)
+            (activity as MainActivity).openFragment(dt, ABOUT_HEALTH_VIEW)
         }
     }
 

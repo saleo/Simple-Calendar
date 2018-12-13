@@ -1,6 +1,5 @@
 package com.simplemobiletools.calendar.activities
 
-import android.app.Fragment
 import android.app.SearchManager
 import android.content.*
 import android.content.pm.ActivityInfo
@@ -12,6 +11,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.CalendarContract
 import android.provider.ContactsContract
+import android.support.v4.app.Fragment
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.SearchView
 import android.util.Log
@@ -45,15 +45,14 @@ import com.simplemobiletools.commons.dialogs.RadioGroupDialog
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
-import com.simplemobiletools.commons.models.FAQItem
 import com.simplemobiletools.commons.models.RadioItem
 import com.simplemobiletools.commons.models.Release
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.top_navigation.*
 import org.joda.time.DateTime
+import org.joda.time.format.ISODateTimeFormat.dateTime
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
-import java.time.Month
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -78,7 +77,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     private var mSearchMenuItem: MenuItem? = null
     private var shouldGoToTodayBeVisible = false
     private var goToTodayButton: MenuItem? = null
-    private var currentFragments = ArrayList<MyFragmentHolder>()
+    private var currentFragments = ArrayList<Fragment>()
 
     private var mStoredTextColor = 0
     private var mStoredBackgroundColor = 0
@@ -98,7 +97,9 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         checkWhatsNewDialog()
         //calendar_fab.beVisibleIf(config.storedView != YEARLY_VIEW)
         calendar_fab.setOnClickListener {
-            launchNewEventIntent(currentFragments.last().getNewEventDayCode())
+            val f= currentFragments.last()
+            if (f is MyFragmentHolder)
+                launchNewEventIntent(f.getNewEventDayCode())
         }
 
         getStoredStateVariables()
@@ -354,7 +355,9 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     fun goToToday() {
-        currentFragments.last().goToToday()
+        val f=currentFragments.last()
+        if (f is MyFragmentHolder)
+            f.goToToday()
     }
 
     private fun resetActionBarTitle() {
@@ -567,7 +570,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             supportFragmentManager.beginTransaction().remove(it).commitNow()
         }
         currentFragments.clear()
-        currentFragments.add(fragment)
+        currentFragments.add(fragment as Fragment)
         val bundle = Bundle()
 
         when (config.storedView) {
@@ -580,22 +583,26 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     fun openMonthFromYearly(dateTime: DateTime) {
-        if (currentFragments.last() is MonthFragmentsHolder) {
-            return
+    }
+
+    fun openFragment(dateTime: DateTime,view: Int= ABOUT_HEALTH_VIEW){
+        if ((config.storedView == ABOUT_HEALTH_VIEW) && (view == ABOUT_HEALTH_VIEW)) return
+        config.storedView=view
+        val fragment:Fragment
+        when (view){
+            ABOUT_HEALTH_VIEW -> fragment = HealthFragment() as Fragment
+            else -> fragment=MonthFragmentsHolder()
         }
 
-        val fragment = MonthFragmentsHolder()
         currentFragments.add(fragment)
         val bundle = Bundle()
         bundle.putString(DAY_CODE, Formatter.getDayCodeFromDateTime(dateTime))
         fragment.arguments = bundle
         supportFragmentManager.beginTransaction().add(R.id.fragments_holder, fragment).commitNow()
-        resetActionBarTitle()
-        //calendar_fab.beVisible()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    fun openFragment(dateTime: DateTime, view: Int= MONTHLY_VIEW) {
+    fun openFragmentHolder(dateTime: DateTime, view: Int= MONTHLY_VIEW) {
         var fragment:MyFragmentHolder
         if ((config.storedView == DAILY_VIEW) && (view == DAILY_VIEW))
         else if ((config.storedView == MONTHLY_VIEW) && (view == MONTHLY_VIEW))
@@ -620,10 +627,10 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             else -> fragment=MonthFragmentsHolder()
         }
 
-        currentFragments.add(fragment)
+        currentFragments.add(fragment as Fragment)
         val bundle = Bundle()
         bundle.putString(DAY_CODE, Formatter.getDayCodeFromDateTime(dateTime))
-        fragment.arguments = bundle
+        (fragment as MyFragmentHolder).arguments = bundle
         supportFragmentManager.beginTransaction().add(R.id.fragments_holder, fragment).commitNow()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
@@ -645,6 +652,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         ABOUT_VIEW -> AboutFragment()
         ABOUT_INTRO_VIEW -> IntroFragment()
         ABOUT_CREDIT_VIEW -> CreditFragment()
+        ABOUT_HEALTH_VIEW -> HealthFragment()
         else -> WeekFragmentsHolder()
     }
 
@@ -652,8 +660,10 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         var dt:DateTime
         supportFragmentManager.beginTransaction().remove(currentFragments.last()).commitNow()
         currentFragments.removeAt(currentFragments.size - 1)
-        toggleGoToTodayVisibility(currentFragments.last().shouldGoToTodayBeVisible())
-        currentFragments.last().apply {
+        val f=currentFragments.last()
+        if (f is HealthFragment) {updateTopBottom(view= ABOUT_HEALTH_VIEW);return}
+
+        (f as MyFragmentHolder).apply {
             dt=Formatter.getDateTimeFromCode(this.currentDayCode)
             when (this) {
                 is DayFragmentsHolder ->updateTopBottom(dt, DAILY_VIEW)
@@ -663,19 +673,17 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                 is AboutFragment ->updateTopBottom(dt, ABOUT_VIEW)
                 is IntroFragment ->updateTopBottom(dt, ABOUT_INTRO_VIEW)
                 is CreditFragment ->updateTopBottom(dt, ABOUT_CREDIT_VIEW)
-
             }
             refreshEvents()
-            updateActionBarTitle()
         }
-        //calendar_fab.beGoneIf(currentFragments.size == 1 && config.storedView == YEARLY_VIEW)
-        supportActionBar?.setDisplayHomeAsUpEnabled(currentFragments.size > 1)
+
     }
 
     private fun refreshViewPager() {
         runOnUiThread {
             if (!isActivityDestroyed()) {
-                currentFragments.last().refreshEvents()
+                val f=currentFragments.last()
+                if (f is MyFragmentHolder) f.refreshEvents()
             }
         }
     }
@@ -986,13 +994,13 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         bottom_sentense2.textSize = config.getFontSize()*1.01.toFloat()
 
         bottom_sentense0.setOnClickListener {
-            openFragment(time, QINGXIN_VIEW)
+            openFragmentHolder(time, QINGXIN_VIEW)
         }
         bottom_sentense1.setOnClickListener {
-            openFragment(time, QINGXIN_VIEW)
+            openFragmentHolder(time, QINGXIN_VIEW)
         }
         bottom_sentense2.setOnClickListener {
-            openFragment(time, QINGXIN_VIEW)
+            openFragmentHolder(time, QINGXIN_VIEW)
         }
 
         if (intYear==2016 || intYear ==2018){

@@ -194,7 +194,7 @@ class MonthFragment : Fragment(), MonthlyCalendar {
                     val day = days[i]
                     if (day.dayEvents.size>0)
                         setOnClickListener {
-                            (activity as MainActivity).openFragment(Formatter.getDateTimeFromCode(day.code), DAILY_VIEW)
+                            (activity as MainActivity).openFragmentHolder(Formatter.getDateTimeFromCode(day.code), DAILY_VIEW)
                         }
 
                     removeAllViews()
