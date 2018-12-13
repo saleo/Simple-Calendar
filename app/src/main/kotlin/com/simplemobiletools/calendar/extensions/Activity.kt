@@ -137,7 +137,7 @@ fun Activity.setupBottomButtonBar(time:DateTime) {
         }
 
         ib_bcc_setting.setOnClickListener {
-            //context.launchSettings(componentName.shortClassName)
+            (this as MainActivity)!!.openFragmentHolder(time, SETTINGS_VIEW)
         }
 
         ib_bcc_today.setOnClickListener {

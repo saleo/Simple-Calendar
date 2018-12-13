@@ -242,7 +242,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             R.id.add_anniversaries -> tryAddAnniversaries()
             R.id.import_events -> tryImportEvents()
             R.id.export_events -> tryExportEvents()
-            R.id.settings -> launchSettings(componentName.shortClassName)
             android.R.id.home -> onBackPressed()
             else -> return super.onOptionsItemSelected(item)
         }
@@ -611,6 +610,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         else if ((config.storedView == ABOUT_VIEW) && (view == ABOUT_VIEW))
         else if ((config.storedView == ABOUT_INTRO_VIEW) && (view == ABOUT_INTRO_VIEW))
         else if ((config.storedView == ABOUT_CREDIT_VIEW) && (view == ABOUT_CREDIT_VIEW))
+        else if ((config.storedView == SETTINGS_VIEW) && (view == SETTINGS_VIEW))
         {
             return
         }
@@ -624,6 +624,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             ABOUT_VIEW -> fragment=AboutFragment()
             ABOUT_INTRO_VIEW -> fragment=IntroFragment()
             ABOUT_CREDIT_VIEW -> fragment=CreditFragment()
+            SETTINGS_VIEW -> fragment=SettingsFragment()
             else -> fragment=MonthFragmentsHolder()
         }
 
@@ -653,6 +654,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         ABOUT_INTRO_VIEW -> IntroFragment()
         ABOUT_CREDIT_VIEW -> CreditFragment()
         ABOUT_HEALTH_VIEW -> HealthFragment()
+        SETTINGS_VIEW -> SettingsFragment()
         else -> WeekFragmentsHolder()
     }
 
@@ -673,6 +675,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                 is AboutFragment ->updateTopBottom(dt, ABOUT_VIEW)
                 is IntroFragment ->updateTopBottom(dt, ABOUT_INTRO_VIEW)
                 is CreditFragment ->updateTopBottom(dt, ABOUT_CREDIT_VIEW)
+                is SettingsFragment ->updateTop(dt, SETTINGS_VIEW)
             }
             refreshEvents()
         }

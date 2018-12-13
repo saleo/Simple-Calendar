@@ -562,6 +562,3 @@ fun Context.processEventRemindersNotification(eventIdsToProcess:ArrayList<String
     }
 }
 
-fun Context.launchSettings(shortClassName:String) {
-    startActivity(Intent(applicationContext, SettingsActivity::class.java))
-}
