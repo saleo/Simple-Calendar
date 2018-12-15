@@ -470,8 +470,10 @@ class CalDAVHandler(val context: Context) {
         }
 
 
-        val updatedEvents=context.dbHelper.getEventsWithSyncUids(updatedEventSyncUids)
-        context.processEventRemindersNotification(updatedEvents)
+        if (context.config.reminderSwitch) {
+            val updatedEvents=context.dbHelper.getEventsWithSyncUids(updatedEventSyncUids)
+            context.processEventRemindersNotification(updatedEvents)
+        }
 
     }
 

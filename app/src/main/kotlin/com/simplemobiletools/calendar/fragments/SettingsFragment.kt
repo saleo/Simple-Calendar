@@ -392,7 +392,9 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
                 if (i==0) parentId=it
             }
         }
-        activity!!.processEventRemindersNotification(idsToProcessNotification)
+
+        if (context!!.config.reminderSwitch)
+            activity!!.processEventRemindersNotification(idsToProcessNotification)
         callback()
     }
 
@@ -412,6 +414,7 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
 
         if (reminderTs != activity!!.config.reminderTs){
             activity!!.config.reminderTs = reminderTs
+            // no need check config.reminderSwitch=true since program cannot come here if the switch is off
             Thread {
                 activity!!.processEventRemindersNotification(activity!!.dbHelper.getEventsToExport(false))
             }.start()
