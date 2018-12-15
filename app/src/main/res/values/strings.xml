@@ -371,6 +371,7 @@
     <string name="customized_event_added">戒期添加成功！</string>
     <string name="customized_event_deleted">戒期删除成功！</string>
     <string name="customized_event_updated">戒期修改成功！</string>
+    <string name="reminder_time_udpated">修改成功！</string>
 
     <!--
         Haven't found some stringsh? There's more at

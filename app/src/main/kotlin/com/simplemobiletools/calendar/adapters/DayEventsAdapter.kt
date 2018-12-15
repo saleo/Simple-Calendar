@@ -64,7 +64,7 @@ class DayEventsAdapter(activity: SimpleActivity, val events: ArrayList<Event>, r
     private fun setupView(view: View, event: Event) {
         view.apply {
             event_section_title.text = event.title
-            event_reminder_time.text = Formatter.getTimeFromTS(context,event.startTS-context.config.currentReminderMinutes*60)
+            event_reminder_time.text = Formatter.getTimeFromTS(context,event.startTS)
 
             event_reminder_time.setTextColor(textColor)
             event_section_title.setTextColor(event.color)

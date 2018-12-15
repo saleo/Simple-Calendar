@@ -50,7 +50,6 @@ import com.simplemobiletools.commons.models.Release
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.top_navigation.*
 import org.joda.time.DateTime
-import org.joda.time.format.ISODateTimeFormat.dateTime
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
@@ -92,7 +91,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         setContentView(R.layout.activity_main)
         appLaunched()
         if (baseConfig.appRunCount==1)
-            config.currentReminderMinutes= REMINDER_INITIAL_MINUTES
+            config.reminderTs= REMINDER_INITIAL_TS
 
         checkWhatsNewDialog()
         //calendar_fab.beVisibleIf(config.storedView != YEARLY_VIEW)

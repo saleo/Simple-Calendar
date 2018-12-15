@@ -144,7 +144,7 @@ class IcsImporter(val activity: SimpleActivity) {
                                 source = source, location = curLocation, lunar = "")
 
                         if (event.getIsAllDay() && curEnd > curStart) {
-                            event.endTS -= DAY
+                            event.endTS -= DAY_SECONDS
                         }
 
                         if (eventToUpdate == null) {

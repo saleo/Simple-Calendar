@@ -52,18 +52,12 @@
                 android:text="@string/builtin_event_reminder_label"
                 android:textSize="@dimen/day_text_size" />
 
-            <com.simplemobiletools.commons.views.MyTextView
-                android:id="@+id/tv_settings_builtin_events_reminder_unified_minute"
+            <com.simplemobiletools.commons.views.MyAppCompatSpinner
+                android:id="@+id/acs_reminderTs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_alignRight="@id/rl_settings_reminder_switch_holder"
-                android:layout_below="@+id/rl_settings_reminder_switch_holder"
-                android:background="?attr/selectableItemBackground"
-                android:padding="@dimen/medium_margin"
-                android:text="@string/builtin_event_reminder"
-                android:textSize="@dimen/day_text_size" />
+                android:layout_below="@id/rl_settings_reminder_switch_holder"/>
 
             <RelativeLayout
                 android:id="@+id/rl_settings_reminder_vibrate_holder"

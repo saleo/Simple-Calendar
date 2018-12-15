@@ -477,4 +477,15 @@
         <item>忌日</item>
         <item>纪念日</item>
     </string-array>
+
+    <string-array name="reminderTs">
+        <item>20:00</item>
+        <item>20:30</item>
+        <item>21:00</item>
+        <item>21:30</item>
+        <item>22:00</item>
+        <item>22:30</item>
+        <item>23:00</item>
+        <item>23:30</item>
+    </string-array>
 </resources>

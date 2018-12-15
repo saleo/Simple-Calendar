@@ -5,7 +5,7 @@ import android.support.v7.app.AlertDialog
 import android.view.ViewGroup
 import android.view.WindowManager
 import com.simplemobiletools.calendar.R
-import com.simplemobiletools.calendar.helpers.DAY
+import com.simplemobiletools.calendar.helpers.DAY_SECONDS
 import com.simplemobiletools.calendar.helpers.MONTH
 import com.simplemobiletools.calendar.helpers.WEEK
 import com.simplemobiletools.calendar.helpers.YEAR
@@ -43,6 +43,6 @@ class CustomEventRepeatIntervalDialog(val activity: Activity, val callback: (sec
         R.id.dialog_radio_weeks -> WEEK
         R.id.dialog_radio_months -> MONTH
         R.id.dialog_radio_years -> YEAR
-        else -> DAY
+        else -> DAY_SECONDS
     }
 }

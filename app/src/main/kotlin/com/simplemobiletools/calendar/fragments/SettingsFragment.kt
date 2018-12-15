@@ -16,7 +16,6 @@ import android.widget.ArrayAdapter
 import cn.carbs.android.gregorianlunarcalendar.library.data.ChineseCalendar
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.activities.MainActivity
-import com.simplemobiletools.calendar.activities.SimpleActivity
 import com.simplemobiletools.calendar.adapters.CustomizeEventsAdapter
 import com.simplemobiletools.calendar.dialogs.CustomizeEventDialog
 import com.simplemobiletools.calendar.dialogs.CustomizeLunarDialog
@@ -98,6 +97,7 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
         when (parent){
             acs_customize_event_whomfor -> {mWhomFor= parent?.getItemAtPosition(position).toString()}
             acs_customize_event_whatfor -> {mWhatFor= parent?.getItemAtPosition(position).toString()}
+            acs_reminderTs -> { updateReminerTs(position)}
         }
     }
 
@@ -202,18 +202,34 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
         activity!!.config.vibrateOnReminder = sc_settings_reminder_vibrate.isChecked
     }
 
-    private fun setupReminderUnifiedMinute(isEnabled: Boolean = true) {
+    private fun setupReminderTime(isEnabled: Boolean = true) {
+        acs_reminderTs.isEnabled = isEnabled
+        val reminderTs=activity!!.config.reminderTs
+        if (isEnabled){
+            val reminderTs_array = resources.getStringArray(R.array.reminderTs)
+            val reminderTs_adapter = ArrayAdapter<CharSequence>(activity as MainActivity, android.R.layout.simple_spinner_item, reminderTs_array)
+            reminderTs_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-        tv_settings_builtin_events_reminder_unified_minute.isEnabled = isEnabled
-        tv_settings_builtin_events_reminder_unified_minute.text = activity!!.getFormattedMinutes(activity!!.config.currentReminderMinutes)
-        if (isEnabled)
-            tv_settings_builtin_events_reminder_unified_minute.setOnClickListener { showReminderDialog() }
+            acs_reminderTs.adapter = reminderTs_adapter
+            when (reminderTs){
+                REMINDER_INITIAL_TS -> acs_reminderTs.setSelection(0)
+                REMINDER_INITIAL_TS_PLUS_30MIN -> acs_reminderTs.setSelection(1)
+                REMINDER_INITIAL_TS_PLUS_60MIN -> acs_reminderTs.setSelection(2)
+                REMINDER_INITIAL_TS_PLUS_90MIN -> acs_reminderTs.setSelection(3)
+                REMINDER_INITIAL_TS_PLUS_120MIN -> acs_reminderTs.setSelection(4)
+                REMINDER_INITIAL_TS_PLUS_150MIN -> acs_reminderTs.setSelection(5)
+                REMINDER_INITIAL_TS_PLUS_180MIN -> acs_reminderTs.setSelection(6)
+                REMINDER_INITIAL_TS_PLUS_210MIN -> acs_reminderTs.setSelection(7)
+            }
+        }
+        acs_reminderTs.onItemSelectedListener = this
+
     }
 
     private fun setupReminderSwitch(isChecked: Boolean = true) {
         sc_settings_reminder_switch.isChecked = isChecked //no trigger clicklistener when enter here FIRST
 //        settings_reminder_switch.textSize=activity!!.config.fontSize.toFloat()
-        setupReminderUnifiedMinute(isChecked)
+        setupReminderTime(isChecked)
         setupVibrate(isChecked)
         setupReminderSound(isChecked)
 
@@ -221,12 +237,16 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
             sc_settings_reminder_switch.toggle()
             val reminderOnOff = sc_settings_reminder_switch.isChecked
             activity!!.config.reminderSwitch = reminderOnOff
-            setupReminderUnifiedMinute(reminderOnOff)
+            setupReminderTime(reminderOnOff)
             setupVibrate(reminderOnOff)
             setupReminderSound(reminderOnOff)
-            if (!reminderOnOff)
+            if (reminderOnOff)
                 Thread {
-                    activity!!.dbHelper.updateEventReminder(REMINDER_OFF)
+                    activity!!.processEventRemindersNotification(activity!!.dbHelper.getEventsToExport(false))
+                }.start()
+            else
+                Thread {
+                    activity!!.cancelAllNotification()
                 }.start()
         }
     }
@@ -281,17 +301,17 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
 
     }
 
-    private fun showReminderDialog() {
-        activity!!.showEventReminderDialog(mReminderMinutes) {
-            mReminderMinutes = it
-            tv_settings_builtin_events_reminder_unified_minute.text = activity!!.getFormattedMinutes(mReminderMinutes)
-            activity!!.config.currentReminderMinutes = mReminderMinutes
-            Thread {
-                activity!!.dbHelper.updateEventReminder(mReminderMinutes)
-                activity!!.processEventRemindersNotification(activity!!.dbHelper.getEventsToExport(false))
-            }.start()
-        }
-    }
+//    private fun showReminderDialog() {
+//        activity!!.showEventReminderDialog(mReminderMinutes) {
+//            mReminderMinutes = it
+//            tv_settings_builtin_events_reminder_time.text = activity!!.getFormattedMinutes(mReminderMinutes)
+//            activity!!.config.currentReminderMinutes = mReminderMinutes
+//            Thread {
+//                activity!!.dbHelper.updateEventStartTS(mReminderMinutes)
+//                activity!!.processEventRemindersNotification(activity!!.dbHelper.getEventsToExport(false))
+//            }.start()
+//        }
+//    }
 
 
     private fun itemModifyClick(event: Event) {
@@ -348,12 +368,11 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
         if (yearsToAdd == 0) yearsToAdd++
         else if ((DateTime().dayOfYear) < (DateTime(startTs.toLong()).dayOfYear)) yearsToAdd++
 
-        val reminderMinute1 = activity!!.config.unifiedReminderTs / 60
         var lunarYear = lundarDate.substring(0, 4).toInt()
         val lunarMonth = lundarDate.substring(4, 6).toInt()
         val lunarDay = lundarDate.substring(6, 8).toInt()
 
-        for (i in 0..2) {
+        for (i in 0..YEARS_LIMIT_CUSTOMIZE_EVENT) {
             lunarYear += yearsToAdd
             val myCal = ChineseCalendar(true, lunarYear, lunarMonth, lunarDay)
             iGregYear = myCal.get(Calendar.YEAR)
@@ -365,7 +384,7 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
             startTs = Formatter.getDayStartTS("$iGregYear$ggMonth$ggDayofMonth")
             endTs = startTs + 1
             if (i==0) parentId=0
-            val event = Event(0, startTs, endTs, title = title, reminder1Minutes = reminderMinute1, source = SOURCE_CUSTOMIZE_ANNIVERSARY,
+            val event = Event(0, startTs, endTs, title = title,  source = SOURCE_CUSTOMIZE_ANNIVERSARY,
                     color = Color.BLUE, lunar = lundarDate,parentId =parentId )
             activity!!.dbHelper.insert(event, false) {
                 Log.d(APP_TAG, "customized event inserted with id=$it,title=$title,startTs=$startTs")
@@ -377,6 +396,29 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
         callback()
     }
 
+    private fun updateReminerTs(selectedItemPosition:Int){
+        var reminderTs=0
+        when (selectedItemPosition){
+            0 -> reminderTs= REMINDER_INITIAL_TS
+            1 -> reminderTs= REMINDER_INITIAL_TS_PLUS_30MIN
+            2 -> reminderTs= REMINDER_INITIAL_TS_PLUS_60MIN
+            3 -> reminderTs= REMINDER_INITIAL_TS_PLUS_90MIN
+            4 -> reminderTs= REMINDER_INITIAL_TS_PLUS_120MIN
+            5 -> reminderTs= REMINDER_INITIAL_TS_PLUS_150MIN
+            6 -> reminderTs= REMINDER_INITIAL_TS_PLUS_180MIN
+            7 -> reminderTs= REMINDER_INITIAL_TS_PLUS_210MIN
+        }
+
+
+        if (reminderTs != activity!!.config.reminderTs){
+            activity!!.config.reminderTs = reminderTs
+            Thread {
+                activity!!.processEventRemindersNotification(activity!!.dbHelper.getEventsToExport(false))
+            }.start()
+
+            context!!.toast(R.string.reminder_time_udpated)
+        }
+    }
     //all below are for placeholder purpose
     override fun goToToday() {
     }

@@ -51,7 +51,7 @@ class Parser {
     }
 
     private fun getFrequencySeconds(interval: String) = when (interval) {
-        DAILY -> DAY
+        DAILY -> DAY_SECONDS
         WEEKLY -> WEEK
         MONTHLY -> MONTH
         YEARLY -> YEAR
@@ -117,7 +117,7 @@ class Parser {
         interval % YEAR == 0 -> interval / YEAR
         interval % MONTH == 0 -> interval / MONTH
         interval % WEEK == 0 -> interval / WEEK
-        else -> interval / DAY
+        else -> interval / DAY_SECONDS
     }
 
     private fun getRepeatLimitString(event: Event) = when {

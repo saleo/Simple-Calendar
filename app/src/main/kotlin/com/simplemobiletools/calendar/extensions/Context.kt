@@ -15,7 +15,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.support.v4.app.NotificationCompat
-import android.support.v4.content.FileProvider
+import android.text.TextUtils
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -37,7 +37,6 @@ import com.simplemobiletools.commons.extensions.getAdjustedPrimaryColor
 import com.simplemobiletools.commons.extensions.getFilePublicUri
 import com.simplemobiletools.commons.extensions.onGlobalLayout
 import com.simplemobiletools.commons.helpers.*
-import com.simplemobiletools.commons.models.FAQItem
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import java.io.File
@@ -120,6 +119,15 @@ fun Context.scheduleEventIn(notifTS: Long, event: Event) {
     }
 }
 
+fun Context.cancelAllNotification(){
+    val ntfIDs=config.getNtfIdsAsList()
+    for (i in 0 until ntfIDs.size) {
+        val intent = Intent(applicationContext, NotificationReceiver::class.java)
+        PendingIntent.getBroadcast(applicationContext, ntfIDs[i].toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT).cancel()
+    }
+    config.ntfIDs=""
+}
+
 fun Context.cancelNotification(id: Int) {
     val intent = Intent(applicationContext, NotificationReceiver::class.java)
     PendingIntent.getBroadcast(applicationContext, id, intent, PendingIntent.FLAG_UPDATE_CURRENT).cancel()
@@ -154,7 +162,7 @@ private fun getPostponeNotificationIntent(context: Context,ntfId:Int,ntfTitle:St
 
 fun Context.getRepetitionText(seconds: Int) = when (seconds) {
     0 -> getString(R.string.no_repetition)
-    DAY -> getString(R.string.daily)
+    com.simplemobiletools.calendar.helpers.DAY_SECONDS -> getString(R.string.daily)
     WEEK -> getString(R.string.weekly)
     MONTH -> getString(R.string.monthly)
     YEAR -> getString(R.string.yearly)
@@ -163,7 +171,7 @@ fun Context.getRepetitionText(seconds: Int) = when (seconds) {
             seconds % YEAR == 0 -> resources.getQuantityString(R.plurals.years, seconds / YEAR, seconds / YEAR)
             seconds % MONTH == 0 -> resources.getQuantityString(R.plurals.months, seconds / MONTH, seconds / MONTH)
             seconds % WEEK == 0 -> resources.getQuantityString(R.plurals.weeks, seconds / WEEK, seconds / WEEK)
-            else -> resources.getQuantityString(R.plurals.days, seconds / DAY, seconds / DAY)
+            else -> resources.getQuantityString(R.plurals.days, seconds / com.simplemobiletools.calendar.helpers.DAY_SECONDS, seconds / com.simplemobiletools.calendar.helpers.DAY_SECONDS)
         }
     }
 }
@@ -303,7 +311,7 @@ private fun getPendingIntent(context: Context, event: Event): PendingIntent {
 
 private fun getPendingIntentWithGroupedNtfId(context: Context,groupedNtfId:Int):PendingIntent{
     val intent = Intent(context, MainActivity::class.java)
-    val dayCode =Formatter.getDayCodeFromTS(groupedNtfId* DAY_SECONDS)
+    val dayCode =Formatter.getDayCodeFromTS(groupedNtfId* com.simplemobiletools.commons.helpers.DAY_SECONDS)
     intent.putExtra(DAY_CODE,dayCode)
     return PendingIntent.getActivity(context, groupedNtfId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 }
@@ -522,7 +530,7 @@ fun Context.processEventRemindersNotification(eventsToProcess:ArrayList<Event>){
     val now = getNowSeconds()
 
     eventsToProcess.forEach{
-        currentNotifyTs=it.startTS-it.reminder1Minutes*60
+        currentNotifyTs=it.startTS+config.reminderTs
         if (currentNotifyTs>now) {
             idsToProcess.add(it.id.toString())
         }
@@ -539,7 +547,8 @@ fun Context.processEventRemindersNotification(eventsToProcess:ArrayList<Event>){
 
 fun Context.processEventRemindersNotification(eventIdsToProcess:ArrayList<String>, notifyTms: Long=0, inNtfId:Int=0, inNtfTitle:String="", inNtfContent:String="") {
     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
+    var ntfIDs=ArrayList<Int>()
+    val existNtfIds=config.getNtfIdsAsList()
     if (inNtfId == 0) {
         val gns = dbHelper.getGroupedNotifications(eventIdsToProcess)
         gns.forEach {
@@ -549,7 +558,13 @@ fun Context.processEventRemindersNotification(eventIdsToProcess:ArrayList<String
                 isKitkatPlus() -> alarmManager.setExact(AlarmManager.RTC_WAKEUP, it.ntfTms, pendingIntent)
                 else -> alarmManager.set(AlarmManager.RTC_WAKEUP, it.ntfTms, pendingIntent)
             }
+            if (!existNtfIds.contains(it.ntfId.toString()))
+                ntfIDs.add(it.ntfId)
         }
+        if (existNtfIds.size>0)
+            config.ntfIDs=config.ntfIDs+","+TextUtils.join(",",ntfIDs)
+        else
+            config.ntfIDs=TextUtils.join(",",ntfIDs)
     }
     else {
         //for postponed notification

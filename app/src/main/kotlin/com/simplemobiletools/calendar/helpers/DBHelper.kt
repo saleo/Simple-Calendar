@@ -1040,18 +1040,19 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         }
     }
 
-    fun updateEventReminder(reminderMinutes:Int){
-        val contentValues=ContentValues().apply {put(COL_REMINDER_MINUTES, reminderMinutes)}
-        val ts = context.getNowSeconds().toString()
-        val selection = "$COL_START_TS >= ?"
-        val i:Int=mDb.update(MAIN_TABLE_NAME,contentValues,selection, arrayOf(ts))
+    fun updateEventStartTS(startTs:Int) {
+        val sqlPrefix="update $MAIN_TABLE_NAME "
+        var sql=""
+        var sqlCriteria=" where $COL_START_TS >="+context.getNowSeconds().toString()
+        sql = sqlPrefix + "set $COL_START_TS=($COL_START_TS/${DAY_SECONDS})*${DAY_SECONDS}+${startTs}" + sqlCriteria
+        mDb.execSQL(sql)
     }
 
     fun getGroupedNotifications(eventIdsToProcess:ArrayList<String>):List<GroupedNotification> {
         val args = TextUtils.join(", ", eventIdsToProcess)
         val selection = "$COL_ID in ($args)"
         val cols = arrayOf(COL_START_TS, "group_concat($COL_TITLE) as gnTitle", "group_concat($COL_DESCRIPTION) as gnContent",COL_REMINDER_MINUTES)
-        val groupBy = "$COL_START_TS/$DAY_SECONDS"
+        val groupBy = "$COL_START_TS/${DAY_SECONDS}"
 
         var cursor: Cursor? = null
         val gns=ArrayList<GroupedNotification>()
@@ -1064,7 +1065,7 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
                         val gnId = (cursor.getIntValue(COL_START_TS)) / DAY_SECONDS
                         val gnTitle = cursor.getStringValue("gnTitle")
                         val gnContent = cursor.getStringValue("gnContent")
-                        val gnTms=(cursor.getLongValue(COL_START_TS)-cursor.getIntValue(COL_REMINDER_MINUTES)*60)*1000L
+                        val gnTms=(cursor.getLongValue(COL_START_TS)+context.config.reminderTs)*1000L
                         val gn=GroupedNotification(gnId,gnTitle,gnContent,gnTms)
                         gns.add(gn)
                     }while (cursor.moveToNext())

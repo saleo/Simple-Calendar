@@ -33,7 +33,7 @@ const val SETTINGS_VIEW=12
 
 const val REMINDER_OFF = -1
 
-const val DAY = 86400
+const val DAY_SECONDS = 86400
 const val WEEK = 604800
 const val MONTH = 2592001    // exact value not taken into account, Joda is used for adding months and years
 const val YEAR = 31536000
@@ -64,6 +64,7 @@ const val REPLACE_DESCRIPTION = "replace_description"
 const val USE_SAME_SNOOZE = "use_same_snooze"
 const val REMINDER_UNIFIED_TIME = "reminder_unified_time"
 const val CURRENT_REMINDER_MINUTES ="current_reminder_minutes"
+const val NOTIFICATON_IDS="notification_ids"
 val letterIDs = intArrayOf(R.string.sunday_letter, R.string.monday_letter, R.string.tuesday_letter, R.string.wednesday_letter,
         R.string.thursday_letter, R.string.friday_letter, R.string.saturday_letter)
 
@@ -150,8 +151,15 @@ const val SOURCE_CONTACT_ANNIVERSARY = "contact-anniversary"
 const val SOURCE_CUSTOMIZE_ANNIVERSARY = "customize-anniversary"
 
 const val REMINDER_SWITCH ="reminder_switch"
-const val REMINDER_INITIAL_MINUTES=240 //4 hours before REMINDER_UNIFIED_TIME_VALUE
-const val SKCAL_AS_DEFAULT="skcal_as_default"
+const val REMINDER_INITIAL_TS=72000//20:00
+const val REMINDER_INITIAL_TS_PLUS_30MIN=72000+30*60
+const val REMINDER_INITIAL_TS_PLUS_60MIN=72000+60*60//21:00
+const val REMINDER_INITIAL_TS_PLUS_90MIN=72000+90*60
+const val REMINDER_INITIAL_TS_PLUS_120MIN=72000+120*60 //22:00
+const val REMINDER_INITIAL_TS_PLUS_150MIN=72000+150*60
+const val REMINDER_INITIAL_TS_PLUS_180MIN=72000+180*60 //23:00
+const val REMINDER_INITIAL_TS_PLUS_210MIN=72000+210*60
+
 const val INTRO_TYPE="intro_type"
 const val HEALTH_TITLE="health_title"
 const val HEALTH_CONTENT="health_content"
@@ -176,7 +184,4 @@ const val FORBIDDEN_DAY= 2
 const val ANNIVERSARY_DAY= 3
 
 const val PLACEHOLDER_8WHITESPACE="                "
-
-const val SETTINGS_ACTIVITY_CLASSNAME="SettingsActivity"
-const val ABOUT_ACTIVITY_CLASSNAME="AboutActivity"
-const val MAIN_ACTIVITY_CLASSNAME="MainActivity"
+const val YEARS_LIMIT_CUSTOMIZE_EVENT=2

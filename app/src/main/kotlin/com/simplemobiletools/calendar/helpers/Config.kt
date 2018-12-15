@@ -96,15 +96,17 @@ class Config(context: Context) : BaseConfig(context) {
         get()=prefs.getBoolean(REMINDER_SWITCH,true)
         set(reminderSwitch)=prefs.edit().putBoolean(REMINDER_SWITCH,reminderSwitch).apply()
 
-    var currentReminderMinutes: Int
-        get() = prefs.getInt(CURRENT_REMINDER_MINUTES, 10)
-        set(currentReminderMinutes) = prefs.edit().putInt(CURRENT_REMINDER_MINUTES, currentReminderMinutes).apply()
-
-    var unifiedReminderTs:Int
-        get()= prefs.getInt(REMINDER_UNIFIED_TIME,72000)//20:00 per day
+    var reminderTs:Int
+        get()= prefs.getInt(REMINDER_UNIFIED_TIME, REMINDER_INITIAL_TS)//20:00 per day
         set(unifiedReminderTs) = prefs.edit().putInt(REMINDER_UNIFIED_TIME,unifiedReminderTs).apply()
 
+    var ntfIDs: String
+        get() = prefs.getString(NOTIFICATON_IDS, "")
+        set(ntfIDs) = prefs.edit().putString(NOTIFICATON_IDS, ntfIDs).apply()
+
     fun getSyncedCalendarIdsAsList() = caldavSyncedCalendarIDs.split(",").filter { it.trim().isNotEmpty() } as ArrayList<String>
+
+    fun getNtfIdsAsList() = ntfIDs.split(",").filter { it.trim().isNotEmpty() } as ArrayList<String>
 
     fun addDisplayEventType(type: String) {
         addDisplayEventTypes(HashSet<String>(Arrays.asList(type)))

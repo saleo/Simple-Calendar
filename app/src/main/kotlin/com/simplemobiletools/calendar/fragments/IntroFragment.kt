@@ -14,7 +14,6 @@ import com.simplemobiletools.calendar.extensions.config
 import com.simplemobiletools.calendar.helpers.ABOUT_INTRO_VIEW
 import com.simplemobiletools.calendar.helpers.ABOUT_VIEW
 import com.simplemobiletools.calendar.helpers.Formatter
-import com.simplemobiletools.calendar.helpers.SKCAL_AS_DEFAULT
 import kotlinx.android.synthetic.main.fragment_about_intro.*
 import kotlinx.android.synthetic.main.bottom_contact_copyright.*
 import java.util.*

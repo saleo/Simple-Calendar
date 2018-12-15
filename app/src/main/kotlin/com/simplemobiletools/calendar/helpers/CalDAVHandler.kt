@@ -263,17 +263,14 @@ class CalDAVHandler(val context: Context) {
                             lastUpdated = 0L
                             offset = ""
                         }
-                        reminders = listOf(context.config.currentReminderMinutes)
 
-                        val event = Event(0, startTS, endTS, title, description, reminders.getOrElse(0, { -1 }),
-                                reminders.getOrElse(1, { -1 }), reminders.getOrElse(2, { -1 }), repeatRule.repeatInterval,
-                                importId, allDay, repeatRule.repeatLimit, repeatRule.repeatRule, eventTypeId, source = source, color = color, location = location, lunar = "")
+                        val event = Event(0, startTS, endTS, title, description, source = source, color = color, location = location, lunar = "")
 
                         if (event.getIsAllDay()) {
                             event.startTS = Formatter.getShiftedImportTimestamp(event.startTS)
                             event.endTS = Formatter.getShiftedImportTimestamp(event.endTS)
                             if (event.endTS > event.startTS) {
-                                event.endTS -= DAY
+                                event.endTS -= DAY_SECONDS
                             }
                         }
 
@@ -284,17 +281,13 @@ class CalDAVHandler(val context: Context) {
                             context.dbHelper.update(event, false)
                         }
                     } else {
-                        reminders = listOf(context.config.currentReminderMinutes)
-
-                        val event = Event(0, startTS, endTS, title, description, reminders.getOrElse(0, { -1 }),
-                                reminders.getOrElse(1, { -1 }), reminders.getOrElse(2, { -1 }), repeatRule.repeatInterval,
-                                importId, allDay, repeatRule.repeatLimit, repeatRule.repeatRule, eventTypeId, source = source, color = color, location = location, lunar = "")
+                        val event = Event(0, startTS, endTS, title, description, source = source, color = color, location = location, lunar = "")
 
                         if (event.getIsAllDay()) {
                             event.startTS = Formatter.getShiftedImportTimestamp(event.startTS)
                             event.endTS = Formatter.getShiftedImportTimestamp(event.endTS)
                             if (event.endTS > event.startTS) {
-                                event.endTS -= DAY
+                                event.endTS -= DAY_SECONDS
                             }
                         }
 
@@ -405,11 +398,8 @@ class CalDAVHandler(val context: Context) {
                             lastUpdated = 0L
                             offset = ""
                         }
-                        reminders = listOf(context.config.currentReminderMinutes)
-
-                        val event = Event(0, startTS, endTS, title, description, reminders.getOrElse(0, { -1 }),
-                                reminders.getOrElse(1, { -1 }), reminders.getOrElse(2, { -1 }), repeatRule.repeatInterval,
-                                "", allDay, repeatRule.repeatLimit, repeatRule.repeatRule, eventTypeId, source = source, color = color, location = location, syncUid = syncUid, lunar = "")
+                        val event = Event(0, startTS, endTS, title, description, source = source,
+                                color = color, location = location, syncUid = syncUid, lunar = "")
 
 //                        if (event.getIsAllDay()) {
 //                            event.startTS = Formatter.getShiftedImportTimestamp(event.startTS)
@@ -427,11 +417,7 @@ class CalDAVHandler(val context: Context) {
                             }
                         }
                     } else {
-                        reminders = listOf(context.config.currentReminderMinutes)
-
-                        val event = Event(0, startTS, endTS, title, description, reminders.getOrElse(0, { -1 }),
-                                reminders.getOrElse(1, { -1 }), reminders.getOrElse(2, { -1 }), repeatRule.repeatInterval,
-                                "", allDay, repeatRule.repeatLimit, repeatRule.repeatRule, eventTypeId, source = source,
+                        val event = Event(0, startTS, endTS, title, description, source = source,
                                 color = color, location = location, syncUid = syncUid, lunar = "")
 
 //                        if (event.getIsAllDay()) {
@@ -547,7 +533,7 @@ class CalDAVHandler(val context: Context) {
             put(CalendarContract.Events.EVENT_LOCATION, event.location)
 
             if (event.getIsAllDay() && event.endTS > event.startTS)
-                event.endTS += DAY
+                event.endTS += DAY_SECONDS
 
             if (event.repeatInterval > 0) {
                 put(CalendarContract.Events.DURATION, getDurationCode(event))
@@ -567,7 +553,7 @@ class CalDAVHandler(val context: Context) {
 
     private fun getDurationCode(event: Event): String {
         return if (event.getIsAllDay()) {
-            val dur = Math.max(1, (event.endTS - event.startTS) / DAY)
+            val dur = Math.max(1, (event.endTS - event.startTS) / DAY_SECONDS)
             "P${dur}D"
         } else {
             Parser().getDurationCode((event.endTS - event.startTS) / 60)

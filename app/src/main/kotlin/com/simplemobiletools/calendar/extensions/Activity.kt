@@ -100,7 +100,7 @@ fun Activity.showEventRepeatIntervalDialog(curSeconds: Int, callback: (minutes: 
     val seconds = TreeSet<Int>()
     seconds.apply {
         add(0)
-        add(DAY)
+        add(DAY_SECONDS)
         add(WEEK)
         add(MONTH)
         add(YEAR)
