@@ -469,7 +469,9 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         val args = TextUtils.join(", ", ids)
         val selection = "$MAIN_TABLE_NAME.$COL_ID IN ($args)"
         val cursor = getEventsCursor(selection)
-        val events = fillEvents(cursor).filter { it.importId.isNotEmpty() }
+        val events=fillEvents(cursor)
+        val caldavEvents = events.filter { it.importId.isNotEmpty() }
+        val events1=events.distinctBy { it.startTS }
         var iDeleted=0
 
         iDeleted=mDb.delete(MAIN_TABLE_NAME, selection, null)
@@ -482,12 +484,12 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
 
         context.updateWidgets()
 
-        ids.forEach {
-            context.cancelNotification(it.toInt())
+        events1.forEach {
+            context.cancelNotification(it.startTS)
         }
 
         if (deleteFromCalDAV && context.config.caldavSync) {
-            events.forEach {
+            caldavEvents.forEach {
                 CalDAVHandler(context).deleteCalDAVEvent(it)
             }
         }
@@ -1038,14 +1040,6 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         } finally {
             cursor?.close()
         }
-    }
-
-    fun updateEventStartTS(startTs:Int) {
-        val sqlPrefix="update $MAIN_TABLE_NAME "
-        var sql=""
-        var sqlCriteria=" where $COL_START_TS >="+context.getNowSeconds().toString()
-        sql = sqlPrefix + "set $COL_START_TS=($COL_START_TS/${DAY_SECONDS})*${DAY_SECONDS}+${startTs}" + sqlCriteria
-        mDb.execSQL(sql)
     }
 
     fun getGroupedNotifications(eventIdsToProcess:ArrayList<String>):List<GroupedNotification> {

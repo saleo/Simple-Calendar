@@ -128,9 +128,16 @@ fun Context.cancelAllNotification(){
     config.ntfIDs=""
 }
 
-fun Context.cancelNotification(id: Int) {
-    val intent = Intent(applicationContext, NotificationReceiver::class.java)
-    PendingIntent.getBroadcast(applicationContext, id, intent, PendingIntent.FLAG_UPDATE_CURRENT).cancel()
+fun Context.cancelNotification(eventStartTs:Int) {
+    dbHelper.getEvents(eventStartTs,eventStartTs,-1,{
+        if (it.size>0)
+            processEventRemindersNotification(it as ArrayList<Event>)
+        else{
+            val ntfId=eventStartTs/com.simplemobiletools.calendar.helpers.DAY_SECONDS
+            val intent = Intent(applicationContext, NotificationReceiver::class.java)
+            PendingIntent.getBroadcast(applicationContext, ntfId, intent, PendingIntent.FLAG_UPDATE_CURRENT).cancel()
+        }
+    })
 }
 
 private fun getNotificationIntent(context: Context, event: Event): PendingIntent {

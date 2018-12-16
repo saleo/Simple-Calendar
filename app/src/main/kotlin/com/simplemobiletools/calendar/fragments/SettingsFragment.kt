@@ -376,7 +376,7 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
             lunarYear += yearsToAdd
             val myCal = ChineseCalendar(true, lunarYear, lunarMonth, lunarDay)
             iGregYear = myCal.get(Calendar.YEAR)
-            iGregMonth = myCal.get(Calendar.MONTH)
+            iGregMonth = myCal.get(Calendar.MONTH)+1
             iGregDayofMonth = myCal.get(Calendar.DAY_OF_MONTH)
             if (iGregMonth<10) ggMonth="0$iGregMonth" else ggMonth="$iGregMonth"
             if (iGregDayofMonth<10) ggDayofMonth="0$iGregDayofMonth" else ggDayofMonth="$iGregDayofMonth"
