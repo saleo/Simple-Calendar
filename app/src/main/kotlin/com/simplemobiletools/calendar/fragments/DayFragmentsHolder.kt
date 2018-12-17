@@ -62,12 +62,9 @@ class DayFragmentsHolder : MyFragmentHolder(), NavigationListener {
                 override fun onPageSelected(position: Int) {
                     currentDayCode = codes[position]
 
-                    (activity as? MainActivity)?.updateTopBottom(Formatter.getDateTimeFromCode(currentDayCode), DAILY_VIEW)
-
-                    val shouldGoToTodayBeVisible = shouldGoToTodayBeVisible()
-                    if (isGoToTodayVisible != shouldGoToTodayBeVisible) {
-                        (activity as? MainActivity)?.toggleGoToTodayVisibility(shouldGoToTodayBeVisible)
-                        isGoToTodayVisible = shouldGoToTodayBeVisible
+                    (activity as? MainActivity)?.apply{
+                        updateTopBottom(Formatter.getDateTimeFromCode(currentDayCode), DAILY_VIEW)
+                        refreshCalDAVCalendars(showRefreshToastOnActivityResume)
                     }
                 }
             })

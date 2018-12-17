@@ -69,7 +69,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     private lateinit var layout: View
 
     private var showRefreshToastOnCalDataChange = true
-    private var showRefreshToastOnActivityResume = false
+    var showRefreshToastOnActivityResume = false
     private var mShouldFilterBeVisible = false
     private var mIsSearchOpen = false
     private var mLatestSearchQuery = ""
@@ -227,7 +227,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             currentFragments.removeAt(size-1)
             val f=currentFragments.last()
             supportFragmentManager.beginTransaction().replace(R.id.fragments_holder, f).commitNow()
-
+            refreshCalDAVCalendars(showRefreshToastOnActivityResume)
         } else {
             val fragment=currentFragments.last()
             currentFragments.clear()
@@ -357,7 +357,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
     }
 
-    private fun refreshCalDAVCalendars(showRefreshToast: Boolean) {
+    fun refreshCalDAVCalendars(showRefreshToast: Boolean) {
         if (showRefreshToast) {
             toast(R.string.refreshing)
         }
@@ -540,6 +540,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         bundle.putString(DAY_CODE, Formatter.getDayCodeFromDateTime(dateTime))
         fragment.arguments = bundle
         supportFragmentManager.beginTransaction().replace(R.id.fragments_holder, fragment).commitNow()
+        refreshCalDAVCalendars(showRefreshToastOnActivityResume)
     }
 
     private fun getThisWeekDateTime(): String {
@@ -569,7 +570,10 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         runOnUiThread {
             if (!isActivityDestroyed()) {
                 val f=currentFragments.last()
-                if (f is MyFragmentHolder) f.refreshEvents()
+                if (f is MyFragmentHolder) {
+                    refreshCalDAVCalendars(showRefreshToastOnActivityResume)
+                    f.refreshEvents()
+                }
             }
         }
     }
