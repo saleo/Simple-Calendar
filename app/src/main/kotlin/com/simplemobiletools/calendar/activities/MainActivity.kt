@@ -54,6 +54,7 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.system.exitProcess
 
 const val MY_PERMISSIONS_REQUEST_READ_CALENDAR=1
 
@@ -95,11 +96,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
         checkWhatsNewDialog()
         //calendar_fab.beVisibleIf(config.storedView != YEARLY_VIEW)
-        calendar_fab.setOnClickListener {
-            val f= currentFragments.last()
-            if (f is MyFragmentHolder)
-                launchNewEventIntent(f.getNewEventDayCode())
-        }
 
         getStoredStateVariables()
         if (resources.getBoolean(R.bool.portrait_only)) {
@@ -124,7 +120,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
 
         if (!checkOpenIntents()) {
-            updateViewPager()
+            updateView(config.storedView)
         }
 
         handlePermission(PERMISSION_WRITE_CALENDAR) {
@@ -170,11 +166,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             return
         }
 
-        if (mStoredTextColor != config.textColor || mStoredBackgroundColor != config.backgroundColor || mStoredPrimaryColor != config.primaryColor
-                || mStoredDayCode != Formatter.getTodayCode(applicationContext)) {
-            updateViewPager()
-        }
-
         dbHelper.getEventTypes {
             mShouldFilterBeVisible = it.size > 1 || config.displayEventTypes.isEmpty()
         }
@@ -183,7 +174,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             updateTextColors(calendar_coordinator)
             if (config.storedView == WEEKLY_VIEW) {
                 if (mStoredIsSundayFirst != config.isSundayFirst || mStoredUse24HourFormat != config.use24hourFormat) {
-                    updateViewPager()
+                    updateView(WEEKLY_VIEW)
                 }
             }
         }
@@ -230,28 +221,18 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.change_view -> showViewDialog()
-            R.id.go_to_today -> goToToday()
-            R.id.filter -> showFilterDialog()
-            R.id.refresh_caldav_calendars -> refreshCalDAVCalendars(true)
-            R.id.add_holidays -> addHolidays()
-            R.id.add_birthdays -> tryAddBirthdays()
-            R.id.add_anniversaries -> tryAddAnniversaries()
-            R.id.import_events -> tryImportEvents()
-            R.id.export_events -> tryExportEvents()
-            android.R.id.home -> onBackPressed()
-            else -> return super.onOptionsItemSelected(item)
-        }
-        return true
-    }
-
     override fun onBackPressed() {
-        if (currentFragments.size > 1) {
-            removeTopFragment()
+        val size=currentFragments.size
+        if (size > 1) {
+            currentFragments.removeAt(size-1)
+            val f=currentFragments.last()
+            supportFragmentManager.beginTransaction().replace(R.id.fragments_holder, f).commitNow()
+
         } else {
-            super.onBackPressed()
+            val fragment=currentFragments.last()
+            currentFragments.clear()
+            supportFragmentManager.beginTransaction().remove(fragment).commitNow()
+            exitProcess(0)
         }
     }
 
@@ -315,7 +296,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         if (dayCodeToOpen.isNotEmpty()) {
             //calendar_fab.beVisible()
             config.storedView = if (openMonth) MONTHLY_VIEW else DAILY_VIEW
-            updateViewPager(dayCodeToOpen)
+            updateView(config.storedView,dayCodeToOpen)
             return true
         }
 
@@ -399,67 +380,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                         }
                     }
                 }, CALDAV_SYNC_DELAY)
-            }
-        }
-    }
-
-    private fun addHolidays() {
-        val items = getHolidayRadioItems()
-        RadioGroupDialog(this, items) {
-            toast(R.string.importing)
-            Thread {
-                val holidays = getString(R.string.holidays)
-                var eventTypeId = dbHelper.getEventTypeIdWithTitle(holidays)
-                if (eventTypeId == -1) {
-                    val eventType = EventType(0, holidays, resources.getColor(R.color.default_holidays_color))
-                    eventTypeId = dbHelper.insertEventType(eventType)
-                }
-
-                val result = IcsImporter(this).importEvents(it as String, eventTypeId, 0)
-                handleParseResult(result)
-                if (result != IcsImporter.ImportResult.IMPORT_FAIL) {
-                    runOnUiThread {
-                        updateViewPager()
-                    }
-                }
-            }.start()
-        }
-    }
-
-    private fun tryAddBirthdays() {
-        handlePermission(PERMISSION_READ_CONTACTS) {
-            if (it) {
-                Thread {
-                    addContactEvents(true) {
-                        if (it > 0) {
-                            toast(R.string.birthdays_added)
-                            updateViewPager()
-                        } else {
-                            toast(R.string.no_birthdays)
-                        }
-                    }
-                }.start()
-            } else {
-                toast(R.string.no_contacts_permission)
-            }
-        }
-    }
-
-    private fun tryAddAnniversaries() {
-        handlePermission(PERMISSION_READ_CONTACTS) {
-            if (it) {
-                Thread {
-                    addContactEvents(false) {
-                        if (it > 0) {
-                            toast(R.string.anniversaries_added)
-                            updateViewPager()
-                        } else {
-                            toast(R.string.no_anniversaries)
-                        }
-                    }
-                }.start()
-            } else {
-                toast(R.string.no_contacts_permission)
             }
         }
     }
@@ -552,29 +472,21 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         return eventTypeId
     }
 
-    fun updateView(view: Int) {
-        //calendar_fab.beVisibleIf(view != YEARLY_VIEW)
+    fun updateView(view:Int,dayCode: String? = Formatter.getTodayCode(applicationContext)) {
         config.storedView = view
-        updateViewPager()
-        if (goToTodayButton?.isVisible == true) {
-            shouldGoToTodayBeVisible = false
-            invalidateOptionsMenu()
-        }
-    }
 
-    private fun updateViewPager(dayCode: String? = Formatter.getTodayCode(applicationContext)) {
         val fragment = getFragmentsHolder()
+
         currentFragments.forEach {
             supportFragmentManager.beginTransaction().remove(it).commitNow()
         }
+
         currentFragments.clear()
         currentFragments.add(fragment as Fragment)
-        val bundle = Bundle()
 
-        when (config.storedView) {
-            DAILY_VIEW, MONTHLY_VIEW, QINGXIN_VIEW, EVENTS_LIST_VIEW -> bundle.putString(DAY_CODE, dayCode)
-            WEEKLY_VIEW -> bundle.putString(WEEK_START_DATE_TIME, getThisWeekDateTime())
-        }
+        //since only Monthly_view and event_list_view can come here
+        val bundle=Bundle()
+        bundle.putString(DAY_CODE, dayCode)
 
         fragment.arguments = bundle
         supportFragmentManager.beginTransaction().add(R.id.fragments_holder, fragment).commitNow()
@@ -583,24 +495,18 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     fun openMonthFromYearly(dateTime: DateTime) {
     }
 
-    fun openFragment(dateTime: DateTime,view: Int= ABOUT_HEALTH_VIEW){
+    fun openFragment(dateTime: DateTime=DateTime(),view: Int= ABOUT_HEALTH_VIEW){
         if ((config.storedView == ABOUT_HEALTH_VIEW) && (view == ABOUT_HEALTH_VIEW)) return
         config.storedView=view
-        val fragment:Fragment
-        when (view){
-            ABOUT_HEALTH_VIEW -> fragment = HealthFragment() as Fragment
-            else -> fragment=MonthFragmentsHolder()
-        }
-
+        val fragment=HealthFragment()
         currentFragments.add(fragment)
         val bundle = Bundle()
         bundle.putString(DAY_CODE, Formatter.getDayCodeFromDateTime(dateTime))
         fragment.arguments = bundle
-        supportFragmentManager.beginTransaction().add(R.id.fragments_holder, fragment).commitNow()
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportFragmentManager.beginTransaction().replace(R.id.fragments_holder, fragment).commitNow()
     }
 
-    fun openFragmentHolder(dateTime: DateTime, view: Int= MONTHLY_VIEW) {
+    fun openFragmentHolder(dateTime: DateTime=DateTime(), view: Int= MONTHLY_VIEW) {
         var fragment:MyFragmentHolder
         if ((config.storedView == DAILY_VIEW) && (view == DAILY_VIEW))
         else if ((config.storedView == MONTHLY_VIEW) && (view == MONTHLY_VIEW))
@@ -632,9 +538,8 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         currentFragments.add(fragment as Fragment)
         val bundle = Bundle()
         bundle.putString(DAY_CODE, Formatter.getDayCodeFromDateTime(dateTime))
-        (fragment as MyFragmentHolder).arguments = bundle
-        supportFragmentManager.beginTransaction().add(R.id.fragments_holder, fragment).commitNow()
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        fragment.arguments = bundle
+        supportFragmentManager.beginTransaction().replace(R.id.fragments_holder, fragment).commitNow()
     }
 
     private fun getThisWeekDateTime(): String {
@@ -658,31 +563,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         ABOUT_LICENSE_VIEW -> LicenseFragment()
         SETTINGS_VIEW -> SettingsFragment()
         else -> MonthFragmentsHolder()
-    }
-
-    private fun removeTopFragment() {
-        var dt:DateTime
-        supportFragmentManager.beginTransaction().remove(currentFragments.last()).commitNow()
-        currentFragments.removeAt(currentFragments.size - 1)
-        val f=currentFragments.last()
-        if (f is HealthFragment) {updateTopBottom(view= ABOUT_HEALTH_VIEW);return}
-
-        (f as MyFragmentHolder).apply {
-            dt=Formatter.getDateTimeFromCode(this.currentDayCode)
-            when (this) {
-                is DayFragmentsHolder ->updateTopBottom(dt, DAILY_VIEW)
-                is MonthFragmentsHolder ->updateTopBottom(dt, MONTHLY_VIEW)
-                is EventListFragmentsHolder ->updateTopBottom(dt, EVENTS_LIST_VIEW)
-                is QingxinFragment ->updateTopBottom(dt, QINGXIN_VIEW)
-                is AboutFragment ->updateTopBottom(dt, ABOUT_VIEW)
-                is IntroFragment ->updateTopBottom(dt, ABOUT_INTRO_VIEW)
-                is CreditFragment ->updateTopBottom(dt, ABOUT_CREDIT_VIEW)
-                is LicenseFragment ->updateTopBottom(dt, ABOUT_LICENSE_VIEW)
-                is SettingsFragment ->updateTop(dt, SETTINGS_VIEW)
-            }
-            refreshEvents()
-        }
-
     }
 
     private fun refreshViewPager() {
@@ -731,7 +611,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         ImportEventsDialog(this, path) {
             if (it) {
                 runOnUiThread {
-                    updateViewPager()
+                    updateView(config.storedView)
                 }
             }
         }
@@ -806,7 +686,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         val dayCode = Formatter.getDayCodeFromTS((timestamp / 1000).toInt())
         //calendar_fab.beVisible()
         config.storedView = DAILY_VIEW
-        updateViewPager(dayCode)
+        updateView(config.storedView,dayCode)
     }
 
     private fun getHolidayRadioItems(): ArrayList<RadioItem> {

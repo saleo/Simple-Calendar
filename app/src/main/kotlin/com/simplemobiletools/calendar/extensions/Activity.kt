@@ -217,14 +217,14 @@ fun Activity.shareScreen(){
 fun Activity.goToday(){
     when (config.storedView) {
         MONTHLY_VIEW -> (this as MainActivity)!!.goToToday()
-        else -> (this as MainActivity)!!.updateView(MONTHLY_VIEW)
+        else -> (this as MainActivity)!!.openFragmentHolder()
     }
 }
 
     private fun Activity.showEventList(){
         when (config.storedView){
             EVENTS_LIST_VIEW-> return
-            else-> (this as MainActivity)!!.updateView(EVENTS_LIST_VIEW)
+            else-> (this as MainActivity)!!.openFragmentHolder(DateTime(),EVENTS_LIST_VIEW)
         }
     }
 //fun Activity.getCurrentShownMonthPlusDay(currentDayCode:String){
