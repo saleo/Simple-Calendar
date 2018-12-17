@@ -10,10 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.RelativeLayout
-import android.widget.TextView
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.activities.EventActivity
-import com.simplemobiletools.calendar.activities.MainActivity
 import com.simplemobiletools.calendar.activities.SimpleActivity
 import com.simplemobiletools.calendar.adapters.DayEventsAdapter
 import com.simplemobiletools.calendar.extensions.config
@@ -23,8 +21,7 @@ import com.simplemobiletools.calendar.helpers.*
 import com.simplemobiletools.calendar.helpers.Formatter
 import com.simplemobiletools.calendar.interfaces.NavigationListener
 import com.simplemobiletools.calendar.models.Event
-import com.simplemobiletools.commons.extensions.getDialogTheme
-import com.simplemobiletools.commons.extensions.setupDialogStuff
+import com.simplemobiletools.commons.extensions.*
 import kotlinx.android.synthetic.main.fragment_day.*
 import kotlinx.android.synthetic.main.fragment_day.view.*
 import org.joda.time.DateTime
@@ -50,9 +47,10 @@ class DayFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        val placeholderText = String.format(getString(R.string.string_placeholder), "${getString(R.string.no_upcoming_events_in_dayEvents)}\n")
+        tv_day_events_placeholder.text = placeholderText
         mHolder = rl_day_holder
         setupButtons()
-
         updateCalendar()
     }
 
@@ -131,6 +129,8 @@ class DayFragment : Fragment() {
 
         activity?.runOnUiThread {
             updateEvents(sorted)
+            tv_day_events_placeholder.beVisibleIf(events.isEmpty())
+            rv_day_events.beGoneIf(events.isEmpty())
         }
     }
 
@@ -138,12 +138,12 @@ class DayFragment : Fragment() {
         if (activity == null)
             return
 
-        DayEventsAdapter(activity as SimpleActivity, events, mHolder.day_events) {
+        DayEventsAdapter(activity as SimpleActivity, events, mHolder.rv_day_events) {
             editEvent(it as Event)
         }.apply {
             setupDragListener(false)
             addVerticalDividers(true)
-            mHolder.day_events.adapter=this
+            mHolder.rv_day_events.adapter=this
         }
     }
 

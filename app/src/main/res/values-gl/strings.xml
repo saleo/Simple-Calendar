@@ -8,7 +8,7 @@
     <string name="monthly_view">Vista mensual</string>
     <string name="yearly_view">Vista anual</string>
     <string name="simple_event_list">Lista de eventos simple</string>
-    <string name="no_upcoming_events">Semella que non ten ningún evento próximo.</string>
+    <string name="no_upcoming_events_in_eventlist">Semella que non ten ningún evento próximo.</string>
     <string name="add_some_events">Pode engadir algún co botón Máis na parte inferior.</string>
     <string name="details">Detalle</string>
     <string name="go_to_today">Ir ao día de hoxe</string>

@@ -8,7 +8,7 @@
     <string name="monthly_view">Měsíční kalendář</string>
     <string name="yearly_view">Roční kalendář</string>
     <string name="simple_event_list">Jednoduchý seznam událostí</string>
-    <string name="no_upcoming_events">Nemáte žádné nadcházející události.</string>
+    <string name="no_upcoming_events_in_eventlist">Nemáte žádné nadcházející události.</string>
     <string name="add_some_events">Přidejte událost tlačítkem Plus dole.</string>
     <string name="details">Detaily</string>
     <string name="go_to_today">Přejít na dnešek</string>

@@ -52,7 +52,7 @@
         android:gravity="center_horizontal"
         android:paddingLeft="@dimen/big_margin"
         android:paddingRight="@dimen/big_margin"
-        android:text="@string/no_upcoming_events"
+        android:text="@string/no_upcoming_events_in_eventlist"
         android:textSize="@dimen/bigger_text_size"/>
 
 </RelativeLayout>

@@ -8,7 +8,7 @@
     <string name="monthly_view">Monatsansicht</string>
     <string name="yearly_view">Jahresansicht</string>
     <string name="simple_event_list">Schlichte Terminliste</string>
-    <string name="no_upcoming_events">Keine anstehenden Termine</string>
+    <string name="no_upcoming_events_in_eventlist">Keine anstehenden Termine</string>
     <string name="add_some_events">Du kannst neue Termine mit dem Hinzufügen Button unten rechts erstellen.</string>
     <string name="details">Details</string>
     <string name="go_to_today">Gehe zu Heute</string>

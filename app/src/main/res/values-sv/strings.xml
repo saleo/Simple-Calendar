@@ -8,7 +8,7 @@
     <string name="monthly_view">Månadsvy</string>
     <string name="yearly_view">Årsvy</string>
     <string name="simple_event_list">Händelselista</string>
-    <string name="no_upcoming_events">Det ser ut som att du inte har några kommande händelser.</string>
+    <string name="no_upcoming_events_in_eventlist">Det ser ut som att du inte har några kommande händelser.</string>
     <string name="add_some_events">Du kan lägga till händelser via plus-knappen som du ser längst ner.</string>
     <string name="details">Detaljer</string>
     <string name="go_to_today">Gå till idag</string>

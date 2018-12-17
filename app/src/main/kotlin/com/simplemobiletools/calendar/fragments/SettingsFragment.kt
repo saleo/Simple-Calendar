@@ -65,6 +65,10 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
 
     override fun onResume() {
         super.onResume()
+
+        val placeholderText = String.format(getString(R.string.string_placeholder), "${getString(R.string.no_data_in_customizeEvents)}\n")
+        tv_settings_placeholder.text = placeholderText
+
         tv_settings_customize_event_when.text= PLACEHOLDER_8WHITESPACE
         tv_settings_customize_event_when.underlineText()
 
@@ -296,7 +300,11 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
 
 
 
-        (activity as MainActivity).runOnUiThread { ceAdapter.addVerticalDividers(true); rv_customize_event.adapter=ceAdapter }
+        (activity as MainActivity).runOnUiThread {
+            tv_settings_placeholder.beVisibleIf(le.isEmpty())
+            rv_customize_event.beGoneIf(le.isEmpty())
+            ceAdapter.addVerticalDividers(true);
+            rv_customize_event.adapter=ceAdapter }
 
 
     }

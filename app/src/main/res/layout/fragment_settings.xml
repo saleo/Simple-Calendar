@@ -233,7 +233,18 @@
                 android:clipToPadding="true"
                 android:orientation="vertical"
                 android:paddingVertical="@dimen/medium_margin"
+                android:visibility="gone"
                 app:layoutManager="LinearLayoutManager" />
+
+            <com.simplemobiletools.commons.views.MyTextView
+                android:id="@+id/tv_settings_placeholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="1dp"
+                android:padding="@dimen/big_margin"
+                android:text="@string/no_data_in_customizeEvents"
+                android:visibility="gone"/>
 
         </LinearLayout>
 

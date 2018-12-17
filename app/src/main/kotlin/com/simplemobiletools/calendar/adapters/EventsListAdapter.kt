@@ -6,13 +6,11 @@ import android.view.ViewGroup
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.activities.SimpleActivity
 import com.simplemobiletools.calendar.dialogs.DeleteEventDialog
-import com.simplemobiletools.calendar.extensions.config
 import com.simplemobiletools.calendar.extensions.dbHelper
 import com.simplemobiletools.calendar.extensions.shareEvents
 import com.simplemobiletools.calendar.helpers.Formatter
 import com.simplemobiletools.calendar.models.Event
 import com.simplemobiletools.commons.adapters.MyRecyclerViewAdapter
-import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.views.MyRecyclerView
 import kotlinx.android.synthetic.main.event_item_day_view.view.*
 
@@ -63,11 +61,11 @@ class EventsListAdapter(activity: SimpleActivity, val events: ArrayList<Event>, 
 
     private fun setupView(view: View, event: Event) {
         view.apply {
-            event_section_title.text = event.title
+            event_item_title.text = event.title
             event_reminder_time.text = Formatter.getTimeFromTS(context,event.startTS)
 
             event_reminder_time.setTextColor(textColor)
-            event_section_title.setTextColor(event.color)
+            event_item_title.setTextColor(event.color)
         }
     }
 

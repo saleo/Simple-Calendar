@@ -198,7 +198,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         super.onStop()
         mCalDAVSyncHandler.removeCallbacksAndMessages(null)
         contentResolver.unregisterContentObserver(calDAVSyncObserver)
-        closeSearch()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -209,7 +208,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             findItem(R.id.go_to_today).isVisible = shouldGoToTodayBeVisible && config.storedView != EVENTS_LIST_VIEW
         }
 
-        setupSearch(menu)
         return true
     }
 
@@ -248,45 +246,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         mStoredDayCode = Formatter.getTodayCode(applicationContext)
     }
 
-    private fun setupSearch(menu: Menu) {
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        mSearchMenuItem = menu.findItem(R.id.search)
-        (mSearchMenuItem!!.actionView as SearchView).apply {
-            setSearchableInfo(searchManager.getSearchableInfo(componentName))
-            isSubmitButtonEnabled = false
-            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String) = false
-
-                override fun onQueryTextChange(newText: String): Boolean {
-                    if (mIsSearchOpen) {
-                        searchQueryChanged(newText)
-                    }
-                    return true
-                }
-            })
-        }
-
-        MenuItemCompat.setOnActionExpandListener(mSearchMenuItem, object : MenuItemCompat.OnActionExpandListener {
-            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                mIsSearchOpen = true
-                search_holder.beVisible()
-                //calendar_fab.beGone()
-                searchQueryChanged("")
-                return true
-            }
-
-            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                mIsSearchOpen = false
-                search_holder.beGone()
-                //calendar_fab.beVisible()
-                return true
-            }
-        })
-    }
-
-    private fun closeSearch() {
-        mSearchMenuItem?.collapseActionView()
-    }
 
     private fun checkOpenIntents(): Boolean {
         val dayCodeToOpen = intent.getStringExtra(DAY_CODE) ?: ""
@@ -313,24 +272,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
 
         return false
-    }
-
-    private fun showViewDialog() {
-        val items = arrayListOf(
-                RadioItem(DAILY_VIEW, getString(R.string.daily_view)),
-                RadioItem(WEEKLY_VIEW, getString(R.string.weekly_view)),
-                RadioItem(MONTHLY_VIEW, getString(R.string.monthly_view)),
-                RadioItem(YEARLY_VIEW, getString(R.string.yearly_view)),
-                RadioItem(EVENTS_LIST_VIEW, getString(R.string.simple_event_list)))
-
-        RadioGroupDialog(this, items, config.storedView) {
-            //calendar_fab.beVisibleIf(it as Int != YEARLY_VIEW)
-            resetActionBarTitle()
-            closeSearch()
-            updateView(it as Int)
-            shouldGoToTodayBeVisible = false
-            invalidateOptionsMenu()
-        }
     }
 
     fun goToToday() {
@@ -651,38 +592,9 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
     }
 
-    private fun searchQueryChanged(text: String) {
-        mLatestSearchQuery = text
-        search_placeholder_2.beGoneIf(text.length >= 2)
-        if (text.length >= 2) {
-            dbHelper.getEventsWithSearchQuery(text) { searchedText, events ->
-                if (searchedText == mLatestSearchQuery) {
-                    runOnUiThread {
-                        search_results_list.beVisibleIf(events.isNotEmpty())
-                        search_placeholder.beVisibleIf(events.isEmpty())
-                        val listItems = getEventListItems(events)
-                        val eventsAdapter = EventListAdapter(this, listItems, true, this, search_results_list) {
-                            if (it is ListEvent) {
-                                Intent(applicationContext, EventActivity::class.java).apply {
-                                    putExtra(EVENT_ID, it.id)
-                                    startActivity(this)
-                                }
-                            }
-                        }
-
-                        search_results_list.adapter = eventsAdapter
-                    }
-                }
-            }
-        } else {
-            search_placeholder.beVisible()
-            search_results_list.beGone()
-        }
-    }
 
     // only used at active search
     override fun refreshItems() {
-        searchQueryChanged(mLatestSearchQuery)
         refreshViewPager()
     }
 

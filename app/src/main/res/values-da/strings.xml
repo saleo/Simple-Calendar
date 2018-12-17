@@ -8,7 +8,7 @@
     <string name="monthly_view">Månedlig</string>
     <string name="yearly_view">Årlig</string>
     <string name="simple_event_list">Begivenhedsliste</string>
-    <string name="no_upcoming_events">Du ser ikke ud til at have nogen forestående begivenheder.</string>
+    <string name="no_upcoming_events_in_eventlist">Du ser ikke ud til at have nogen forestående begivenheder.</string>
     <string name="add_some_events">Du kan tilføje nogle med plus-knappen nederst.</string>
     <string name="details">Detaljeret</string>
     <string name="go_to_today">Gå til i dag</string>

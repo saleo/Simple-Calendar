@@ -8,7 +8,7 @@
     <string name="monthly_view">На месяц</string>
     <string name="yearly_view">На год</string>
     <string name="simple_event_list">Простой список событий</string>
-    <string name="no_upcoming_events">Похоже, у вас нет предстоящих событий.</string>
+    <string name="no_upcoming_events_in_eventlist">Похоже, у вас нет предстоящих событий.</string>
     <string name="add_some_events">Вы можете их добавить, нажав на кнопку с плюсом внизу.</string>
     <string name="details">Подробности</string>
     <string name="go_to_today">Сегодня</string>

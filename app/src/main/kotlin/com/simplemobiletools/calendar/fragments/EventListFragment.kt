@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.activities.EventActivity
-import com.simplemobiletools.calendar.activities.MainActivity
 import com.simplemobiletools.calendar.activities.SimpleActivity
 import com.simplemobiletools.calendar.adapters.EventListAdapter
 import com.simplemobiletools.calendar.extensions.*
@@ -39,7 +38,7 @@ class EventListFragment : Fragment(), RefreshRecyclerViewListener {
 
     override fun onResume() {
         super.onResume()
-        val placeholderText = String.format(getString(R.string.string_placeholder), "${getString(R.string.no_upcoming_events)}\n")
+        val placeholderText = String.format(getString(R.string.string_placeholder), "${getString(R.string.no_upcoming_events_in_eventlist)}\n")
         mView.calendar_empty_list_placeholder.text = placeholderText
 
         updateCalendar()

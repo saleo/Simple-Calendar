@@ -7,7 +7,7 @@ import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import com.simplemobiletools.calendar.R
 import com.simplemobiletools.calendar.R.id.event_item_holder
-import com.simplemobiletools.calendar.R.id.event_section_title
+import com.simplemobiletools.calendar.R.id.event_item_title
 import com.simplemobiletools.calendar.extensions.config
 import com.simplemobiletools.calendar.extensions.dbHelper
 import com.simplemobiletools.calendar.extensions.seconds
@@ -41,7 +41,7 @@ class EventListWidgetAdapter(val context: Context) : RemoteViewsService.RemoteVi
         if (type == ITEM_EVENT) {
             val item = events[position] as ListEvent
             remoteView = RemoteViews(context.packageName, R.layout.event_list_item_widget).apply {
-                setText(R.id.event_section_title, item.title)
+                setText(R.id.event_item_title, item.title)
                 setText(R.id.event_item_description, if (replaceDescription) item.location else item.description)
                 setText(R.id.event_item_start, if (item.isAllDay) allDayString else Formatter.getTimeFromTS(context, item.startTS))
                 setImageViewBitmap(R.id.event_item_color, context.resources.getColoredBitmap(R.drawable.monthly_event_dot, item.color))
@@ -66,12 +66,12 @@ class EventListWidgetAdapter(val context: Context) : RemoteViewsService.RemoteVi
                     setText(R.id.event_item_end, endString)
                 }
 
-                setTextColor(R.id.event_section_title, textColor)
+                setTextColor(R.id.event_item_title, textColor)
                 setTextColor(R.id.event_item_description, textColor)
                 setTextColor(R.id.event_item_start, textColor)
                 setTextColor(R.id.event_item_end, textColor)
 
-                setTextSize(R.id.event_section_title, mediumFontSize)
+                setTextSize(R.id.event_item_title, mediumFontSize)
                 setTextSize(R.id.event_item_description, mediumFontSize)
                 setTextSize(R.id.event_item_start, mediumFontSize)
                 setTextSize(R.id.event_item_end, mediumFontSize)
@@ -85,13 +85,13 @@ class EventListWidgetAdapter(val context: Context) : RemoteViewsService.RemoteVi
         } else {
             val item = events[position] as ListSection
             remoteView = RemoteViews(context.packageName, R.layout.event_list_section_widget).apply {
-                setTextColor(R.id.event_section_title, textColor)
-                setTextSize(R.id.event_section_title, mediumFontSize)
-                setText(R.id.event_section_title, item.title)
+                setTextColor(R.id.event_item_title, textColor)
+                setTextSize(R.id.event_item_title, mediumFontSize)
+                setText(R.id.event_item_title, item.title)
 
                 Intent().apply {
                     putExtra(DAY_CODE, item.code)
-                    setOnClickFillInIntent(event_section_title, this)
+                    setOnClickFillInIntent(event_item_title, this)
                 }
             }
         }

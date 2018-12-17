@@ -8,7 +8,7 @@
     <string name="monthly_view">Maand</string>
     <string name="yearly_view">Jaar</string>
     <string name="simple_event_list">Lijst</string>
-    <string name="no_upcoming_events">Niets gepland.</string>
+    <string name="no_upcoming_events_in_eventlist">Niets gepland.</string>
     <string name="add_some_events">Gebruik de plus-knop om iets te plannen.</string>
     <string name="details">Details</string>
     <string name="go_to_today">Naar vandaag</string>

@@ -15,9 +15,6 @@ import com.simplemobiletools.calendar.models.ListEvent
 import com.simplemobiletools.calendar.models.ListItem
 import com.simplemobiletools.calendar.models.ListSection
 import com.simplemobiletools.commons.adapters.MyRecyclerViewAdapter
-import com.simplemobiletools.commons.extensions.applyColorFilter
-import com.simplemobiletools.commons.extensions.beInvisible
-import com.simplemobiletools.commons.extensions.beInvisibleIf
 import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
 import com.simplemobiletools.commons.views.MyRecyclerView
 import kotlinx.android.synthetic.main.event_list_item.view.*
@@ -84,53 +81,14 @@ class EventListAdapter(activity: SimpleActivity, val listItems: ArrayList<ListIt
 
     private fun setupListEvent(view: View, listEvent: ListEvent) {
         view.apply {
-            event_section_title.text = listEvent.title
-            event_item_description.text = if (replaceDescriptionWithLocation) listEvent.location else listEvent.description
-            event_item_start.text = if (listEvent.isAllDay) allDayString else Formatter.getTimeFromTS(context, listEvent.startTS)
-            event_item_end.beInvisibleIf(listEvent.startTS == listEvent.endTS)
-            event_item_color.applyColorFilter(listEvent.color)
-
-            if (listEvent.startTS != listEvent.endTS) {
-                val startCode = Formatter.getDayCodeFromTS(listEvent.startTS)
-                val endCode = Formatter.getDayCodeFromTS(listEvent.endTS)
-
-                event_item_end.apply {
-                    text = Formatter.getTimeFromTS(context, listEvent.endTS)
-                    if (startCode != endCode) {
-                        if (listEvent.isAllDay) {
-                            text = Formatter.getDateFromCode(context, endCode, true)
-                        } else {
-                            append(" (${Formatter.getDateFromCode(context, endCode, true)})")
-                        }
-                    } else if (listEvent.isAllDay) {
-                        beInvisible()
-                    }
-                }
-            }
-
-            var startTextColor = textColor
-            var endTextColor = textColor
-            if (listEvent.startTS <= now && listEvent.endTS <= now) {
-                if (listEvent.isAllDay) {
-                    if (Formatter.getDayCodeFromTS(listEvent.startTS) == Formatter.getDayCodeFromTS(now))
-                        startTextColor = primaryColor
-                } else {
-                    startTextColor = redTextColor
-                }
-                endTextColor = redTextColor
-            } else if (listEvent.startTS <= now && listEvent.endTS >= now) {
-                startTextColor = primaryColor
-            }
-
-            event_item_start.setTextColor(startTextColor)
-            event_item_end.setTextColor(endTextColor)
-            event_section_title.setTextColor(startTextColor)
-            event_item_description.setTextColor(startTextColor)
+            event_item_title.text = listEvent.title
+            event_item_start.text = if (listEvent.isAllDay) allDayString else Formatter.getTimeFromTS(context, listEvent.startTS+context.config.reminderTs)
+            event_item_title.setTextColor(listEvent.color)
         }
     }
 
     private fun setupListSection(view: View, listSection: ListSection, position: Int) {
-        view.event_section_title.apply {
+        view.event_item_title.apply {
             text = listSection.title
             setCompoundDrawablesWithIntrinsicBounds(null, if (position == 0) null else topDivider, null, null)
             setTextColor(if (listSection.title == todayDate) primaryColor else textColor)

@@ -9,11 +9,21 @@
 
 
     <com.simplemobiletools.commons.views.MyRecyclerView
-        android:id="@+id/day_events"
+        android:id="@+id/rv_day_events"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rl_top_holder"
         android:orientation="vertical"
         android:clipToPadding="true"
         app:layoutManager="com.simplemobiletools.commons.views.MyLinearLayoutManager"/>
+
+    <com.simplemobiletools.commons.views.MyTextView
+        android:id="@+id/tv_day_events_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="1dp"
+        android:padding="@dimen/big_margin"
+        android:text="@string/no_upcoming_events_in_eventlist"
+        android:visibility="gone"/>
 </RelativeLayout>

@@ -8,7 +8,7 @@
     <string name="monthly_view">월간 보기</string>
     <string name="yearly_view">연간 보기</string>
     <string name="simple_event_list">간단한 이벤트 목록</string>
-    <string name="no_upcoming_events">다가올 이벤트가 없는 것 같습니다.</string>
+    <string name="no_upcoming_events_in_eventlist">다가올 이벤트가 없는 것 같습니다.</string>
     <string name="add_some_events">아래의 더하기 버튼을 눌러 추가할 수 있습니다.</string>
     <string name="details">상세</string>
     <string name="go_to_today">오늘로 이동</string>

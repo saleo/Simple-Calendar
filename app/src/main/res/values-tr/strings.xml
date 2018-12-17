@@ -8,7 +8,7 @@
     <string name="monthly_view">Aylık görünüm</string>
     <string name="yearly_view">Yıllık görünüm</string>
     <string name="simple_event_list">Basit durum listesi</string>
-    <string name="no_upcoming_events">Gelecekteki etkinliğiniz yok gibi görünüyor.</string>
+    <string name="no_upcoming_events_in_eventlist">Gelecekteki etkinliğiniz yok gibi görünüyor.</string>
     <string name="add_some_events">Artı düğmesinin alt kısmında bazılarını ekleyebilirsiniz.</string>
     <string name="details">Ayrıntı</string>
     <string name="go_to_today">Bugüne git</string>
