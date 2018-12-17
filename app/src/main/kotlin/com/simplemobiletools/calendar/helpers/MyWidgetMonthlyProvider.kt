@@ -209,45 +209,9 @@ class MyWidgetMonthlyProvider : AppWidgetProvider() {
         //        if (!TextUtils.equals(oldMonth, mMonthName.getText())) {
         //            mMonthName.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
         //        }
-        val intYear = time.year
-        val mCurrentMonthDisplayed = time.monthOfYear
-        val view:ImageView
 
-        if (intYear == 2016) {
-            when (mCurrentMonthDisplayed) {
-                0 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2018_1)
-                1 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2018_2)
-                2 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2018_3)
-                3 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2018_4)
-                4 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2018_5)
-                5 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2018_6)
-                6 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2018_7)
-                7 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2018_8)
-                8 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2018_9)
-                9 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2018_10)
-                10 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2018_11)
-                11 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2018_12)
-                else -> views.setImageViewResource(R.id.img_top,R.drawable.sk2018_1)
-            }
-        } else if (intYear == 2017 || intYear==2019) {
-            when (mCurrentMonthDisplayed) {
-                0 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2019_1)
-                1 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2019_2)
-                2 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2019_3)
-                3 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2019_4)
-                4 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2019_5)
-                5 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2019_6)
-                6 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2019_7)
-                7 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2019_8)
-                8 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2019_9)
-                9 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2019_10)
-                10 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2019_11)
-                11 -> views.setImageViewResource(R.id.img_top,R.drawable.sk2019_12)
-                else -> views.setImageViewResource(R.id.img_top,R.drawable.sk2019_1)
-            }
-        } else {
-            views.setImageViewResource(R.id.img_top,R.drawable.placeholder)
-        }
+        val view:ImageView
+        views.setImageViewResource(R.id.img_top,R.drawable.placeholder)
     }
 
 }

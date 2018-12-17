@@ -288,17 +288,8 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
     private fun setupCustomizeEventList() {
         val le=activity!!.dbHelper.getCustomizedEvents().sortedByDescending { event ->event.id  }
 
-        val newHash=le.hashCode()
-        if (newHash == lastHash) {
-            return
-        }
-
-        lastHash = newHash
-
         val ceAdapter = CustomizeEventsAdapter(activity as MainActivity, ArrayList<Event>(le) , rv_customize_event,
                 {any -> itemModifyClick(any as Event)},{ any -> itemRemoveClick(any as Event)})
-
-
 
         (activity as MainActivity).runOnUiThread {
             tv_settings_placeholder.beVisibleIf(le.isEmpty())
