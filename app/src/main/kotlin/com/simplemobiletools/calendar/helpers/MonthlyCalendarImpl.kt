@@ -13,7 +13,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class MonthlyCalendarImpl(val mCallback: MonthlyCalendar, val mContext: Context) {
-    private val DAYS_CNT = 35
+    private val DAYS_CNT = 42
     private val YEAR_PATTERN = "YYYY"
 
     private val mToday: String = DateTime().toString(Formatter.DAYCODE_PATTERN)

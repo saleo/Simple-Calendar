@@ -420,6 +420,85 @@
                 android:orientation="vertical"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/month_line_holder_6"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+            <com.simplemobiletools.commons.views.MyTextView
+                android:id="@+id/week_num_5"
+                style="@style/WeekNumberStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/day_35"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:orientation="vertical"/>
+
+            <LinearLayout
+                android:id="@+id/day_36"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:orientation="vertical"/>
+
+            <LinearLayout
+                android:id="@+id/day_37"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:orientation="vertical"/>
+
+            <LinearLayout
+                android:id="@+id/day_38"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:orientation="vertical"/>
+
+            <LinearLayout
+                android:id="@+id/day_39"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:orientation="vertical"/>
+
+            <LinearLayout
+                android:id="@+id/day_40"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:orientation="vertical"/>
+
+            <LinearLayout
+                android:id="@+id/day_41"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:orientation="vertical"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

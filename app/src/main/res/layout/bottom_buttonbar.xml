@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
         android:gravity="center"
         android:id="@+id/ll_bcc_buttonbar"
-    android:paddingVertical="@dimen/yearly_padding_full">
+    android:paddingBottom="@dimen/yearly_padding_full">
 
         <ImageView
             android:id="@+id/iv_bcc_divider1"

@@ -416,7 +416,7 @@ fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: Linea
     (View.inflate(applicationContext, R.layout.day_monthly_number_view, null) as TextView).apply {
         text = day.value.toString()
         setTextColor(Color.BLACK)
-        textSize = (context.config.getFontSize()) * 1.5.toFloat()
+        textSize = (context.config.getFontSize()) * 1.2.toFloat()
         gravity = Gravity.TOP or Gravity.LEFT
         layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         linearLayout.addView(this)
