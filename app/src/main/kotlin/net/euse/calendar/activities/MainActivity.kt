@@ -64,7 +64,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     private val SKCAL_NON_EXIST=1
     private val SKCAL_CHECK_ERROR=0
     private val SK_CREATE_FAILED=0
-    private val SKCAL_URL="http://tp.euse.cn/1vevent.ics"
+    private val SKCAL_URL="https://rili.euse.net/sk_events.ics"
 
     private lateinit var layout: View
 
