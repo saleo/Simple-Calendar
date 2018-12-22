@@ -156,6 +156,8 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
         if (!hasPermission(PERMISSION_WRITE_CALENDAR) || !hasPermission(PERMISSION_READ_CALENDAR)) {
             config.caldavSync = false
+//            Toast.makeText(this,getString(R.string.calendar_permission_no_granted),Toast.LENGTH_LONG).show()
+//            finish()
         }
     }
 

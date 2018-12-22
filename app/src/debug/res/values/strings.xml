@@ -17,6 +17,7 @@
     <string name="add_calendar_failed">寿康日历创建失败</string>
     <string name="check_calendar_failed">寿康日历创建失败</string>
     <string name="skcal_title">寿康日历SkCalendar</string>
+    <string name="calendar_permission_no_granted">因为没有授予日历权限，本程序退出</string>
     <string name="test1">有求皆苦，无求乃乐；\n无愿无活力，有愿有生机；\n所以：有愿无求是最幸福的中道。</string>
     <string name="test2">昨天坚持的，今天看看，也不一定对；\n今天坚持的，明天看看，也不一定对；\n所以形式上走什么路，不一定是最重要的，\n重要的是本质上\n
         有没有走上活得越来越明白的路。</string>
