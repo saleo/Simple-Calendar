@@ -267,6 +267,11 @@ open class BaseSimpleActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (requestCode == GENERIC_PERM_HANDLER && grantResults.isEmpty()){
+            actionOnPermission?.invoke(false)
+            return
+        }
+
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         isAskingPermissions = false
         if (requestCode == GENERIC_PERM_HANDLER && grantResults.isNotEmpty()) {

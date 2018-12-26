@@ -6,7 +6,9 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import com.simplemobiletools.commons.extensions.hasPermission
+import com.simplemobiletools.commons.helpers.PERMISSION_READ_CALENDAR
+import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CALENDAR
 import net.euse.calendar.R
 import net.euse.calendar.activities.MainActivity
 import net.euse.calendar.adapters.MyMonthPagerAdapter
@@ -62,7 +64,8 @@ class MonthFragmentsHolder : MyFragmentHolder(), NavigationListener {
                     currentDayCode = codes[position]
                     (activity as? MainActivity)?.apply{
                         updateTopBottom(Formatter.getDateTimeFromCode(currentDayCode), MONTHLY_VIEW)
-                        refreshCalDAVCalendars(showRefreshToastOnActivityResume)
+                        if (hasPermission(PERMISSION_READ_CALENDAR))
+                            refreshCalDAVCalendars(showRefreshToast)
                     }
                 }
             })

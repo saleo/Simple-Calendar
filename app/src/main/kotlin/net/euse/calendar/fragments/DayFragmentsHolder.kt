@@ -6,7 +6,6 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import net.euse.calendar.R
 import net.euse.calendar.activities.MainActivity
 import net.euse.calendar.adapters.MyDayPagerAdapter
@@ -16,7 +15,6 @@ import net.euse.calendar.helpers.DAY_CODE
 import net.euse.calendar.helpers.Formatter
 import net.euse.calendar.interfaces.NavigationListener
 import com.simplemobiletools.commons.views.MyViewPager
-import kotlinx.android.synthetic.main.fragment_day.view.*
 import kotlinx.android.synthetic.main.fragment_days_holder.view.*
 import org.joda.time.DateTime
 import java.util.*
@@ -64,7 +62,7 @@ class DayFragmentsHolder : MyFragmentHolder(), NavigationListener {
 
                     (activity as? MainActivity)?.apply{
                         updateTopBottom(Formatter.getDateTimeFromCode(currentDayCode), DAILY_VIEW)
-                        refreshCalDAVCalendars(showRefreshToastOnActivityResume)
+                        refreshCalDAVCalendars(showRefreshToast)
                     }
                 }
             })

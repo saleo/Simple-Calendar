@@ -1,19 +1,15 @@
 package net.euse.calendar.activities
 
-import android.app.SearchManager
 import android.content.*
 import android.content.pm.ActivityInfo
 import android.database.ContentObserver
 import android.database.Cursor
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.CalendarContract
 import android.provider.ContactsContract
 import android.support.v4.app.Fragment
-import android.support.v4.view.MenuItemCompat
-import android.support.v7.widget.SearchView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -29,7 +25,6 @@ import net.euse.calendar.BuildConfig
 import net.euse.calendar.R
 import net.euse.calendar.R.string.status_day
 import net.euse.calendar.R.string.status_month
-import net.euse.calendar.adapters.EventListAdapter
 import net.euse.calendar.dialogs.ExportEventsDialog
 import net.euse.calendar.dialogs.FilterEventTypesDialog
 import net.euse.calendar.dialogs.ImportEventsDialog
@@ -39,9 +34,7 @@ import net.euse.calendar.helpers.*
 import net.euse.calendar.helpers.Formatter
 import net.euse.calendar.models.Event
 import net.euse.calendar.models.EventType
-import net.euse.calendar.models.ListEvent
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
-import com.simplemobiletools.commons.dialogs.RadioGroupDialog
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
@@ -56,7 +49,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.system.exitProcess
 
-const val MY_PERMISSIONS_REQUEST_READ_CALENDAR=1
 
 class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 //    var mCurrentShownMonth="";var mCurrentShownDay=""
@@ -69,7 +61,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     private lateinit var layout: View
 
     private var showRefreshToastOnCalDataChange = true
-    var showRefreshToastOnActivityResume = false
+    var showRefreshToast = false
     private var mShouldFilterBeVisible = false
     private var mIsSearchOpen = false
     private var mLatestSearchQuery = ""
@@ -129,15 +121,13 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                     if (it) {
                         var res=checkSkCalExist()
                         if (res!=SKCAL_NON_EXIST && res!=SKCAL_CHECK_ERROR){
-
-                            val extras = Bundle(2)
-                            extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true)
-                            extras.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true)
-                            ContentResolver.requestSync(AppAccount.account, CalendarContract.AUTHORITY, extras)
+                                refreshCalDAVCalendars(showRefreshToast)
                         } else if (res==SKCAL_NON_EXIST){
                             res=createSkCalendar()
-                            if (res!=SK_CREATE_FAILED)
+                            if (res!=SK_CREATE_FAILED) {
                                 Toast.makeText(this, getString(R.string.add_calendar_created), Toast.LENGTH_LONG).show()
+                                refreshCalDAVCalendars(showRefreshToast)
+                            }
                             else
                                 Toast.makeText(this, getString(R.string.add_calendar_failed), Toast.LENGTH_LONG).show()
                         } else{
@@ -155,37 +145,16 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             }
         }
 
-        if (!hasPermission(PERMISSION_WRITE_CALENDAR) || !hasPermission(PERMISSION_READ_CALENDAR)) {
-            config.caldavSync = false
-        }
     }
 
     override fun onResume() {
         super.onResume()
-        if (mStoredUseEnglish != config.useEnglish) {
-            restartActivity()
-            return
+
+        if (!hasPermission(PERMISSION_WRITE_CALENDAR) || !hasPermission(PERMISSION_READ_CALENDAR)) {
+            config.caldavSync = false
         }
 
-        dbHelper.getEventTypes {
-            mShouldFilterBeVisible = it.size > 1 || config.displayEventTypes.isEmpty()
-        }
 
-        if (config.storedView != EVENTS_LIST_VIEW) {
-            updateTextColors(calendar_coordinator)
-            if (config.storedView == WEEKLY_VIEW) {
-                if (mStoredIsSundayFirst != config.isSundayFirst || mStoredUse24HourFormat != config.use24hourFormat) {
-                    updateView(WEEKLY_VIEW)
-                }
-            }
-        }
-
-        updateWidgets()
-
-        calendar_fab.setColors(config.textColor, getAdjustedPrimaryColor(), config.backgroundColor)
-        search_holder.background = ColorDrawable(config.backgroundColor)
-
-        refreshCalDAVCalendars(showRefreshToastOnActivityResume)
         getStoredStateVariables()
 
     }
@@ -226,7 +195,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             currentFragments.removeAt(size-1)
             val f=currentFragments.last()
             supportFragmentManager.beginTransaction().replace(R.id.fragments_holder, f).commitNow()
-            refreshCalDAVCalendars(showRefreshToastOnActivityResume)
+            refreshCalDAVCalendars(showRefreshToast)
         } else {
             val fragment=currentFragments.last()
             currentFragments.clear()
@@ -482,7 +451,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         bundle.putString(DAY_CODE, Formatter.getDayCodeFromDateTime(dateTime))
         fragment.arguments = bundle
         supportFragmentManager.beginTransaction().replace(R.id.fragments_holder, fragment).commitNow()
-        refreshCalDAVCalendars(showRefreshToastOnActivityResume)
+        refreshCalDAVCalendars(showRefreshToast)
     }
 
     private fun getThisWeekDateTime(): String {
@@ -513,7 +482,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             if (!isActivityDestroyed()) {
                 val f=currentFragments.last()
                 if (f is MyFragmentHolder) {
-                    refreshCalDAVCalendars(showRefreshToastOnActivityResume)
+                    refreshCalDAVCalendars(showRefreshToast)
                     f.refreshEvents()
                 }
             }

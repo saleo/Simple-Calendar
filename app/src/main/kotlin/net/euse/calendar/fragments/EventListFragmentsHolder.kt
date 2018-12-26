@@ -61,7 +61,7 @@ class EventListFragmentsHolder : MyFragmentHolder(), NavigationListener {
                     currentDayCode = codes[position]
                     (activity as? MainActivity)?.apply{
                         updateTopBottom(Formatter.getDateTimeFromCode(currentDayCode), EVENTS_LIST_VIEW)
-                        refreshCalDAVCalendars(showRefreshToastOnActivityResume)
+                        refreshCalDAVCalendars(showRefreshToast)
                     }
                 }
             })
