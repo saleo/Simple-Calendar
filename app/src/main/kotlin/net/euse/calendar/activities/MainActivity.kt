@@ -53,9 +53,9 @@ import kotlin.system.exitProcess
 class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 //    var mCurrentShownMonth="";var mCurrentShownDay=""
     private val CALDAV_SYNC_DELAY = 1000L
-    private val SKCAL_NON_EXIST=1
-    private val SKCAL_CHECK_ERROR=0
-    private val SK_CREATE_FAILED=0
+    private val SKCAL_NON_EXIST=-3
+    private val SKCAL_CHECK_ERROR=-2
+    private val SK_CREATE_FAILED=-1
     private val SKCAL_URL="https://rili.euse.net/sk_events.ics"
 
     private lateinit var layout: View
@@ -121,12 +121,12 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                     if (it) {
                         var res=checkSkCalExist()
                         if (res!=SKCAL_NON_EXIST && res!=SKCAL_CHECK_ERROR){
-                                refreshCalDAVCalendars(showRefreshToast)
+                                refreshCalDAVCalendars()
                         } else if (res==SKCAL_NON_EXIST){
                             res=createSkCalendar()
                             if (res!=SK_CREATE_FAILED) {
                                 Toast.makeText(this, getString(R.string.add_calendar_created), Toast.LENGTH_LONG).show()
-                                refreshCalDAVCalendars(showRefreshToast)
+                                refreshCalDAVCalendars()
                             }
                             else
                                 Toast.makeText(this, getString(R.string.add_calendar_failed), Toast.LENGTH_LONG).show()
@@ -195,7 +195,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             currentFragments.removeAt(size-1)
             val f=currentFragments.last()
             supportFragmentManager.beginTransaction().replace(R.id.fragments_holder, f).commitNow()
-            refreshCalDAVCalendars(showRefreshToast)
+            refreshCalDAVCalendars(false)
         } else {
             val fragment=currentFragments.last()
             currentFragments.clear()
@@ -268,7 +268,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
     }
 
-    fun refreshCalDAVCalendars(showRefreshToast: Boolean) {
+    fun refreshCalDAVCalendars(showRefreshToast: Boolean=true) {
         if (showRefreshToast) {
             toast(R.string.refreshing)
         }
@@ -451,7 +451,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         bundle.putString(DAY_CODE, Formatter.getDayCodeFromDateTime(dateTime))
         fragment.arguments = bundle
         supportFragmentManager.beginTransaction().replace(R.id.fragments_holder, fragment).commitNow()
-        refreshCalDAVCalendars(showRefreshToast)
+        refreshCalDAVCalendars(false)
     }
 
     private fun getThisWeekDateTime(): String {
@@ -482,7 +482,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             if (!isActivityDestroyed()) {
                 val f=currentFragments.last()
                 if (f is MyFragmentHolder) {
-                    refreshCalDAVCalendars(showRefreshToast)
+                    refreshCalDAVCalendars(false)
                     f.refreshEvents()
                 }
             }
