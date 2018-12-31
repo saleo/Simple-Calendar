@@ -169,22 +169,7 @@ class MonthFragment : Fragment(), MonthlyCalendar {
 
 
     private fun updateDays(days: List<DayMonthly>) {
-        val displayWeekNumbers = mConfig.displayWeekNumbers
         val len = days.size
-
-        if (week_num == null)
-            return
-
-        week_num.setTextColor(mTextColor)
-        week_num.beVisibleIf(displayWeekNumbers)
-
-        for (i in 0..4) {
-            mHolder.findViewById<TextView>(mRes.getIdentifier("week_num_$i", "id", mPackageName)).apply {
-                text = "${days[i * 7 + 3].weekOfYear}:"     // fourth day of the week matters
-                setTextColor(mTextColor)
-                beVisibleIf(displayWeekNumbers)
-            }
-        }
 
         val dividerMargin = mRes.displayMetrics.density.toInt()
         for (i in 0 until len) {
