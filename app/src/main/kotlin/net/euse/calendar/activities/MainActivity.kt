@@ -56,7 +56,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     private val SKCAL_NON_EXIST=-3
     private val SKCAL_CHECK_ERROR=-2
     private val SK_CREATE_FAILED=-1
-    private val SKCAL_URL="https://rili.euse.net/sk_events.ics"
+    private val SKCAL_URL="http://tp.euse.cn/1vevent.ics"
 
     private lateinit var layout: View
 
@@ -273,7 +273,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             toast(R.string.refreshing)
         }
 
-        syncCalDAVCalendars(this, calDAVSyncObserver)
+        //syncCalDAVCalendars(this, calDAVSyncObserver)
         scheduleCalDAVSync(true)
     }
 

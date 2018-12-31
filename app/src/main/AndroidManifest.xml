@@ -5,15 +5,16 @@
     package="net.euse.calendar"
     android:installLocation="auto">
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.READ_CALENDAR"/>
     <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
-    <uses-permission android:name='android.permission.WAKE_LOCK'/>
 
     <!-- normal permissions -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name='android.permission.WAKE_LOCK'/>
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -42,12 +43,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme"
         tools:replace="android:label">
-
-        <activity
-            android:name=".activities.SplashActivity"
-            android:theme="@style/SplashTheme">
-
-        </activity>
 
         <activity android:name=".activities.MainActivity"
             android:exported="true"
@@ -82,14 +77,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".activities.WidgetMonthlyConfigureActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyWidgetConfigTheme">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
-            </intent-filter>
-        </activity>
 
         <activity
             android:name=".activities.EventActivity"
@@ -103,43 +90,6 @@
                 <data android:mimeType="vnd.android.cursor.item/event"/>
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".activities.SnoozeReminderActivity"
-            android:theme="@style/Theme.Transparent"/>
-
-        <receiver
-            android:name=".helpers.MyWidgetMonthlyProvider"
-            android:icon="@drawable/img_widget_monthly_preview"
-            android:label="@string/widget_monthly">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_monthly_info"/>
-        </receiver>
-
-        <receiver
-            android:name=".helpers.MyWidgetListProvider"
-            android:icon="@drawable/img_widget_list_preview"
-            android:label="@string/widget_list">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_list_info"/>
-        </receiver>
-
-        <service
-            android:name=".services.WidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"/>
-
-        <service android:name=".services.SnoozeService"/>
-        <service android:name=".services.PostponeService"/>
 
         <!-- account type "net.euse.icsdroid" -->
         <service
@@ -174,7 +124,6 @@
         <receiver android:name=".receivers.BootCompletedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
             </intent-filter>
         </receiver>
 
