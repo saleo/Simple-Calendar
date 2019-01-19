@@ -1,7 +1,7 @@
 package net.euse.calendar.helpers
 
-import net.euse.calendar.R
 import com.simplemobiletools.commons.helpers.DAY_SECONDS
+import net.euse.calendar.R
 
 const val LOW_ALPHA = .3f
 const val MEDIUM_ALPHA = .6f
@@ -114,7 +114,7 @@ const val BYMONTHDAY = "BYMONTHDAY"
 const val LOCATION = "LOCATION:"
 
 // this tag isn't a standard ICS tag, but there's no official way of adding a category color in an ics file
-const val CATEGORY_COLOR = "CATEGORY_COLOR:"
+const val CATEGORY_COLOR = "COLOR:"
 
 const val DISPLAY = "DISPLAY"
 const val FREQ = "FREQ"

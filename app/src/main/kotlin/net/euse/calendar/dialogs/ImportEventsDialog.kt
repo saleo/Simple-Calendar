@@ -2,6 +2,10 @@ package net.euse.calendar.dialogs
 
 import android.support.v7.app.AlertDialog
 import android.view.ViewGroup
+import com.simplemobiletools.commons.extensions.setBackgroundWithStroke
+import com.simplemobiletools.commons.extensions.setupDialogStuff
+import com.simplemobiletools.commons.extensions.toast
+import kotlinx.android.synthetic.main.dialog_import_events.view.*
 import net.euse.calendar.R
 import net.euse.calendar.activities.SimpleActivity
 import net.euse.calendar.extensions.config
@@ -9,10 +13,6 @@ import net.euse.calendar.extensions.dbHelper
 import net.euse.calendar.helpers.DBHelper
 import net.euse.calendar.helpers.IcsImporter
 import net.euse.calendar.helpers.IcsImporter.ImportResult.*
-import com.simplemobiletools.commons.extensions.setBackgroundWithStroke
-import com.simplemobiletools.commons.extensions.setupDialogStuff
-import com.simplemobiletools.commons.extensions.toast
-import kotlinx.android.synthetic.main.dialog_import_events.view.*
 
 class ImportEventsDialog(val activity: SimpleActivity, val path: String, val callback: (refreshView: Boolean) -> Unit) {
     var currEventTypeId = DBHelper.REGULAR_EVENT_TYPE_ID
@@ -37,11 +37,11 @@ class ImportEventsDialog(val activity: SimpleActivity, val path: String, val cal
             activity.setupDialogStuff(view, this, R.string.import_events) {
                 getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                     activity.toast(R.string.importing)
-                    Thread {
-                        val result = IcsImporter(activity).importEvents(path, currEventTypeId, currEventTypeCalDAVCalendarId)
-                        handleParseResult(result)
-                        dismiss()
-                    }.start()
+//                    Thread {
+//                        val result = IcsImporter(activity).importEvents(path, currEventTypeId, currEventTypeCalDAVCalendarId)
+//                        handleParseResult(result)
+//                        dismiss()
+//                    }.start()
                 }
             }
         }

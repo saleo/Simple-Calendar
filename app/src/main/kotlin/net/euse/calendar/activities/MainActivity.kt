@@ -1,6 +1,9 @@
 package net.euse.calendar.activities
 
-import android.content.*
+import android.content.ContentProviderClient
+import android.content.ContentUris
+import android.content.ContentValues
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.database.ContentObserver
 import android.database.Cursor
@@ -21,6 +24,14 @@ import at.bitfire.icsdroid.AppAccount
 import at.bitfire.icsdroid.AppAccount.account
 import at.bitfire.icsdroid.Constants
 import at.bitfire.icsdroid.db.LocalCalendar
+import com.simplemobiletools.commons.dialogs.FilePickerDialog
+import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.helpers.*
+import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
+import com.simplemobiletools.commons.models.RadioItem
+import com.simplemobiletools.commons.models.Release
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.top_navigation.*
 import net.euse.calendar.BuildConfig
 import net.euse.calendar.R
 import net.euse.calendar.R.string.status_day
@@ -34,14 +45,6 @@ import net.euse.calendar.helpers.*
 import net.euse.calendar.helpers.Formatter
 import net.euse.calendar.models.Event
 import net.euse.calendar.models.EventType
-import com.simplemobiletools.commons.dialogs.FilePickerDialog
-import com.simplemobiletools.commons.extensions.*
-import com.simplemobiletools.commons.helpers.*
-import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
-import com.simplemobiletools.commons.models.RadioItem
-import com.simplemobiletools.commons.models.Release
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.top_navigation.*
 import org.joda.time.DateTime
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -115,35 +118,45 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             updateView(config.storedView)
         }
 
-        handlePermission(PERMISSION_WRITE_CALENDAR) {
-            if (it) {
-                handlePermission(PERMISSION_READ_CALENDAR) {
-                    if (it) {
-                        var res=checkSkCalExist()
-                        if (res!=SKCAL_NON_EXIST && res!=SKCAL_CHECK_ERROR){
-                                refreshCalDAVCalendars()
-                        } else if (res==SKCAL_NON_EXIST){
-                            res=createSkCalendar()
-                            if (res!=SK_CREATE_FAILED) {
-                                Toast.makeText(this, getString(R.string.add_calendar_created), Toast.LENGTH_LONG).show()
-                                refreshCalDAVCalendars()
-                            }
-                            else
-                                Toast.makeText(this, getString(R.string.add_calendar_failed), Toast.LENGTH_LONG).show()
-                        } else{
-                            Toast.makeText(this, getString(R.string.check_calendar_failed), Toast.LENGTH_LONG).show()
-                        }
-                        this.config.caldavSync=true
-                        this.config.lastUsedCaldavCalendar=res
-                        this.config.caldavSyncedCalendarIDs=res.toString()
-                    }
-                }
+        Thread {
+            val icsImporter=IcsImporter(this)
+            val inputStream=icsImporter.getInputStream()
+            if (inputStream!=null) {
+                val result = icsImporter.importEvents(inputStream)
+                handleParseResult(result)
             }
-            else{
-                Toast.makeText(this,getString(R.string.calendar_permission_no_granted),Toast.LENGTH_LONG).show()
-                finish()
-            }
-        }
+            else
+                toast("failed to get inputstream from internet")
+        }.start()
+//        handlePermission(PERMISSION_WRITE_CALENDAR) {
+//            if (it) {
+//                handlePermission(PERMISSION_READ_CALENDAR) {
+//                    if (it) {
+//                        var res=checkSkCalExist()
+//                        if (res!=SKCAL_NON_EXIST && res!=SKCAL_CHECK_ERROR){
+//                                refreshCalDAVCalendars()
+//                        } else if (res==SKCAL_NON_EXIST){
+//                            res=createSkCalendar()
+//                            if (res!=SK_CREATE_FAILED) {
+//                                Toast.makeText(this, getString(R.string.add_calendar_created), Toast.LENGTH_LONG).show()
+//                                refreshCalDAVCalendars()
+//                            }
+//                            else
+//                                Toast.makeText(this, getString(R.string.add_calendar_failed), Toast.LENGTH_LONG).show()
+//                        } else{
+//                            Toast.makeText(this, getString(R.string.check_calendar_failed), Toast.LENGTH_LONG).show()
+//                        }
+//                        this.config.caldavSync=true
+//                        this.config.lastUsedCaldavCalendar=res
+//                        this.config.caldavSyncedCalendarIDs=res.toString()
+//                    }
+//                }
+//            }
+//            else{
+//                Toast.makeText(this,getString(R.string.calendar_permission_no_granted),Toast.LENGTH_LONG).show()
+//                finish()
+//            }
+//        }
 
     }
 

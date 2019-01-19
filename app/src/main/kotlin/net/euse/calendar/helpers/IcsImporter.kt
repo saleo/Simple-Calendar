@@ -1,21 +1,27 @@
 package net.euse.calendar.helpers
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
+import at.bitfire.icsdroid.Constants
+import com.simplemobiletools.commons.extensions.showErrorToast
 import net.euse.calendar.R
 import net.euse.calendar.activities.SimpleActivity
 import net.euse.calendar.extensions.dbHelper
 import net.euse.calendar.helpers.IcsImporter.ImportResult.*
 import net.euse.calendar.models.Event
 import net.euse.calendar.models.EventType
-import com.simplemobiletools.commons.extensions.areDigitsOnly
-import com.simplemobiletools.commons.extensions.showErrorToast
-import java.io.File
+import java.io.IOException
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 class IcsImporter(val activity: SimpleActivity) {
     enum class ImportResult {
         IMPORT_FAIL, IMPORT_OK, IMPORT_PARTIAL
     }
+
+    private val SKCAL_URL="http://tp.euse.cn/1vevent.ics"
 
     private var curStart = -1
     private var curEnd = -1
@@ -31,7 +37,7 @@ class IcsImporter(val activity: SimpleActivity) {
     private var curEventType = DBHelper.REGULAR_EVENT_TYPE_ID
     private var curLastModified = 0L
     private var curLocation = ""
-    private var curCategoryColor = -2
+    private var curCategoryColor = ""
     private var isNotificationDescription = false
     private var isProperReminderAction = false
     private var isDescription = false
@@ -40,16 +46,79 @@ class IcsImporter(val activity: SimpleActivity) {
     private var eventsImported = 0
     private var eventsFailed = 0
 
-    fun importEvents(path: String, defaultEventType: Int, calDAVCalendarId: Int): ImportResult {
+    fun getInputStream():InputStream?{
+        var url=URL(SKCAL_URL)
+        var conn = url.openConnection()
+        var inputStream:InputStream?=null
+
+        var followRedirect = false
+        var redirect = 0
+        do {
+            try {
+                if (conn is HttpURLConnection) {
+                    conn.setRequestProperty("User-Agent", Constants.USER_AGENT)
+                    conn.setRequestProperty("Connection", "close")  // workaround for AndroidHttpClient bug, which causes "Unexpected Status Line" exceptions
+                    conn.instanceFollowRedirects = false
+
+                    val statusCode = conn.responseCode
+
+                    // handle 304 Not Modified
+                    if (statusCode == HttpURLConnection.HTTP_NOT_MODIFIED) {
+                        Log.i(Constants.TAG, "ICS file has not been modified since last fetch (${conn.responseMessage})")
+
+                        conn.disconnect()   // don't read input stream
+                        conn = null
+                    } else {
+                        // handle redirects
+                        val location = conn.getHeaderField("Location")
+                        if (statusCode/100 == 3 && location != null) {
+                            conn.disconnect()   // don't read input stream
+                            conn = null
+
+                            Log.i(Constants.TAG, "Following redirect to $location")
+                            url = URL(url, location)
+                            followRedirect = true
+                            if (statusCode == HttpURLConnection.HTTP_MOVED_PERM) {
+                                Log.i(Constants.TAG, "Permanent redirect: saving new location")
+                            }
+                        }
+                    }
+
+                    // only read stream if status is 200 OK
+                    if (conn is HttpURLConnection && statusCode != HttpURLConnection.HTTP_OK) {
+                        conn.disconnect()
+                        conn = null
+                    }
+                } else
+                // local file, always simulate HTTP status 200 OK
+                    requireNotNull(conn)
+
+            } catch(e: IOException) {
+                Log.e(Constants.TAG, "Couldn't fetch calendar", e)
+                activity.showErrorToast(e, Toast.LENGTH_LONG)
+            }
+            redirect++
+        } while (followRedirect && redirect < Constants.MAX_REDIRECTS)
+
+        try {
+            inputStream=conn?.getInputStream()
+        } catch(e: IOException) {
+            Log.e(Constants.TAG, "Couldn't read calendar", e)
+            activity.showErrorToast(e, Toast.LENGTH_LONG)
+        } catch(e: Exception) {
+            Log.e(Constants.TAG, "Couldn't process calendar", e)
+            activity.showErrorToast(e, Toast.LENGTH_LONG)
+        } finally {
+            (conn as? HttpURLConnection)?.disconnect()
+        }
+
+        return inputStream
+    }
+
+    fun importEvents(inputStream: InputStream, defaultEventType: Int=0, calDAVCalendarId: Int=0): ImportResult {
         try {
             val existingEvents = activity.dbHelper.getEventsWithImportIds()
             var prevLine = ""
-
-            val inputStream = if (path.contains("/")) {
-                File(path).inputStream()
-            } else {
-                activity.assets.open(path)
-            }
 
             inputStream.bufferedReader().use {
                 while (true) {
@@ -100,10 +169,7 @@ class IcsImporter(val activity: SimpleActivity) {
                     } else if (line.startsWith(TRIGGER)) {
                         curReminderTriggerMinutes = Parser().parseDurationSeconds(line.substring(TRIGGER.length)) / 60
                     } else if (line.startsWith(CATEGORY_COLOR)) {
-                        val color = line.substring(CATEGORY_COLOR.length)
-                        if (color.trimStart('-').areDigitsOnly()) {
-                            curCategoryColor = Integer.parseInt(color)
-                        }
+                        val curCategoryColor = line.substring(CATEGORY_COLOR.length)
                     } else if (line.startsWith(CATEGORIES)) {
                         val categories = line.substring(CATEGORIES.length)
                         tryAddCategories(categories, activity)
@@ -138,10 +204,7 @@ class IcsImporter(val activity: SimpleActivity) {
                         }
 
                         val source = if (calDAVCalendarId == 0) SOURCE_IMPORTED_ICS else "$CALDAV-$calDAVCalendarId"
-                        val event = Event(0, curStart, curEnd, curTitle, curDescription, curReminderMinutes.getOrElse(0, { -1 }),
-                                curReminderMinutes.getOrElse(1, { -1 }), curReminderMinutes.getOrElse(2, { -1 }), curRepeatInterval,
-                                curImportId, curFlags, curRepeatLimit, curRepeatRule, curEventType, lastUpdated = curLastModified,
-                                source = source, location = curLocation, lunar = "")
+                        val event = Event(0, curStart, curEnd, curTitle, curDescription,color =  colorInt(CATEGORY_COLOR))
 
                         if (event.getIsAllDay() && curEnd > curStart) {
                             event.endTS -= DAY_SECONDS
@@ -204,7 +267,7 @@ class IcsImporter(val activity: SimpleActivity) {
 
         val eventId = context.dbHelper.getEventTypeIdWithTitle(eventTypeTitle)
         curEventType = if (eventId == -1) {
-            val newTypeColor = if (curCategoryColor == -2) context.resources.getColor(R.color.color_primary) else curCategoryColor
+            val newTypeColor = if (curCategoryColor == "") context.resources.getColor(R.color.color_primary) else colorInt(curCategoryColor)
             val eventType = EventType(0, eventTypeTitle, newTypeColor)
             context.dbHelper.insertEventType(eventType)
         } else {
@@ -234,10 +297,19 @@ class IcsImporter(val activity: SimpleActivity) {
         curRepeatRule = 0
         curEventType = DBHelper.REGULAR_EVENT_TYPE_ID
         curLastModified = 0L
-        curCategoryColor = -2
+        curCategoryColor = ""
         curLocation = ""
         isNotificationDescription = false
         isProperReminderAction = false
         curReminderTriggerMinutes = -1
+    }
+
+    private fun colorInt(colorString:String):Int {
+        when (colorString) {
+            "red" -> return (0xffff0000.toInt())
+            "blue" ->return (0xff0000ff.toInt())
+            "gray" -> return (0xff888888.toInt())
+            else -> return (0)
+        }
     }
 }
