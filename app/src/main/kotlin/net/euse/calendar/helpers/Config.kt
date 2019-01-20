@@ -3,9 +3,9 @@ package net.euse.calendar.helpers
 import android.content.Context
 import android.media.RingtoneManager
 import android.text.format.DateFormat
+import com.simplemobiletools.commons.helpers.BaseConfig
 import net.euse.calendar.R
 import net.euse.calendar.extensions.scheduleCalDAVSync
-import com.simplemobiletools.commons.helpers.BaseConfig
 import java.util.*
 
 class Config(context: Context) : BaseConfig(context) {
@@ -103,6 +103,10 @@ class Config(context: Context) : BaseConfig(context) {
     var ntfIDs: String
         get() = prefs.getString(NOTIFICATON_IDS, "")
         set(ntfIDs) = prefs.edit().putString(NOTIFICATON_IDS, ntfIDs).apply()
+
+    var httpResonponseCacheInstalled: Boolean
+        get() = prefs.getBoolean(HTTPRESONPONSECACHE_INSTALLED, false)
+        set(httpResonponseCacheInstalled) = prefs.edit().putBoolean(HTTPRESONPONSECACHE_INSTALLED, httpResonponseCacheInstalled).apply()
 
     fun getSyncedCalendarIdsAsList() = caldavSyncedCalendarIDs.split(",").filter { it.trim().isNotEmpty() } as ArrayList<String>
 

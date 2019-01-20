@@ -65,6 +65,8 @@ const val USE_SAME_SNOOZE = "use_same_snooze"
 const val REMINDER_UNIFIED_TIME = "reminder_unified_time"
 const val CURRENT_REMINDER_MINUTES ="current_reminder_minutes"
 const val NOTIFICATON_IDS="notification_ids"
+const val HTTPRESONPONSECACHE_INSTALLED="httpResonponseCache_Installed"
+
 val letterIDs = intArrayOf(R.string.sunday_letter, R.string.monday_letter, R.string.tuesday_letter, R.string.wednesday_letter,
         R.string.thursday_letter, R.string.friday_letter, R.string.saturday_letter)
 

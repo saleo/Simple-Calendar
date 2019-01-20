@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo
 import android.database.ContentObserver
 import android.database.Cursor
 import android.net.Uri
+import android.net.http.HttpResponseCache
 import android.os.Bundle
 import android.os.Handler
 import android.provider.CalendarContract
@@ -22,7 +23,6 @@ import at.bitfire.ical4android.AndroidCalendar
 import at.bitfire.ical4android.CalendarStorageException
 import at.bitfire.icsdroid.AppAccount
 import at.bitfire.icsdroid.AppAccount.account
-import at.bitfire.icsdroid.Constants
 import at.bitfire.icsdroid.db.LocalCalendar
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
 import com.simplemobiletools.commons.extensions.*
@@ -46,7 +46,9 @@ import net.euse.calendar.helpers.Formatter
 import net.euse.calendar.models.Event
 import net.euse.calendar.models.EventType
 import org.joda.time.DateTime
+import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -118,6 +120,16 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             updateView(config.storedView)
         }
 
+        try {
+            val httpCacheDir = File(cacheDir, "http")
+            val httpCacheSize = (10 * 1024 * 1024).toLong() // 10 MiB
+            HttpResponseCache.install(httpCacheDir, httpCacheSize)
+            config.httpResonponseCacheInstalled=true
+        } catch (e: IOException) {
+            Log.i(APP_TAG, "HTTP response cache installation failed:$e")
+            config.httpResonponseCacheInstalled=false
+        }
+
         Thread {
            IcsImporter(this).download_Import()
         }.start()
@@ -172,6 +184,10 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
     override fun onStop() {
         super.onStop()
+
+        val cache = HttpResponseCache.getInstalled()
+        cache?.flush()
+
         mCalDAVSyncHandler.removeCallbacksAndMessages(null)
         contentResolver.unregisterContentObserver(calDAVSyncObserver)
     }
@@ -286,7 +302,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     private val calDAVSyncObserver = object : ContentObserver(Handler()) {
         override fun onChange(selfChange: Boolean) {
             super.onChange(selfChange)
-            Log.d(Constants.TAG,"calDavSync onChange() observed")
+            Log.d(APP_TAG,"calDavSync onChange() observed")
             if (!selfChange) {
                 mCalDAVSyncHandler.removeCallbacksAndMessages(null)
                 mCalDAVSyncHandler.postDelayed({
@@ -662,10 +678,10 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             else
                 res=SKCAL_NON_EXIST
         } catch (e: CalendarStorageException) {
-            Log.e(Constants.TAG, "Calendar storage exception", e)
+            Log.e(APP_TAG, "Calendar storage exception", e)
             Toast.makeText(applicationContext, e.localizedMessage, Toast.LENGTH_LONG).show()
         } catch (e: InterruptedException) {
-            Log.e(Constants.TAG, "Thread interrupted", e)
+            Log.e(APP_TAG, "Thread interrupted", e)
             Toast.makeText(applicationContext, e.localizedMessage, Toast.LENGTH_LONG).show()
         }
         return res
@@ -694,7 +710,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             }
             res
         } catch(e: Exception) {
-            Log.e(Constants.TAG, "Couldn't create calendar", e)
+            Log.e(APP_TAG, "Couldn't create calendar", e)
 //            Toast.makeText(applicationContext, e.localizedMessage, Toast.LENGTH_LONG).show()
             res
         } finally {

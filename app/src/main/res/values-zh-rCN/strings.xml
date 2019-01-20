@@ -183,6 +183,9 @@
     <string name="holidays_imported_successfully">假期已从一个事件类型中导入</string>
     <string name="importing_some_holidays_failed">某些事件导入失败</string>
     <string name="importing_holidays_failed">导入假期失败</string>
+    <string name="import_successfully">导入成功</string>
+    <string name="import_some_failed">部分导入失败</string>
+    <string name="import_failed">导入失败</string>
 
     <!-- Settings -->
     <string name="manage_event_types">管理事件类型</string>

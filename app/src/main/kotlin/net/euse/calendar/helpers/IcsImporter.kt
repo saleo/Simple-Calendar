@@ -8,6 +8,7 @@ import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.toast
 import net.euse.calendar.R
 import net.euse.calendar.activities.SimpleActivity
+import net.euse.calendar.extensions.config
 import net.euse.calendar.extensions.dbHelper
 import net.euse.calendar.helpers.IcsImporter.ImportResult.*
 import net.euse.calendar.models.Event
@@ -19,7 +20,7 @@ import java.net.URL
 
 class IcsImporter(val activity: SimpleActivity) {
     enum class ImportResult {
-        IMPORT_FAIL, IMPORT_OK, IMPORT_PARTIAL
+        IMPORT_FAIL, IMPORT_OK, IMPORT_PARTIAL,IMPORT_IGNORED
     }
 
     private val SKCAL_URL="https://rili.euse.net/sk_events.ics"
@@ -46,6 +47,8 @@ class IcsImporter(val activity: SimpleActivity) {
 
     private var eventsImported = 0
     private var eventsFailed = 0
+    private var eventsNotModified = 0
+    private var eventsTotal=0
 
     fun download_Import(){
         var url=URL(SKCAL_URL)
@@ -64,8 +67,8 @@ class IcsImporter(val activity: SimpleActivity) {
                     val statusCode = conn.responseCode
 
                     // handle 304 Not Modified
-                    if (statusCode == HttpURLConnection.HTTP_NOT_MODIFIED) {
-                        Log.i(Constants.TAG, "ICS file has not been modified since last fetch (${conn.responseMessage})")
+                    if (activity.config.httpResonponseCacheInstalled && statusCode == HttpURLConnection.HTTP_NOT_MODIFIED) {
+                        Log.i(APP_TAG, "ICS file has not been modified since last fetch (${conn.responseMessage})")
 
                         conn.disconnect()   // don't read input stream
                         conn = null
@@ -77,11 +80,11 @@ class IcsImporter(val activity: SimpleActivity) {
                             conn.disconnect()   // don't read input stream
                             conn = null
 
-                            Log.i(Constants.TAG, "Following redirect to $location")
+                            Log.i(APP_TAG, "Following redirect to $location")
                             url = URL(url, location)
                             followRedirect = true
                             if (statusCode == HttpURLConnection.HTTP_MOVED_PERM) {
-                                Log.i(Constants.TAG, "Permanent redirect: saving new location")
+                                Log.i(APP_TAG, "Permanent redirect: saving new location")
                             }
                         }
                     }
@@ -98,7 +101,7 @@ class IcsImporter(val activity: SimpleActivity) {
                     requireNotNull(conn)
 
             } catch(e: IOException) {
-                Log.e(Constants.TAG, "Couldn't fetch calendar", e)
+                Log.e(APP_TAG, "Couldn't fetch calendar", e)
                 activity.showErrorToast(e, Toast.LENGTH_LONG)
             }
             redirect++
@@ -113,17 +116,17 @@ class IcsImporter(val activity: SimpleActivity) {
             else
                 activity.showErrorToast("no inputstream got")
         } catch(e: IOException) {
-            Log.e(Constants.TAG, "Couldn't read calendar", e)
+            Log.e(APP_TAG, "Couldn't read calendar", e)
             activity.showErrorToast(e, Toast.LENGTH_LONG)
         } catch(e: Exception) {
-            Log.e(Constants.TAG, "Couldn't process calendar", e)
+            Log.e(APP_TAG, "Couldn't process calendar", e)
             activity.showErrorToast(e, Toast.LENGTH_LONG)
         } finally {
             (conn as? HttpURLConnection)?.disconnect()
         }
     }
 
-    fun importEvents(inputStream: InputStream, defaultEventType: Int=0, calDAVCalendarId: Int=0): ImportResult {
+    private fun importEvents(inputStream: InputStream, defaultEventType: Int=0, calDAVCalendarId: Int=0): ImportResult {
         try {
             val existingEvents = activity.dbHelper.getEventsWithImportIds()
             var prevLine = ""
@@ -150,6 +153,7 @@ class IcsImporter(val activity: SimpleActivity) {
 
                     if (line == BEGIN_EVENT) {
                         resetValues()
+                        eventsTotal++
                         curEventType = defaultEventType
                     } else if (line.startsWith(DTSTART)) {
                         curStart = getTimestamp(line.substring(DTSTART.length))
@@ -208,6 +212,7 @@ class IcsImporter(val activity: SimpleActivity) {
 
                         val eventToUpdate = existingEvents.firstOrNull { curImportId.isNotEmpty() && curImportId == it.importId }
                         if (eventToUpdate != null && eventToUpdate.lastUpdated >= curLastModified) {
+                            eventsNotModified++
                             continue
                         }
 
@@ -241,7 +246,8 @@ class IcsImporter(val activity: SimpleActivity) {
         }
 
         return when {
-            eventsImported == 0 -> IMPORT_FAIL
+            (eventsTotal == eventsNotModified) -> IMPORT_IGNORED
+            (eventsImported + eventsNotModified < eventsTotal)-> IMPORT_FAIL
             eventsFailed > 0 -> IMPORT_PARTIAL
             else -> IMPORT_OK
         }
@@ -322,10 +328,11 @@ class IcsImporter(val activity: SimpleActivity) {
     }
 
     private fun handleParseResult(result: IcsImporter.ImportResult) {
+        if (result ==  IcsImporter.ImportResult.IMPORT_IGNORED) return
         activity.toast(when (result) {
-            IcsImporter.ImportResult.IMPORT_OK -> R.string.holidays_imported_successfully
-            IcsImporter.ImportResult.IMPORT_PARTIAL -> R.string.importing_some_holidays_failed
-            else -> R.string.importing_holidays_failed
+            IcsImporter.ImportResult.IMPORT_OK -> R.string.import_successfully
+            IcsImporter.ImportResult.IMPORT_PARTIAL -> R.string.import_some_failed
+            else -> R.string.import_failed
         }, Toast.LENGTH_LONG)
     }
 
