@@ -59,7 +59,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     private val SKCAL_NON_EXIST=-3
     private val SKCAL_CHECK_ERROR=-2
     private val SK_CREATE_FAILED=-1
-    private val SKCAL_URL="http://tp.euse.cn/1vevent.ics"
+    private val SKCAL_URL="https://rili.euse.net/sk_events.ics"
 
     private lateinit var layout: View
 
@@ -119,14 +119,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
 
         Thread {
-            val icsImporter=IcsImporter(this)
-            val inputStream=icsImporter.getInputStream()
-            if (inputStream!=null) {
-                val result = icsImporter.importEvents(inputStream)
-                handleParseResult(result)
-            }
-            else
-                toast("failed to get inputstream from internet")
+           IcsImporter(this).download_Import()
         }.start()
 //        handlePermission(PERMISSION_WRITE_CALENDAR) {
 //            if (it) {
@@ -306,14 +299,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                 }, CALDAV_SYNC_DELAY)
             }
         }
-    }
-
-    private fun handleParseResult(result: IcsImporter.ImportResult) {
-        toast(when (result) {
-            IcsImporter.ImportResult.IMPORT_OK -> R.string.holidays_imported_successfully
-            IcsImporter.ImportResult.IMPORT_PARTIAL -> R.string.importing_some_holidays_failed
-            else -> R.string.importing_holidays_failed
-        }, Toast.LENGTH_LONG)
     }
 
     private fun addContactEvents(birthdays: Boolean, callback: (Int) -> Unit) {

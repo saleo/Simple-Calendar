@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import at.bitfire.icsdroid.Constants
 import com.simplemobiletools.commons.extensions.showErrorToast
+import com.simplemobiletools.commons.extensions.toast
 import net.euse.calendar.R
 import net.euse.calendar.activities.SimpleActivity
 import net.euse.calendar.extensions.dbHelper
@@ -21,7 +22,7 @@ class IcsImporter(val activity: SimpleActivity) {
         IMPORT_FAIL, IMPORT_OK, IMPORT_PARTIAL
     }
 
-    private val SKCAL_URL="http://tp.euse.cn/1vevent.ics"
+    private val SKCAL_URL="https://rili.euse.net/sk_events.ics"
 
     private var curStart = -1
     private var curEnd = -1
@@ -46,7 +47,7 @@ class IcsImporter(val activity: SimpleActivity) {
     private var eventsImported = 0
     private var eventsFailed = 0
 
-    fun getInputStream():InputStream?{
+    fun download_Import(){
         var url=URL(SKCAL_URL)
         var conn = url.openConnection()
         var inputStream:InputStream?=null
@@ -68,6 +69,7 @@ class IcsImporter(val activity: SimpleActivity) {
 
                         conn.disconnect()   // don't read input stream
                         conn = null
+                        return
                     } else {
                         // handle redirects
                         val location = conn.getHeaderField("Location")
@@ -88,6 +90,8 @@ class IcsImporter(val activity: SimpleActivity) {
                     if (conn is HttpURLConnection && statusCode != HttpURLConnection.HTTP_OK) {
                         conn.disconnect()
                         conn = null
+                        activity.showErrorToast("connection failed with statusCode$statusCode,please check and retry")
+                        return
                     }
                 } else
                 // local file, always simulate HTTP status 200 OK
@@ -102,6 +106,12 @@ class IcsImporter(val activity: SimpleActivity) {
 
         try {
             inputStream=conn?.getInputStream()
+            if (inputStream!=null) {
+                val result = importEvents(inputStream)
+                handleParseResult(result)
+            }
+            else
+                activity.showErrorToast("no inputstream got")
         } catch(e: IOException) {
             Log.e(Constants.TAG, "Couldn't read calendar", e)
             activity.showErrorToast(e, Toast.LENGTH_LONG)
@@ -111,8 +121,6 @@ class IcsImporter(val activity: SimpleActivity) {
         } finally {
             (conn as? HttpURLConnection)?.disconnect()
         }
-
-        return inputStream
     }
 
     fun importEvents(inputStream: InputStream, defaultEventType: Int=0, calDAVCalendarId: Int=0): ImportResult {
@@ -169,7 +177,7 @@ class IcsImporter(val activity: SimpleActivity) {
                     } else if (line.startsWith(TRIGGER)) {
                         curReminderTriggerMinutes = Parser().parseDurationSeconds(line.substring(TRIGGER.length)) / 60
                     } else if (line.startsWith(CATEGORY_COLOR)) {
-                        val curCategoryColor = line.substring(CATEGORY_COLOR.length)
+                        curCategoryColor = line.substring(CATEGORY_COLOR.length)
                     } else if (line.startsWith(CATEGORIES)) {
                         val categories = line.substring(CATEGORIES.length)
                         tryAddCategories(categories, activity)
@@ -204,7 +212,7 @@ class IcsImporter(val activity: SimpleActivity) {
                         }
 
                         val source = if (calDAVCalendarId == 0) SOURCE_IMPORTED_ICS else "$CALDAV-$calDAVCalendarId"
-                        val event = Event(0, curStart, curEnd, curTitle, curDescription,color =  colorInt(CATEGORY_COLOR))
+                        val event = Event(0, curStart, curEnd, curTitle, curDescription,importId = curImportId,color =  colorInt(curCategoryColor))
 
                         if (event.getIsAllDay() && curEnd > curStart) {
                             event.endTS -= DAY_SECONDS
@@ -305,11 +313,20 @@ class IcsImporter(val activity: SimpleActivity) {
     }
 
     private fun colorInt(colorString:String):Int {
-        when (colorString) {
-            "red" -> return (0xffff0000.toInt())
-            "blue" ->return (0xff0000ff.toInt())
-            "gray" -> return (0xff888888.toInt())
-            else -> return (0)
+        return when (colorString) {
+            "red" -> (0xffff0000.toInt())
+            "blue" ->(0xff0000ff.toInt())
+            "gray" -> (0xff888888.toInt())
+            else -> (0)
         }
     }
+
+    private fun handleParseResult(result: IcsImporter.ImportResult) {
+        activity.toast(when (result) {
+            IcsImporter.ImportResult.IMPORT_OK -> R.string.holidays_imported_successfully
+            IcsImporter.ImportResult.IMPORT_PARTIAL -> R.string.importing_some_holidays_failed
+            else -> R.string.importing_holidays_failed
+        }, Toast.LENGTH_LONG)
+    }
+
 }
