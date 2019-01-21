@@ -7,6 +7,7 @@
     <string name="status_month" translatable="false">月</string>
     <string name="status_day" translatable="false">日</string>
     <string name="status_leap" translatable="false">闰</string>
+    <string name="status_chuyi" translatable="false">初一</string>
     <string name="status_chushi" translatable="false">初十</string>
     <string name="status_ershi" translatable="false">二十</string>
     <string name="status_sanshi" translatable="false">三十</string>

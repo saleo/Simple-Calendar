@@ -166,7 +166,7 @@ class Lunar(private val mCalendar: Calendar, private val mContext: Context) {
         else if (day == 30)
             mContext.resources.getString(R.string.status_sanshi)
         else if (day==1)
-            lunarMonthName[month-1]
+            mContext.resources.getString(R.string.status_chuyi)
         else
             chineseTen[day / 10] + chineseNumber[n]
     }
@@ -176,7 +176,6 @@ class Lunar(private val mCalendar: Calendar, private val mContext: Context) {
         val run1 = mContext.resources.getString(R.string.status_leap)
         val month1 = mContext.resources.getString(R.string.status_month)
         return (cyclical() + animalsYear() + year1 + (if (leap) run1 else "") + lunarMonthName[month - 1]
-                + month1
                 + getChinaDayString(day))
     }
 
