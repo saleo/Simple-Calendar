@@ -200,7 +200,9 @@ class IcsImporter(val activity: SimpleActivity) {
                         if (isProperReminderAction && curReminderTriggerMinutes != -1) {
                             curReminderMinutes.add(curReminderTriggerMinutes)
                         }
-                    } else if (line == END_EVENT) {
+                    } else if (line.startsWith(SEQUENCE)){
+                        continue
+                    }else if (line == END_EVENT) {
                         if (curStart != -1 && curEnd == -1) {
                             curEnd = curStart
                         }
