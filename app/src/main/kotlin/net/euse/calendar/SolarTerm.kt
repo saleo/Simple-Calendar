@@ -1,7 +1,5 @@
 package net.euse.calendar
 
-import android.content.Context
-
 object SolarTerm {
     internal var START_YEAR = 1970
 
@@ -87,10 +85,7 @@ object SolarTerm {
             0xA4, 0xC3, 0xA5, 0xA5, 0xA5, 0xA6, 0x97, 0x87, 0x87, 0x78, 0x87, 0x86, //2049
             0xA5, 0xC3, 0xA5, 0xB5, 0xA6, 0xA6, 0x87, 0x88, 0x78, 0x78, 0x87, 0x87)     //2050
 
-    fun getSolarTermStr(year: Int, month: Int, day: Int, context: Context): String {
-        val res = context.resources
-        val solarArrayStr = res.getStringArray(R.array.solar_term)
-        var SolarTermStr = ""
+    fun getSolarTermIndex(year: Int, month: Int, day: Int): Int {
         val temp: Int
         var result = 0
         val index = (year - START_YEAR) * 12 + month
@@ -107,7 +102,6 @@ object SolarTerm {
                 result = month * 2 + 1
             }
         }
-        SolarTermStr = solarArrayStr[result]
-        return SolarTermStr
+        return result
     }
 }

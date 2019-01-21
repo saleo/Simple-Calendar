@@ -445,22 +445,23 @@ fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: Linea
         val month=datetime.monthOfYear-1
         calendar.set(year,month,day.value)
         val lunar = Lunar(calendar, applicationContext)
-        solarTerm = SolarTerm.getSolarTermStr(year, month, day.value, applicationContext)
-        if (solarTerm.length == 0) {
-            val SolarHoliDayStr = SolarHoliday.getSolarHoliday(month, day.value, applicationContext)
-            if (SolarHoliDayStr.length == 0) {
-                val fullchinadatestr = lunar.toString()
-                val LunarFestivalStr = LunarFestival.getLunarFestival(fullchinadatestr, lunar, applicationContext)
-                if (LunarFestivalStr.length != 0) {
-                    solarTerm=LunarFestivalStr
-                } else {
+        val fullchinadatestr = lunar.toString()
+        val LunarFestivalStr = LunarFestival.getLunarFestival(fullchinadatestr, lunar, applicationContext)
+        if (LunarFestivalStr.length != 0) {
+            solarTerm = LunarFestivalStr
+        } else{
+            val solarArrayStr = applicationContext.resources.getStringArray(R.array.solar_term)
+            val solarIndex = SolarTerm.getSolarTermIndex(year, month, day.value)
+            solarTerm=solarArrayStr[solarIndex]
+            if (solarTerm.length == 0) {
+                val SolarHoliDayStr = SolarHoliday.getSolarHoliday(month, day.value, applicationContext)
+                if (SolarHoliDayStr.length == 0) {
                     solarTerm = fullchinadatestr.substring(fullchinadatestr.length - 2, fullchinadatestr.length)
+                } else {
+                    solarTerm=SolarHoliDayStr
                 }
-            } else {
-                solarTerm=SolarHoliDayStr
             }
         }
-
     }
 
 //    if (isBold) {

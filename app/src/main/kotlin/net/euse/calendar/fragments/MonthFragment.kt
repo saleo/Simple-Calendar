@@ -12,6 +12,10 @@ import android.widget.DatePicker
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import com.simplemobiletools.commons.extensions.beGone
+import com.simplemobiletools.commons.extensions.getDialogTheme
+import com.simplemobiletools.commons.extensions.setupDialogStuff
+import kotlinx.android.synthetic.main.fragment_month.*
 import net.euse.calendar.R
 import net.euse.calendar.activities.MainActivity
 import net.euse.calendar.extensions.addDayEvents
@@ -21,12 +25,6 @@ import net.euse.calendar.helpers.*
 import net.euse.calendar.interfaces.MonthlyCalendar
 import net.euse.calendar.interfaces.NavigationListener
 import net.euse.calendar.models.DayMonthly
-import com.simplemobiletools.commons.extensions.beGone
-import com.simplemobiletools.commons.extensions.beVisibleIf
-import com.simplemobiletools.commons.extensions.getDialogTheme
-import com.simplemobiletools.commons.extensions.setupDialogStuff
-import kotlinx.android.synthetic.main.first_row.*
-import kotlinx.android.synthetic.main.fragment_month.*
 import org.joda.time.DateTime
 
 
@@ -185,6 +183,7 @@ class MonthFragment : Fragment(), MonthlyCalendar {
                     removeAllViews()
                     context.addDayNumber(mTextColor, day, this, mDayLabelHeight) { mDayLabelHeight = it }
                     context.addDayEvents(day, this, mRes, dividerMargin)
+
                 }
             }
         }
