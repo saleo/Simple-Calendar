@@ -187,3 +187,17 @@ const val ANNIVERSARY_DAY= 3
 
 const val PLACEHOLDER_8WHITESPACE="                "
 const val YEARS_LIMIT_CUSTOMIZE_EVENT=2
+
+const val LICHUN_INDEX=3
+const val LIXIA_INDEX=9
+const val LIQIU_INDEX=15
+const val LIDONG_INDEX=21
+
+const val CHUNFEN_INDEX=6
+const val QIUFEN_INDEX=18
+const val XIAZHI_INDEX=12
+const val DONGZHI_INDEX=24
+
+const val ZHI_RELEVANT_DAY=-1
+const val FEN_RELEVANT_DAY=-2
+const val LI_RELEVANT_DAY=-3

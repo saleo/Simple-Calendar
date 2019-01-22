@@ -23,7 +23,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import net.euse.calendar.*
-import net.euse.calendar.R.drawable.today_border
 import net.euse.calendar.activities.*
 import net.euse.calendar.helpers.*
 import net.euse.calendar.helpers.Formatter
@@ -33,9 +32,7 @@ import net.euse.calendar.receivers.NotificationReceiver
 import net.euse.calendar.services.PostponeService
 import net.euse.calendar.services.SnoozeService
 import com.simplemobiletools.commons.extensions.applyColorFilter
-import com.simplemobiletools.commons.extensions.getAdjustedPrimaryColor
 import com.simplemobiletools.commons.extensions.getFilePublicUri
-import com.simplemobiletools.commons.extensions.onGlobalLayout
 import com.simplemobiletools.commons.helpers.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
@@ -409,8 +406,9 @@ fun Context.syncCalDAVCalendars(activity: SimpleActivity?, calDAVSyncObserver: C
     }.start()
 }
 
-fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: LinearLayout, dayLabelHeight: Int, callback: (Int) -> Unit) {
+fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: LinearLayout,callback: (Int) -> Unit) {
     var textColor = rawTextColor
+    var solarTermIndex=0
     var solarTerm=""
 
     (View.inflate(applicationContext, R.layout.day_monthly_number_view, null) as TextView).apply {
@@ -420,20 +418,6 @@ fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: Linea
         gravity = Gravity.TOP or Gravity.LEFT
         layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         linearLayout.addView(this)
-
-        if (day.isToday) {
-            val primaryColor = getAdjustedPrimaryColor()
-            setTextColor(Color.BLACK)
-            if (dayLabelHeight == 0) {
-                onGlobalLayout {
-                    val height = this@apply.height
-                    if (height > 0) {
-                        callback(height)
-                    }
-                }
-            }
-            linearLayout.setBackgroundResource(today_border)
-        }
 
     }
     //show chinese lunar when in zh-cn,or zh-tw,etc
@@ -451,16 +435,17 @@ fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: Linea
             solarTerm = LunarFestivalStr
         } else{
             val solarArrayStr = applicationContext.resources.getStringArray(R.array.solar_term)
-            val solarIndex = SolarTerm.getSolarTermIndex(year, month, day.value)
-            solarTerm=solarArrayStr[solarIndex]
-            if (solarTerm.length == 0) {
+            solarTermIndex = SolarTerm.getSolarTermIndex(year, month, day.value)
+            if (solarTermIndex == 0) {
                 val SolarHoliDayStr = SolarHoliday.getSolarHoliday(month, day.value, applicationContext)
                 if (SolarHoliDayStr.length == 0) {
                     solarTerm = fullchinadatestr.substring(fullchinadatestr.length - 2, fullchinadatestr.length)
                 } else {
                     solarTerm=SolarHoliDayStr
                 }
-            }
+                solarTermIndex= getSpecialSolarTermIndex(year,month,day.value)
+            }else
+                solarTerm=solarArrayStr[solarTermIndex]
         }
     }
 
@@ -476,6 +461,7 @@ fun Context.addDayNumber(rawTextColor: Int, day: DayMonthly, linearLayout: Linea
         linearLayout.addView(this)
     }
 
+    callback(solarTermIndex)
 }
 
 private fun addTodaysBackground(textView: TextView, res: Resources, dayLabelHeight: Int, mPrimaryColor: Int) =
@@ -512,6 +498,10 @@ fun Context.addDayEvents(day: DayMonthly, linearLayout: LinearLayout, res: Resou
         }
     }
 
+}
+
+fun Context.addSpecialSolarTermBottom(linearLayout: LinearLayout, res: Resources){
+    linearLayout.addView(View.inflate(applicationContext,R.layout.special_solarterm_indicator,null))
 }
 
 fun Context.getEventListItems(events: List<Event>): ArrayList<ListItem> {
@@ -585,3 +575,55 @@ fun Context.processEventRemindersNotification(eventIdsToProcess:ArrayList<String
     }
 }
 
+
+private fun getSpecialSolarTermIndex(year:Int, month:Int, day:Int):Int{
+    return when {
+        isZhiReleventDay(year,month,day) ==true -> ZHI_RELEVANT_DAY
+        isFenReleventDay(year,month,day) ==true -> FEN_RELEVANT_DAY
+        isLiReleventDay(year,month,day) ==true -> LI_RELEVANT_DAY
+        else -> 0
+    }
+
+}
+
+private fun isZhiReleventDay(year:Int,month:Int,day:Int):Boolean {
+    SolarTerm.apply {
+        if (getSolarTermIndex(year, month, day + 3) == DONGZHI_INDEX || getSolarTermIndex(year, month, day + 2) == DONGZHI_INDEX
+                || getSolarTermIndex(year, month, day + 1) == DONGZHI_INDEX)
+            return true
+        else if (getSolarTermIndex(year, month, day + 3) == XIAZHI_INDEX || getSolarTermIndex(year, month, day + 2) == XIAZHI_INDEX
+                || getSolarTermIndex(year, month, day + 1) == XIAZHI_INDEX)
+            return true
+        else if (getSolarTermIndex(year, month, day - 3) == DONGZHI_INDEX || getSolarTermIndex(year, month, day - 2) == DONGZHI_INDEX
+                || getSolarTermIndex(year, month, day - 1) == DONGZHI_INDEX)
+            return true
+        else if (getSolarTermIndex(year, month, day - 3) == XIAZHI_INDEX || getSolarTermIndex(year, month, day - 2) == XIAZHI_INDEX
+                || getSolarTermIndex(year, month, day - 1) == XIAZHI_INDEX)
+            return true
+    }
+    return false
+}
+
+private fun isFenReleventDay(year:Int,month:Int,day:Int):Boolean{
+    SolarTerm.apply {
+        if (getSolarTermIndex(year, month, day + 2) == CHUNFEN_INDEX || getSolarTermIndex(year, month, day + 1) == CHUNFEN_INDEX)
+            return true
+        else if (getSolarTermIndex(year, month, day + 2) == QIUFEN_INDEX || getSolarTermIndex(year, month, day + 1) == QIUFEN_INDEX)
+            return true
+        else if (getSolarTermIndex(year, month, day - 2) == CHUNFEN_INDEX || getSolarTermIndex(year, month, day - 1) == CHUNFEN_INDEX)
+            return true
+        else if ( getSolarTermIndex(year, month, day - 2) == QIUFEN_INDEX || getSolarTermIndex(year, month, day - 1) == QIUFEN_INDEX)
+            return true
+    }
+    return false
+}
+
+private fun isLiReleventDay(year:Int,month:Int,day:Int):Boolean{
+    SolarTerm.apply {
+        if (getSolarTermIndex(year, month, day + 1) == LIDONG_INDEX || getSolarTermIndex(year, month, day + 1) == LIQIU_INDEX)
+            return true
+        if (getSolarTermIndex(year, month, day + 1) == LIXIA_INDEX || getSolarTermIndex(year, month, day + 1) == LICHUN_INDEX)
+            return true
+    }
+    return false
+}

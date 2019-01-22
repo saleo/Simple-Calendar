@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TextView android:id="@+id/triangle_up"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="▲"
-    android:textColor="@color/red_text"
-    xmlns:android="http://schemas.android.com/apk/res/android" />

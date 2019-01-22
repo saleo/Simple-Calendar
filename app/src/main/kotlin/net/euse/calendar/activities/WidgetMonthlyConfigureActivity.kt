@@ -10,6 +10,11 @@ import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
+import com.simplemobiletools.commons.dialogs.ColorPickerDialog
+import com.simplemobiletools.commons.extensions.adjustAlpha
+import com.simplemobiletools.commons.extensions.beVisible
+import kotlinx.android.synthetic.main.first_row.*
+import kotlinx.android.synthetic.main.widget_config_monthly.*
 import net.euse.calendar.R
 import net.euse.calendar.extensions.addDayEvents
 import net.euse.calendar.extensions.addDayNumber
@@ -19,11 +24,6 @@ import net.euse.calendar.helpers.MonthlyCalendarImpl
 import net.euse.calendar.helpers.MyWidgetMonthlyProvider
 import net.euse.calendar.interfaces.MonthlyCalendar
 import net.euse.calendar.models.DayMonthly
-import com.simplemobiletools.commons.dialogs.ColorPickerDialog
-import com.simplemobiletools.commons.extensions.adjustAlpha
-import com.simplemobiletools.commons.extensions.beVisible
-import kotlinx.android.synthetic.main.first_row.*
-import kotlinx.android.synthetic.main.widget_config_monthly.*
 import org.joda.time.DateTime
 
 class WidgetMonthlyConfigureActivity : SimpleActivity(), MonthlyCalendar {
@@ -171,7 +171,7 @@ class WidgetMonthlyConfigureActivity : SimpleActivity(), MonthlyCalendar {
                 val day = mDays!![i]
                 removeAllViews()
 
-                context.addDayNumber(mTextColor, day, this, dayLabelHeight) { dayLabelHeight = it }
+                context.addDayNumber(mTextColor, day, this) { dayLabelHeight = it }
                 context.addDayEvents(day, this, mRes, dividerMargin)
             }
         }

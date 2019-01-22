@@ -21,7 +21,7 @@
     </string-array>
 
     <string-array name="solar_holiday">
-        <item>0101 元旦节</item>
+        <item>0101 元旦</item>
         <item>0308 妇女节</item>
         <item>0312 植树节</item>
         <item>0501 劳动节</item>
@@ -132,13 +132,13 @@
         <item>腊月廿九 除夕</item>
         <item>腊月三十 除夕</item>
         <item>正月初一 春节</item>
-        <item>正月十五 元宵节</item>
-        <item>五月初五 端午节</item>
-        <item>七月初七 七夕节</item>
-        <item>七月十五 中元节</item>
-        <item>八月十五 中秋节</item>
-        <item>九月初九 重阳节</item>
-        <item>腊月初八 腊八节</item>
+        <item>正月十五 元宵</item>
+        <item>五月初五 端午</item>
+        <item>七月初七 七夕</item>
+        <item>七月十五 中元</item>
+        <item>八月十五 中秋</item>
+        <item>九月初九 重阳</item>
+        <item>腊月初八 腊八</item>
         <item>腊月廿三 小年</item>
     </string-array>
 

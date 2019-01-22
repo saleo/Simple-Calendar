@@ -20,6 +20,7 @@ import net.euse.calendar.R
 import net.euse.calendar.activities.MainActivity
 import net.euse.calendar.extensions.addDayEvents
 import net.euse.calendar.extensions.addDayNumber
+import net.euse.calendar.extensions.addSpecialSolarTermBottom
 import net.euse.calendar.extensions.config
 import net.euse.calendar.helpers.*
 import net.euse.calendar.interfaces.MonthlyCalendar
@@ -34,6 +35,7 @@ class MonthFragment : Fragment(), MonthlyCalendar {
     private var mDayCode = ""
     private var mPackageName = ""
     private var mDayLabelHeight = 0
+    private var mSolarTermIndex =0
     private var mLastHash = 0L
     private var mCalendar: MonthlyCalendarImpl? = null
 
@@ -168,7 +170,7 @@ class MonthFragment : Fragment(), MonthlyCalendar {
 
     private fun updateDays(days: List<DayMonthly>) {
         val len = days.size
-
+        var isSpecialSolarTerm=false
         val dividerMargin = mRes.displayMetrics.density.toInt()
         for (i in 0 until len) {
             mHolder.findViewById<LinearLayout>(mRes.getIdentifier("day_$i", "id", mPackageName)).apply {
@@ -181,8 +183,25 @@ class MonthFragment : Fragment(), MonthlyCalendar {
                         }
 
                     removeAllViews()
-                    context.addDayNumber(mTextColor, day, this, mDayLabelHeight) { mDayLabelHeight = it }
+                    context.addDayNumber(mTextColor, day, this) { mSolarTermIndex=it }
                     context.addDayEvents(day, this, mRes, dividerMargin)
+
+                     if (mSolarTermIndex== XIAZHI_INDEX || mSolarTermIndex== DONGZHI_INDEX ||
+                             mSolarTermIndex== LICHUN_INDEX || mSolarTermIndex== LIXIA_INDEX ||
+                             mSolarTermIndex== LIQIU_INDEX || mSolarTermIndex== LIDONG_INDEX||
+                             mSolarTermIndex== CHUNFEN_INDEX || mSolarTermIndex== QIUFEN_INDEX) {
+
+                         isSpecialSolarTerm=true
+                         context.addSpecialSolarTermBottom(this,mRes )
+                     }else if (mSolarTermIndex == ZHI_RELEVANT_DAY || mSolarTermIndex == FEN_RELEVANT_DAY || mSolarTermIndex == LI_RELEVANT_DAY) {
+                         isSpecialSolarTerm = true
+                     }else
+                         isSpecialSolarTerm=false
+
+                     if (day.isToday)
+                         this.setBackgroundResource(R.drawable.today_border)
+                     else if (isSpecialSolarTerm)
+                         this.setBackgroundResource(R.drawable.special_solarterm_border)
 
                 }
             }
