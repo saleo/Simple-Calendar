@@ -47,7 +47,6 @@ class IcsImporter(val activity: SimpleActivity) {
 
     private var eventsImported = 0
     private var eventsFailed = 0
-    private var eventsNotModified = 0
     private var eventsTotal=0
 
     fun download_Import(){
@@ -128,7 +127,8 @@ class IcsImporter(val activity: SimpleActivity) {
 
     private fun importEvents(inputStream: InputStream, defaultEventType: Int=0, calDAVCalendarId: Int=0): ImportResult {
         try {
-            val existingEvents = activity.dbHelper.getEventsWithImportIds()
+            activity.dbHelper.deleteImportedEvents()
+            Log.d(APP_TAG,"import events deleted")
             var prevLine = ""
 
             inputStream.bufferedReader().use {
@@ -211,32 +211,17 @@ class IcsImporter(val activity: SimpleActivity) {
                             continue
                         }
 
-
-                        val eventToUpdate = existingEvents.firstOrNull { curImportId.isNotEmpty() && curImportId == it.importId }
-                        if (eventToUpdate != null && eventToUpdate.lastUpdated >= curLastModified) {
-                            eventsNotModified++
-                            continue
-                        }
-
                         val source = if (calDAVCalendarId == 0) SOURCE_IMPORTED_ICS else "$CALDAV-$calDAVCalendarId"
-                        val event = Event(0, curStart, curEnd, curTitle, curDescription,importId = curImportId,color =  colorInt(curCategoryColor))
+                        val event = Event(0, curStart, curEnd, curTitle, curDescription,importId = curImportId,color =  colorInt(curCategoryColor),source=SOURCE_IMPORTED_ICS)
 
                         if (event.getIsAllDay() && curEnd > curStart) {
                             event.endTS -= DAY_SECONDS
                         }
 
-                        if (eventToUpdate == null) {
-                            activity.dbHelper.insert(event, true) {
-                                for (exceptionTS in curRepeatExceptions) {
-                                    activity.dbHelper.addEventRepeatException(it, exceptionTS, true)
-                                }
-                                existingEvents.add(event)
-                            }
-                        } else {
-                            event.id = eventToUpdate.id
-                            activity.dbHelper.update(event, true)
+                        activity.dbHelper.insert(event, true) {
+                            eventsImported++
                         }
-                        eventsImported++
+
                         resetValues()
                     }
                     prevLine = line
@@ -248,9 +233,8 @@ class IcsImporter(val activity: SimpleActivity) {
         }
 
         return when {
-            (eventsTotal == eventsNotModified) -> IMPORT_IGNORED
-            (eventsImported + eventsNotModified < eventsTotal)-> IMPORT_FAIL
-            eventsFailed > 0 -> IMPORT_PARTIAL
+            (eventsImported ==0 )-> IMPORT_FAIL
+            (eventsImported < eventsTotal) -> IMPORT_PARTIAL
             else -> IMPORT_OK
         }
     }

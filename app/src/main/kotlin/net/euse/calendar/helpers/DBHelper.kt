@@ -9,15 +9,15 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteQueryBuilder
 import android.text.TextUtils
 import android.util.SparseIntArray
+import com.simplemobiletools.commons.extensions.getIntValue
+import com.simplemobiletools.commons.extensions.getLongValue
+import com.simplemobiletools.commons.extensions.getStringValue
+import com.simplemobiletools.commons.helpers.DAY_SECONDS
 import net.euse.calendar.R
 import net.euse.calendar.extensions.*
 import net.euse.calendar.models.Event
 import net.euse.calendar.models.EventType
 import net.euse.calendar.models.GroupedNotification
-import com.simplemobiletools.commons.extensions.getIntValue
-import com.simplemobiletools.commons.extensions.getLongValue
-import com.simplemobiletools.commons.extensions.getStringValue
-import com.simplemobiletools.commons.helpers.DAY_SECONDS
 import org.joda.time.DateTime
 import java.util.*
 import kotlin.collections.ArrayList
@@ -1074,5 +1074,11 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
 
     fun getEventsWithSyncUids(syncUids:List<String>) = getEvents("").filter {syncUids.contains(it.syncUid) } as ArrayList<Event>
 
-
+    fun deleteImportedEvents(){
+        val selection = "$MAIN_TABLE_NAME.$COL_EVENT_SOURCE == '$SOURCE_IMPORTED_ICS'"
+        val cursor = getEventsCursor(selection, null)
+        val events = fillEvents(cursor)
+        val eventIDs = Array(events.size, { i -> (events[i].id.toString()) })
+        deleteEvents(eventIDs, true)
+    }
 }
