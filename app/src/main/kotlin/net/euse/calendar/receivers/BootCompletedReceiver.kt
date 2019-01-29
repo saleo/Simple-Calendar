@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import net.euse.calendar.extensions.notifyRunningEvents
-import net.euse.calendar.extensions.recheckCalDAVCalendars
 import net.euse.calendar.extensions.scheduleAllEvents
 
 class BootCompletedReceiver : BroadcastReceiver() {
@@ -13,7 +12,7 @@ class BootCompletedReceiver : BroadcastReceiver() {
         context.apply {
             scheduleAllEvents()
             notifyRunningEvents()
-            recheckCalDAVCalendars {}
+            //recheckCalDAVCalendars {}
         }
     }
 }

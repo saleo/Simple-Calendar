@@ -10,6 +10,7 @@ import net.euse.calendar.R
 import net.euse.calendar.activities.SimpleActivity
 import net.euse.calendar.extensions.config
 import net.euse.calendar.extensions.dbHelper
+import net.euse.calendar.extensions.scheduleAllEvents
 import net.euse.calendar.helpers.IcsImporter.ImportResult.*
 import net.euse.calendar.models.Event
 import net.euse.calendar.models.EventType
@@ -23,7 +24,7 @@ class IcsImporter(val activity: SimpleActivity) {
         IMPORT_FAIL, IMPORT_OK, IMPORT_PARTIAL,IMPORT_IGNORED
     }
 
-    private val SKCAL_URL="https://rili.euse.net/sk_events.ics"
+    private val SKCAL_URL="https://rili.euse.net/test.ics"
 
     private var curStart = -1
     private var curEnd = -1
@@ -126,6 +127,7 @@ class IcsImporter(val activity: SimpleActivity) {
     }
 
     private fun importEvents(inputStream: InputStream, defaultEventType: Int=0, calDAVCalendarId: Int=0): ImportResult {
+        var eventsToAddNotify:ArrayList<Event>
         try {
             activity.dbHelper.deleteImportedEvents()
             Log.d(APP_TAG,"import events deleted")
@@ -232,6 +234,7 @@ class IcsImporter(val activity: SimpleActivity) {
             eventsFailed++
         }
 
+        activity.scheduleAllEvents(SOURCE_IMPORTED_ICS)
         return when {
             (eventsImported ==0 )-> IMPORT_FAIL
             (eventsImported < eventsTotal) -> IMPORT_PARTIAL

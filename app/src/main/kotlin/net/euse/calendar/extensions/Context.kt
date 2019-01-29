@@ -22,8 +22,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.simplemobiletools.commons.extensions.applyColorFilter
+import com.simplemobiletools.commons.extensions.getFilePublicUri
+import com.simplemobiletools.commons.helpers.isKitkatPlus
+import com.simplemobiletools.commons.helpers.isLollipopPlus
+import com.simplemobiletools.commons.helpers.isMarshmallowPlus
+import com.simplemobiletools.commons.helpers.isOreoPlus
 import net.euse.calendar.*
-import net.euse.calendar.activities.*
+import net.euse.calendar.activities.EventActivity
+import net.euse.calendar.activities.MainActivity
+import net.euse.calendar.activities.SimpleActivity
+import net.euse.calendar.activities.SnoozeReminderActivity
 import net.euse.calendar.helpers.*
 import net.euse.calendar.helpers.Formatter
 import net.euse.calendar.models.*
@@ -31,9 +40,6 @@ import net.euse.calendar.receivers.CalDAVSyncReceiver
 import net.euse.calendar.receivers.NotificationReceiver
 import net.euse.calendar.services.PostponeService
 import net.euse.calendar.services.SnoozeService
-import com.simplemobiletools.commons.extensions.applyColorFilter
-import com.simplemobiletools.commons.extensions.getFilePublicUri
-import com.simplemobiletools.commons.helpers.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import java.io.File
@@ -73,11 +79,12 @@ fun Context.updateListWidget() {
     }
 }
 
-fun Context.scheduleAllEvents() {
-    val events = dbHelper.getEventsAfterward()
-    events.forEach {
-        scheduleNextEventReminder(it, dbHelper)
-    }
+fun Context.scheduleAllEvents(event_source:String=SOURCE_ALL) {
+    var events = dbHelper.getEventsAfterward()
+    if (event_source!= SOURCE_ALL)
+        events.filter { it.source == SOURCE_IMPORTED_ICS }
+
+    processEventRemindersNotification(events  as ArrayList<Event>)
 }
 
 fun Context.scheduleNextEventReminder(event: Event?, dbHelper: DBHelper) {
@@ -87,7 +94,7 @@ fun Context.scheduleNextEventReminder(event: Event?, dbHelper: DBHelper) {
 
     val now = getNowSeconds()
     val reminderSeconds = event.getReminders().reversed().map { it * 60 }
-    dbHelper.getEvents(now, now + YEAR, event.id) {
+    dbHelper.getEvents(now, now + MONTH, event.id) {
         if (it.isNotEmpty()) {
             for (curEvent in it) {
                 for (curReminder in reminderSeconds) {
@@ -125,14 +132,16 @@ fun Context.cancelAllNotification(){
     config.ntfIDs=""
 }
 
-fun Context.cancelNotification(eventStartTs:Int) {
-    dbHelper.getEvents(eventStartTs,eventStartTs,-1,{
-        if (it.size>0)
+fun Context.cancelNotification(eventStartTs:Int,forImportEventsOnly:Boolean=false) {
+    dbHelper.getEventsInBackground(eventStartTs,eventStartTs,-1,{
+        if (it.size>0 && !forImportEventsOnly)
+        //for deletion on non-importEvents, and still have existing events which have the same startTs with the deleted
             processEventRemindersNotification(it as ArrayList<Event>)
         else{
-            val ntfId=eventStartTs/net.euse.calendar.helpers.DAY_SECONDS
+            val ntfId=eventStartTs/DAY_SECONDS
             val intent = Intent(applicationContext, NotificationReceiver::class.java)
             PendingIntent.getBroadcast(applicationContext, ntfId, intent, PendingIntent.FLAG_UPDATE_CURRENT).cancel()
+            config.getNtfIdsAsList().remove(ntfId.toString())
         }
     })
 }

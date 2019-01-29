@@ -149,7 +149,7 @@ const val SOURCE_SIMPLE_CALENDAR = "simple-calendar"
 const val SOURCE_IMPORTED_ICS = "imported-ics"
 const val SOURCE_CONTACT_BIRTHDAY = "contact-birthday"
 const val SOURCE_CONTACT_ANNIVERSARY = "contact-anniversary"
-
+const val SOURCE_ALL="all"
 const val SOURCE_CUSTOMIZE_ANNIVERSARY = "customize-anniversary"
 
 const val REMINDER_SWITCH ="reminder_switch"

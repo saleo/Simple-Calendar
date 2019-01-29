@@ -465,36 +465,26 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         deleteEvents(events, true)
     }
 
-    fun deleteEvents(ids: Array<String>, deleteFromCalDAV: Boolean) :Int{
+    fun deleteEvents(ids: Array<String>, importEventsOnly: Boolean) :Int{
         val args = TextUtils.join(", ", ids)
         val selection = "$MAIN_TABLE_NAME.$COL_ID IN ($args)"
         val cursor = getEventsCursor(selection)
         val events=fillEvents(cursor)
-        val caldavEvents = events.filter { it.importId.isNotEmpty() }
-        val events1=events.distinctBy { it.startTS }
+        var events1=events.distinctBy { it.startTS }
+        if (importEventsOnly)
+            events1.filter { it.importId.isNotEmpty() }
+
         var iDeleted=0
 
         iDeleted=mDb.delete(MAIN_TABLE_NAME, selection, null)
 
-        val metaSelection = "$COL_EVENT_ID IN ($args)"
-        mDb.delete(META_TABLE_NAME, metaSelection, null)
-
-        val exceptionSelection = "$COL_PARENT_EVENT_ID IN ($args)"
-        mDb.delete(EXCEPTIONS_TABLE_NAME, exceptionSelection, null)
-
         context.updateWidgets()
 
         events1.forEach {
-            context.cancelNotification(it.startTS)
+            context.cancelNotification(it.startTS,importEventsOnly)
         }
 
-        if (deleteFromCalDAV && context.config.caldavSync) {
-            caldavEvents.forEach {
-                CalDAVHandler(context).deleteCalDAVEvent(it)
-            }
-        }
-
-        deleteChildEvents(args, deleteFromCalDAV){iDeletedChild-> iDeleted=iDeleted+iDeletedChild}
+        //deleteChildEvents(args, deleteFromCalDAV){iDeletedChild-> iDeleted=iDeleted+iDeletedChild}
         return iDeleted
     }
 
@@ -822,9 +812,10 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
     }
 
     fun getEventsAfterward(): List<Event> {
-        val selection = "$COL_REMINDER_MINUTES != -1 AND ($COL_START_TS > ? OR $COL_REPEAT_INTERVAL != 0) AND $COL_START_TS != 0"
-        val selectionArgs = arrayOf(DateTime.now().seconds().toString())
-        val cursor = getEventsCursor(selection, selectionArgs)
+        val reminderTs=context.config.reminderTs
+        val nowSeconds=DateTime.now().seconds()
+        val selection = "($COL_START_TS+$reminderTs) > $nowSeconds"
+        val cursor = getEventsCursor(selection, null)
         return fillEvents(cursor)
     }
 
