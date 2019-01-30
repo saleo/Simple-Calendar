@@ -24,7 +24,7 @@ class IcsImporter(val activity: SimpleActivity,val fromNotiticationClick:Boolean
         IMPORT_FAIL, IMPORT_OK, IMPORT_PARTIAL,IMPORT_IGNORED
     }
 
-    private val SKCAL_URL="https://rili.euse.net/test.ics"
+    private val SKCAL_URL="https://rili.euse.net/sk_events.ics"
 
     private var curStart = -1
     private var curEnd = -1

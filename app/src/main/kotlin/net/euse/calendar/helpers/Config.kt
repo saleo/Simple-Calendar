@@ -96,8 +96,8 @@ class Config(context: Context) : BaseConfig(context) {
         set(reminderSwitch)=prefs.edit().putBoolean(REMINDER_SWITCH,reminderSwitch).apply()
 
     var reminderTs:Int
-        //get()= prefs.getInt(REMINDER_UNIFIED_TIME, REMINDER_INITIAL_TS)//20:00 per day, TEST DATA=HOUR-10*3600+MIN-58*60
-        get() = 11*3600+13*60
+        get()= prefs.getInt(REMINDER_UNIFIED_TIME, REMINDER_INITIAL_TS)//20:00 per day
+        //get() = 11*3600+13*60
         set(unifiedReminderTs) = prefs.edit().putInt(REMINDER_UNIFIED_TIME,unifiedReminderTs).apply()
 
     var ntfIDs: String

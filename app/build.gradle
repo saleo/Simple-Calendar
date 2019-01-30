@@ -10,8 +10,8 @@ android {
         applicationId "net.euse.calendar"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 115
-        versionName "3.3.2"
+        versionCode 100
+        versionName "1.0"
         multiDexEnabled true
         setProperty("archivesBaseName", "calendar")
     }
@@ -41,17 +41,11 @@ android {
     }
 }
 
-ext {
-    leakCanaryVersion = '1.5.4'
-}
-
 dependencies {
     implementation 'joda-time:joda-time:2.9.9'
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.android.support:multidex:1.0.2'
     implementation 'com.google.code.gson:gson:2.8.2'
-    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
-    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
     implementation 'com.android.support:design:27.1.0'
     implementation project(':icsdroid_lib')
     implementation project(':ical4android')

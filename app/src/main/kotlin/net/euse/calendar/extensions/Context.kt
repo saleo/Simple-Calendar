@@ -138,10 +138,10 @@ fun Context.cancelNotification(eventStartTs:Int,forImportEventsOnly:Boolean=fals
         //for deletion on non-importEvents, and still have existing events which have the same startTs with the deleted
             processEventRemindersNotification(it as ArrayList<Event>)
         else{
-            val ntfId=eventStartTs/DAY_SECONDS
+            val ntfId=Formatter.getDayCodeFromTS(eventStartTs)
             val intent = Intent(applicationContext, NotificationReceiver::class.java)
-            PendingIntent.getBroadcast(applicationContext, ntfId, intent, PendingIntent.FLAG_UPDATE_CURRENT).cancel()
-            config.getNtfIdsAsList().remove(ntfId.toString())
+            PendingIntent.getBroadcast(applicationContext, ntfId.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT).cancel()
+            config.getNtfIdsAsList().remove(ntfId)
         }
     })
 }
