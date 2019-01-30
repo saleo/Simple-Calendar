@@ -241,7 +241,7 @@ private fun buildGroupedNotification(context: Context, pendingIntent: PendingInt
         }
     }
 
-    val content= if (ntfContent == "," || ntfContent== "") context.getString(R.string.str_notification_content) else ntfContent
+    val content= if (ntfContent.replace(",","").isEmpty()) context.getString(R.string.str_notification_content) else ntfContent
     val builder = NotificationCompat.Builder(context)
             .setContentTitle(ntfTitle)
             .setContentText(content)
@@ -324,8 +324,7 @@ private fun getPendingIntent(context: Context, event: Event): PendingIntent {
 
 private fun getPendingIntentWithGroupedNtfId(context: Context,groupedNtfId:Int):PendingIntent{
     val intent = Intent(context, MainActivity::class.java)
-    val dayCode =Formatter.getDayCodeFromTS(groupedNtfId* com.simplemobiletools.commons.helpers.DAY_SECONDS)
-    intent.putExtra(DAY_CODE,dayCode)
+    intent.putExtra(DAY_CODE,groupedNtfId)
     return PendingIntent.getActivity(context, groupedNtfId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 }
 

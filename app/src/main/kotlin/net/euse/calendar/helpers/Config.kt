@@ -5,7 +5,6 @@ import android.media.RingtoneManager
 import android.text.format.DateFormat
 import com.simplemobiletools.commons.helpers.BaseConfig
 import net.euse.calendar.R
-import net.euse.calendar.extensions.scheduleCalDAVSync
 import java.util.*
 
 class Config(context: Context) : BaseConfig(context) {
@@ -76,7 +75,7 @@ class Config(context: Context) : BaseConfig(context) {
     var caldavSync: Boolean
         get() = prefs.getBoolean(CALDAV_SYNC, false)
         set(caldavSync) {
-            context.scheduleCalDAVSync(caldavSync)
+            //context.scheduleCalDAVSync(caldavSync)
             prefs.edit().putBoolean(CALDAV_SYNC, caldavSync).apply()
         }
 
@@ -97,7 +96,8 @@ class Config(context: Context) : BaseConfig(context) {
         set(reminderSwitch)=prefs.edit().putBoolean(REMINDER_SWITCH,reminderSwitch).apply()
 
     var reminderTs:Int
-        get()= prefs.getInt(REMINDER_UNIFIED_TIME, REMINDER_INITIAL_TS)//20:00 per day
+        //get()= prefs.getInt(REMINDER_UNIFIED_TIME, REMINDER_INITIAL_TS)//20:00 per day, TEST DATA=HOUR-10*3600+MIN-58*60
+        get() = 11*3600+13*60
         set(unifiedReminderTs) = prefs.edit().putInt(REMINDER_UNIFIED_TIME,unifiedReminderTs).apply()
 
     var ntfIDs: String

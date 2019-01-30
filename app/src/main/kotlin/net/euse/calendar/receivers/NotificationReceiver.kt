@@ -6,15 +6,12 @@ import android.content.Intent
 import android.os.PowerManager
 import net.euse.calendar.extensions.postGroupedNotify
 import net.euse.calendar.extensions.updateListWidget
-import net.euse.calendar.helpers.NOTIFICATION_CONTENT
-import net.euse.calendar.helpers.NOTIFICATION_ID
-import net.euse.calendar.helpers.NOTIFICATION_TITLE
-import net.euse.calendar.helpers.NOTIFICATION_TS
+import net.euse.calendar.helpers.*
 
 class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-        val wakelock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Simple Calendar")
+        val wakelock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, APP_TAG)
         wakelock.acquire(5000)
 
         context.updateListWidget()

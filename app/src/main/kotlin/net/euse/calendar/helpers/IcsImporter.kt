@@ -19,7 +19,7 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-class IcsImporter(val activity: SimpleActivity) {
+class IcsImporter(val activity: SimpleActivity,val fromNotiticationClick:Boolean=false) {
     enum class ImportResult {
         IMPORT_FAIL, IMPORT_OK, IMPORT_PARTIAL,IMPORT_IGNORED
     }
@@ -111,7 +111,7 @@ class IcsImporter(val activity: SimpleActivity) {
             inputStream=conn?.getInputStream()
             if (inputStream!=null) {
                 val result = importEvents(inputStream)
-                handleParseResult(result)
+                if (!fromNotiticationClick) handleParseResult(result)
             }
             else
                 activity.showErrorToast("no inputstream got")

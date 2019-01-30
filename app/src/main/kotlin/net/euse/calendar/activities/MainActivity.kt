@@ -99,22 +99,23 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
-        if (intent?.action == Intent.ACTION_VIEW && intent.data != null) {
-
-            val uri = intent.data
-            if (uri.authority == "com.android.calendar") {
-                // clicking date on a third party widget: content://com.android.calendar/time/1507309245683
-                if (intent?.extras?.getBoolean("DETAIL_VIEW", false) == true) {
-                    val timestamp = uri.pathSegments.last()
-                    if (timestamp.areDigitsOnly()) {
-                        openDayAt(timestamp.toLong())
-                        return
-                    }
-                }
-            } else {
-                tryImportEventsFromFile(uri)
-            }
-        }
+        var dayCodeFromNotification = intent?.getIntExtra(DAY_CODE,0)
+//        if (intent?.action == Intent.ACTION_VIEW && intent.data != null) {
+//
+//            val uri = intent.data
+//            if (uri.authority == "com.android.calendar") {
+//                // clicking date on a third party widget: content://com.android.calendar/time/1507309245683
+//                if (intent?.extras?.getBoolean("DETAIL_VIEW", false) == true) {
+//                    val timestamp = uri.pathSegments.last()
+//                    if (timestamp.areDigitsOnly()) {
+//                        openDayAt(timestamp.toLong())
+//                        return
+//                    }
+//                }
+//            } else {
+//                tryImportEventsFromFile(uri)
+//            }
+//        }
 
         if (!checkOpenIntents()) {
             updateView(config.storedView)
@@ -131,7 +132,10 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
 
         Thread {
-           IcsImporter(this).download_Import()
+           if (dayCodeFromNotification!=0)
+               IcsImporter(this,true).download_Import()
+           else
+               IcsImporter(this).download_Import()
         }.start()
 //        handlePermission(PERMISSION_WRITE_CALENDAR) {
 //            if (it) {
@@ -296,7 +300,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
 
         //syncCalDAVCalendars(this, calDAVSyncObserver)
-        scheduleCalDAVSync(true)
+        //scheduleCalDAVSync(true)
     }
 
     private val calDAVSyncObserver = object : ContentObserver(Handler()) {
