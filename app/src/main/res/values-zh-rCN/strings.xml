@@ -186,6 +186,7 @@
     <string name="import_successfully">导入成功</string>
     <string name="import_some_failed">部分导入失败</string>
     <string name="import_failed">导入失败</string>
+    <string name="importing">请保持网络畅通，下载导入数据中..</string>
 
     <!-- Settings -->
     <string name="manage_event_types">管理事件类型</string>

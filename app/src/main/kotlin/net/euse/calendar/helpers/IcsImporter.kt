@@ -1,12 +1,14 @@
 package net.euse.calendar.helpers
 
 import android.content.Context
+import android.os.AsyncTask
 import android.util.Log
 import android.widget.Toast
 import at.bitfire.icsdroid.Constants
 import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.toast
 import net.euse.calendar.R
+import net.euse.calendar.activities.MainActivity
 import net.euse.calendar.activities.SimpleActivity
 import net.euse.calendar.extensions.config
 import net.euse.calendar.extensions.dbHelper
@@ -19,7 +21,7 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-class IcsImporter(val activity: SimpleActivity,val fromNotiticationClick:Boolean=false) {
+class IcsImporter(val activity: SimpleActivity,val fromNotiticationClick:Boolean=false):AsyncTask<Void,Void,Boolean>() {
     enum class ImportResult {
         IMPORT_FAIL, IMPORT_OK, IMPORT_PARTIAL,IMPORT_IGNORED
     }
@@ -50,13 +52,18 @@ class IcsImporter(val activity: SimpleActivity,val fromNotiticationClick:Boolean
     private var eventsFailed = 0
     private var eventsTotal=0
 
-    fun download_Import(){
+    override fun doInBackground(vararg params: Void?): Boolean {
         var url=URL(SKCAL_URL)
         var conn = url.openConnection()
         var inputStream:InputStream?=null
 
         var followRedirect = false
         var redirect = 0
+
+        var result=ImportResult.IMPORT_FAIL
+
+        if (!fromNotiticationClick) activity.toast(R.string.importing)
+
         do {
             try {
                 if (conn is HttpURLConnection) {
@@ -72,7 +79,7 @@ class IcsImporter(val activity: SimpleActivity,val fromNotiticationClick:Boolean
 
                         conn.disconnect()   // don't read input stream
                         conn = null
-                        return
+                        return false
                     } else {
                         // handle redirects
                         val location = conn.getHeaderField("Location")
@@ -94,7 +101,7 @@ class IcsImporter(val activity: SimpleActivity,val fromNotiticationClick:Boolean
                         conn.disconnect()
                         conn = null
                         activity.showErrorToast("connection failed with statusCode$statusCode,please check and retry")
-                        return
+                        return false
                     }
                 } else
                 // local file, always simulate HTTP status 200 OK
@@ -110,8 +117,7 @@ class IcsImporter(val activity: SimpleActivity,val fromNotiticationClick:Boolean
         try {
             inputStream=conn?.getInputStream()
             if (inputStream!=null) {
-                val result = importEvents(inputStream)
-                if (!fromNotiticationClick) handleParseResult(result)
+                 result = importEvents(inputStream)
             }
             else
                 activity.showErrorToast("no inputstream got")
@@ -124,6 +130,12 @@ class IcsImporter(val activity: SimpleActivity,val fromNotiticationClick:Boolean
         } finally {
             (conn as? HttpURLConnection)?.disconnect()
         }
+
+        if (!fromNotiticationClick) handleParseResult(result)
+        if (result==IMPORT_OK)
+            return true
+        else
+            return false
     }
 
     private fun importEvents(inputStream: InputStream, defaultEventType: Int=0, calDAVCalendarId: Int=0): ImportResult {
@@ -325,4 +337,7 @@ class IcsImporter(val activity: SimpleActivity,val fromNotiticationClick:Boolean
         }, Toast.LENGTH_LONG)
     }
 
+    override fun onPostExecute(result: Boolean?) {
+        (activity as MainActivity).refreshViewPager()
+    }
 }

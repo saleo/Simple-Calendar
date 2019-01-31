@@ -131,12 +131,8 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             config.httpResonponseCacheInstalled=false
         }
 
-        Thread {
-           if (dayCodeFromNotification!=0)
-               IcsImporter(this,true).download_Import()
-           else
-               IcsImporter(this).download_Import()
-        }.start()
+       IcsImporter(this,dayCodeFromNotification!=0).execute()
+
 //        handlePermission(PERMISSION_WRITE_CALENDAR) {
 //            if (it) {
 //                handlePermission(PERMISSION_READ_CALENDAR) {
@@ -495,7 +491,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         else -> MonthFragmentsHolder()
     }
 
-    private fun refreshViewPager() {
+    fun refreshViewPager() {
         runOnUiThread {
             if (!isActivityDestroyed()) {
                 val f=currentFragments.last()
