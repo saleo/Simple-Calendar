@@ -131,7 +131,8 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             config.httpResonponseCacheInstalled=false
         }
 
-       IcsImporter(this,dayCodeFromNotification!=0).execute()
+        if (dayCodeFromNotification==0)
+            IcsImporter(this).execute()
 
 //        handlePermission(PERMISSION_WRITE_CALENDAR) {
 //            if (it) {
@@ -802,5 +803,15 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             bottom_sentense1.text=mBottomSentences[3*(iMonth-1)+1]
             bottom_sentense2.text=mBottomSentences[3*(iMonth-1)+2]
         }
+    }
+
+    fun processProgressBar(phase:Int,downloadStatus:String?="") {
+            when (phase) {
+                SHOW_PROGRESSBAR -> ll_progressbar.visibility=View.VISIBLE
+                DISMISS_PROGRESSBAR -> ll_progressbar.visibility=View.GONE
+                else -> {
+                    txt_download_status.text = downloadStatus
+                }
+            }
     }
 }

@@ -21,7 +21,7 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-class IcsImporter(val activity: SimpleActivity,val fromNotiticationClick:Boolean=false):AsyncTask<Void,Void,Boolean>() {
+class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>() {
     enum class ImportResult {
         IMPORT_FAIL, IMPORT_OK, IMPORT_PARTIAL,IMPORT_IGNORED
     }
@@ -62,7 +62,7 @@ class IcsImporter(val activity: SimpleActivity,val fromNotiticationClick:Boolean
 
         var result=ImportResult.IMPORT_FAIL
 
-        if (!fromNotiticationClick) activity.toast(R.string.importing)
+        publishProgress(activity.getString(R.string.downloading_importing)+"-1")
 
         do {
             try {
@@ -114,6 +114,8 @@ class IcsImporter(val activity: SimpleActivity,val fromNotiticationClick:Boolean
             redirect++
         } while (followRedirect && redirect < Constants.MAX_REDIRECTS)
 
+        publishProgress(activity.getString(R.string.downloading_importing)+"-2")
+
         try {
             inputStream=conn?.getInputStream()
             if (inputStream!=null) {
@@ -131,7 +133,7 @@ class IcsImporter(val activity: SimpleActivity,val fromNotiticationClick:Boolean
             (conn as? HttpURLConnection)?.disconnect()
         }
 
-        if (!fromNotiticationClick) handleParseResult(result)
+        handleParseResult(result)
         if (result==IMPORT_OK)
             return true
         else
@@ -139,7 +141,6 @@ class IcsImporter(val activity: SimpleActivity,val fromNotiticationClick:Boolean
     }
 
     private fun importEvents(inputStream: InputStream, defaultEventType: Int=0, calDAVCalendarId: Int=0): ImportResult {
-        var eventsToAddNotify:ArrayList<Event>
         try {
             activity.dbHelper.deleteImportedEvents()
             Log.d(APP_TAG,"import events deleted")
@@ -337,7 +338,18 @@ class IcsImporter(val activity: SimpleActivity,val fromNotiticationClick:Boolean
         }, Toast.LENGTH_LONG)
     }
 
+    override fun onPreExecute() {
+        (activity as MainActivity).processProgressBar(SHOW_PROGRESSBAR)
+    }
+
+    override fun onProgressUpdate(vararg values: String?) {
+        (activity as MainActivity).processProgressBar(UPDATE_PROGRESSBAR,values[0])
+    }
+
     override fun onPostExecute(result: Boolean?) {
-        (activity as MainActivity).refreshViewPager()
+        (activity as MainActivity).apply{
+            refreshViewPager()
+            processProgressBar(DISMISS_PROGRESSBAR)
+        }
     }
 }

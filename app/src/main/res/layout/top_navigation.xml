@@ -34,7 +34,27 @@
         android:textSize="20dp"
         android:textColor="@color/default_holidays_color"
         android:text="10日" />
-
+    <LinearLayout
+        android:id="@+id/ll_progressbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/img_top"
+        android:gravity="center">
+        <android.widget.ProgressBar
+            android:id="@+id/pgb_download"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            style="@android:style/Widget.ProgressBar.Small"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/txt_download_status"
+            android:text="downloading_importing"
+            android:textColor="@color/default_holidays_color"
+            android:textSize="@dimen/normal_text_size"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/yearly_padding_full"/>
+    </LinearLayout>
     <!--<com.simplemobiletools.commons.views.MyTextView-->
         <!--android:id="@+id/top_value"-->
         <!--style="@style/MonthStyle"-->

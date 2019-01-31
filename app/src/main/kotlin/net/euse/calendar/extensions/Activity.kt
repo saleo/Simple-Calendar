@@ -2,22 +2,21 @@ package net.euse.calendar.extensions
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Point
 import android.view.WindowManager
-import net.euse.calendar.BuildConfig
-import net.euse.calendar.R
-import net.euse.calendar.activities.MainActivity
-import net.euse.calendar.dialogs.CustomEventReminderDialog
-import net.euse.calendar.dialogs.CustomEventRepeatIntervalDialog
-import net.euse.calendar.helpers.*
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.RadioGroupDialog
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.models.FileDirItem
 import com.simplemobiletools.commons.models.RadioItem
 import kotlinx.android.synthetic.main.bottom_buttonbar.*
+import net.euse.calendar.BuildConfig
+import net.euse.calendar.R
+import net.euse.calendar.activities.MainActivity
+import net.euse.calendar.dialogs.CustomEventReminderDialog
+import net.euse.calendar.dialogs.CustomEventRepeatIntervalDialog
+import net.euse.calendar.helpers.*
 import org.joda.time.DateTime
 import java.io.File
 import java.util.TreeSet
@@ -147,21 +146,26 @@ fun Activity.setupBottomButtonBar(time:DateTime) {
         ib_bcc_share.setOnClickListener {
             shareScreen()
         }
+//
+//        ib_bcc_recommend.setOnClickListener {
+//            val appName = getString(R.string.app_name)
+//            val text = String.format(getString(R.string.share_text), appName, getString(R.string.my_website))
+//            Intent().apply {
+//                action = Intent.ACTION_SEND
+//                putExtra(Intent.EXTRA_SUBJECT, appName)
+//                putExtra(Intent.EXTRA_TEXT, text)
+//                type = "text/plain"
+//                startActivity(Intent.createChooser(this, getString(R.string.invite_via)))
+//            }
+//
+//        }
 
-        ib_bcc_recommend.setOnClickListener {
-            val appName = getString(R.string.app_name)
-            val text = String.format(getString(R.string.share_text), appName, getString(R.string.my_website))
-            Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_SUBJECT, appName)
-                putExtra(Intent.EXTRA_TEXT, text)
-                type = "text/plain"
-                startActivity(Intent.createChooser(this, getString(R.string.invite_via)))
-            }
-
-        }
         ib_bcc_list.setOnClickListener {
             (this as MainActivity).openFragmentHolder(time, EVENTS_LIST_VIEW)
+        }
+
+        ib_bcc_exit.setOnClickListener {
+            this.finish()
         }
 }
 
