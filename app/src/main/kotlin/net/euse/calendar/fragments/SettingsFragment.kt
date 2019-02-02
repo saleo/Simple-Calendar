@@ -14,6 +14,9 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import cn.carbs.android.gregorianlunarcalendar.library.data.ChineseCalendar
+import com.simplemobiletools.commons.dialogs.ConfirmationDialog
+import com.simplemobiletools.commons.extensions.*
+import kotlinx.android.synthetic.main.fragment_settings.*
 import net.euse.calendar.R
 import net.euse.calendar.activities.MainActivity
 import net.euse.calendar.adapters.CustomizeEventsAdapter
@@ -23,12 +26,9 @@ import net.euse.calendar.extensions.*
 import net.euse.calendar.helpers.*
 import net.euse.calendar.helpers.Formatter
 import net.euse.calendar.models.Event
-import com.simplemobiletools.commons.dialogs.ConfirmationDialog
-import com.simplemobiletools.commons.extensions.*
-import kotlinx.android.synthetic.main.fragment_settings.rv_customize_events1 as rv_customize_event
-import kotlinx.android.synthetic.main.fragment_settings.*
 import org.joda.time.DateTime
 import java.util.*
+import kotlinx.android.synthetic.main.fragment_settings.rv_customize_events1 as rv_customize_event
 
 class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,View.OnClickListener {
     private val GET_RINGTONE_URI = 1
@@ -245,13 +245,9 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
             setupVibrate(reminderOnOff)
             setupReminderSound(reminderOnOff)
             if (reminderOnOff)
-                Thread {
-                    activity!!.processEventRemindersNotification(activity!!.dbHelper.getEventsToExport(false))
-                }.start()
+                context!!.scheduleEventsReminder(SCHEDULE_ACTIVE)
             else
-                Thread {
-                    activity!!.cancelAllNotification()
-                }.start()
+                context!!.scheduleEventsReminder(SCHEDULE_CANCEL)
         }
     }
 
@@ -413,11 +409,7 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
 
         if (reminderTs != activity!!.config.reminderTs){
             activity!!.config.reminderTs = reminderTs
-            // no need check config.reminderSwitch=true since program cannot come here if the switch is off
-            Thread {
-                activity!!.processEventRemindersNotification(activity!!.dbHelper.getEventsToExport(false))
-            }.start()
-
+            context!!.scheduleEventsReminder(SCHEDULE_ACTIVE_AFTER_CANCEL)
             context!!.toast(R.string.reminder_time_udpated)
         }
     }

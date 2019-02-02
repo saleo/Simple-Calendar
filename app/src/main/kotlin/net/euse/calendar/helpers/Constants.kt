@@ -63,7 +63,7 @@ const val DISPLAY_PAST_EVENTS = "display_past_events"
 const val REPLACE_DESCRIPTION = "replace_description"
 const val USE_SAME_SNOOZE = "use_same_snooze"
 const val REMINDER_UNIFIED_TIME = "reminder_unified_time"
-const val CURRENT_REMINDER_MINUTES ="current_reminder_minutes"
+const val REMINDER_TIME_DOWNLOADIMPORT = "reminder_downloadimport_time"
 const val NOTIFICATON_IDS="notification_ids"
 const val HTTPRESONPONSECACHE_INSTALLED="httpResonponseCache_Installed"
 
@@ -205,3 +205,12 @@ const val LI_RELEVANT_DAY=-3
 const val SHOW_PROGRESSBAR=1
 const val DISMISS_PROGRESSBAR=2
 const val UPDATE_PROGRESSBAR=3
+
+const val SCHEDULE_ACTIVE=1
+const val SCHEDULE_CANCEL=2
+const val SCHEDULE_ACTIVE_AFTER_CANCEL=3
+
+const val REPEAT_DOWNLOAD_IMPORT_RESULT="repeatDownloadImportResult"
+
+const val  REPEAT_DOWNLOAD_IMPORT_SUCCESS="success"
+const val  REPEAT_DOWNLOAD_IMPORT_FAIL="fail"

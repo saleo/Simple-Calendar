@@ -97,16 +97,17 @@ class Config(context: Context) : BaseConfig(context) {
 
     var reminderTs:Int
         get()= prefs.getInt(REMINDER_UNIFIED_TIME, REMINDER_INITIAL_TS)//20:00 per day
-        //get() = 11*3600+13*60
+        //get() = 11*3600+14*60
         set(unifiedReminderTs) = prefs.edit().putInt(REMINDER_UNIFIED_TIME,unifiedReminderTs).apply()
+
+    var reminderTsForDownloadImport:Int
+    //get()= prefs.getInt(REMINDER_TIME_DOWNLOADIMPORT, REMINDER_INITIAL_TS_PLUS_210MIN)//23:30 per day
+        get() = 11*3600+2*60
+        set(unifiedReminderTs) = prefs.edit().putInt(REMINDER_TIME_DOWNLOADIMPORT,unifiedReminderTs).apply()
 
     var ntfIDs: String
         get() = prefs.getString(NOTIFICATON_IDS, "")
         set(ntfIDs) = prefs.edit().putString(NOTIFICATON_IDS, ntfIDs).apply()
-
-    var httpResonponseCacheInstalled: Boolean
-        get() = prefs.getBoolean(HTTPRESONPONSECACHE_INSTALLED, false)
-        set(httpResonponseCacheInstalled) = prefs.edit().putBoolean(HTTPRESONPONSECACHE_INSTALLED, httpResonponseCacheInstalled).apply()
 
     fun getSyncedCalendarIdsAsList() = caldavSyncedCalendarIDs.split(",").filter { it.trim().isNotEmpty() } as ArrayList<String>
 

@@ -46,9 +46,7 @@ import net.euse.calendar.helpers.Formatter
 import net.euse.calendar.models.Event
 import net.euse.calendar.models.EventType
 import org.joda.time.DateTime
-import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -88,9 +86,10 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         appLaunched()
-        if (baseConfig.appRunCount==1)
-            config.reminderTs= REMINDER_INITIAL_TS
-
+        if (baseConfig.appRunCount==1) {
+            config.reminderTs = REMINDER_INITIAL_TS
+            config.reminderTsForDownloadImport = REMINDER_INITIAL_TS_PLUS_210MIN
+        }
         checkWhatsNewDialog()
         //calendar_fab.beVisibleIf(config.storedView != YEARLY_VIEW)
 
@@ -99,7 +98,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
-        var dayCodeFromNotification = intent?.getIntExtra(DAY_CODE,0)
 //        if (intent?.action == Intent.ACTION_VIEW && intent.data != null) {
 //
 //            val uri = intent.data
@@ -121,18 +119,11 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             updateView(config.storedView)
         }
 
-        try {
-            val httpCacheDir = File(cacheDir, "http")
-            val httpCacheSize = (10 * 1024 * 1024).toLong() // 10 MiB
-            HttpResponseCache.install(httpCacheDir, httpCacheSize)
-            config.httpResonponseCacheInstalled=true
-        } catch (e: IOException) {
-            Log.i(APP_TAG, "HTTP response cache installation failed:$e")
-            config.httpResonponseCacheInstalled=false
-        }
-
-        if (dayCodeFromNotification==0)
+        if (baseConfig.appRunCount==1){
             IcsImporter(this).execute()
+            scheduleEventsReminder()
+            //scheduleDownloadImport(true)
+        }
 
 //        handlePermission(PERMISSION_WRITE_CALENDAR) {
 //            if (it) {
@@ -175,7 +166,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
 
         getStoredStateVariables()
-
     }
 
     override fun onPause() {
@@ -496,10 +486,8 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         runOnUiThread {
             if (!isActivityDestroyed()) {
                 val f=currentFragments.last()
-                if (f is MyFragmentHolder) {
-                    refreshCalDAVCalendars(false)
+                if (f is MyFragmentHolder)
                     f.refreshEvents()
-                }
             }
         }
     }

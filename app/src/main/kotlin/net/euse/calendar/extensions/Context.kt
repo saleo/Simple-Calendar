@@ -36,13 +36,14 @@ import net.euse.calendar.activities.SnoozeReminderActivity
 import net.euse.calendar.helpers.*
 import net.euse.calendar.helpers.Formatter
 import net.euse.calendar.models.*
-import net.euse.calendar.receivers.CalDAVSyncReceiver
+import net.euse.calendar.receivers.DownloadImportReceiver
 import net.euse.calendar.receivers.NotificationReceiver
 import net.euse.calendar.services.PostponeService
 import net.euse.calendar.services.SnoozeService
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import java.io.File
+import java.lang.Math.random
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -79,12 +80,29 @@ fun Context.updateListWidget() {
     }
 }
 
-fun Context.scheduleAllEvents(event_source:String=SOURCE_ALL) {
-    var events = dbHelper.getEventsAfterward()
-    if (event_source!= SOURCE_ALL)
-        events.filter { it.source == SOURCE_IMPORTED_ICS }
+fun Context.scheduleEventsReminder(option:Int=SCHEDULE_ACTIVE) {
+    val notifyIntent = Intent(applicationContext, NotificationReceiver::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(applicationContext, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+    val alarm = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    processEventRemindersNotification(events  as ArrayList<Event>)
+    if (option == SCHEDULE_CANCEL || option == SCHEDULE_ACTIVE_AFTER_CANCEL)
+        alarm.cancel(pendingIntent)
+
+    if (option != SCHEDULE_CANCEL) {
+        //val checkInterval = 1 * AlarmManager.INTERVAL_DAY
+        val checkInterval = 3*60*1000L // 2 minute
+        try {
+                val daycode=Formatter.getDayCodeFromDateTime(DateTime())
+                val dayStartTs=Formatter.getDayStartTS(daycode)
+                val currentDayReminderDateTime=Formatter.getDateTimeFromTS(dayStartTs+config.reminderTs)
+                if (currentDayReminderDateTime.isAfterNow)
+                    alarm.setRepeating(AlarmManager.RTC_WAKEUP, currentDayReminderDateTime.millis, checkInterval, pendingIntent)
+                else
+                    alarm.setRepeating(AlarmManager.RTC_WAKEUP, currentDayReminderDateTime.plusDays(1).millis, checkInterval, pendingIntent)
+
+        } catch (ignored: SecurityException) {
+        }
+    }
 }
 
 fun Context.scheduleNextEventReminder(event: Event?, dbHelper: DBHelper) {
@@ -228,7 +246,7 @@ private fun buildGroupedNotification(context: Context, pendingIntent: PendingInt
         NotificationChannel(channelId, name, importance).apply {
             enableLights(true)
             lightColor = Color.RED
-            enableVibration(false)
+            enableVibration(context.config.vibrateOnReminder)
             notificationManager.createNotificationChannel(this)
         }
     }
@@ -377,7 +395,7 @@ fun Context.recheckCalDAVCalendars(callback: () -> Unit) {
 }
 
 fun Context.scheduleCalDAVSync(activate: Boolean) {
-    val syncIntent = Intent(applicationContext, CalDAVSyncReceiver::class.java)
+    val syncIntent = Intent(applicationContext, DownloadImportReceiver::class.java)
     val pendingIntent = PendingIntent.getBroadcast(applicationContext, 0, syncIntent, PendingIntent.FLAG_UPDATE_CURRENT)
     val alarm = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
@@ -634,4 +652,85 @@ private fun isLiReleventDay(year:Int,month:Int,day:Int):Boolean{
             return true
     }
     return false
+}
+
+fun Context.scheduleDownloadImport(activate: Boolean) {
+    val downloadImportIntent = Intent(applicationContext, DownloadImportReceiver::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(applicationContext, 0, downloadImportIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+    val alarm = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+    if (activate) {
+        //val checkInterval = 30 * AlarmManager.INTERVAL_DAY
+        val checkInterval = 3*60*1000L // 2 minute
+        try {
+            val daycode=Formatter.getDayCodeFromDateTime(DateTime())
+            val dayStartTs=Formatter.getDayStartTS(daycode)
+            val currentDayReminderDateTime=Formatter.getDateTimeFromTS(dayStartTs+config.reminderTsForDownloadImport)
+            if (currentDayReminderDateTime.isAfterNow)
+                alarm.setRepeating(AlarmManager.RTC_WAKEUP, currentDayReminderDateTime.millis, checkInterval, pendingIntent)
+            else
+                alarm.setRepeating(AlarmManager.RTC_WAKEUP, currentDayReminderDateTime.plusDays(1).millis, checkInterval, pendingIntent)
+
+        } catch (ignored: SecurityException) {
+        }
+    }
+    else
+        alarm.cancel(pendingIntent)
+}
+
+fun Context.notifyDownloadImportResult(result: Boolean){
+    val intent = Intent(this, MainActivity::class.java)
+    val pendingIntent=PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    var notification:Notification
+    if (result)
+        notification = buildNotifationForDownloadImport(applicationContext, pendingIntent, "", getString(R.string.import_successfully))
+    else
+        notification = buildNotifationForDownloadImport(applicationContext, pendingIntent, "", getString(R.string.import_failed))
+
+    val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    notificationManager.notify(random().toInt(), notification)
+}
+
+@SuppressLint("NewApi")
+private fun buildNotifationForDownloadImport(context: Context, pendingIntent: PendingIntent, content: String, title:String): Notification {
+    val channelId = "reminder_channel"
+    if (isOreoPlus()) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val name = context.resources.getString(R.string.event_reminders)
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        NotificationChannel(channelId, name, importance).apply {
+            enableLights(true)
+            enableVibration(context.config.vibrateOnReminder)
+            notificationManager.createNotificationChannel(this)
+        }
+    }
+
+    var soundUri = Uri.parse(context.config.reminderSound)
+    if (soundUri.scheme == "file") {
+        try {
+            soundUri = context.getFilePublicUri(File(soundUri.path), BuildConfig.APPLICATION_ID)
+        } catch (ignored: Exception) {
+        }
+    }
+
+    val builder = NotificationCompat.Builder(context)
+            .setContentTitle(title)
+            .setContentText(content)
+            .setSmallIcon(R.drawable.ic_calendar)
+            .setContentIntent(pendingIntent)
+            .setPriority(Notification.PRIORITY_HIGH)
+            .setDefaults(Notification.DEFAULT_LIGHTS)
+            .setAutoCancel(true)
+            .setSound(soundUri)
+            .setChannelId(channelId)
+
+    if (isLollipopPlus()) {
+        builder.setVisibility(Notification.VISIBILITY_PUBLIC)
+    }
+
+    if (context.config.vibrateOnReminder) {
+        builder.setVibrate(longArrayOf(0, 300, 300, 300))
+    }
+
+    return builder.build()
 }

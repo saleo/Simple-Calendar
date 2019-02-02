@@ -1,25 +1,17 @@
 package net.euse.calendar.helpers
 
 import android.content.Context
-import android.os.AsyncTask
 import android.util.Log
-import android.widget.Toast
 import at.bitfire.icsdroid.Constants
-import com.simplemobiletools.commons.extensions.showErrorToast
-import com.simplemobiletools.commons.extensions.toast
-import net.euse.calendar.R
-import net.euse.calendar.activities.MainActivity
-import net.euse.calendar.activities.SimpleActivity
 import net.euse.calendar.extensions.dbHelper
-import net.euse.calendar.helpers.IcsImporter.ImportResult.*
+import net.euse.calendar.helpers.IcsImporter.ImportResult.IMPORT_OK
 import net.euse.calendar.models.Event
-import net.euse.calendar.models.EventType
 import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>() {
+class RepeatIcsImporter(val context: Context) {
     enum class ImportResult {
         IMPORT_FAIL, IMPORT_OK, IMPORT_PARTIAL,IMPORT_IGNORED
     }
@@ -50,7 +42,7 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
     private var eventsFailed = 0
     private var eventsTotal=0
 
-    override fun doInBackground(vararg params: Void?): Boolean {
+    fun download_import(): Boolean {
         var url=URL(SKCAL_URL)
         var conn = url.openConnection()
         var inputStream:InputStream?
@@ -60,8 +52,6 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
 
         var result=ImportResult.IMPORT_FAIL
 
-        publishProgress(activity.getString(R.string.downloading_importing)+"-1")
-
         do {
             try {
                 if (conn is HttpURLConnection) {
@@ -70,7 +60,6 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
                     conn.instanceFollowRedirects = false
 
                     val statusCode = conn.responseCode
-
 
                     // handle redirects
                     val location = conn.getHeaderField("Location")
@@ -90,7 +79,6 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
                     if (conn is HttpURLConnection && statusCode != HttpURLConnection.HTTP_OK) {
                         conn.disconnect()
                         conn = null
-                        activity.showErrorToast("connection failed with statusCode$statusCode,please check and retry")
                         return false
                     }
                 } else
@@ -99,31 +87,23 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
 
             } catch(e: IOException) {
                 Log.e(APP_TAG, "Couldn't fetch calendar", e)
-                activity.showErrorToast(e, Toast.LENGTH_LONG)
             }
             redirect++
         } while (followRedirect && redirect < Constants.MAX_REDIRECTS)
-
-        publishProgress(activity.getString(R.string.downloading_importing)+"-2")
 
         try {
             inputStream=conn?.getInputStream()
             if (inputStream!=null) {
                  result = importEvents(inputStream)
             }
-            else
-                activity.showErrorToast("no inputstream got")
         } catch(e: IOException) {
             Log.e(APP_TAG, "Couldn't read calendar", e)
-            activity.showErrorToast(e, Toast.LENGTH_LONG)
         } catch(e: Exception) {
             Log.e(APP_TAG, "Couldn't process calendar", e)
-            activity.showErrorToast(e, Toast.LENGTH_LONG)
         } finally {
             (conn as? HttpURLConnection)?.disconnect()
         }
 
-        handleParseResult(result)
         if (result==IMPORT_OK)
             return true
         else
@@ -132,7 +112,7 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
 
     private fun importEvents(inputStream: InputStream, defaultEventType: Int=0, calDAVCalendarId: Int=0): ImportResult {
         try {
-            activity.dbHelper.deleteImportedEvents()
+            context.dbHelper.deleteImportedEvents()
             Log.d(APP_TAG,"import events deleted")
             var prevLine = ""
 
@@ -185,11 +165,6 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
                         isProperReminderAction = line.substring(ACTION.length) == DISPLAY
                     } else if (line.startsWith(TRIGGER)) {
                         curReminderTriggerMinutes = Parser().parseDurationSeconds(line.substring(TRIGGER.length)) / 60
-                    } else if (line.startsWith(CATEGORY_COLOR)) {
-                        curCategoryColor = line.substring(CATEGORY_COLOR.length)
-                    } else if (line.startsWith(CATEGORIES)) {
-                        val categories = line.substring(CATEGORIES.length)
-                        tryAddCategories(categories, activity)
                     } else if (line.startsWith(LAST_MODIFIED)) {
                         curLastModified = getTimestamp(line.substring(LAST_MODIFIED.length)) * 1000L
                     } else if (line.startsWith(EXDATE)) {
@@ -222,7 +197,7 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
                             event.endTS -= DAY_SECONDS
                         }
 
-                        activity.dbHelper.insert(event, true) {
+                        context.dbHelper.insert(event, true) {
                             eventsImported++
                         }
 
@@ -232,15 +207,13 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
                 }
             }
         } catch (e: Exception) {
-            activity.showErrorToast(e, Toast.LENGTH_LONG)
             eventsFailed++
         }
 
-        return when {
-            (eventsImported ==0 )-> IMPORT_FAIL
-            (eventsImported < eventsTotal) -> IMPORT_PARTIAL
-            else -> IMPORT_OK
-        }
+        if (eventsImported < eventsTotal)
+            return ImportResult.IMPORT_FAIL
+        else
+            return ImportResult.IMPORT_OK
     }
 
     private fun getTimestamp(fullString: String): Int {
@@ -256,26 +229,8 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
                 Parser().parseDateTimeValue(fullString.substring(1))
             }
         } catch (e: Exception) {
-            activity.showErrorToast(e, Toast.LENGTH_LONG)
             eventsFailed++
             -1
-        }
-    }
-
-    private fun tryAddCategories(categories: String, context: Context) {
-        val eventTypeTitle = if (categories.contains(",")) {
-            categories.split(",")[0]
-        } else {
-            categories
-        }
-
-        val eventId = context.dbHelper.getEventTypeIdWithTitle(eventTypeTitle)
-        curEventType = if (eventId == -1) {
-            val newTypeColor = if (curCategoryColor == "") context.resources.getColor(R.color.color_primary) else colorInt(curCategoryColor)
-            val eventType = EventType(0, eventTypeTitle, newTypeColor)
-            context.dbHelper.insertEventType(eventType)
-        } else {
-            eventId
         }
     }
 
@@ -314,30 +269,6 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
             "blue" ->(0xff0000ff.toInt())
             "gray" -> (0xff888888.toInt())
             else -> (0)
-        }
-    }
-
-    private fun handleParseResult(result: IcsImporter.ImportResult) {
-        if (result ==  IcsImporter.ImportResult.IMPORT_IGNORED) return
-        activity.toast(when (result) {
-            IcsImporter.ImportResult.IMPORT_OK -> R.string.import_successfully
-            IcsImporter.ImportResult.IMPORT_PARTIAL -> R.string.import_some_failed
-            else -> R.string.import_failed
-        }, Toast.LENGTH_LONG)
-    }
-
-    override fun onPreExecute() {
-        (activity as MainActivity).processProgressBar(SHOW_PROGRESSBAR)
-    }
-
-    override fun onProgressUpdate(vararg values: String?) {
-        (activity as MainActivity).processProgressBar(UPDATE_PROGRESSBAR,values[0])
-    }
-
-    override fun onPostExecute(result: Boolean?) {
-        (activity as MainActivity).apply{
-            refreshViewPager()
-            processProgressBar(DISMISS_PROGRESSBAR)
         }
     }
 }

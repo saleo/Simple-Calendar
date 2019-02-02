@@ -39,7 +39,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/img_top"
-        android:gravity="center">
+        android:gravity="center"
+        android:visibility="gone">
         <android.widget.ProgressBar
             android:id="@+id/pgb_download"
             android:layout_width="wrap_content"
@@ -47,7 +48,7 @@
             style="@android:style/Widget.ProgressBar.Small"/>
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/txt_download_status"
-            android:text="downloading_importing"
+            android:text="@string/downloading_importing"
             android:textColor="@color/default_holidays_color"
             android:textSize="@dimen/normal_text_size"
             android:layout_width="wrap_content"

@@ -1071,4 +1071,31 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         val eventIDs = Array(events.size, { i -> (events[i].id.toString()) })
         deleteEvents(eventIDs, true)
     }
+
+    fun getDayGroupedNotification():GroupedNotification {
+        val selection = "date($COL_START_TS, 'unixepoch', 'localtime') == date('now')"
+        val cols = arrayOf(COL_START_TS, "group_concat($COL_TITLE) as gnTitle", "group_concat($COL_DESCRIPTION) as gnContent",COL_REMINDER_MINUTES)
+        val groupBy = "date($COL_START_TS, 'unixepoch', 'localtime')"
+
+        var cursor: Cursor? = null
+        var gn=GroupedNotification(-1,ntfTms = 0)
+
+        try {
+            cursor = mDb.query(MAIN_TABLE_NAME, cols, selection, null, groupBy, null, null)
+            cursor?.use {
+                if (cursor.moveToFirst() == true) {
+                        val gnId =Formatter.getDayCodeFromTS(cursor.getIntValue(COL_START_TS)).toInt()
+                        val gnTitle = cursor.getStringValue("gnTitle")
+                        val gnContent = cursor.getStringValue("gnContent")
+                        val gnTms=(cursor.getLongValue(COL_START_TS)+context.config.reminderTs)*1000L
+                        gn=GroupedNotification(gnId,gnTitle,gnContent,gnTms)
+                }
+            }
+
+        } finally {
+            cursor?.close()
+        }
+        return gn
+    }
+
 }
