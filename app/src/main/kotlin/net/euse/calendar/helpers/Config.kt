@@ -100,9 +100,9 @@ class Config(context: Context) : BaseConfig(context) {
         //get() = 11*3600+14*60
         set(unifiedReminderTs) = prefs.edit().putInt(REMINDER_UNIFIED_TIME,unifiedReminderTs).apply()
 
-    var reminderTsForDownloadImport:Int
+    var scheduledDownloadImportTimeSeconds:Int
     //get()= prefs.getInt(REMINDER_TIME_DOWNLOADIMPORT, REMINDER_INITIAL_TS_PLUS_210MIN)//23:30 per day
-        get() = 11*3600+2*60
+        get() = 16*3600+9*60
         set(unifiedReminderTs) = prefs.edit().putInt(REMINDER_TIME_DOWNLOADIMPORT,unifiedReminderTs).apply()
 
     var ntfIDs: String

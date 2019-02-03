@@ -125,7 +125,7 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".receivers.DownloadImportReceiver"/>
+        <!--<receiver android:name=".receivers.DownloadImportReceiver"/>-->
 
         <provider
             android:name="android.support.v4.content.FileProvider"

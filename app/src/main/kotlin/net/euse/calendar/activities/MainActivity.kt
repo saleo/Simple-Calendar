@@ -90,7 +90,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         appLaunched()
         if (baseConfig.appRunCount==1) {
             config.reminderTs = REMINDER_INITIAL_TS
-            config.reminderTsForDownloadImport = REMINDER_INITIAL_TS_PLUS_210MIN
+            config.scheduledDownloadImportTimeSeconds = REMINDER_INITIAL_TS_PLUS_210MIN
         }
 
         getStoredStateVariables()
@@ -125,7 +125,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
         if (config.lastLaunchMilliSeconds<upTimeMillisSeconds){
             if (config.reminderSwitch) scheduleEventsReminder()
-            //scheduleDownloadImport(true)
+//            scheduleDownloadImport(true)
             config.lastLaunchMilliSeconds= currentTimeMillis()
         }
 

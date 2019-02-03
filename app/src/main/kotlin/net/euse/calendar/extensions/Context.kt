@@ -665,7 +665,7 @@ fun Context.scheduleDownloadImport(activate: Boolean) {
         try {
             val daycode=Formatter.getDayCodeFromDateTime(DateTime())
             val dayStartTs=Formatter.getDayStartTS(daycode)
-            val currentDayReminderDateTime=Formatter.getDateTimeFromTS(dayStartTs+config.reminderTsForDownloadImport)
+            val currentDayReminderDateTime=Formatter.getDateTimeFromTS(dayStartTs+config.scheduledDownloadImportTimeSeconds)
             if (currentDayReminderDateTime.isAfterNow)
                 alarm.setRepeating(AlarmManager.RTC_WAKEUP, currentDayReminderDateTime.millis, checkInterval, pendingIntent)
             else
