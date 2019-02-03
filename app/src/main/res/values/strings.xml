@@ -176,6 +176,10 @@
     <string name="holidays_imported_successfully">Holidays have been successfully imported into a new event type</string>
     <string name="importing_some_holidays_failed">Importing some events failed</string>
     <string name="importing_holidays_failed">Importing holidays failed</string>
+    <string name="import_successfully">Importing success</string>
+    <string name="import_some_failed">Importing partialy failed</string>
+    <string name="import_failed">Import failed</string>
+    <string name="downloading_importing">Please keep network,downloading..</string>
 
     <!-- Settings -->
     <string name="manage_event_types">Manage event types</string>

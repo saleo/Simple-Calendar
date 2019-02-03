@@ -109,6 +109,17 @@ class Config(context: Context) : BaseConfig(context) {
         get() = prefs.getString(NOTIFICATON_IDS, "")
         set(ntfIDs) = prefs.edit().putString(NOTIFICATON_IDS, ntfIDs).apply()
 
+    var lastSuccessfulDataImportMilliSeconds:Long
+        get()= prefs.getLong(LAST_SUCCESSFUL_DATA_IMPORT_TIME, -1)
+    //get() = 11*3600+14*60
+        set(lastSuccessfulDataImportMilliSeconds) = prefs.edit().putLong(LAST_SUCCESSFUL_DATA_IMPORT_TIME,lastSuccessfulDataImportMilliSeconds).apply()
+
+    var lastLaunchMilliSeconds:Long
+        get()= prefs.getLong(LAST_LAUNCH_TIME, -1)
+    //get() = 11*3600+14*60
+        set(lastLaunchMilliSeconds) = prefs.edit().putLong(LAST_LAUNCH_TIME,lastLaunchMilliSeconds).apply()
+
+
     fun getSyncedCalendarIdsAsList() = caldavSyncedCalendarIDs.split(",").filter { it.trim().isNotEmpty() } as ArrayList<String>
 
     fun getNtfIdsAsList() = ntfIDs.split(",").filter { it.trim().isNotEmpty() } as ArrayList<String>

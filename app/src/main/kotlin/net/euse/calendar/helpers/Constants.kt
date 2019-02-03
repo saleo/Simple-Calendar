@@ -67,6 +67,10 @@ const val REMINDER_TIME_DOWNLOADIMPORT = "reminder_downloadimport_time"
 const val NOTIFICATON_IDS="notification_ids"
 const val HTTPRESONPONSECACHE_INSTALLED="httpResonponseCache_Installed"
 
+const val LAST_SUCCESSFUL_DATA_IMPORT_TIME="last_successful_data_import_time"
+const val LAST_LAUNCH_TIME="last_launch_time"
+
+
 val letterIDs = intArrayOf(R.string.sunday_letter, R.string.monday_letter, R.string.tuesday_letter, R.string.wednesday_letter,
         R.string.thursday_letter, R.string.friday_letter, R.string.saturday_letter)
 

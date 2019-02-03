@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="net.euse.calendar"
-    android:installLocation="auto">
+    android:installLocation="internalOnly">
 
 
     <uses-permission android:name="android.permission.READ_CALENDAR"/>
@@ -121,7 +121,7 @@
 
         <receiver android:name=".receivers.BootCompletedReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.ACTION_BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
 

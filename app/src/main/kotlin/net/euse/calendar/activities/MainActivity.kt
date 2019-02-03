@@ -11,6 +11,7 @@ import android.net.Uri
 import android.net.http.HttpResponseCache
 import android.os.Bundle
 import android.os.Handler
+import android.os.SystemClock
 import android.provider.CalendarContract
 import android.provider.ContactsContract
 import android.support.v4.app.Fragment
@@ -47,6 +48,7 @@ import net.euse.calendar.models.Event
 import net.euse.calendar.models.EventType
 import org.joda.time.DateTime
 import java.io.FileOutputStream
+import java.lang.System.currentTimeMillis
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -90,8 +92,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             config.reminderTs = REMINDER_INITIAL_TS
             config.reminderTsForDownloadImport = REMINDER_INITIAL_TS_PLUS_210MIN
         }
-        checkWhatsNewDialog()
-        //calendar_fab.beVisibleIf(config.storedView != YEARLY_VIEW)
 
         getStoredStateVariables()
         if (resources.getBoolean(R.bool.portrait_only)) {
@@ -119,11 +119,16 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             updateView(config.storedView)
         }
 
-        if (baseConfig.appRunCount==1){
+        val upTimeMillisSeconds= currentTimeMillis()- SystemClock.elapsedRealtime()
+        if (config.lastSuccessfulDataImportMilliSeconds<upTimeMillisSeconds)
             IcsImporter(this).execute()
-            scheduleEventsReminder()
+
+        if (config.lastLaunchMilliSeconds<upTimeMillisSeconds){
+            if (config.reminderSwitch) scheduleEventsReminder()
             //scheduleDownloadImport(true)
+            config.lastLaunchMilliSeconds= currentTimeMillis()
         }
+
 
 //        handlePermission(PERMISSION_WRITE_CALENDAR) {
 //            if (it) {

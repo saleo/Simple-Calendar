@@ -4,17 +4,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import net.euse.calendar.extensions.config
-import net.euse.calendar.extensions.scheduleEventsReminder
 import net.euse.calendar.helpers.APP_TAG
-import net.euse.calendar.helpers.SCHEDULE_ACTIVE
 
 class BootCompletedReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, arg1: Intent) {
+Log.e(APP_TAG,"111")
         context.apply {
-            if (context.config.reminderSwitch)
-                scheduleEventsReminder(SCHEDULE_ACTIVE)
+Log.e(APP_TAG,"222")
             //scheduleDownloadImport(true)
             //recheckCalDAVCalendars {}
         }

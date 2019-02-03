@@ -10,14 +10,15 @@ import com.simplemobiletools.commons.extensions.toast
 import net.euse.calendar.R
 import net.euse.calendar.activities.MainActivity
 import net.euse.calendar.activities.SimpleActivity
+import net.euse.calendar.extensions.config
 import net.euse.calendar.extensions.dbHelper
-import net.euse.calendar.helpers.IcsImporter.ImportResult.*
 import net.euse.calendar.models.Event
 import net.euse.calendar.models.EventType
 import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
+import java.net.URLConnection
 
 class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>() {
     enum class ImportResult {
@@ -52,18 +53,20 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
 
     override fun doInBackground(vararg params: Void?): Boolean {
         var url=URL(SKCAL_URL)
-        var conn = url.openConnection()
+        var conn: URLConnection?=null
         var inputStream:InputStream?
 
         var followRedirect = false
         var redirect = 0
 
-        var result=ImportResult.IMPORT_FAIL
+        var result=false
 
         publishProgress(activity.getString(R.string.downloading_importing)+"-1")
 
         do {
             try {
+                conn = url.openConnection()
+
                 if (conn is HttpURLConnection) {
                     conn.setRequestProperty("User-Agent", Constants.USER_AGENT)
                     conn.setRequestProperty("Connection", "close")  // workaround for AndroidHttpClient bug, which causes "Unexpected Status Line" exceptions
@@ -90,7 +93,8 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
                     if (conn is HttpURLConnection && statusCode != HttpURLConnection.HTTP_OK) {
                         conn.disconnect()
                         conn = null
-                        activity.showErrorToast("connection failed with statusCode$statusCode,please check and retry")
+                        val str=String.format(activity.getString(R.string.connectin_failed_with_statuscode),statusCode)
+                        activity.showErrorToast(str)
                         return false
                     }
                 } else
@@ -100,6 +104,8 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
             } catch(e: IOException) {
                 Log.e(APP_TAG, "Couldn't fetch calendar", e)
                 activity.showErrorToast(e, Toast.LENGTH_LONG)
+            } catch(e: Exception) {
+                Log.e(APP_TAG, "network or other failure", e)
             }
             redirect++
         } while (followRedirect && redirect < Constants.MAX_REDIRECTS)
@@ -123,14 +129,10 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
             (conn as? HttpURLConnection)?.disconnect()
         }
 
-        handleParseResult(result)
-        if (result==IMPORT_OK)
-            return true
-        else
-            return false
+        return result
     }
 
-    private fun importEvents(inputStream: InputStream, defaultEventType: Int=0, calDAVCalendarId: Int=0): ImportResult {
+    private fun importEvents(inputStream: InputStream, defaultEventType: Int=0, calDAVCalendarId: Int=0): Boolean {
         try {
             activity.dbHelper.deleteImportedEvents()
             Log.d(APP_TAG,"import events deleted")
@@ -237,9 +239,8 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
         }
 
         return when {
-            (eventsImported ==0 )-> IMPORT_FAIL
-            (eventsImported < eventsTotal) -> IMPORT_PARTIAL
-            else -> IMPORT_OK
+            (eventsImported < eventsTotal) -> false
+            else -> true
         }
     }
 
@@ -334,8 +335,17 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
         (activity as MainActivity).processProgressBar(UPDATE_PROGRESSBAR,values[0])
     }
 
-    override fun onPostExecute(result: Boolean?) {
+    override fun onPostExecute(result: Boolean) {
+
         (activity as MainActivity).apply{
+            if (result){
+                toast(R.string.import_successfully,Toast.LENGTH_LONG)
+                config.lastSuccessfulDataImportMilliSeconds = System.currentTimeMillis()
+            }
+            else{
+                toast(R.string.import_failed,Toast.LENGTH_LONG)
+                config.lastSuccessfulDataImportMilliSeconds = -1
+            }
             refreshViewPager()
             processProgressBar(DISMISS_PROGRESSBAR)
         }
