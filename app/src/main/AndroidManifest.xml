@@ -91,32 +91,6 @@
             </intent-filter>
         </activity>
 
-        <!-- account type "net.euse.icsdroid" -->
-        <service
-            android:name="at.bitfire.icsdroid.AccountAuthenticatorService"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator"/>
-            </intent-filter>
-
-            <meta-data
-                android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/account_authenticator"/>
-        </service>
-        <service
-            android:name="at.bitfire.icsdroid.SyncAdapterService"
-            android:exported="true"
-            android:process=":sync"
-            tools:ignore="ExportedService">
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter"/>
-            </intent-filter>
-
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/sync_calendars"/>
-        </service>
-
         <receiver android:name=".receivers.NotificationReceiver"/>
 
         <receiver android:name=".receivers.BootCompletedReceiver">

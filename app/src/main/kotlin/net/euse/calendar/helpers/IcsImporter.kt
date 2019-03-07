@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
 import android.widget.Toast
-import at.bitfire.icsdroid.Constants
 import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.toast
 import net.euse.calendar.R
@@ -68,7 +67,7 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
                 conn = url.openConnection()
 
                 if (conn is HttpURLConnection) {
-                    conn.setRequestProperty("User-Agent", Constants.USER_AGENT)
+                    conn.setRequestProperty("User-Agent", USER_AGENT)
                     conn.setRequestProperty("Connection", "close")  // workaround for AndroidHttpClient bug, which causes "Unexpected Status Line" exceptions
                     conn.instanceFollowRedirects = false
 
@@ -108,7 +107,7 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
                 Log.e(APP_TAG, "network or other failure", e)
             }
             redirect++
-        } while (followRedirect && redirect < Constants.MAX_REDIRECTS)
+        } while (followRedirect && redirect < MAX_REDIRECTS)
 
         publishProgress(activity.getString(R.string.downloading_importing)+"-2")
 

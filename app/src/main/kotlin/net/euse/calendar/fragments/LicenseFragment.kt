@@ -5,20 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import net.euse.calendar.R
-import net.euse.calendar.activities.MainActivity
-import net.euse.calendar.activities.SimpleActivity
-import net.euse.calendar.extensions.config
-import net.euse.calendar.helpers.ABOUT_CREDIT_VIEW
-import net.euse.calendar.helpers.ABOUT_INTRO_VIEW
-import net.euse.calendar.helpers.ABOUT_LICENSE_VIEW
-import net.euse.calendar.helpers.Formatter
-import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.extensions.launchViewIntent
+import com.simplemobiletools.commons.extensions.underlineText
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.models.License
 import kotlinx.android.synthetic.main.fragment_about_license.*
 import kotlinx.android.synthetic.main.license_faq_item.view.*
-import java.util.*
+import net.euse.calendar.R
+import net.euse.calendar.activities.MainActivity
+import net.euse.calendar.extensions.config
+import net.euse.calendar.helpers.ABOUT_LICENSE_VIEW
+import net.euse.calendar.helpers.Formatter
 
 class LicenseFragment: MyFragmentHolder() {
 
@@ -39,7 +36,7 @@ class LicenseFragment: MyFragmentHolder() {
 
         val inflater = LayoutInflater.from(activity)
         val licenses = initLicenses()
-        val licenseMask = (activity as MainActivity).intent.getIntExtra(APP_LICENSES, 0) or LICENSE_SMT or LICENSE_KOTLIN or LICENSE_JODA or LICENSE_LEAK_CANARY or LICENSE_STETHO or LICENSE_ICAL4ANDROID or LICENSE_ICSDROID or LICENSE_GLCV or LICENSE_NUMBER_PICKER
+        val licenseMask = (activity as MainActivity).intent.getIntExtra(APP_LICENSES, 0) or LICENSE_SMT or LICENSE_KOTLIN or LICENSE_JODA or LICENSE_LEAK_CANARY or LICENSE_STETHO or LICENSE_GLCV or LICENSE_NUMBER_PICKER
         licenses.filter { licenseMask and it.id != 0 }.forEach {
             val license = it
             inflater.inflate(R.layout.license_faq_item, null).apply {
@@ -82,8 +79,6 @@ class LicenseFragment: MyFragmentHolder() {
             License(LICENSE_GSON, com.simplemobiletools.commons.R.string.gson_title, com.simplemobiletools.commons.R.string.gson_text, com.simplemobiletools.commons.R.string.gson_url),
             License(LICENSE_LEAK_CANARY, com.simplemobiletools.commons.R.string.leak_canary_title, com.simplemobiletools.commons.R.string.leakcanary_text, com.simplemobiletools.commons.R.string.leakcanary_url),
             License(LICENSE_NUMBER_PICKER, com.simplemobiletools.commons.R.string.number_picker_title, com.simplemobiletools.commons.R.string.number_picker_text, com.simplemobiletools.commons.R.string.number_picker_url),
-            License(LICENSE_ICSDROID, com.simplemobiletools.commons.R.string.icsdroid_title, com.simplemobiletools.commons.R.string.icsdroid_text, com.simplemobiletools.commons.R.string.icsdroid_url),
-            License(LICENSE_ICAL4ANDROID, com.simplemobiletools.commons.R.string.ical4android_title, com.simplemobiletools.commons.R.string.ical4android_text, com.simplemobiletools.commons.R.string.ical4android_url),
             License(LICENSE_GLCV, com.simplemobiletools.commons.R.string.glcv_title, com.simplemobiletools.commons.R.string.glcv_text, com.simplemobiletools.commons.R.string.glcv_url)    )
 
     //all below are for placeholder purpose

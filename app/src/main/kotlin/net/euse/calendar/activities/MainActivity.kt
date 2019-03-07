@@ -1,8 +1,5 @@
 package net.euse.calendar.activities
 
-import android.content.ContentProviderClient
-import android.content.ContentUris
-import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.database.ContentObserver
@@ -12,19 +9,12 @@ import android.net.http.HttpResponseCache
 import android.os.Bundle
 import android.os.Handler
 import android.os.SystemClock
-import android.provider.CalendarContract
 import android.provider.ContactsContract
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
-import at.bitfire.ical4android.AndroidCalendar
-import at.bitfire.ical4android.CalendarStorageException
-import at.bitfire.icsdroid.AppAccount
-import at.bitfire.icsdroid.AppAccount.account
-import at.bitfire.icsdroid.db.LocalCalendar
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.*
@@ -659,57 +649,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             add(Release(88, R.string.release_88))
             add(Release(98, R.string.release_98))
             checkWhatsNew(this, BuildConfig.VERSION_CODE)
-        }
-    }
-
-    private fun checkSkCalExist():Int{
-        var provider= contentResolver.acquireContentProviderClient(CalendarContract.AUTHORITY)
-        var res=SKCAL_CHECK_ERROR
-        try {
-            // currently only filter by account, since cannot find any other criteria suitable or available
-            if (!LocalCalendar.findAll(account, provider).isEmpty())
-                res=LocalCalendar.findAll(account, provider)[0].id.toInt()
-            else
-                res=SKCAL_NON_EXIST
-        } catch (e: CalendarStorageException) {
-            Log.e(APP_TAG, "Calendar storage exception", e)
-            Toast.makeText(applicationContext, e.localizedMessage, Toast.LENGTH_LONG).show()
-        } catch (e: InterruptedException) {
-            Log.e(APP_TAG, "Thread interrupted", e)
-            Toast.makeText(applicationContext, e.localizedMessage, Toast.LENGTH_LONG).show()
-        }
-        return res
-    }
-
-    private fun createSkCalendar(): Int {
-        AppAccount.makeAvailable(this)
-
-        val calInfo = ContentValues(9)
-        calInfo.put(CalendarContract.Calendars.ACCOUNT_NAME, AppAccount.account.name)
-        calInfo.put(CalendarContract.Calendars.ACCOUNT_TYPE, AppAccount.account.type)
-        calInfo.put(CalendarContract.Calendars.NAME, SKCAL_URL)
-        calInfo.put(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,getString(R.string.skcal_title) )
-        calInfo.put(CalendarContract.Calendars.CALENDAR_COLOR,R.color.lightblue)
-        calInfo.put(CalendarContract.Calendars.OWNER_ACCOUNT, AppAccount.account.name)
-        calInfo.put(CalendarContract.Calendars.SYNC_EVENTS, 1)
-        calInfo.put(CalendarContract.Calendars.VISIBLE, 1)
-        calInfo.put(CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_READ)
-
-        var res=SK_CREATE_FAILED
-        val client: ContentProviderClient? = contentResolver.acquireContentProviderClient(CalendarContract.AUTHORITY)
-        return try {
-            client?.let {
-                val uri = AndroidCalendar.create(AppAccount.account, it, calInfo)
-                res=ContentUris.parseId(uri).toInt()
-            }
-            res
-        } catch(e: Exception) {
-            Log.e(APP_TAG, "Couldn't create calendar", e)
-//            Toast.makeText(applicationContext, e.localizedMessage, Toast.LENGTH_LONG).show()
-            res
-        } finally {
-            client?.release()
-            res
         }
     }
 

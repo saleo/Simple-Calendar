@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import android.util.Log
-import at.bitfire.icsdroid.Constants
 import net.euse.calendar.extensions.dbHelper
 import net.euse.calendar.helpers.*
 import net.euse.calendar.models.Event
@@ -60,7 +59,7 @@ class DownloadImportReceiver : BroadcastReceiver() {
                 do {
                     try {
                         if (conn is HttpURLConnection) {
-                            conn.setRequestProperty("User-Agent", Constants.USER_AGENT)
+                            conn.setRequestProperty("User-Agent", USER_AGENT)
                             conn.setRequestProperty("Connection", "close")  // workaround for AndroidHttpClient bug, which causes "Unexpected Status Line" exceptions
                             conn.instanceFollowRedirects = false
 
@@ -94,7 +93,7 @@ class DownloadImportReceiver : BroadcastReceiver() {
                         Log.e(APP_TAG, "Couldn't fetch calendar", e)
                     }
                     redirect++
-                } while (followRedirect && redirect < Constants.MAX_REDIRECTS)
+                } while (followRedirect && redirect < MAX_REDIRECTS)
 
                 try {
                     inputStream=conn?.getInputStream()
