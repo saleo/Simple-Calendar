@@ -1,10 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.aliyun.ams.emas-services'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion propCompileSdkVersion
 
     defaultConfig {
         applicationId "net.euse.calendar"

@@ -36,9 +36,13 @@ License.
 ### 数据字典：
 
 1. ics文件中dtstart字段标示时间必须是000001-零点零分1秒，dtend字段标示001001零点10分1秒（后者不起作用，占位符）
+
 2. 自定义事件，时长为以使用日开始的2年
+
 3. SOURCE_CUSTOMIZE_ANNIVERSARY, events中source字段，标示是自定义事件
+
 4. 目前涉及event表修改startTs的是addCustomizeEvent1个函数，context.fetchCalDavSync。
+
 5. 涉及notification的共5个,均只处理近1个月内的notifications(太多担心alarm耗电厉害)：
 
    > settings中的reminderSwitch,reminderTime,addCustomizeEvent,3个开关
@@ -46,11 +50,20 @@ License.
    > bootComplete
    >
    > import-ics
+   
 6. 如遇当天有戒期的，则在提醒设置（调整）
+
 7. 本以为要处理modifyCustomizeEvent之后的reminder，看之后发现：modify=delete+add,而这2者分别处理过了
+
 8. 目前仅支持竖版：不会随屏幕横置而横向显示
+
 9. 表events中reminder_minutes1,2,3均没用了，因为同一从config中取
-10. calDav相关的也没用了，因为数据从网上下载后导入本地表。
+
+10. calDav相关的也没用了，因为提醒数据从网上下载后导入本地表
+
+11. 当前在用荣耀8对应android8.0，是从android7升级而来
+
+12. 清心格言内置程序内
 
 ---
 
