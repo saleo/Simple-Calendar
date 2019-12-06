@@ -3,14 +3,13 @@ package com.simplemobiletools.commons.views
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.os.Handler
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.simplemobiletools.commons.R
 import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.baseConfig
@@ -104,7 +103,7 @@ class FastScroller : FrameLayout {
 
         val adapter = recyclerView!!.adapter
         val spanCount = ((recyclerView!!.layoutManager as? androidx.recyclerview.widget.GridLayoutManager)?.spanCount ?: 1)
-        val otherDimension = Math.floor((adapter.itemCount - 1) / spanCount.toDouble()) + 1
+        val otherDimension = Math.floor((adapter!!.itemCount - 1) / spanCount.toDouble()) + 1
         val size = recyclerView!!.getChildAt(measureItemIndex)?.height ?: 0
         if (isHorizontal) {
             recyclerViewContentWidth = (otherDimension * size).toInt()
@@ -272,7 +271,7 @@ class FastScroller : FrameLayout {
                 recyclerView!!.scrollBy(0, diff)
             }
 
-            val itemCount = recyclerView!!.adapter.itemCount
+            val itemCount = recyclerView!!.adapter!!.itemCount
             val targetPos = getValueInRange(0f, (itemCount - 1).toFloat(), targetProportion * itemCount).toInt()
             fastScrollCallback?.invoke(targetPos)
         }

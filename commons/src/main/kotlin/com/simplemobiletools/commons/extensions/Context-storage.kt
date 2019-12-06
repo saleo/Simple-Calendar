@@ -10,9 +10,9 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.text.TextUtils
 import androidx.core.content.FileProvider
 import androidx.documentfile.provider.DocumentFile
-import android.text.TextUtils
 import com.simplemobiletools.commons.R
 import com.simplemobiletools.commons.helpers.OTG_PATH
 import com.simplemobiletools.commons.helpers.isLollipopPlus
@@ -341,18 +341,18 @@ fun Context.getOTGItems(path: String, countHiddenItems: Boolean, getProperFileSi
             continue
         }
 
-        val file = rootUri.findFile(part)
+        val file = rootUri?.findFile(part)
         if (file != null) {
             rootUri = file
         }
     }
 
-    val files = rootUri.listFiles()
+    val files = rootUri?.listFiles()
     if (baseConfig.OTGBasePath.isEmpty()) {
         val first = files?.firstOrNull()
         if (first != null) {
             val fullPath = first.uri.toString()
-            val nameStartIndex = Math.max(fullPath.lastIndexOf(first.name), 0)
+            val nameStartIndex = Math.max(fullPath.lastIndexOf(first.name!!), 0)
             var basePath = fullPath.substring(0, nameStartIndex)
             if (basePath.endsWith("%3A")) {
                 basePath = basePath.substring(0, basePath.length - 3)
@@ -362,12 +362,12 @@ fun Context.getOTGItems(path: String, countHiddenItems: Boolean, getProperFileSi
     }
 
     val basePath = "${baseConfig.OTGBasePath}%3A"
-    for (file in files) {
+    for (file in files!!) {
         if (file.exists()) {
             val filePath = file.uri.toString().substring(basePath.length)
             val decodedPath = OTG_PATH + "/" + URLDecoder.decode(filePath, "UTF-8")
             val fileSize = if (getProperFileSize) file.getItemSize(countHiddenItems) else file.length()
-            items.add(FileDirItem(decodedPath, file.name, file.isDirectory, file.listFiles()?.size ?: 0, fileSize))
+            items.add(FileDirItem(decodedPath, file.name!!, file.isDirectory, file.listFiles()?.size ?: 0, fileSize))
         }
     }
     callback(items)

@@ -12,15 +12,15 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.SystemClock
 import android.provider.ContactsContract
-import androidx.fragment.app.Fragment
-import androidx.core.app.NotificationManagerCompat
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.simplemobiletools.commons.dialogs.FilePickerDialog
+import androidx.core.app.NotificationManagerCompat
 import com.simplemobiletools.commons.extensions.*
-import com.simplemobiletools.commons.helpers.*
+import com.simplemobiletools.commons.helpers.PERMISSION_READ_CALENDAR
+import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CALENDAR
+import com.simplemobiletools.commons.helpers.getDateFormats
 import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
 import com.simplemobiletools.commons.models.RadioItem
 import com.simplemobiletools.commons.models.Release
@@ -30,9 +30,7 @@ import net.euse.calendar.BuildConfig
 import net.euse.calendar.R
 import net.euse.calendar.R.string.status_day
 import net.euse.calendar.R.string.status_month
-import net.euse.calendar.dialogs.ExportEventsDialog
 import net.euse.calendar.dialogs.FilterEventTypesDialog
-import net.euse.calendar.dialogs.ImportEventsDialog
 import net.euse.calendar.extensions.*
 import net.euse.calendar.fragments.*
 import net.euse.calendar.helpers.*
@@ -40,7 +38,6 @@ import net.euse.calendar.helpers.Formatter
 import net.euse.calendar.models.Event
 import net.euse.calendar.models.EventType
 import org.joda.time.DateTime
-import java.io.FileOutputStream
 import java.lang.System.currentTimeMillis
 import java.text.SimpleDateFormat
 import java.util.*
@@ -493,80 +490,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             }
         }
     }
-
-    private fun tryImportEvents() {
-        handlePermission(PERMISSION_READ_STORAGE) {
-            if (it) {
-                importEvents()
-            }
-        }
-    }
-
-    private fun importEvents() {
-        FilePickerDialog(this) {
-            showImportEventsDialog(it)
-        }
-    }
-
-    private fun tryImportEventsFromFile(uri: Uri) {
-        when {
-            uri.scheme == "file" -> showImportEventsDialog(uri.path)
-            uri.scheme == "content" -> {
-                val tempFile = getTempFile()
-                if (tempFile == null) {
-                    toast(R.string.unknown_error_occurred)
-                    return
-                }
-
-                val inputStream = contentResolver.openInputStream(uri)
-                val out = FileOutputStream(tempFile)
-                inputStream.copyTo(out)
-                showImportEventsDialog(tempFile.absolutePath)
-            }
-            else -> toast(R.string.invalid_file_format)
-        }
-    }
-
-    private fun showImportEventsDialog(path: String) {
-        ImportEventsDialog(this, path) {
-            if (it) {
-                runOnUiThread {
-                    updateView(config.storedView)
-                }
-            }
-        }
-    }
-
-    private fun tryExportEvents() {
-        handlePermission(PERMISSION_WRITE_STORAGE) {
-            if (it) {
-                exportEvents()
-            }
-        }
-    }
-
-    private fun exportEvents() {
-        FilePickerDialog(this, pickFile = false, showFAB = true) {
-            ExportEventsDialog(this, it) { exportPastEvents, file, eventTypes ->
-                Thread {
-                    val events = dbHelper.getEventsToExport(exportPastEvents).filter { eventTypes.contains(it.eventType.toString()) }
-                    if (events.isEmpty()) {
-                        toast(R.string.no_entries_for_exporting)
-                    } else {
-                        toast(R.string.exporting)
-                        IcsExporter().exportEvents(this, file, events as ArrayList<Event>) {
-                            toast(when (it) {
-                                IcsExporter.ExportResult.EXPORT_OK -> R.string.exporting_successful
-                                IcsExporter.ExportResult.EXPORT_PARTIAL -> R.string.exporting_some_entries_failed
-                                else -> R.string.exporting_failed
-                            })
-                        }
-                    }
-                }.start()
-            }
-        }
-    }
-
 
     // only used at active search
     override fun refreshItems() {

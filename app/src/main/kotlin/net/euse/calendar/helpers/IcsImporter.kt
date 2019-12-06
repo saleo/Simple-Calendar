@@ -92,7 +92,7 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
                     if (conn is HttpURLConnection && statusCode != HttpURLConnection.HTTP_OK) {
                         conn.disconnect()
                         conn = null
-                        val str=String.format(activity.getString(R.string.connectin_failed_with_statuscode),statusCode)
+                        val str=String.format(activity.getString(R.string.connection_failed_with_statuscode),statusCode)
                         activity.showErrorToast(str)
                         return false
                     }

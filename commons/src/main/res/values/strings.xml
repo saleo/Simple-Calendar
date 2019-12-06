@@ -472,12 +472,15 @@
     <string name="gson_title">Gson (JSON parser)</string>
     <string name="leak_canary_title">Leak Canary (memory leak detector)</string>
     <string name="number_picker_title">Number Picker (customizable number picker)</string>
+    <string name="connection_failed_with_statuscode">网络连接失败，请检查后重试，状态码：%d</string>
 
     <string name="skcal_introduction">introduction</string>
     <string name="skcal_creditlist">credit person</string>
     <string name="skcal_contact">contact</string>
     <string name="skcal_share">share</string>
     <string name="skcal_health">body+mind health</string>
+    <string name="simplecalendar_title">SimpleCalenar</string>
+    <string name="glcv_title">GregorianLunarCalendarView</string>
 
 
 </resources>

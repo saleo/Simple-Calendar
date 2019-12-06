@@ -19,7 +19,7 @@ private fun getDirectorySize(dir: DocumentFile, countHiddenItems: Boolean): Long
                 val file = files[i]
                 if (file.isDirectory) {
                     size += getDirectorySize(file, countHiddenItems)
-                } else if (!file.name.startsWith(".") || countHiddenItems) {
+                } else if (!file.name!!.startsWith(".") || countHiddenItems) {
                     size += file.length()
                 }
             }
@@ -46,7 +46,7 @@ private fun getDirectoryFileCount(dir: DocumentFile, countHiddenItems: Boolean):
                 if (file.isDirectory) {
                     count++
                     count += getDirectoryFileCount(file, countHiddenItems)
-                } else if (!file.name.startsWith(".") || countHiddenItems) {
+                } else if (!file.name!!.startsWith(".") || countHiddenItems) {
                     count++
                 }
             }

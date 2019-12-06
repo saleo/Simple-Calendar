@@ -59,6 +59,7 @@ class LicenseFragment: MyFragmentHolder() {
 
     private fun initLicenses() = arrayOf(
             License(LICENSE_SMT, com.simplemobiletools.commons.R.string.simplecalendar_title, com.simplemobiletools.commons.R.string.simplecalendar_text, com.simplemobiletools.commons.R.string.simplecalendar_url),
+            License(LICENSE_SMT, com.simplemobiletools.commons.R.string.simplecalendar_title, com.simplemobiletools.commons.R.string.simplecalendar_text, com.simplemobiletools.commons.R.string.simplecalendar_url),
             License(LICENSE_KOTLIN, com.simplemobiletools.commons.R.string.kotlin_title, com.simplemobiletools.commons.R.string.kotlin_text, com.simplemobiletools.commons.R.string.kotlin_url),
             License(LICENSE_SUBSAMPLING, com.simplemobiletools.commons.R.string.subsampling_title, com.simplemobiletools.commons.R.string.subsampling_text, com.simplemobiletools.commons.R.string.subsampling_url),
             License(LICENSE_GLIDE, com.simplemobiletools.commons.R.string.glide_title, com.simplemobiletools.commons.R.string.glide_text, com.simplemobiletools.commons.R.string.glide_url),
