@@ -1,7 +1,7 @@
 package net.euse.calendar.dialogs
 
 import android.content.DialogInterface
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.text.Editable
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +31,7 @@ class CustomizeEventDialog(val activity: SimpleActivity, val whomfor: String="",
     val view = (activity.layoutInflater.inflate(R.layout.dialog_customize_event, null) as ViewGroup)
 
     init{
-        dialog = android.support.v7.app.AlertDialog.Builder(activity)
+        dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
                 .setPositiveButton(R.string.ok,this)
                 .setNegativeButton(R.string.cancel,null)
                 .create().apply {

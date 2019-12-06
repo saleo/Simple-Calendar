@@ -1,10 +1,10 @@
 package com.simplemobiletools.commons.views
 
 import android.content.Context
-import android.support.v7.widget.GridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import android.util.AttributeSet
 
-class MyGridLayoutManager : GridLayoutManager {
+class MyGridLayoutManager : androidx.recyclerview.widget.GridLayoutManager {
     constructor(context: Context, spanCount: Int) : super(context, spanCount)
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)

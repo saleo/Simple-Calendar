@@ -7,9 +7,9 @@ import android.content.Context
 import android.os.AsyncTask
 import android.os.Handler
 import android.provider.MediaStore
-import android.support.v4.app.NotificationCompat
-import android.support.v4.provider.DocumentFile
-import android.support.v4.util.Pair
+import androidx.core.app.NotificationCompat
+import androidx.documentfile.provider.DocumentFile
+import androidx.core.util.Pair
 import com.simplemobiletools.commons.R
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.extensions.*

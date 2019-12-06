@@ -3,8 +3,8 @@ package net.euse.calendar.fragments
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +29,7 @@ import net.euse.calendar.models.DayMonthly
 import org.joda.time.DateTime
 
 
-class MonthFragment : Fragment(), MonthlyCalendar {
+class MonthFragment : androidx.fragment.app.Fragment(), MonthlyCalendar {
     private var mTextColor = 0
     private var mSundayFirst = false
     private var mDayCode = ""

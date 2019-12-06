@@ -1,6 +1,6 @@
 package net.euse.calendar;
 import android.content.Context;
-import android.support.annotation.Keep;
+import androidx.annotation.Keep;
 import android.util.Log;
 
 import com.taobao.sophix.PatchStatus;

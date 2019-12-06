@@ -1,6 +1,6 @@
 package net.euse.calendar.dialogs
 
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.view.ViewGroup
 import android.view.WindowManager
 import net.euse.calendar.R

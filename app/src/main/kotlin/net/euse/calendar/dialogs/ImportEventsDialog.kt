@@ -1,6 +1,6 @@
 package net.euse.calendar.dialogs
 
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.view.ViewGroup
 import com.simplemobiletools.commons.extensions.setBackgroundWithStroke
 import com.simplemobiletools.commons.extensions.setupDialogStuff

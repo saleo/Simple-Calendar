@@ -1,7 +1,7 @@
 package net.euse.calendar.dialogs
 
 import android.app.Activity
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import net.euse.calendar.R
 import net.euse.calendar.extensions.config
 import com.simplemobiletools.commons.extensions.setupDialogStuff

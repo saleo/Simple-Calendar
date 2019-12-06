@@ -65,7 +65,7 @@ License.
 
 12. 清心格言内置程序内
 
-13. minSdk升级到19，考虑到现在少有机器还是在用android4.4
+13. minSdk升级到19，考虑到现在少有机器还是在用android4.4，以及检测通知用的areNotificationsEnabled只支持19+。
 
 ---
 

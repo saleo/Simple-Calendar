@@ -1,7 +1,7 @@
 package net.euse.calendar.views
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.View
 import net.euse.calendar.R
@@ -25,7 +25,7 @@ open class skRecyclerView : MyRecyclerView{
         }
     }
 
-    override fun setAdapter(adapter: RecyclerView.Adapter<*>?) {
+    override fun setAdapter(adapter: androidx.recyclerview.widget.RecyclerView.Adapter<*>?) {
         val oldAdapter = getAdapter()
         if (oldAdapter!=null) {
             if (!oldAdapter.hasObservers())
@@ -39,7 +39,7 @@ open class skRecyclerView : MyRecyclerView{
         checkIfEmpty()
     }
 
-    private val observer = object : RecyclerView.AdapterDataObserver() {
+    private val observer = object : androidx.recyclerview.widget.RecyclerView.AdapterDataObserver() {
         override fun onChanged() {
             checkIfEmpty()
         }

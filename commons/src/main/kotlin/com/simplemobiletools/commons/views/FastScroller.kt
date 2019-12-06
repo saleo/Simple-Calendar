@@ -3,9 +3,9 @@ package com.simplemobiletools.commons.views
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.os.Handler
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -41,7 +41,7 @@ class FastScroller : FrameLayout {
     private var fastScrollCallback: ((Int) -> Unit)? = null
 
     private val HANDLE_HIDE_DELAY = 1000L
-    private var recyclerView: RecyclerView? = null
+    private var recyclerView: androidx.recyclerview.widget.RecyclerView? = null
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
     private var bubbleHideHandler = Handler()
     private var handleHideHandler = Handler()
@@ -52,14 +52,14 @@ class FastScroller : FrameLayout {
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
-    fun setViews(recyclerView: RecyclerView, swipeRefreshLayout: SwipeRefreshLayout? = null, callback: ((Int) -> Unit)? = null) {
+    fun setViews(recyclerView: androidx.recyclerview.widget.RecyclerView, swipeRefreshLayout: SwipeRefreshLayout? = null, callback: ((Int) -> Unit)? = null) {
         this.recyclerView = recyclerView
         this.swipeRefreshLayout = swipeRefreshLayout
         tinyMargin = context.resources.getDimension(R.dimen.tiny_margin)
 
         updatePrimaryColor()
-        recyclerView.setOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(rv: RecyclerView, dx: Int, dy: Int) {
+        recyclerView.setOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(rv: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
                 if (isScrollingEnabled) {
                     if (!handle!!.isSelected) {
                         bubble?.alpha = 0f
@@ -72,16 +72,16 @@ class FastScroller : FrameLayout {
                 }
             }
 
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            override fun onScrollStateChanged(recyclerView: androidx.recyclerview.widget.RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!isScrollingEnabled) {
                     hideHandle()
                     return
                 }
 
-                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                if (newState == androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_DRAGGING) {
                     showHandle()
-                } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                } else if (newState == androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE) {
                     hideHandle()
                 }
             }
@@ -103,7 +103,7 @@ class FastScroller : FrameLayout {
         }
 
         val adapter = recyclerView!!.adapter
-        val spanCount = ((recyclerView!!.layoutManager as? GridLayoutManager)?.spanCount ?: 1)
+        val spanCount = ((recyclerView!!.layoutManager as? androidx.recyclerview.widget.GridLayoutManager)?.spanCount ?: 1)
         val otherDimension = Math.floor((adapter.itemCount - 1) / spanCount.toDouble()) + 1
         val size = recyclerView!!.getChildAt(measureItemIndex)?.height ?: 0
         if (isHorizontal) {

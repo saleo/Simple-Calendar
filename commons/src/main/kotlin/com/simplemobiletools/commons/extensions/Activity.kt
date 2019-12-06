@@ -12,8 +12,8 @@ import android.os.Looper
 import android.os.TransactionTooLargeException
 import android.provider.DocumentsContract
 import android.provider.MediaStore
-import android.support.v4.provider.DocumentFile
-import android.support.v7.app.AlertDialog
+import androidx.documentfile.provider.DocumentFile
+import androidx.appcompat.app.AlertDialog
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window

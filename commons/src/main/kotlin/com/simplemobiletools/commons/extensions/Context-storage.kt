@@ -10,8 +10,8 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
-import android.support.v4.content.FileProvider
-import android.support.v4.provider.DocumentFile
+import androidx.core.content.FileProvider
+import androidx.documentfile.provider.DocumentFile
 import android.text.TextUtils
 import com.simplemobiletools.commons.R
 import com.simplemobiletools.commons.helpers.OTG_PATH

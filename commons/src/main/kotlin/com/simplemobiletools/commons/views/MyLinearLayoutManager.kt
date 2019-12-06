@@ -1,10 +1,10 @@
 package com.simplemobiletools.commons.views
 
 import android.content.Context
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.util.AttributeSet
 
-class MyLinearLayoutManager : LinearLayoutManager {
+class MyLinearLayoutManager : androidx.recyclerview.widget.LinearLayoutManager {
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)

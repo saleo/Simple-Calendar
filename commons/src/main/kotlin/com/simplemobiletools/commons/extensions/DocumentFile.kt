@@ -1,6 +1,6 @@
 package com.simplemobiletools.commons.extensions
 
-import android.support.v4.provider.DocumentFile
+import androidx.documentfile.provider.DocumentFile
 
 fun DocumentFile.getItemSize(countHiddenItems: Boolean): Long {
     return if (isDirectory) {

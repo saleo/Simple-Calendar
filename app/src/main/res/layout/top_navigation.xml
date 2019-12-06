@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             style="@android:style/Widget.ProgressBar.Small"/>
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_download_status"
             android:text="@string/downloading_importing"
             android:textColor="@color/default_holidays_color"

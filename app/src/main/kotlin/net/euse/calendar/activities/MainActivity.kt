@@ -1,16 +1,19 @@
 package net.euse.calendar.activities
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.database.ContentObserver
 import android.database.Cursor
 import android.net.Uri
 import android.net.http.HttpResponseCache
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.SystemClock
 import android.provider.ContactsContract
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
+import androidx.core.app.NotificationManagerCompat
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -64,7 +67,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     private var mSearchMenuItem: MenuItem? = null
     private var shouldGoToTodayBeVisible = false
     private var goToTodayButton: MenuItem? = null
-    private var currentFragments = ArrayList<Fragment>()
+    private var currentFragments = ArrayList<androidx.fragment.app.Fragment>()
 
     private var mStoredTextColor = 0
     private var mStoredBackgroundColor = 0
@@ -161,6 +164,10 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
 
         getStoredStateVariables()
+        val notificationManagerCompat = NotificationManagerCompat.from(applicationContext)
+        if (!notificationManagerCompat.areNotificationsEnabled()){
+            goNotificationSetting(applicationContext)
+        }
     }
 
     override fun onPause() {
@@ -393,7 +400,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
 
         currentFragments.clear()
-        currentFragments.add(fragment as Fragment)
+        currentFragments.add(fragment as androidx.fragment.app.Fragment)
 
         //since only Monthly_view and event_list_view can come here
         val bundle=Bundle()
@@ -446,7 +453,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             else -> fragment=MonthFragmentsHolder()
         }
 
-        currentFragments.add(fragment as Fragment)
+        currentFragments.add(fragment as androidx.fragment.app.Fragment)
         val bundle = Bundle()
         bundle.putString(DAY_CODE, Formatter.getDayCodeFromDateTime(dateTime))
         fragment.arguments = bundle
@@ -745,5 +752,26 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
                     txt_download_status.text = downloadStatus
                 }
             }
+    }
+
+    private fun goNotificationSetting(context: Context) {
+
+
+        if (Build.VERSION.SDK_INT >= 26) {
+            // android 8.0引导
+            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+            intent.putExtra("android.provider.extra.APP_PACKAGE", context.getPackageName());
+        } else if (Build.VERSION.SDK_INT >= 21) {
+            // android 5.0-7.0
+            intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
+            intent.putExtra("app_package", context.getPackageName());
+            intent.putExtra("app_uid", context.getApplicationInfo().uid);
+        } else {
+            // 其他
+            intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+            intent.setData(Uri.fromParts("package", context.getPackageName(), null));
+        }
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 }

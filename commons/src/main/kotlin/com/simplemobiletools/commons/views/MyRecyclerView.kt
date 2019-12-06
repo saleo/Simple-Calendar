@@ -2,7 +2,7 @@ package com.simplemobiletools.commons.views
 
 import android.content.Context
 import android.os.Handler
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
@@ -12,7 +12,7 @@ import com.simplemobiletools.commons.R
 import com.simplemobiletools.commons.interfaces.RecyclerScrollCallback
 
 // drag selection is based on https://github.com/afollestad/drag-select-recyclerview
-open class MyRecyclerView : RecyclerView {
+open class MyRecyclerView : androidx.recyclerview.widget.RecyclerView {
     private val AUTO_SCROLL_DELAY = 25L
     private var isZoomEnabled = false
     private var isDragSelectionEnabled = false
@@ -150,7 +150,7 @@ open class MyRecyclerView : RecyclerView {
                         }
                     }
 
-                    if (itemPosition != RecyclerView.NO_POSITION && lastDraggedIndex != itemPosition) {
+                    if (itemPosition != androidx.recyclerview.widget.RecyclerView.NO_POSITION && lastDraggedIndex != itemPosition) {
                         lastDraggedIndex = itemPosition
                         if (minReached == -1) {
                             minReached = lastDraggedIndex
@@ -211,13 +211,13 @@ open class MyRecyclerView : RecyclerView {
     }
 
     private fun getItemPosition(e: MotionEvent): Int {
-        val v = findChildViewUnder(e.x, e.y) ?: return RecyclerView.NO_POSITION
+        val v = findChildViewUnder(e.x, e.y) ?: return androidx.recyclerview.widget.RecyclerView.NO_POSITION
 
-        if (v.tag == null || v.tag !is RecyclerView.ViewHolder) {
+        if (v.tag == null || v.tag !is androidx.recyclerview.widget.RecyclerView.ViewHolder) {
             throw IllegalStateException("Make sure your adapter makes a call to super.onBindViewHolder(), and doesn't override itemView tags.")
         }
 
-        val holder = v.tag as RecyclerView.ViewHolder
+        val holder = v.tag as androidx.recyclerview.widget.RecyclerView.ViewHolder
         return holder.adapterPosition
     }
 

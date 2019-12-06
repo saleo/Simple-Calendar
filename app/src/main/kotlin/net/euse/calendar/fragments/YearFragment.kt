@@ -2,7 +2,7 @@ package net.euse.calendar.fragments
 
 import android.content.res.Resources
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_year.view.*
 import org.joda.time.DateTime
 import java.util.*
 
-class YearFragment : Fragment(), YearlyCalendar {
+class YearFragment : androidx.fragment.app.Fragment(), YearlyCalendar {
     private var mYear = 0
     private var mSundayFirst = false
     private var lastHash = 0

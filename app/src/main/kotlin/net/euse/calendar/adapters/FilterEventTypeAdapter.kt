@@ -1,6 +1,6 @@
 package net.euse.calendar.adapters
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.filter_event_type_view.view.*
 import java.util.*
 
 class FilterEventTypeAdapter(val activity: SimpleActivity, val eventTypes: List<EventType>, val displayEventTypes: Set<String>) :
-        RecyclerView.Adapter<FilterEventTypeAdapter.ViewHolder>() {
+        androidx.recyclerview.widget.RecyclerView.Adapter<FilterEventTypeAdapter.ViewHolder>() {
     private val itemViews = SparseArray<View>()
     private val selectedPositions = HashSet<Int>()
 
@@ -68,7 +68,7 @@ class FilterEventTypeAdapter(val activity: SimpleActivity, val eventTypes: List<
 
     override fun getItemCount() = eventTypes.size
 
-    class ViewHolder(view: View, val adapterListener: MyAdapterListener, val activity: SimpleActivity) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View, val adapterListener: MyAdapterListener, val activity: SimpleActivity) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         fun bindView(eventType: EventType): View {
             itemView.apply {
                 filter_event_type_checkbox.setColors(activity.config.textColor, activity.getAdjustedPrimaryColor(), activity.config.backgroundColor)

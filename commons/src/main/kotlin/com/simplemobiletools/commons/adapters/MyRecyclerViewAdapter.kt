@@ -1,8 +1,8 @@
 package com.simplemobiletools.commons.adapters
 
-import android.support.v7.view.ActionMode
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.RecyclerView
+import androidx.appcompat.view.ActionMode
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import android.util.SparseArray
 import android.view.Menu
 import android.view.MenuItem
@@ -20,7 +20,7 @@ import com.simplemobiletools.commons.views.FastScroller
 import com.simplemobiletools.commons.views.MyRecyclerView
 import java.util.*
 
-abstract class MyRecyclerViewAdapter(val activity: BaseSimpleActivity, val recyclerView: MyRecyclerView, val fastScroller: FastScroller? = null, val itemClick: (Any) -> Unit, val itemRemoveClick: ((Any) -> Unit)? =null) : RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder>() {
+abstract class MyRecyclerViewAdapter(val activity: BaseSimpleActivity, val recyclerView: MyRecyclerView, val fastScroller: FastScroller? = null, val itemClick: (Any) -> Unit, val itemRemoveClick: ((Any) -> Unit)? =null) : androidx.recyclerview.widget.RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder>() {
     val baseConfig = activity.baseConfig
     val resources = activity.resources!!
     val layoutInflater = activity.layoutInflater
@@ -115,7 +115,7 @@ abstract class MyRecyclerViewAdapter(val activity: BaseSimpleActivity, val recyc
         }
 
         if (add) {
-            DividerItemDecoration(activity, DividerItemDecoration.VERTICAL).apply {
+            androidx.recyclerview.widget.DividerItemDecoration(activity, androidx.recyclerview.widget.DividerItemDecoration.VERTICAL).apply {
                 setDrawable(resources.getDrawable(R.drawable.divider))
                 recyclerView.addItemDecoration(this)
             }

@@ -3,8 +3,8 @@ package net.euse.calendar.fragments
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +27,7 @@ import kotlinx.android.synthetic.main.fragment_day.view.*
 import org.joda.time.DateTime
 import java.util.*
 
-class DayFragment : Fragment() {
+class DayFragment : androidx.fragment.app.Fragment() {
     var mListener: NavigationListener? = null
     private var mTextColor = 0
     private var mDayCode = ""

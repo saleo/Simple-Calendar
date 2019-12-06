@@ -1,6 +1,6 @@
 package com.simplemobiletools.commons.extensions
 
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.view.WindowManager
 import android.widget.EditText
 

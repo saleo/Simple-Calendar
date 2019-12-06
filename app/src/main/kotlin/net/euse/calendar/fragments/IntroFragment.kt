@@ -2,7 +2,7 @@ package net.euse.calendar.fragments
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.design.widget.TabLayout
+import com.google.android.material.tabs.TabLayout
 import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.bottom_contact_copyright.*
 import java.util.*
 
 
-class IntroFragment: MyFragmentHolder() ,TabLayout.OnTabSelectedListener{
+class IntroFragment: MyFragmentHolder() , TabLayout.OnTabSelectedListener{
 
     private var skcal_as_default:Boolean=true
 
@@ -42,7 +42,7 @@ class IntroFragment: MyFragmentHolder() ,TabLayout.OnTabSelectedListener{
     }
 
     private fun setupTabs(){
-        val tabLayout:TabLayout?=view!!.findViewById(R.id.intro_tabs)
+        val tabLayout: TabLayout?=view!!.findViewById(R.id.intro_tabs)
         tabLayout!!.newTab().setText(R.string.title_intro_skcal)
         tabLayout.newTab().setText(R.string.title_intro_sk)
         tabLayout.newTab().setText(R.string.title_intro_xiangyu)

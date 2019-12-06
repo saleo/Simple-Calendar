@@ -3,7 +3,7 @@ package net.euse.calendar.dialogs
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import android.view.View
 import net.euse.calendar.R
 import net.euse.calendar.extensions.config

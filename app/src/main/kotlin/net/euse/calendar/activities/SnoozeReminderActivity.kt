@@ -1,7 +1,7 @@
 package net.euse.calendar.activities
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import net.euse.calendar.extensions.config
 import net.euse.calendar.extensions.dbHelper
 import net.euse.calendar.extensions.rescheduleReminder

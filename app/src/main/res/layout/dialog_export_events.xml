@@ -80,7 +80,7 @@
                 android:text="@string/include_event_types"
                 android:textSize="@dimen/smaller_text_size"/>
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/export_events_types_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -2,7 +2,7 @@ package com.simplemobiletools.commons.views
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.support.design.widget.FloatingActionButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.util.AttributeSet
 import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.getContrastColor

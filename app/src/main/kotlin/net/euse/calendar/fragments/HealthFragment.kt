@@ -1,6 +1,6 @@
 package net.euse.calendar.fragments
 
-import android.support.v4.app.ListFragment
+import androidx.fragment.app.ListFragment
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_about_health.*
 import kotlinx.android.synthetic.main.health_list_header.view.*
 import java.util.*
 
-class HealthFragment: ListFragment(),RadioGroup.OnCheckedChangeListener {
+class HealthFragment: androidx.fragment.app.ListFragment(),RadioGroup.OnCheckedChangeListener {
     private lateinit var mHeader: View
     private var mOldHeader: View? = null
     private var mBorder: Drawable? =null

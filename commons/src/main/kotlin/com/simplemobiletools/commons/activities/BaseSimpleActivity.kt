@@ -11,9 +11,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.DocumentsContract
-import android.support.v4.app.ActivityCompat
-import android.support.v4.util.Pair
-import android.support.v7.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.util.Pair
+import androidx.appcompat.app.AppCompatActivity
 import android.text.Html
 import android.view.MenuItem
 import android.view.WindowManager

@@ -1,8 +1,8 @@
 package net.euse.calendar.fragments
 
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 
-abstract class MyFragmentHolder : Fragment() {
+abstract class MyFragmentHolder : androidx.fragment.app.Fragment() {
     var currentDayCode="19700101"
 
     abstract fun goToToday()

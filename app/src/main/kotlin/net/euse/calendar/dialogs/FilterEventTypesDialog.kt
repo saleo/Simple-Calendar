@@ -1,6 +1,6 @@
 package net.euse.calendar.dialogs
 
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import net.euse.calendar.R
 import net.euse.calendar.activities.SimpleActivity
 import net.euse.calendar.adapters.FilterEventTypeAdapter
