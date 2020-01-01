@@ -604,6 +604,8 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         when (intYear){
             2018 -> img_top.setImageResource(R.drawable.sk2018)
             2019 -> img_top.setImageResource(R.drawable.sk2019)
+            2020 -> img_top.setImageResource(R.drawable.sk2020)
+            2021 -> img_top.setImageResource(R.drawable.sk2021)
             else -> img_top.setImageResource(R.drawable.sk_banner)
         }
         
@@ -656,11 +658,19 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             bottom_sentense0.text=mBottomSentences[3*(iMonth-1)]
             bottom_sentense1.text=mBottomSentences[3*(iMonth-1)+1]
             bottom_sentense2.text=mBottomSentences[3*(iMonth-1)+2]
-        }else if (intYear==2017 || intYear==2019){
+        }else if (intYear==2017 || intYear==2019 || intYear ==2021){
             bottom_sentense0.text=mBottomSentences[3*(iMonth-1)+36]
             bottom_sentense1.text=mBottomSentences[3*(iMonth-1)+37]
             bottom_sentense2.text=mBottomSentences[3*(iMonth-1)+38]
-        }else{
+        }else if (intYear==2020){
+            bottom_sentense0.text=mBottomSentences[3*(iMonth-1)+72]
+            bottom_sentense1.text=mBottomSentences[3*(iMonth-1)+73]
+            bottom_sentense2.text=mBottomSentences[3*(iMonth-1)+74]
+        }else if (intYear==2021){
+            bottom_sentense0.text=mBottomSentences[3*(iMonth-1)+108]
+            bottom_sentense1.text=mBottomSentences[3*(iMonth-1)+109]
+            bottom_sentense2.text=mBottomSentences[3*(iMonth-1)+110]
+        }else {
             bottom_sentense0.text=mBottomSentences[3*(iMonth-1)]
             bottom_sentense1.text=mBottomSentences[3*(iMonth-1)+1]
             bottom_sentense2.text=mBottomSentences[3*(iMonth-1)+2]

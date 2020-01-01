@@ -67,6 +67,10 @@ License.
 
 13. minSdk升级到19，考虑到现在少有机器还是在用android4.4，以及检测通知用的areNotificationsEnabled只支持19+。
 
+14. 节气在app内置写入，不用下载ics文件
+
+15. 目前ics文件内含有最近三年**阳历年**数据，
+
 ---
 
 包含的module：

@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.fragment_qingxin.*
 import net.euse.calendar.R
 import net.euse.calendar.activities.MainActivity
 import net.euse.calendar.helpers.DAY_CODE
 import net.euse.calendar.helpers.Formatter
 import net.euse.calendar.helpers.QINGXIN_VIEW
-import kotlinx.android.synthetic.main.fragment_qingxin.*
 
 class QingxinFragment:MyFragmentHolder() {
 
@@ -36,11 +36,19 @@ class QingxinFragment:MyFragmentHolder() {
             txt_qingxin1.text=sentences[3*(iMonth-1)+36]
             txt_qingxin2.text=sentences[3*(iMonth-1)+37]
             txt_qingxin3.text=sentences[3*(iMonth-1)+38]
+        }else if (iYear==2020){
+            txt_qingxin1.text=sentences[3*(iMonth-1)+72]
+            txt_qingxin2.text=sentences[3*(iMonth-1)+73]
+            txt_qingxin3.text=sentences[3*(iMonth-1)+74]
+        }else if (iYear==2021){
+            txt_qingxin1.text=sentences[3*(iMonth-1)+108]
+            txt_qingxin2.text=sentences[3*(iMonth-1)+109]
+            txt_qingxin3.text=sentences[3*(iMonth-1)+110]
         }else{
             txt_qingxin1.text=sentences[3*(iMonth-1)]
             txt_qingxin2.text=sentences[3*(iMonth-1)+1]
             txt_qingxin3.text=sentences[3*(iMonth-1)+2]
-        }        
+        }
         (activity as MainActivity).updateTopBottom(Formatter.getDateTimeFromCode(currentDayCode), QINGXIN_VIEW)
     }
     
