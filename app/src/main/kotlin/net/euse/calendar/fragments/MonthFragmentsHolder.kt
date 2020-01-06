@@ -2,13 +2,13 @@ package net.euse.calendar.fragments
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import androidx.viewpager.widget.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.simplemobiletools.commons.extensions.hasPermission
 import com.simplemobiletools.commons.helpers.PERMISSION_READ_CALENDAR
-import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CALENDAR
+import com.simplemobiletools.commons.views.MyViewPager
+import kotlinx.android.synthetic.main.fragment_months_holder.view.*
 import net.euse.calendar.R
 import net.euse.calendar.activities.MainActivity
 import net.euse.calendar.adapters.MyMonthPagerAdapter
@@ -18,8 +18,6 @@ import net.euse.calendar.helpers.DAY_CODE
 import net.euse.calendar.helpers.Formatter
 import net.euse.calendar.helpers.MONTHLY_VIEW
 import net.euse.calendar.interfaces.NavigationListener
-import com.simplemobiletools.commons.views.MyViewPager
-import kotlinx.android.synthetic.main.fragment_months_holder.view.*
 import org.joda.time.DateTime
 
 class MonthFragmentsHolder : MyFragmentHolder(), NavigationListener {

@@ -64,12 +64,11 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     private var mSearchMenuItem: MenuItem? = null
     private var shouldGoToTodayBeVisible = false
     private var goToTodayButton: MenuItem? = null
-    private var currentFragments = ArrayList<androidx.fragment.app.Fragment>()
+    var currentFragments = ArrayList<androidx.fragment.app.Fragment>()
 
     private var mStoredTextColor = 0
     private var mStoredBackgroundColor = 0
     private var mStoredPrimaryColor = 0
-    private var mStoredDayCode = ""
     private var mStoredIsSundayFirst = false
     private var mStoredUse24HourFormat = false
     private var mStoredUseEnglish = false
@@ -225,7 +224,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             mStoredBackgroundColor = backgroundColor
             mStoredUse24HourFormat = use24hourFormat
         }
-        mStoredDayCode = Formatter.getTodayCode(applicationContext)
     }
 
 

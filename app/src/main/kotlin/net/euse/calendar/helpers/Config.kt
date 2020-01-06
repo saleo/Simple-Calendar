@@ -158,5 +158,4 @@ class Config(context: Context) : BaseConfig(context) {
     private fun getMediumFontSize() = context.resources.getDimension(R.dimen.day_text_size) / context.resources.displayMetrics.density
     private fun getLargeFontSize() = getMediumFontSize() + 3f
 
-
 }

@@ -3,8 +3,6 @@ package net.euse.calendar.fragments
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.appcompat.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +10,7 @@ import android.widget.DatePicker
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import com.simplemobiletools.commons.extensions.beGone
 import com.simplemobiletools.commons.extensions.getDialogTheme
 import com.simplemobiletools.commons.extensions.setupDialogStuff
@@ -179,6 +178,9 @@ class MonthFragment : androidx.fragment.app.Fragment(), MonthlyCalendar {
                     val day = days[i]
                     if (day.dayEvents.size>0)
                         setOnClickListener {
+                            val bundle=Bundle()
+                            bundle.putString(DAY_CODE,day.code)
+                            ((activity as MainActivity).currentFragments.last() as MonthFragmentsHolder).arguments=bundle
                             (activity as MainActivity).openFragmentHolder(Formatter.getDateTimeFromCode(day.code), DAILY_VIEW)
                         }
 
