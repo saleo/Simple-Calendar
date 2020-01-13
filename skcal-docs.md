@@ -43,13 +43,13 @@ License.
 
 4. 目前涉及event表修改startTs的是addCustomizeEvent1个函数，context.fetchCalDavSync。
 
-5. 涉及notification的共5个,均只处理近1个月内的notifications(太多担心alarm耗电厉害)：
+5. 涉及alarm的共5个,均只处理近1个月内的alarm(太多担心alarm耗电厉害)：
 
    > settings中的reminderSwitch,reminderTime,addCustomizeEvent,3个开关
    >
-   > bootComplete
-   >
    > import-ics
+   >
+   > alarm triggered(before postNotification)
    
 6. 如遇当天有戒期的，则在提醒设置（调整）
 
@@ -70,6 +70,8 @@ License.
 14. 节气在app内置写入，不用下载ics文件
 
 15. 目前ics文件内含有最近三年**阳历年**数据，
+
+16. 如需**持续**提醒，条件有2个：开启通知权限+每次重启机器后立即打开一次本程序
 
 ---
 
