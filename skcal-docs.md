@@ -43,13 +43,15 @@ License.
 
 4. 目前涉及event表修改startTs的是addCustomizeEvent1个函数，context.fetchCalDavSync。
 
-5. 涉及alarm的共5个,均只处理近1个月内的alarm(太多担心alarm耗电厉害)：
+5. 涉及alarm的共6个,均只处理近1个月内的alarm(太多担心alarm耗电厉害)：
 
    > settings中的reminderSwitch,reminderTime,addCustomizeEvent,3个开关
    >
    > import-ics
    >
    > alarm triggered(before postNotification)
+   >
+   > notification tap to postpone
    
 6. 如遇当天有戒期的，则在提醒设置（调整）
 
@@ -92,3 +94,7 @@ License.
 ### 使用说明：
 
 如果重启手机，请尽快启动一次本程序、以激活通知功能（国内手机厂商限制所致）
+
+### 流程备忘：
+
+目前没有再用到caldav和sync等， 直接下载insert events
