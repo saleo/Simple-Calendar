@@ -734,3 +734,25 @@ private fun buildNotifationForDownloadImport(context: Context, pendingIntent: Pe
 
     return builder.build()
 }
+
+fun Context.addAlarms() {
+    val startTs_list=dbHelper.getStartTsList_afterward()
+    startTs_list.forEach{
+        addAlarm(it)
+    }
+}
+
+fun Context.addAlarm(startTs: Int){
+    val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val dayCode=Formatter.getDayCodeFromTS(startTs).toInt()
+    val intent = Intent(applicationContext, NotificationReceiver::class.java)
+    val pendingIntent=PendingIntent.getBroadcast(applicationContext, dayCode, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    val triggerTms=(startTs+ REMINDER_INITIAL_TS)*1000L
+    when {
+        isMarshmallowPlus() -> alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,triggerTms , pendingIntent)
+        isKitkatPlus() -> alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTms, pendingIntent)
+        else -> alarmManager.set(AlarmManager.RTC_WAKEUP,triggerTms, pendingIntent)
+    }
+    if (!config.ntfIDs.contains(dayCode.toString()))
+        config.ntfIDs.plus(dayCode)
+}

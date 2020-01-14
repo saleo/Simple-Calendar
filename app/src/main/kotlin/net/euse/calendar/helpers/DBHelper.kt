@@ -24,7 +24,7 @@ import kotlin.collections.ArrayList
 class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
     private val MAIN_TABLE_NAME = "events"
     private val COL_ID = "id"
-    private val COL_START_TS = "start_ts"
+    private val COL_START_TS = "start_ts"// 1546387200 as sample, that unit is seconds, not milli-seconds
     private val COL_END_TS = "end_ts"
     private val COL_TITLE = "title"
     private val COL_DESCRIPTION = "description"
@@ -1098,4 +1098,29 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         return gn
     }
 
+    fun getStartTsList_afterward():ArrayList<Int>{
+        val existNtfIds = context.config.ntfIDs
+        val nowSeconds=DateTime.now().seconds()
+        var listStartTs=ArrayList<Int>()
+
+        val selection = "$COL_ID in ($existNtfIds) and ($COL_START_TS+$REMINDER_INITIAL_TS) > $nowSeconds"
+        val cols = arrayOf(COL_START_TS)
+        val groupBy = "date($COL_START_TS, 'unixepoch', 'localtime')"
+        var cursor: Cursor? = null
+        try {
+            cursor = mDb.query(MAIN_TABLE_NAME, cols, selection, null, groupBy, null, null)
+            cursor?.use {
+                if (cursor.moveToFirst() == true) {
+                    do {
+                        listStartTs.plus(Formatter.getDayCodeFromTS(cursor.getIntValue(COL_START_TS)).toInt())
+                    }while (cursor.moveToNext())
+                }
+            }
+
+        } finally {
+            cursor?.close()
+        }
+    }
+
 }
+

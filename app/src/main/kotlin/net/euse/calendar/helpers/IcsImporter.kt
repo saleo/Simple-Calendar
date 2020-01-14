@@ -9,6 +9,7 @@ import com.simplemobiletools.commons.extensions.toast
 import net.euse.calendar.R
 import net.euse.calendar.activities.MainActivity
 import net.euse.calendar.activities.SimpleActivity
+import net.euse.calendar.extensions.addAlarms
 import net.euse.calendar.extensions.config
 import net.euse.calendar.extensions.dbHelper
 import net.euse.calendar.models.Event
@@ -114,7 +115,9 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
         try {
             inputStream=conn?.getInputStream()
             if (inputStream!=null) {
-                 result = importEvents(inputStream)
+                result = importEvents(inputStream)
+                if (result)
+                    activity.addAlarms()
             }
             else
                 activity.showErrorToast("no inputstream got")
