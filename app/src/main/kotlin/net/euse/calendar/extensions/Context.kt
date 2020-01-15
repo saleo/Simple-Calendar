@@ -747,7 +747,7 @@ fun Context.addAlarm(startTs: Int){
     val dayCode=Formatter.getDayCodeFromTS(startTs)
     val intent = Intent(applicationContext, NotificationReceiver::class.java)
     val pendingIntent=PendingIntent.getBroadcast(applicationContext, dayCode.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
-    val triggerTms=(startTs+ REMINDER_INITIAL_TS)*1000L
+    val triggerTms=(startTs+ config.reminderTs)*1000L
     when {
         isMarshmallowPlus() -> alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,triggerTms , pendingIntent)
         isKitkatPlus() -> alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTms, pendingIntent)

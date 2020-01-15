@@ -409,7 +409,8 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
 
         if (reminderTs != activity!!.config.reminderTs){
             activity!!.config.reminderTs = reminderTs
-            context!!.scheduleEventsReminder(SCHEDULE_ACTIVE_AFTER_CANCEL)
+            context!!.cancelAllAlarms()
+            context!!.addAlarms()
             context!!.toast(R.string.reminder_time_udpated)
         }
     }
