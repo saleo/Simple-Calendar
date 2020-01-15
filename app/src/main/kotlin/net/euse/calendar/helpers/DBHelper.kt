@@ -1098,12 +1098,16 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         return gn
     }
 
-    fun getStartTsList_afterward():ArrayList<Int>{
+    fun getStartTsList_in30days():List<Int>{
         val existNtfIds = context.config.ntfIDs
         val nowSeconds=DateTime.now().seconds()
-        var listStartTs=ArrayList<Int>()
+        val seconds30DaysLater=nowSeconds+30*24*60*60
+        var listStartTs:List<Int> = emptyList()
 
-        val selection = "$COL_ID in ($existNtfIds) and ($COL_START_TS+$REMINDER_INITIAL_TS) > $nowSeconds"
+
+        var selection = "($COL_START_TS+$REMINDER_INITIAL_TS) between $nowSeconds and $seconds30DaysLater"
+        if (!existNtfIds.isEmpty())
+            selection="replace(date($COL_START_TS, 'unixepoch', 'localtime'),'-','') not in ($existNtfIds) and ".plus(selection)
         val cols = arrayOf(COL_START_TS)
         val groupBy = "date($COL_START_TS, 'unixepoch', 'localtime')"
         var cursor: Cursor? = null
@@ -1112,7 +1116,7 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
             cursor?.use {
                 if (cursor.moveToFirst() == true) {
                     do {
-                        listStartTs.plus(Formatter.getDayCodeFromTS(cursor.getIntValue(COL_START_TS)).toInt())
+                        listStartTs=listStartTs.plus(cursor.getIntValue(COL_START_TS))
                     }while (cursor.moveToNext())
                 }
             }
@@ -1120,6 +1124,7 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         } finally {
             cursor?.close()
         }
+        return listStartTs
     }
 
 }

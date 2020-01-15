@@ -736,7 +736,7 @@ private fun buildNotifationForDownloadImport(context: Context, pendingIntent: Pe
 }
 
 fun Context.addAlarms() {
-    val startTs_list=dbHelper.getStartTsList_afterward()
+    val startTs_list=dbHelper.getStartTsList_in30days()
     startTs_list.forEach{
         addAlarm(it)
     }
@@ -744,15 +744,17 @@ fun Context.addAlarms() {
 
 fun Context.addAlarm(startTs: Int){
     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val dayCode=Formatter.getDayCodeFromTS(startTs).toInt()
+    val dayCode=Formatter.getDayCodeFromTS(startTs)
     val intent = Intent(applicationContext, NotificationReceiver::class.java)
-    val pendingIntent=PendingIntent.getBroadcast(applicationContext, dayCode, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    val pendingIntent=PendingIntent.getBroadcast(applicationContext, dayCode.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
     val triggerTms=(startTs+ REMINDER_INITIAL_TS)*1000L
     when {
         isMarshmallowPlus() -> alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,triggerTms , pendingIntent)
         isKitkatPlus() -> alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTms, pendingIntent)
         else -> alarmManager.set(AlarmManager.RTC_WAKEUP,triggerTms, pendingIntent)
     }
-    if (!config.ntfIDs.contains(dayCode.toString()))
-        config.ntfIDs.plus(dayCode)
+    if (config.ntfIDs.isNullOrEmpty())
+        config.ntfIDs=dayCode
+    else if (!config.ntfIDs.contains(dayCode))
+        config.ntfIDs=config.ntfIDs+","+dayCode
 }
