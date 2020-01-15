@@ -389,7 +389,7 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
         }
 
         if (context!!.config.reminderSwitch)
-            activity!!.processEventRemindersNotification(idsToProcessNotification)
+            context!!.addAlarms()
         callback()
     }
 

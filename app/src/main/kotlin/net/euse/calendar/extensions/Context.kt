@@ -14,7 +14,6 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
-import androidx.core.app.NotificationCompat
 import android.text.TextUtils
 import android.util.Log
 import android.view.Gravity
@@ -22,6 +21,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.app.NotificationCompat
 import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.getFilePublicUri
 import com.simplemobiletools.commons.helpers.isKitkatPlus
@@ -760,12 +760,27 @@ fun Context.addAlarm(startTs: Int){
 }
 
 fun Context.cancelAllAlarms(){
+    //default is for all include customize
     val notifyIntent = Intent(applicationContext, NotificationReceiver::class.java)
     var pendingIntent = PendingIntent.getBroadcast(applicationContext, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
     val alarm = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val alarmIds=TextUtils.split(config.ntfIDs,",")
+    var alarmIds=TextUtils.split(config.ntfIDs,",")
     alarmIds.forEach {
         pendingIntent = PendingIntent.getBroadcast(applicationContext, it.toInt(), notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         alarm.cancel(pendingIntent)
     }
+    config.ntfIDs=""
+}
+
+fun Context.cancelAlarm(alarmId:String) {
+    val notifyIntent = Intent(applicationContext, NotificationReceiver::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(applicationContext, alarmId.toInt(), notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+    val alarm = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    alarm.cancel(pendingIntent)
+    var s=config.ntfIDs;
+    s.replace(alarmId, "")
+    s=s.replace(",,",",")
+    val iLen=s.length
+    if (s[iLen-1]==',')
+        config.ntfIDs=s.substring(0,iLen-2)
 }

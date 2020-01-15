@@ -219,3 +219,7 @@ const val REPEAT_DOWNLOAD_IMPORT_RESULT="repeatDownloadImportResult"
 
 const val  REPEAT_DOWNLOAD_IMPORT_SUCCESS="success"
 const val  REPEAT_DOWNLOAD_IMPORT_FAIL="fail"
+
+const val ALARMS_CUSTOMIZE_EVENTS="alarms_customize_events"
+const val ALARMS_IMPORTED_EVENTS="alarms_imported_events"
+const val ALARMS_ALL_EVENTS="alarms_all_events"

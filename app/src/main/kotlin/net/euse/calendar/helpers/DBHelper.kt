@@ -1123,5 +1123,11 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         return listStartTs
     }
 
+    fun bDayOnlyHasImportEvents(dayCode:String): Boolean{
+        val dayStartTs=Formatter.getDayStartTS(dayCode)
+        val lst=getEventsWithImportIds ().filter {it.startTS==dayStartTs} as ArrayList<Event>
+        return !lst.isEmpty()
+    }
+
 }
 
