@@ -761,7 +761,11 @@ fun Context.addAlarm(startTs: Int){
 
 fun Context.cancelAllAlarms(){
     val notifyIntent = Intent(applicationContext, NotificationReceiver::class.java)
-    val pendingIntent = PendingIntent.getBroadcast(applicationContext, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+    var pendingIntent = PendingIntent.getBroadcast(applicationContext, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
     val alarm = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    alarm.cancel(pendingIntent)
+    val alarmIds=TextUtils.split(config.ntfIDs,",")
+    alarmIds.forEach {
+        pendingIntent = PendingIntent.getBroadcast(applicationContext, it.toInt(), notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        alarm.cancel(pendingIntent)
+    }
 }

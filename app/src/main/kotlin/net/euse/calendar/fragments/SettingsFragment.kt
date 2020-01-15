@@ -245,9 +245,9 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
             setupVibrate(reminderOnOff)
             setupReminderSound(reminderOnOff)
             if (reminderOnOff)
-                context!!.scheduleEventsReminder(SCHEDULE_ACTIVE)
+                context!!.addAlarms()
             else
-                context!!.scheduleEventsReminder(SCHEDULE_CANCEL)
+                context!!.cancelAllAlarms()
         }
     }
 

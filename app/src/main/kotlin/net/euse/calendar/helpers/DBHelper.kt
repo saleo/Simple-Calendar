@@ -479,10 +479,6 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
 
         context.updateWidgets()
 
-        events1.forEach {
-            context.cancelNotification(it.startTS,importEventsOnly)
-        }
-
         //deleteChildEvents(args, deleteFromCalDAV){iDeletedChild-> iDeleted=iDeleted+iDeletedChild}
         return iDeleted
     }
