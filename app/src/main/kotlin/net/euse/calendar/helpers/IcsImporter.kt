@@ -10,6 +10,7 @@ import net.euse.calendar.R
 import net.euse.calendar.activities.MainActivity
 import net.euse.calendar.activities.SimpleActivity
 import net.euse.calendar.extensions.addAlarms
+import net.euse.calendar.extensions.cancelAllAlarms
 import net.euse.calendar.extensions.config
 import net.euse.calendar.extensions.dbHelper
 import net.euse.calendar.models.Event
@@ -138,6 +139,8 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
         try {
             activity.dbHelper.deleteImportedEvents()
             Log.d(APP_TAG,"import events deleted")
+            activity.cancelAllAlarms()
+            Log.d(APP_TAG,"all alarms canceled")
             var prevLine = ""
 
             inputStream.bufferedReader().use {

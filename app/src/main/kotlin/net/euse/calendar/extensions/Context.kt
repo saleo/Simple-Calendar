@@ -758,3 +758,10 @@ fun Context.addAlarm(startTs: Int){
     else if (!config.ntfIDs.contains(dayCode))
         config.ntfIDs=config.ntfIDs+","+dayCode
 }
+
+fun Context.cancelAllAlarms(){
+    val notifyIntent = Intent(applicationContext, NotificationReceiver::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(applicationContext, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+    val alarm = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    alarm.cancel(pendingIntent)
+}
