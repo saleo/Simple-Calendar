@@ -365,7 +365,7 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
             if (iGregMonth<10) ggMonth="0$iGregMonth" else ggMonth="$iGregMonth"
             if (iGregDayofMonth<10) ggDayofMonth="0$iGregDayofMonth" else ggDayofMonth="$iGregDayofMonth"
 
-            startTs = Formatter.getDayStartTS("$iGregYear$ggMonth$ggDayofMonth")
+            startTs = Formatter.getDayStartTS("$iGregYear$ggMonth$ggDayofMonth")+8*60*60
             endTs = startTs + 1
             if (i==0) parentId=0
             val event = Event(0, startTs, endTs, title = title,  source = SOURCE_CUSTOMIZE_ANNIVERSARY,
