@@ -355,8 +355,8 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
         val lunarMonth = lundarDate.substring(4, 6).toInt()
         val lunarDay = lundarDate.substring(6, 8).toInt()
 
-        for (i in 1..YEARS_LIMIT_CUSTOMIZE_EVENT) {
-            val myCal = ChineseCalendar(true, lunarYear, lunarMonth, lunarDay)
+        for (i in 0..YEARS_LIMIT_CUSTOMIZE_EVENT-1) {
+            val myCal = ChineseCalendar(true, lunarYear+i, lunarMonth, lunarDay)
             iGregYear = myCal.get(Calendar.YEAR)
             iGregMonth = myCal.get(Calendar.MONTH)+1
             iGregDayofMonth = myCal.get(Calendar.DAY_OF_MONTH)

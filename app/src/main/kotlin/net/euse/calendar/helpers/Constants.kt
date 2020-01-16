@@ -191,7 +191,7 @@ const val FORBIDDEN_DAY= 2
 const val ANNIVERSARY_DAY= 3
 
 const val PLACEHOLDER_8WHITESPACE="                "
-const val YEARS_LIMIT_CUSTOMIZE_EVENT=2
+const val YEARS_LIMIT_CUSTOMIZE_EVENT=5
 
 const val LICHUN_INDEX=3
 const val LIXIA_INDEX=9
