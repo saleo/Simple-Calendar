@@ -22,11 +22,13 @@ import net.euse.calendar.activities.MainActivity
 import net.euse.calendar.adapters.CustomizeEventsAdapter
 import net.euse.calendar.dialogs.CustomizeEventDialog
 import net.euse.calendar.dialogs.CustomizeLunarDialog
-import net.euse.calendar.extensions.*
+import net.euse.calendar.extensions.addAlarms
+import net.euse.calendar.extensions.cancelAllAlarms
+import net.euse.calendar.extensions.config
+import net.euse.calendar.extensions.dbHelper
 import net.euse.calendar.helpers.*
 import net.euse.calendar.helpers.Formatter
 import net.euse.calendar.models.Event
-import org.joda.time.DateTime
 import java.util.*
 import kotlinx.android.synthetic.main.fragment_settings.rv_customize_events1 as rv_customize_event
 
@@ -290,7 +292,7 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
         (activity as MainActivity).runOnUiThread {
             tv_settings_placeholder.beVisibleIf(le.isEmpty())
             rv_customize_event.beGoneIf(le.isEmpty())
-            ceAdapter.addVerticalDividers(true);
+            ceAdapter.addVerticalDividers(true)
             rv_customize_event.adapter=ceAdapter }
 
 
@@ -318,11 +320,10 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
 
         CustomizeEventDialog(activity as MainActivity, whomfor, whatfor, lunarDate) { cb_whomfor, cb_whatfor, cb_lunarDate, cb_gregorianDate ->
             val title=cb_whomfor+" "+cb_whatfor
-            val cb_startTs=Formatter.getDayStartTS(cb_gregorianDate)
             if (title == whomfor+" "+whatfor && lunarDate == cb_lunarDate) return@CustomizeEventDialog
             val iDeleted=activity!!.dbHelper.deleteEvents(arrayOf(id),false)
             Log.d(APP_TAG,"customized event deleted both id=$id and those whose parentId is this $id,total count=$iDeleted")
-            addCustomizeEvent(title,cb_startTs,cb_lunarDate){
+            addCustomizeEvent(title,cb_lunarDate){
                 activity!!.toast(R.string.customized_event_updated)
                 refreshItems()
             }
@@ -337,20 +338,12 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
         refreshItems()
     }
 
-    private fun addCustomizeEvent(title:String,inStartTs:Int=0,inLunarDate:String="",callback:()->Unit) {
+    private fun addCustomizeEvent(title:String,inLunarDate:String="",callback:()->Unit) {
         var startTs=0;var endTs= 0; var parentId=0
         var iGregDayofMonth=0; var iGregMonth=0;var iGregYear=0
         var ggMonth="";var ggDayofMonth=""
         val lundarDate: String
         var idsToProcessNotification = ArrayList<String>()
-
-        if (inStartTs == 0) {
-            val gregorian = tv_settings_customize_event_when_gregorian.value
-
-            startTs = Formatter.getDayStartTS(gregorian)
-        } else {
-            startTs = inStartTs
-        }
 
         if (inLunarDate.isEmpty()) {
             lundarDate = tv_settings_customize_event_when.value
@@ -358,17 +351,11 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
             lundarDate = inLunarDate
         }
 
-        var yearsToAdd = (activity!!.getNowSeconds() - startTs) / YEAR
-
-        if (yearsToAdd == 0) yearsToAdd++
-        else if ((DateTime().dayOfYear) < (DateTime(startTs.toLong()).dayOfYear)) yearsToAdd++
-
         var lunarYear = lundarDate.substring(0, 4).toInt()
         val lunarMonth = lundarDate.substring(4, 6).toInt()
         val lunarDay = lundarDate.substring(6, 8).toInt()
 
-        for (i in 0..YEARS_LIMIT_CUSTOMIZE_EVENT) {
-            lunarYear += yearsToAdd
+        for (i in 1..YEARS_LIMIT_CUSTOMIZE_EVENT) {
             val myCal = ChineseCalendar(true, lunarYear, lunarMonth, lunarDay)
             iGregYear = myCal.get(Calendar.YEAR)
             iGregMonth = myCal.get(Calendar.MONTH)+1
