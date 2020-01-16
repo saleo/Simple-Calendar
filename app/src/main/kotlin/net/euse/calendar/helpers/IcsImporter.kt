@@ -137,14 +137,14 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
 
     private fun importEvents(inputStream: InputStream, defaultEventType: Int=0, calDAVCalendarId: Int=0): Boolean {
         try {
-            activity.dbHelper.deleteImportedEvents()
-            Log.d(APP_TAG,"import events deleted")
-
             val alarmIds=activity.config.getNtfIdsAsList()
             alarmIds.forEach(){
                 if (activity.dbHelper.bDayOnlyHasImportEvents(it))
                     activity.cancelAlarm(it)
             }
+
+            activity.dbHelper.deleteImportedEvents()
+            Log.d(APP_TAG,"import events deleted")
 
             var prevLine = ""
 

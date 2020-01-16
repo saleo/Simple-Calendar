@@ -22,10 +22,7 @@ import net.euse.calendar.activities.MainActivity
 import net.euse.calendar.adapters.CustomizeEventsAdapter
 import net.euse.calendar.dialogs.CustomizeEventDialog
 import net.euse.calendar.dialogs.CustomizeLunarDialog
-import net.euse.calendar.extensions.addAlarms
-import net.euse.calendar.extensions.cancelAllAlarms
-import net.euse.calendar.extensions.config
-import net.euse.calendar.extensions.dbHelper
+import net.euse.calendar.extensions.*
 import net.euse.calendar.helpers.*
 import net.euse.calendar.helpers.Formatter
 import net.euse.calendar.models.Event
@@ -284,7 +281,7 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
     }
 
     private fun setupCustomizeEventList() {
-        val le=activity!!.dbHelper.getCustomizedEvents().sortedByDescending { event ->event.id  }
+        val le=activity!!.dbHelper.getCustomizedEventsWithoutChildren().sortedByDescending { event ->event.id  }
 
         val ceAdapter = CustomizeEventsAdapter(activity as MainActivity, ArrayList<Event>(le) , rv_customize_event,
                 {any -> itemModifyClick(any as Event)},{ any -> itemRemoveClick(any as Event)})
@@ -331,6 +328,11 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
     }
 
     private fun itemRemoveClick(event: Event) {
+        val alarmIds=activity!!.config.getNtfIdsAsList()
+        alarmIds.forEach(){
+            if (activity!!.dbHelper.bDayOnlyHasCustomizeEvents(it))
+                activity!!.cancelAlarm(it)
+        }
         val id=event.id.toString()
         val iDeleted=activity!!.dbHelper.deleteEvents(arrayOf(id),false)
         activity!!.toast(R.string.customized_event_deleted)

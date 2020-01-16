@@ -269,12 +269,20 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         callback?.invoke()
     }
 
-    fun getCustomizedEvents(): List<Event> {
+    fun getCustomizedEventsWithoutChildren(): List<Event> {
         val selection = "$MAIN_TABLE_NAME.$COL_EVENT_SOURCE = ? and $COL_PARENT_EVENT_ID=0"
         val selectionArgs = arrayOf(SOURCE_CUSTOMIZE_ANNIVERSARY)
         val cursor = getEventsCursor(selection, selectionArgs)
         return fillEvents(cursor)
     }
+
+    fun getCustomizedEvents(): List<Event> {
+        val selection = "$MAIN_TABLE_NAME.$COL_EVENT_SOURCE = ?"
+        val selectionArgs = arrayOf(SOURCE_CUSTOMIZE_ANNIVERSARY)
+        val cursor = getEventsCursor(selection, selectionArgs)
+        return fillEvents(cursor)
+    }
+
 
     private fun fillEventValues(event: Event): ContentValues {
         return ContentValues().apply {
@@ -479,30 +487,13 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
 
         context.updateWidgets()
 
-        //deleteChildEvents(args, deleteFromCalDAV){iDeletedChild-> iDeleted=iDeleted+iDeletedChild}
+        deleteChildEvents(args){iDeletedChild-> iDeleted=iDeleted+iDeletedChild}
         return iDeleted
     }
 
-    private fun deleteChildEvents(ids: String, deleteFromCalDAV: Boolean,callback: ((Int) -> Unit)?) {
-        val projection = arrayOf(COL_ID)
+    private fun deleteChildEvents(ids: String,callback: ((Int) -> Unit)?) {
         val selection = "$COL_PARENT_EVENT_ID IN ($ids)"
-        val childIds = ArrayList<String>()
-        var iDeletedChild=0
-
-        var cursor: Cursor? = null
-        try {
-            cursor = mDb.query(MAIN_TABLE_NAME, projection, selection, null, null, null, null)
-            if (cursor?.moveToFirst() == true) {
-                do {
-                    childIds.add(cursor.getStringValue(COL_ID))
-                } while (cursor.moveToNext())
-            }
-        } finally {
-            cursor?.close()
-        }
-
-        if (childIds.isNotEmpty())
-            iDeletedChild=deleteEvents(childIds.toTypedArray(), deleteFromCalDAV)
+        var iDeletedChild=mDb.delete(MAIN_TABLE_NAME, selection, null)
 
         callback!!.invoke(iDeletedChild)
     }
@@ -1126,6 +1117,12 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
     fun bDayOnlyHasImportEvents(dayCode:String): Boolean{
         val dayStartTs=Formatter.getDayStartTS(dayCode)
         val lst=getEventsWithImportIds ().filter {it.startTS==dayStartTs} as ArrayList<Event>
+        return !lst.isEmpty()
+    }
+
+    fun bDayOnlyHasCustomizeEvents(dayCode:String): Boolean{
+        val dayStartTs=Formatter.getDayStartTS(dayCode)
+        val lst=getCustomizedEvents ().filter {it.startTS==dayStartTs} as ArrayList<Event>
         return !lst.isEmpty()
     }
 

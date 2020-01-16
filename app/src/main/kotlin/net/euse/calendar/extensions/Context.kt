@@ -778,9 +778,9 @@ fun Context.cancelAlarm(alarmId:String) {
     val alarm = getSystemService(Context.ALARM_SERVICE) as AlarmManager
     alarm.cancel(pendingIntent)
     var s=config.ntfIDs;
-    s.replace(alarmId, "")
+    s=s.replace(alarmId, "")
     s=s.replace(",,",",")
     val iLen=s.length
     if (s[iLen-1]==',')
-        config.ntfIDs=s.substring(0,iLen-2)
+        config.ntfIDs=s.substring(0,iLen-1)
 }
