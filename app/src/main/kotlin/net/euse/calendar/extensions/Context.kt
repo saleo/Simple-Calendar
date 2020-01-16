@@ -654,30 +654,6 @@ private fun isLiReleventDay(year:Int,month:Int,day:Int):Boolean{
     return false
 }
 
-fun Context.scheduleDownloadImport(activate: Boolean) {
-    val downloadImportIntent = Intent(applicationContext, DownloadImportReceiver::class.java)
-    val pendingIntent = PendingIntent.getBroadcast(applicationContext, 0, downloadImportIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-    val alarm = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-    if (activate) {
-        //val checkInterval = 30 * AlarmManager.INTERVAL_DAY
-        val checkInterval = 3*60*1000L // 2 minute
-        try {
-            val daycode=Formatter.getDayCodeFromDateTime(DateTime())
-            val dayStartTs=Formatter.getDayStartTS(daycode)
-            val currentDayReminderDateTime=Formatter.getDateTimeFromTS(dayStartTs+config.scheduledDownloadImportTimeSeconds)
-            if (currentDayReminderDateTime.isAfterNow)
-                alarm.setRepeating(AlarmManager.RTC_WAKEUP, currentDayReminderDateTime.millis, checkInterval, pendingIntent)
-            else
-                alarm.setRepeating(AlarmManager.RTC_WAKEUP, currentDayReminderDateTime.plusDays(1).millis, checkInterval, pendingIntent)
-
-        } catch (ignored: SecurityException) {
-        }
-    }
-    else
-        alarm.cancel(pendingIntent)
-}
-
 fun Context.notifyDownloadImportResult(result: Boolean){
     val intent = Intent(this, MainActivity::class.java)
     val pendingIntent=PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)

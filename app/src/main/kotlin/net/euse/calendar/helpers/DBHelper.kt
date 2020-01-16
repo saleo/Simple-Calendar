@@ -1092,7 +1092,7 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         var listStartTs:List<Int> = emptyList()
 
 
-        var selection = "($COL_START_TS+$REMINDER_INITIAL_TS) between $nowSeconds and $seconds30DaysLater"
+        var selection = "($COL_START_TS+${context.config.reminderTs}) between $nowSeconds and $seconds30DaysLater"
         if (!existNtfIds.isEmpty())
             selection="replace(date($COL_START_TS, 'unixepoch', 'localtime'),'-','') not in ($existNtfIds) and ".plus(selection)
         val cols = arrayOf(COL_START_TS)
