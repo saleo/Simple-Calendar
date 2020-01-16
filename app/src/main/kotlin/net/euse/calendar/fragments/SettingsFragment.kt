@@ -244,7 +244,7 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
             setupVibrate(reminderOnOff)
             setupReminderSound(reminderOnOff)
             if (reminderOnOff)
-                context!!.addAlarms()
+                context!!.addAllAlarms()
             else
                 context!!.cancelAllAlarms()
         }
@@ -378,7 +378,7 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
         }
 
         if (context!!.config.reminderSwitch)
-            context!!.addAlarms()
+            context!!.addAllAlarms()
         callback()
     }
 
@@ -397,9 +397,11 @@ class SettingsFragment: MyFragmentHolder(), AdapterView.OnItemSelectedListener,V
 
 
         if (reminderTs != activity!!.config.reminderTs){
+            //if the two are equal, thats at setupReminderTs during app-launch, or not changed although tapped the spin
+            // if not equal,spin items selected and the value changed
             activity!!.config.reminderTs = reminderTs
             context!!.cancelAllAlarms()
-            context!!.addAlarms()
+            context!!.addAllAlarms()
             context!!.toast(R.string.reminder_time_udpated)
         }
     }

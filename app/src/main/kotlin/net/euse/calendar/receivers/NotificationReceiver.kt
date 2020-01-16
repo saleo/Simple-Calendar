@@ -4,9 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.PowerManager
-import net.euse.calendar.extensions.dbHelper
-import net.euse.calendar.extensions.postGroupedNotify
-import net.euse.calendar.extensions.updateListWidget
+import net.euse.calendar.extensions.*
 import net.euse.calendar.helpers.APP_TAG
 
 class NotificationReceiver : BroadcastReceiver() {
@@ -26,6 +24,8 @@ class NotificationReceiver : BroadcastReceiver() {
 //            return
 //        }
 
+        context.cancelAllAlarms()
+        context.addAllAlarms()
         val gn=context.dbHelper.getDayGroupedNotification()
         gn.apply {
             if (ntfId!=-1)
