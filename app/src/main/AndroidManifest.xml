@@ -4,29 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="net.euse.calendar"
     android:installLocation="internalOnly">
-
-
-    <uses-permission android:name="android.permission.READ_CALENDAR"/>
-    <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
-
     <!-- normal permissions -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name='android.permission.WAKE_LOCK'/>
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
-    <uses-permission android:name="android.permission.READ_SYNC_STATS"/>
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
-
-    <!-- account management permissions not required for own accounts since API level 22 -->
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" android:maxSdkVersion="22"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" android:maxSdkVersion="22"/>
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" android:maxSdkVersion="22"/>
 
     <!--
          for writing external log files; permission only required for SDK <= 18 because since then,
