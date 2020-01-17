@@ -342,7 +342,7 @@ private fun getPendingIntent(context: Context, event: Event): PendingIntent {
 
 private fun getPendingIntentWithGroupedNtfId(context: Context,groupedNtfId:Int):PendingIntent{
     val intent = Intent(context, MainActivity::class.java)
-    intent.putExtra(DAY_CODE,groupedNtfId)
+    intent.putExtra(DAY_CODE,groupedNtfId.toString())
     return PendingIntent.getActivity(context, groupedNtfId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 }
 
@@ -712,7 +712,7 @@ private fun buildNotifationForDownloadImport(context: Context, pendingIntent: Pe
 }
 
 fun Context.addAllAlarms() {
-    val startTs_list=dbHelper.getStartTsList_in30days()
+    val startTs_list=dbHelper.getStartTsList_in30days_notInAlarmList()
     startTs_list.forEach{
         addAlarm(it)
     }

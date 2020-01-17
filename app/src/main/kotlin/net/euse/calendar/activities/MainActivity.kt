@@ -226,7 +226,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
     }
 
-
+    //if its a daycode open, open the dayFragment here and return true to caller
     private fun checkOpenIntents(): Boolean {
         val dayCodeToOpen = intent.getStringExtra(DAY_CODE) ?: ""
         val openMonth = intent.getBooleanExtra(OPEN_MONTH, false)
