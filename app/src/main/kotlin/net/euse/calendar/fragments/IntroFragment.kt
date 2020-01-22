@@ -7,6 +7,7 @@ import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebViewClient
 import net.euse.calendar.R
 import net.euse.calendar.activities.MainActivity
 import net.euse.calendar.activities.SimpleActivity
@@ -36,6 +37,8 @@ class IntroFragment: MyFragmentHolder() , TabLayout.OnTabSelectedListener{
 
         txt_about_intro.text = getString(R.string.str_intro_skcal)
         intro_tabs.getTabAt(0)
+        wv_about_intro.webViewClient=WebViewClient()
+        wv_about_intro.loadUrl("file:///android_asset/shoukangrili.html")
 
         setupTabs()
         txt_about_intro.movementMethod=ScrollingMovementMethod()
@@ -52,9 +55,9 @@ class IntroFragment: MyFragmentHolder() , TabLayout.OnTabSelectedListener{
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
         when (tab!!.text){
-            getString(R.string.title_intro_skcal)-> txt_about_intro.text=getString(R.string.str_intro_skcal)
-            getString(R.string.title_intro_sk)-> txt_about_intro.text=getString(R.string.str_intro_sk)
-            getString(R.string.title_intro_xiangyu)-> txt_about_intro.text=getString(R.string.str_intro_xiangyu)
+            getString(R.string.title_intro_skcal)->  wv_about_intro.loadUrl("file:///android_asset/shoukangrili.html")
+            getString(R.string.title_intro_sk)->  wv_about_intro.loadUrl("file:///android_asset/xuehui.html")
+            getString(R.string.title_intro_xiangyu)->  wv_about_intro.loadUrl("file:///android_asset/xiangyu.html")
         }
     }
 

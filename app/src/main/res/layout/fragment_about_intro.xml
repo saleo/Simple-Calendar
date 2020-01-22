@@ -44,4 +44,8 @@
         android:textIsSelectable="true"
         android:text="@string/str_intro_xiangyu" />
 
+    <WebView
+        android:id="@+id/wv_about_intro"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>
