@@ -712,7 +712,7 @@ private fun buildNotifationForDownloadImport(context: Context, pendingIntent: Pe
 }
 
 fun Context.addAllAlarms() {
-    val startTs_list=dbHelper.getStartTsList_in30days_notInAlarmList()
+    val startTs_list=dbHelper.getStartTsList_in30days()
     startTs_list.forEach{
         addAlarm(it)
     }

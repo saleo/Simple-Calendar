@@ -1085,8 +1085,7 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         return gn
     }
 
-    fun getStartTsList_in30days_notInAlarmList():List<Int>{
-        val existNtfIds = context.config.ntfIDs
+    fun getStartTsList_in30days():List<Int>{
         val nowSeconds=DateTime.now().seconds()
         val seconds30DaysLater=nowSeconds+30*24*60*60
         var listStartTs:List<Int> = emptyList()
@@ -1094,8 +1093,6 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
 
         var selection = "($COL_START_TS+${context.config.reminderTs}) between $nowSeconds and $seconds30DaysLater"
 
-        if (!existNtfIds.isEmpty())
-            selection="replace(date($COL_START_TS, 'unixepoch', 'localtime'),'-','') not in ($existNtfIds) and ".plus(selection)
         val cols = arrayOf(COL_START_TS)
         val groupBy = "date($COL_START_TS, 'unixepoch', 'localtime')"
         var cursor: Cursor? = null
