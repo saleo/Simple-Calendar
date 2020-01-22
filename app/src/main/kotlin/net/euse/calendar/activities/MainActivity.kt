@@ -179,6 +179,12 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
         mCalDAVSyncHandler.removeCallbacksAndMessages(null)
         contentResolver.unregisterContentObserver(calDAVSyncObserver)
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        addAllAlarms()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
