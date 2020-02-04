@@ -19,16 +19,20 @@ class MonthCalendarViewFragment:Fragment(),CalendarView.OnCalendarSelectListener
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view=inflater.inflate(R.layout.fragment_month_calendarview,container,false)
-
-        calendarView.setOnCalendarSelectListener(this)
-        initData()
         return view
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        initWindow()
+        calendarView.setOnCalendarSelectListener(this)
+        initData()
     }
 
+    protected fun initWindow(){
+
+    }
 
     protected fun initData() {
         val year = calendarView.getCurYear()

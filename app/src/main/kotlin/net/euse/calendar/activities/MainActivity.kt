@@ -17,6 +17,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.core.app.NotificationManagerCompat
+import androidx.fragment.app.Fragment
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.PERMISSION_READ_CALENDAR
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CALENDAR
@@ -426,7 +427,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     fun openFragmentHolder(dateTime: DateTime=DateTime(), view: Int= MONTHLY_VIEW) {
-        var fragment:MyFragmentHolder
+        var fragment:Fragment
         if ((config.storedView == DAILY_VIEW) && (view == DAILY_VIEW))
         else if ((config.storedView == MONTHLY_VIEW) && (view == MONTHLY_VIEW))
         else if ((config.storedView == EVENTS_LIST_VIEW) && (view == EVENTS_LIST_VIEW))
@@ -443,7 +444,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         config.storedView= view
         when (view){
             DAILY_VIEW -> fragment = DayFragmentsHolder()
-            MONTHLY_VIEW -> fragment = MonthFragmentsHolder()
+            MONTHLY_VIEW -> fragment = MonthCalendarViewFragment()
             EVENTS_LIST_VIEW -> fragment = EventListFragmentsHolder()
             QINGXIN_VIEW -> fragment = QingxinFragment()
             ABOUT_VIEW -> fragment=AboutFragment()
@@ -451,7 +452,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             ABOUT_CREDIT_VIEW -> fragment=CreditFragment()
             ABOUT_LICENSE_VIEW -> fragment=LicenseFragment()
             SETTINGS_VIEW -> fragment=SettingsFragment()
-            else -> fragment=MonthFragmentsHolder()
+            else -> fragment=MonthCalendarViewFragment()
         }
 
         currentFragments.add(fragment as androidx.fragment.app.Fragment)
@@ -472,7 +473,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
     private fun getFragmentsHolder() = when (config.storedView) {
         DAILY_VIEW -> DayFragmentsHolder()
-        MONTHLY_VIEW -> MonthFragmentsHolder()
+        MONTHLY_VIEW -> MonthCalendarViewFragment()
         YEARLY_VIEW -> YearFragmentsHolder()
         EVENTS_LIST_VIEW -> EventListFragmentsHolder()
         QINGXIN_VIEW -> QingxinFragment()
@@ -482,7 +483,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         ABOUT_HEALTH_VIEW -> HealthFragment()
         ABOUT_LICENSE_VIEW -> LicenseFragment()
         SETTINGS_VIEW -> SettingsFragment()
-        else -> MonthFragmentsHolder()
+        else -> MonthCalendarViewFragment()
     }
 
     fun refreshViewPager() {
