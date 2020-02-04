@@ -12,9 +12,12 @@ import com.haibin.calendarview.CalendarView
 import com.haibin.calendarview.TrunkBranchAnnals
 import kotlinx.android.synthetic.main.fragment_month_calendarview.*
 import net.euse.calendar.R
+import net.euse.calendar.activities.MainActivity
+import net.euse.calendar.helpers.MONTHLY_VIEW
+import org.joda.time.DateTime
 import java.util.*
 
-class MonthCalendarViewFragment:Fragment(),CalendarView.OnCalendarSelectListener{
+class MonthCalendarViewFragment:Fragment(),CalendarView.OnCalendarSelectListener,CalendarView.OnMonthChangeListener{
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -27,7 +30,13 @@ class MonthCalendarViewFragment:Fragment(),CalendarView.OnCalendarSelectListener
 
         initWindow()
         calendarView.setOnCalendarSelectListener(this)
+        calendarView.setOnMonthChangeListener(this)
         initData()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).updateTopBottom(view=MONTHLY_VIEW)
     }
 
     protected fun initWindow(){
@@ -80,6 +89,11 @@ class MonthCalendarViewFragment:Fragment(),CalendarView.OnCalendarSelectListener
         Log.e("onDateSelected", "  " + calendarView.getSelectedCalendar().getScheme() +
                 "  --  " + calendarView.getSelectedCalendar().isCurrentDay())
         Log.e("干支年纪 ： ", " -- " + TrunkBranchAnnals.getTrunkBranchYear(calendar.lunarCalendar.year))
+    }
+
+    override fun onMonthChange(year: Int, month: Int) {
+        Log.d(tag,"year=$year...month=$month")
+        (activity as MainActivity).updateTopBottom(DateTime().withDate(year,month,1), MONTHLY_VIEW)
     }
 }
 
