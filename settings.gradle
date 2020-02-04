@@ -1,3 +1,4 @@
-include ':app', ':commons',':GregorianLunarCalendarView'
+include ':app', ':commons',':GregorianLunarCalendarView',':calendarview'
 project(':commons').projectDir = new File('commons')
 project(':GregorianLunarCalendarView').projectDir = new File('GregorianLunarCalendarView')
+project(':calendarview').projectDir = new File('calendarview')
