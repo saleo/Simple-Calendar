@@ -1,7 +1,13 @@
 package net.euse.calendar.fragments
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.CharacterStyle
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +16,7 @@ import androidx.fragment.app.Fragment
 import com.haibin.calendarview.Calendar
 import com.haibin.calendarview.CalendarView
 import com.haibin.calendarview.TrunkBranchAnnals
+import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_month_calendarview.*
 import net.euse.calendar.R
 import net.euse.calendar.activities.MainActivity
@@ -82,6 +89,10 @@ class MonthCalendarViewFragment:Fragment(),CalendarView.OnCalendarSelectListener
     @SuppressLint("SetTextI18n")
     override fun onCalendarSelect(calendar: Calendar, isClick: Boolean) {
 
+        if (isClick) {
+            Toasty.custom(activity as Context, getFormattedMessage(), null, resources.getColor(R.color.md_green_100), resources.getColor(R.color.md_green_100), Toasty.LENGTH_SHORT, false, true).show()
+        }
+
         Log.e("onDateSelected", "  -- " + calendar.year +
                 "  --  " + calendar.month +
                 "  -- " + calendar.day +
@@ -94,6 +105,24 @@ class MonthCalendarViewFragment:Fragment(),CalendarView.OnCalendarSelectListener
     override fun onMonthChange(year: Int, month: Int) {
         Log.d(tag,"year=$year...month=$month")
         (activity as MainActivity).updateTopBottom(DateTime().withDate(year,month,1), MONTHLY_VIEW)
+    }
+
+    private fun getFormattedMessage(): CharSequence {
+        val blueForeColor: CharacterStyle
+        val redForeColor: CharacterStyle
+        blueForeColor = ForegroundColorSpan(Color.BLUE)
+        redForeColor = ForegroundColorSpan(Color.RED)
+
+        val word1 = "word1"
+        val word2 = "word2"
+        val ssb = SpannableStringBuilder(word1).append("\n").append(word2)
+        val len_word1 = word1.length
+        val len_word2 = word2.length
+
+        ssb.setSpan(blueForeColor, 0, len_word1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+        ssb.setSpan(redForeColor, len_word1, len_word1 + len_word2 + 1, Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+
+        return ssb
     }
 }
 
