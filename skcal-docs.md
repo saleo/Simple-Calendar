@@ -92,6 +92,11 @@ License.
 > -7829368
 >
 > -65536
+color用int标示会出现负值:
+
+Color.parseColor("red")=-65536
+Color.parseColor("blue")=-16776961
+Color.parseColor("grey")=-7829368
 
 ### 使用说明：
 

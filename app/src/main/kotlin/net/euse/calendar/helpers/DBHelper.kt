@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteQueryBuilder
 import android.text.TextUtils
 import android.util.SparseIntArray
+import com.haibin.calendarview.Calendar
 import com.simplemobiletools.commons.extensions.getIntValue
 import com.simplemobiletools.commons.extensions.getLongValue
 import com.simplemobiletools.commons.extensions.getStringValue
@@ -20,6 +21,7 @@ import net.euse.calendar.models.GroupedNotification
 import org.joda.time.DateTime
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
     private val MAIN_TABLE_NAME = "events"
@@ -1124,5 +1126,43 @@ class DBHelper private constructor(val context: Context) : SQLiteOpenHelper(cont
         return !lst.isEmpty()
     }
 
+    fun getAllEventsIntoMap(map:HashMap<String, Calendar>){
+        val cols = arrayOf(COL_START_TS, "group_concat($COL_COLOR) as gcColors","group_concat($COL_TITLE) as gcTitles")
+        val groupBy = "date($COL_START_TS, 'unixepoch', 'localtime')"
+        val cursor=mDb.query("$MAIN_TABLE_NAME",cols,null,null,groupBy,null,COL_START_TS)
+        var year=0;var month=0;var day=0
+        var dayCode=""; var gcColors="";var gcTitles=""
+        var cal:Calendar
+        cursor?.use {
+            if (cursor.moveToFirst()) {
+                do {
+                    dayCode=Formatter.getDayCodeFromTS(cursor.getInt(0))
+                    year=dayCode.substring(0,4).toInt()
+                    month=dayCode.substring(4,6).toInt()
+                    day=dayCode.substring(6,8).toInt()
+                    gcColors=cursor.getStringValue("gcColors")
+                    gcTitles=cursor.getStringValue("gcTitles")
+                    cal=getSchemeCalendar(year, month, day, gcColors,gcTitles)
+                    map.put(cal.toString(),cal)
+
+                } while (cursor.moveToNext())
+            }
+        }
+    }
+
+    private fun getSchemeCalendar(year: Int, month: Int, day: Int, gcColors: String, gcTitles: String): com.haibin.calendarview.Calendar {
+        val calendar = com.haibin.calendarview.Calendar()
+        calendar.year = year
+        calendar.month = month
+        calendar.day = day
+        calendar.setSchemeColor(-0xff3300);//如果单独标记颜色、则会使用这个颜色
+        calendar.setScheme(gcTitles);
+        val colors=gcColors.split(",")
+        val titles=gcTitles.split(",")
+        for (i in 0 until colors.size){
+            calendar.addScheme(colors[i].toInt(),titles[i])
+        }
+        return calendar
+    }
 }
 
