@@ -7,7 +7,6 @@ import android.graphics.Paint
 import android.view.View
 import com.haibin.calendarview.Calendar
 import com.haibin.calendarview.MonthView
-import net.euse.calendar.R
 
 class SkcalMonthView(context: Context) : MonthView(context) {
 
@@ -18,7 +17,6 @@ class SkcalMonthView(context: Context) : MonthView(context) {
      *
      */
     private val mSchemeBasicPaint = Paint()
-    private val mSelectedPaint1=Paint()
 
 
     init {
@@ -34,9 +32,7 @@ class SkcalMonthView(context: Context) : MonthView(context) {
         //兼容硬件加速无效的代码
         setLayerType(View.LAYER_TYPE_SOFTWARE, mSchemeBasicPaint)
         //4.0以上硬件加速会导致无效
-        mSelectedPaint1.style=Paint.Style.FILL
-        mSelectedPaint1.color=resources.getColor(R.color.md_green_100)
-        mSelectedPaint1.maskFilter = BlurMaskFilter(50f, BlurMaskFilter.Blur.SOLID)
+        mSelectedPaint.maskFilter = BlurMaskFilter(50f, BlurMaskFilter.Blur.SOLID)
     }
 
     /**
@@ -50,7 +46,7 @@ class SkcalMonthView(context: Context) : MonthView(context) {
      * @return true 则绘制onDrawScheme，因为这里背景色不是是互斥的
      */
     override fun onDrawSelected(canvas: Canvas, calendar: Calendar, x: Int, y: Int, hasScheme: Boolean): Boolean {
-        canvas.drawRect(x.toFloat(), y.toFloat(), (x + mItemWidth).toFloat(), (y + mItemHeight).toFloat(), mSelectedPaint1)
+        canvas.drawRect(x.toFloat(), y.toFloat(), (x + mItemWidth).toFloat(), (y + mItemHeight).toFloat(), mSelectedPaint)
         return true
     }
 
@@ -108,7 +104,10 @@ class SkcalMonthView(context: Context) : MonthView(context) {
             canvas.drawText(calendar.day.toString(), cx.toFloat(), mTextBaseLine + top,
                     if (calendar.isCurrentMonth && isInRange) mSchemeTextPaint else mOtherMonthTextPaint)
 
-            canvas.drawText(calendar.lunar, cx.toFloat(), mTextBaseLine + y.toFloat() + (mItemHeight / 10).toFloat(), mCurMonthLunarTextPaint)
+            canvas.drawText(calendar.lunar, cx.toFloat(), mTextBaseLine + y.toFloat() + (mItemHeight / 10).toFloat(),
+                    if (calendar.isCurrentDay && isInRange)
+                        mCurDayLunarTextPaint
+                    else if (calendar.isCurrentMonth) mCurMonthLunarTextPaint else mOtherMonthLunarTextPaint)
         } else {
             canvas.drawText(calendar.day.toString(), cx.toFloat(), mTextBaseLine + top,
                     if (calendar.isCurrentDay)

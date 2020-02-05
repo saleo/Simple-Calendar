@@ -434,7 +434,7 @@ final class CalendarViewDelegate {
         mWeekBackground = array.getColor(R.styleable.CalendarView_week_background, Color.WHITE);
         mWeekLineBackground = array.getColor(R.styleable.CalendarView_week_line_background, Color.TRANSPARENT);
         mYearViewBackground = array.getColor(R.styleable.CalendarView_year_view_background, Color.WHITE);
-        mWeekTextColor = array.getColor(R.styleable.CalendarView_week_text_color, 0xFF333333);
+        mWeekTextColor = array.getColor(R.styleable.CalendarView_week_text_color, 0xFF111111);
 
         mCurDayTextColor = array.getColor(R.styleable.CalendarView_current_day_text_color, Color.RED);
         mCurDayLunarTextColor = array.getColor(R.styleable.CalendarView_current_day_lunar_text_color, Color.RED);
