@@ -356,7 +356,7 @@ class IcsImporter(val activity: SimpleActivity):AsyncTask<Void,String,Boolean>()
                 toast(R.string.import_failed,Toast.LENGTH_LONG)
                 config.lastSuccessfulDataImportMilliSeconds = -1
             }
-            refreshViewPager()
+            updateView(MONTHLY_VIEW)
             processProgressBar(DISMISS_PROGRESSBAR)
         }
     }
