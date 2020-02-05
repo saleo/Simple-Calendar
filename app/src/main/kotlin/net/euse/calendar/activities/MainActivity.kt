@@ -444,7 +444,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         config.storedView= view
         when (view){
             DAILY_VIEW -> fragment = DayFragmentsHolder()
-            MONTHLY_VIEW -> fragment = MonthCalendarViewFragment()
+            MONTHLY_VIEW -> fragment = SkcalMonthFragment()
             EVENTS_LIST_VIEW -> fragment = EventListFragmentsHolder()
             QINGXIN_VIEW -> fragment = QingxinFragment()
             ABOUT_VIEW -> fragment=AboutFragment()
@@ -452,7 +452,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             ABOUT_CREDIT_VIEW -> fragment=CreditFragment()
             ABOUT_LICENSE_VIEW -> fragment=LicenseFragment()
             SETTINGS_VIEW -> fragment=SettingsFragment()
-            else -> fragment=MonthCalendarViewFragment()
+            else -> fragment=SkcalMonthFragment()
         }
 
         currentFragments.add(fragment as androidx.fragment.app.Fragment)
@@ -473,7 +473,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
     private fun getFragmentsHolder() = when (config.storedView) {
         DAILY_VIEW -> DayFragmentsHolder()
-        MONTHLY_VIEW -> MonthCalendarViewFragment()
+        MONTHLY_VIEW -> SkcalMonthFragment()
         YEARLY_VIEW -> YearFragmentsHolder()
         EVENTS_LIST_VIEW -> EventListFragmentsHolder()
         QINGXIN_VIEW -> QingxinFragment()
@@ -483,7 +483,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         ABOUT_HEALTH_VIEW -> HealthFragment()
         ABOUT_LICENSE_VIEW -> LicenseFragment()
         SETTINGS_VIEW -> SettingsFragment()
-        else -> MonthCalendarViewFragment()
+        else -> SkcalMonthFragment()
     }
 
     fun refreshViewPager() {

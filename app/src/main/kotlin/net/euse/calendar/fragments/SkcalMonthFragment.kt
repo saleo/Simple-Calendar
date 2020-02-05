@@ -25,7 +25,7 @@ import net.euse.calendar.helpers.MONTHLY_VIEW
 import org.joda.time.DateTime
 import java.util.*
 
-class MonthCalendarViewFragment:Fragment(),CalendarView.OnCalendarSelectListener,CalendarView.OnMonthChangeListener{
+class SkcalMonthFragment:Fragment(),CalendarView.OnCalendarSelectListener,CalendarView.OnMonthChangeListener{
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
