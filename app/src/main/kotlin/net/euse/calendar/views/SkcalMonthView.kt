@@ -5,16 +5,11 @@ import android.graphics.BlurMaskFilter
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.view.View
-
 import com.haibin.calendarview.Calendar
 import com.haibin.calendarview.MonthView
+import net.euse.calendar.R
 
-/**
- * 高仿魅族日历布局
- * Created by huanghaibin on 2017/11/15.
- */
-
-class MonthView(context: Context) : MonthView(context) {
+class SkcalMonthView(context: Context) : MonthView(context) {
 
     private val mRectPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
@@ -23,9 +18,10 @@ class MonthView(context: Context) : MonthView(context) {
      *
      */
     private val mSchemeBasicPaint = Paint()
+    private val mSelectedPaint1=Paint()
+
 
     init {
-
         mRectPaint.style = Paint.Style.STROKE
         mRectPaint.strokeWidth = dipToPx(context, 0.5f).toFloat()
         mRectPaint.color = -0x77101011
@@ -38,7 +34,9 @@ class MonthView(context: Context) : MonthView(context) {
         //兼容硬件加速无效的代码
         setLayerType(View.LAYER_TYPE_SOFTWARE, mSchemeBasicPaint)
         //4.0以上硬件加速会导致无效
-        mSelectedPaint.maskFilter = BlurMaskFilter(50f, BlurMaskFilter.Blur.SOLID)
+        mSelectedPaint1.style=Paint.Style.FILL
+        mSelectedPaint1.color=resources.getColor(R.color.md_green_100)
+        mSelectedPaint1.maskFilter = BlurMaskFilter(50f, BlurMaskFilter.Blur.SOLID)
     }
 
     /**
@@ -52,7 +50,7 @@ class MonthView(context: Context) : MonthView(context) {
      * @return true 则绘制onDrawScheme，因为这里背景色不是是互斥的
      */
     override fun onDrawSelected(canvas: Canvas, calendar: Calendar, x: Int, y: Int, hasScheme: Boolean): Boolean {
-        canvas.drawRect(x.toFloat(), y.toFloat(), (x + mItemWidth).toFloat(), (y + mItemHeight).toFloat(), mSelectedPaint)
+        canvas.drawRect(x.toFloat(), y.toFloat(), (x + mItemWidth).toFloat(), (y + mItemHeight).toFloat(), mSelectedPaint1)
         return true
     }
 
@@ -72,7 +70,7 @@ class MonthView(context: Context) : MonthView(context) {
         }
         val space = dipToPx(context, 2f)
         var indexY = y + mItemHeight - 2 * space
-        val sw = dipToPx(context, (mItemWidth / 10).toFloat())
+        val sw = dipToPx(context, (mItemWidth / 15).toFloat())
         val sh = dipToPx(context, 4f)
         for (scheme in schemes) {
 

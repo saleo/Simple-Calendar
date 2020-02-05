@@ -21,13 +21,13 @@ import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 
-import androidx.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import androidx.annotation.Nullable;
 
 /**
  * Google规范化的属性委托,
@@ -446,7 +446,7 @@ final class CalendarViewDelegate {
         mCurrentMonthTextColor = array.getColor(R.styleable.CalendarView_current_month_text_color, 0xFF111111);
         mOtherMonthTextColor = array.getColor(R.styleable.CalendarView_other_month_text_color, 0xFFe1e1e1);
 
-        mCurMonthLunarTextColor = array.getColor(R.styleable.CalendarView_current_month_lunar_text_color, 0xffe1e1e1);
+        mCurMonthLunarTextColor = mCurrentMonthTextColor;
         mOtherMonthLunarTextColor = array.getColor(R.styleable.CalendarView_other_month_lunar_text_color, 0xffe1e1e1);
         mMinYear = array.getInt(R.styleable.CalendarView_min_year, 1971);
         mMaxYear = array.getInt(R.styleable.CalendarView_max_year, 2055);
@@ -456,9 +456,9 @@ final class CalendarViewDelegate {
         mMaxYearDay = array.getInt(R.styleable.CalendarView_max_year_day, -1);
 
         mDayTextSize = array.getDimensionPixelSize(R.styleable.CalendarView_day_text_size,
-                CalendarUtil.dipToPx(context, 16));
+                CalendarUtil.dipToPx(context, 15));
         mLunarTextSize = array.getDimensionPixelSize(R.styleable.CalendarView_lunar_text_size,
-                CalendarUtil.dipToPx(context, 10));
+                CalendarUtil.dipToPx(context, 11));
         mCalendarItemHeight = (int) array.getDimension(R.styleable.CalendarView_calendar_height,
                 CalendarUtil.dipToPx(context, 56));
         isFullScreenCalendar = array.getBoolean(R.styleable.CalendarView_calendar_match_parent, false);

@@ -60,11 +60,9 @@
 
     <string-array name="solar_festival" tools:ignore="InconsistentArrays">
         <item>0101元旦</item>
-        <item>0214情人節</item>
         <item>0308婦女節</item>
         <item>0312植樹節</item>
         <item>0315消權日</item>
-        <item>0401愚人節</item>
         <item>0404兒童節</item>
         <item>0422地球日</item>
         <item>0501勞動節</item>
@@ -77,10 +75,6 @@
         <item>0801建軍節</item>
         <item>0928教師節</item>
         <item>1001國慶節</item>
-        <item>1031萬聖節</item>
-        <item>1111光棍節</item>
-        <item>1224平安夜</item>
-        <item>1225聖誕節</item>
     </string-array>
 
     <string-array name="solar_term">

@@ -24,3 +24,4 @@ debug.keystore
 release.keystore
 signing.properties
 *.puml
+*.apk
