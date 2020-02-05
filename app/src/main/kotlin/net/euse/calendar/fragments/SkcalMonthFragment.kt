@@ -69,7 +69,7 @@ class SkcalMonthFragment:Fragment(),CalendarView.OnCalendarSelectListener,Calend
     @SuppressLint("SetTextI18n")
     override fun onCalendarSelect(calendar: Calendar, isClick: Boolean) {
 
-        if (isClick) {
+        if (isClick && calendar.hasScheme()) {
             Toasty.custom(activity as Context, getFormattedMessage(calendar), null, resources.getColor(R.color.md_green_100), resources.getColor(R.color.md_green_100), Toasty.LENGTH_SHORT, false, true).show()
         }
 

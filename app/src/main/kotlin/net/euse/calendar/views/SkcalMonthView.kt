@@ -3,14 +3,17 @@ package net.euse.calendar.views
 import android.content.Context
 import android.graphics.BlurMaskFilter
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.view.View
 import com.haibin.calendarview.Calendar
 import com.haibin.calendarview.MonthView
 
+
 class SkcalMonthView(context: Context) : MonthView(context) {
 
     private val mRectPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var mRadius: Int = 0
 
     /**
      * 自定义魅族标记的圆形背景
@@ -64,19 +67,22 @@ class SkcalMonthView(context: Context) : MonthView(context) {
         if (schemes == null || schemes.size == 0) {
             return
         }
-        val space = dipToPx(context, 2f)
-        var indexY = y + mItemHeight - 2 * space
-        val sw = dipToPx(context, (mItemWidth / 15).toFloat())
-        val sh = dipToPx(context, 4f)
+        var colors=ArrayList<Int>(schemes.size)
         for (scheme in schemes) {
-
-            mSchemePaint.color = scheme.shcemeColor
-
-            canvas.drawRect((x + mItemWidth - sw - 2 * space).toFloat(),
-
-                    (indexY - sh).toFloat(), (x + mItemWidth - 2 * space).toFloat(), indexY.toFloat(), mSchemePaint)
-            indexY = indexY - space - sh
+            colors.add(scheme.shcemeColor)
         }
+
+        if (colors.contains(Color.RED)) mSchemePaint.color=Color.RED
+        else if (colors.contains(Color.BLUE)) mSchemePaint.color=Color.BLUE
+        else mSchemePaint.color=Color.GRAY
+
+        val mPadding = dipToPx(context, 4f)
+        val cx = x + mItemWidth / 2
+        val cy = y + mItemHeight -2* mPadding
+
+        mRadius = Math.min(mItemWidth, mItemHeight) / 16;
+
+        canvas.drawCircle(cx.toFloat(), cy.toFloat(), mRadius.toFloat(), mSchemePaint)
     }
 
     /**
